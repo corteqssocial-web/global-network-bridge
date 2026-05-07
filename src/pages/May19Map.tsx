@@ -212,22 +212,43 @@ const May19Map = () => {
             <Graticule stroke="hsl(174,72%,46% / 0.12)" strokeWidth={0.4} />
 
             <Geographies geography={GEO_URL}>
-              {({ geographies }) =>
-                geographies.map((geo) => (
-                  <Geography
-                    key={geo.rsmKey}
-                    geography={geo}
-                    fill="hsl(220, 25%, 18%)"
-                    stroke="hsl(174, 72%, 46% / 0.3)"
-                    strokeWidth={0.4}
-                    style={{
-                      default: { outline: "none" },
-                      hover:   { fill: "hsl(220, 25%, 24%)", outline: "none", transition: "fill 0.3s" },
-                      pressed: { outline: "none" },
-                    }}
-                  />
-                ))
-              }
+              {({ geographies }) => {
+                // Vibrant CorteQS-aligned palette
+                const palette = [
+                  "hsl(174, 65%, 38%)", // turquoise
+                  "hsl(14, 75%, 50%)",  // primary orange
+                  "hsl(45, 85%, 50%)",  // gold
+                  "hsl(265, 55%, 50%)", // violet
+                  "hsl(200, 70%, 45%)", // azure
+                  "hsl(340, 65%, 52%)", // rose
+                  "hsl(150, 55%, 42%)", // emerald
+                  "hsl(25, 85%, 55%)",  // amber
+                  "hsl(220, 60%, 55%)", // royal blue
+                  "hsl(290, 50%, 55%)", // magenta
+                ];
+                const colorFor = (id: string) => {
+                  let h = 0;
+                  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+                  return palette[h % palette.length];
+                };
+                return geographies.map((geo) => {
+                  const base = colorFor(String(geo.rsmKey || geo.id || geo.properties?.name || ""));
+                  return (
+                    <Geography
+                      key={geo.rsmKey}
+                      geography={geo}
+                      fill={base}
+                      stroke="hsl(0,0%,100% / 0.35)"
+                      strokeWidth={0.4}
+                      style={{
+                        default: { outline: "none", opacity: 0.78, transition: "all 0.35s ease", transformBox: "fill-box", transformOrigin: "center" } as React.CSSProperties,
+                        hover:   { outline: "none", opacity: 1, fill: base, stroke: "white", strokeWidth: 1.2, filter: "drop-shadow(0 0 6px rgba(255,255,255,0.55))", transform: "scale(1.06)", cursor: "pointer" } as React.CSSProperties,
+                        pressed: { outline: "none" } as React.CSSProperties,
+                      }}
+                    />
+                  );
+                });
+              }}
             </Geographies>
 
             {/* Visibility center for orthographic projection (longitude, latitude in degrees).
