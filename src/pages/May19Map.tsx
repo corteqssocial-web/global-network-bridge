@@ -343,11 +343,32 @@ const May19Map = () => {
           </ComposableMap>
         </div>
 
+        {/* Persistent registration CTA — top-left floating */}
+        <div className="absolute top-4 left-4 z-10 max-w-xs">
+          <Link to="/19-mayis#modules" className="block group">
+            <div className="rounded-xl border border-turquoise/40 bg-gradient-to-br from-turquoise/30 via-turquoise/10 to-primary/15 backdrop-blur-md px-4 py-3 shadow-lg hover:shadow-2xl hover:border-turquoise transition-all">
+              <div className="flex items-center gap-2 mb-1.5">
+                <UserPlus className="h-4 w-4 text-turquoise" />
+                <span className="text-[11px] font-extrabold uppercase tracking-wide text-turquoise">Haritaya Katıl</span>
+              </div>
+              <p className="text-xs font-semibold text-white leading-snug">
+                Kayıt tamamlanınca <span className="text-turquoise-light">haritada kendini bul</span>.
+              </p>
+              <div className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-white/90 group-hover:text-white">
+                Kaydı Tamamla <span aria-hidden>→</span>
+              </div>
+            </div>
+          </Link>
+        </div>
+
         {/* Legend */}
         <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-4 bg-white/5 backdrop-blur border border-white/10 rounded-full px-4 py-2 text-white/80">
             <span className="inline-flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full" style={{ background: PRIMARY, boxShadow: `0 0 8px ${PRIMARY}` }} /> Türkiye
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <img src={ataturkMarker} alt="" className="w-3.5 h-3.5" /> Samsun · 19 Mayıs 1919
             </span>
             <span className="inline-flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full" style={{ background: TURQUOISE, boxShadow: `0 0 8px ${TURQUOISE}` }} /> Diaspora şehri
