@@ -81,6 +81,8 @@ const guests = [
   { name: "Meltem Demirors", title: "Yatırımcı / Dijital Varlıklar", region: "ABD / Global", icon: Briefcase },
   { name: "Gökhan İnler", title: "Futbolcu", region: "İsviçre / TR", icon: Trophy },
 ];
+
+const May19 = () => {
   const { toast } = useToast();
   const [tab, setTab] = useState<Kind>("map_pin");
   const [form, setForm] = useState(initialForm);
