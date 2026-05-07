@@ -250,34 +250,26 @@ const May19 = () => {
       </div>
     );
     if (kind === "idea") return (
-      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden bg-gradient-to-br from-amber-400/25 via-amber-200/10 to-transparent border border-amber-400/30 p-5 flex flex-col justify-between">
-        <div className="absolute -top-12 -left-8 w-44 h-44 rounded-full bg-amber-300/30 blur-2xl" />
-        <div className="relative">
-          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/20 text-[10px] font-bold text-amber-700">MODÜL 02</div>
-          <h3 className="text-xl font-extrabold mt-2 leading-tight">Diasporayı Güçlendirecek<br/><span className="text-amber-600">19 Fikir</span></h3>
-          <p className="text-xs text-muted-foreground mt-2 leading-relaxed">En etkili 19 fikir CorteQS tarafından öne çıkarılır.</p>
-        </div>
-        <div className="relative grid grid-cols-3 gap-1.5 mt-4">
-          {[1,2,3,4,5,6,7,8,9].map(n => (
-            <div key={n} className="aspect-square rounded bg-amber-500/10 border border-amber-400/30 flex items-center justify-center text-[10px] font-bold text-amber-700">
-              {n === 5 ? <Lightbulb className="h-4 w-4" /> : n}
-            </div>
-          ))}
+      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden border border-amber-400/30 flex flex-col justify-end">
+        <img src={ideasImage} alt="Diasporayı güçlendirecek 19 fikir" loading="lazy" width={768} height={768}
+          className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+        <div className="relative p-5">
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/30 backdrop-blur text-[10px] font-bold text-amber-100">MODÜL 02</div>
+          <h3 className="text-xl font-extrabold mt-2 leading-tight text-white drop-shadow">Diasporayı Güçlendirecek<br/><span className="text-amber-300">19 Fikir</span></h3>
+          <p className="text-xs text-white/80 mt-1.5 leading-relaxed">En etkili 19 fikir CorteQS tarafından öne çıkarılır.</p>
         </div>
       </div>
     );
     if (kind === "moment") return (
-      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden bg-gradient-to-br from-primary/25 via-primary/5 to-transparent border border-primary/30 p-5 flex flex-col justify-between">
-        <div className="absolute -bottom-10 -right-8 w-44 h-44 rounded-full bg-primary/20 blur-2xl" />
-        <div className="relative">
-          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-primary/20 text-[10px] font-bold text-primary">MODÜL 03</div>
-          <h3 className="text-xl font-extrabold mt-2 leading-tight">19 Mayıs ve<br/>Diaspora Anını Gönder</h3>
-          <p className="text-xs text-muted-foreground mt-2 leading-relaxed">Foto, 19 saniyelik video veya kısa mesaj — global hesaplarımızda paylaşalım.</p>
-        </div>
-        <div className="relative flex gap-2 mt-4">
-          <div className="aspect-[3/4] flex-1 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center"><Camera className="h-5 w-5 text-primary" /></div>
-          <div className="aspect-[3/4] flex-1 rounded-lg bg-primary/15 border border-primary/30 -mt-2 flex items-center justify-center text-[10px] font-bold text-primary">19s</div>
-          <div className="aspect-[3/4] flex-1 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-[10px] text-primary">★</div>
+      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden border border-primary/30 flex flex-col justify-end">
+        <img src={momentsImage} alt="19 Mayıs ve diaspora anları" loading="lazy" width={768} height={768}
+          className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+        <div className="relative p-5">
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-primary/30 backdrop-blur text-[10px] font-bold text-white">MODÜL 03</div>
+          <h3 className="text-xl font-extrabold mt-2 leading-tight text-white drop-shadow">19 Mayıs ve<br/>Diaspora Anını Gönder</h3>
+          <p className="text-xs text-white/80 mt-1.5 leading-relaxed">Foto, 19 saniyelik video veya kısa mesaj — global hesaplarımızda paylaşalım.</p>
         </div>
       </div>
     );
