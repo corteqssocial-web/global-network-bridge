@@ -17,6 +17,11 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import ideasImage from "@/assets/may19-ideas.jpg";
+import momentsImage from "@/assets/may19-moments.jpg";
+
+const isDriveLink = (url: string) =>
+  /^https?:\/\/(drive|docs)\.google\.com\//i.test(url.trim());
 
 
 type Kind = "map_pin" | "idea" | "moment" | "livestream";
