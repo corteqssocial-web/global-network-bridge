@@ -76,16 +76,12 @@ const guests = [
   { slot: "01:00", name: "Saygın Yalçın", title: "Girişimci / Yatırımcı", region: "Dubai", continent: "AS", icon: Briefcase },
   { slot: "02:00", name: "Can Yaman", title: "Oyuncu", region: "Avrupa", continent: "EU", icon: Mic2 },
   { slot: "03:00", name: "Dilek Gürsoy", title: "Kalp Cerrahı", region: "Almanya", continent: "EU", icon: Star },
-  { slot: "04:00", name: "Barbaros Özbuğutu", title: "Fintech Girişimcisi", region: "DE / TR", continent: "EU", icon: Briefcase },
-  { slot: "05:00", name: "Ferzan Özpetek", title: "Sinema / Global Sanat", region: "İtalya", continent: "EU", icon: Palette },
-  { slot: "06:00", name: "Arda Güler", title: "Futbolcu", region: "İspanya / TR", continent: "EU", icon: Trophy },
-  { slot: "07:00", name: "Hanzade Doğan Boyner", title: "Dijital Ekonomi", region: "Türkiye", continent: "EU", icon: Briefcase },
-  { slot: "08:00", name: "Demet Mutlu", title: "Teknoloji Girişimcisi", region: "Türkiye", continent: "EU", icon: Briefcase },
-  { slot: "09:00", name: "Hulusi Derici", title: "Reklam / Marka", region: "Türkiye", continent: "EU", icon: Briefcase },
-  { slot: "10:00", name: "Müjdat Gezen", title: "Tiyatro / Eğitimci", region: "Türkiye", continent: "EU", icon: Palette },
-  { slot: "11:00", name: "Metin Akpınar", title: "Tiyatro Sanatçısı", region: "Türkiye", continent: "EU", icon: Palette },
-  { slot: "12:00", name: "Kaan Sekban", title: "Komedyen / Yazar", region: "Türkiye", continent: "EU", icon: Mic2 },
-  { slot: "13:00", name: "Cem Yılmaz", title: "Komedyen / Yönetmen", region: "Türkiye", continent: "EU", icon: Mic2 },
+  { slot: "04:00", name: "Ferzan Özpetek", title: "Sinema / Global Sanat", region: "İtalya", continent: "EU", icon: Palette },
+  { slot: "05:00", name: "Arda Güler", title: "Futbolcu", region: "İspanya / TR", continent: "EU", icon: Trophy },
+  { slot: "06:00", name: "Demet Mutlu", title: "Teknoloji Girişimcisi", region: "Türkiye", continent: "EU", icon: Briefcase },
+  { slot: "07:00", name: "Metin Akpınar", title: "Tiyatro Sanatçısı", region: "Türkiye", continent: "EU", icon: Palette },
+  { slot: "08:00", name: "Kaan Sekban", title: "Komedyen / Yazar", region: "Türkiye", continent: "EU", icon: Mic2 },
+  { slot: "09:00", name: "Cem Yılmaz", title: "Komedyen / Yönetmen", region: "Türkiye", continent: "EU", icon: Mic2 },
 ];
 
 const continentLabel: Record<string, string> = {
