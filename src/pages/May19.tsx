@@ -42,6 +42,9 @@ const guestPhotos: Record<string, string> = {
   "Can Yaman": gCanYaman,
   "Arda Güler": gArdaGuler,
   "Dilek Gürsoy": gDilekGursoy,
+  "Cem Yılmaz": gCemYilmaz,
+  "Metin Akpınar": gMetinAkpinar,
+  "Kaan Sekban": gKaanSekban,
 };
 
 const isDriveLink = (url: string) =>
