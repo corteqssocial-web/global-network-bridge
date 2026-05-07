@@ -60,27 +60,40 @@ const momentExamples = [
 ];
 
 // 19 Kişilik global davet listesi
+// 19 Saatlik Global Canlı Yayın — Konuk Listesi (saat dilimi + kıta ile)
 const guests = [
-  { name: "Aziz Sancar", title: "Bilim / Nobel", region: "ABD", icon: Star },
-  { name: "Selçuk Şirin", title: "Akademi / Eğitim", region: "ABD", icon: Star },
-  { name: "Can Yaman", title: "Oyuncu", region: "Avrupa", icon: Mic2 },
-  { name: "Eren Bali", title: "Teknoloji Girişimcisi", region: "ABD", icon: Briefcase },
-  { name: "Refik Anadol", title: "AI Sanatçısı", region: "ABD / Global", icon: Palette },
-  { name: "Alperen Şengün", title: "NBA Oyuncusu", region: "ABD / TR", icon: Trophy },
-  { name: "Arda Güler", title: "Futbolcu", region: "İspanya / TR", icon: Trophy },
-  { name: "Cem Yılmaz", title: "Komedyen / Yönetmen", region: "Türkiye", icon: Mic2 },
-  { name: "Kaan Sekban", title: "Komedyen / Yazar", region: "Türkiye", icon: Mic2 },
-  { name: "Metin Akpınar", title: "Tiyatro Sanatçısı", region: "Türkiye", icon: Palette },
-  { name: "Müjdat Gezen", title: "Tiyatro / Eğitimci", region: "Türkiye", icon: Palette },
-  { name: "Hulusi Derici", title: "Reklam / Marka", region: "Türkiye", icon: Briefcase },
-  { name: "Dilek Gürsoy", title: "Kalp Cerrahı", region: "Almanya", icon: Star },
-  { name: "Barbaros Özbuğutu", title: "Fintech Girişimcisi", region: "DE / TR", icon: Briefcase },
-  { name: "Saygın Yalçın", title: "Girişimci / Yatırımcı", region: "Dubai", icon: Briefcase },
-  { name: "Hanzade Doğan Boyner", title: "Dijital Ekonomi", region: "Türkiye", icon: Briefcase },
-  { name: "Demet Mutlu", title: "Teknoloji Girişimcisi", region: "Türkiye", icon: Briefcase },
-  { name: "Meltem Demirors", title: "Yatırımcı / Dijital Varlıklar", region: "ABD / Global", icon: Briefcase },
-  { name: "Gökhan İnler", title: "Futbolcu", region: "İsviçre / TR", icon: Trophy },
+  { slot: "19:00", name: "Aziz Sancar", title: "Bilim / Nobel Ödülü", region: "ABD", continent: "NA", icon: Star },
+  { slot: "20:00", name: "Selçuk Şirin", title: "Akademi / Eğitim", region: "ABD", continent: "NA", icon: Star },
+  { slot: "21:00", name: "Refik Anadol", title: "AI Sanatçısı", region: "ABD / Global", continent: "NA", icon: Palette },
+  { slot: "22:00", name: "Alperen Şengün", title: "NBA Oyuncusu", region: "ABD / TR", continent: "NA", icon: Trophy },
+  { slot: "23:00", name: "Meltem Demirors", title: "Yatırımcı / Dijital Varlıklar", region: "ABD / Global", continent: "NA", icon: Briefcase },
+  { slot: "00:00", name: "Eren Bali", title: "Teknoloji Girişimcisi", region: "ABD", continent: "NA", icon: Briefcase },
+  { slot: "01:00", name: "Saygın Yalçın", title: "Girişimci / Yatırımcı", region: "Dubai", continent: "AS", icon: Briefcase },
+  { slot: "02:00", name: "Can Yaman", title: "Oyuncu", region: "Avrupa", continent: "EU", icon: Mic2 },
+  { slot: "03:00", name: "Dilek Gürsoy", title: "Kalp Cerrahı", region: "Almanya", continent: "EU", icon: Star },
+  { slot: "04:00", name: "Barbaros Özbuğutu", title: "Fintech Girişimcisi", region: "DE / TR", continent: "EU", icon: Briefcase },
+  { slot: "05:00", name: "Gökhan İnler", title: "Futbolcu", region: "İsviçre / TR", continent: "EU", icon: Trophy },
+  { slot: "06:00", name: "Arda Güler", title: "Futbolcu", region: "İspanya / TR", continent: "EU", icon: Trophy },
+  { slot: "07:00", name: "Hanzade Doğan Boyner", title: "Dijital Ekonomi", region: "Türkiye", continent: "EU", icon: Briefcase },
+  { slot: "08:00", name: "Demet Mutlu", title: "Teknoloji Girişimcisi", region: "Türkiye", continent: "EU", icon: Briefcase },
+  { slot: "09:00", name: "Hulusi Derici", title: "Reklam / Marka", region: "Türkiye", continent: "EU", icon: Briefcase },
+  { slot: "10:00", name: "Müjdat Gezen", title: "Tiyatro / Eğitimci", region: "Türkiye", continent: "EU", icon: Palette },
+  { slot: "11:00", name: "Metin Akpınar", title: "Tiyatro Sanatçısı", region: "Türkiye", continent: "EU", icon: Palette },
+  { slot: "12:00", name: "Kaan Sekban", title: "Komedyen / Yazar", region: "Türkiye", continent: "EU", icon: Mic2 },
+  { slot: "13:00", name: "Cem Yılmaz", title: "Komedyen / Yönetmen", region: "Türkiye", continent: "EU", icon: Mic2 },
 ];
+
+const continentLabel: Record<string, string> = {
+  NA: "Kuzey Amerika", EU: "Avrupa & TR", AS: "Asya / Orta Doğu", SA: "Güney Amerika", OC: "Okyanusya", AF: "Afrika",
+};
+const continentColor: Record<string, string> = {
+  NA: "from-turquoise/20 to-turquoise/5",
+  EU: "from-primary/20 to-primary/5",
+  AS: "from-amber-400/20 to-amber-400/5",
+  SA: "from-rose-500/20 to-rose-500/5",
+  OC: "from-emerald-500/20 to-emerald-500/5",
+  AF: "from-purple-500/20 to-purple-500/5",
+};
 
 const May19 = () => {
   const { toast } = useToast();
@@ -475,32 +488,47 @@ const May19 = () => {
         </div>
       </section>
 
-      {/* GUEST INVITATION LIST */}
+      {/* GUEST INVITATION LIST — 19h Schedule */}
       <section className="py-14 bg-card border-y border-border">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 mb-3">
-              <Radio className="h-3.5 w-3.5 text-rose-500" />
-              <span className="text-xs font-semibold text-rose-600">19 Kişilik Davet Listesi</span>
+              <Radio className="h-3.5 w-3.5 text-rose-500 animate-pulse" />
+              <span className="text-xs font-semibold text-rose-600">19 Saat • 5 Kıta • Canlı Yayın</span>
             </div>
             <h2 className="text-2xl md:text-4xl font-extrabold mb-2">
-              19 Saatlik Global Yayın <span className="text-gradient-primary">Konukları</span>
+              19 Saatlik Global <span className="text-gradient-primary">Canlı Yayın Konukları</span>
             </h2>
             <p className="text-sm text-muted-foreground max-w-2xl mx-auto font-body">
-              5 kıtadan bilim, sanat, spor, girişimcilik ve teknoloji dünyasının önde gelen Türk isimlerini
-              19 Mayıs canlı yayınımıza davet ediyoruz.
+              19 Mayıs günü 19:00'da Ankara'dan başlayıp güneşin batışını takip ederek 5 kıtayı dolaşan
+              19 saatlik kesintisiz yayın akışı.
             </p>
           </div>
 
+          {/* Continent legend */}
+          <div className="flex flex-wrap justify-center gap-2 mb-6">
+            {Object.entries(continentLabel).map(([k, label]) => (
+              <div key={k} className={`px-2.5 py-1 rounded-full text-[10px] font-semibold border border-border bg-gradient-to-r ${continentColor[k]}`}>
+                {label}
+              </div>
+            ))}
+          </div>
+
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {guests.map((g) => {
+            {guests.map((g, i) => {
               const Icon = g.icon;
               return (
                 <div key={g.name} className="group relative rounded-xl border border-border bg-background p-3 hover:border-turquoise/50 hover:shadow-card-hover transition-all">
-                  <div className="aspect-square rounded-lg bg-gradient-to-br from-turquoise/15 via-primary/10 to-amber-400/15 flex items-center justify-center mb-2 relative overflow-hidden">
-                    <Icon className="h-7 w-7 text-turquoise/70 group-hover:scale-110 transition-transform" />
+                  <div className={`absolute -top-2 -left-2 z-10 px-2 py-0.5 rounded-md bg-gradient-to-br ${continentColor[g.continent]} border border-border text-[10px] font-extrabold text-foreground shadow-sm`}>
+                    {g.slot}
+                  </div>
+                  <div className={`aspect-square rounded-lg bg-gradient-to-br ${continentColor[g.continent]} flex items-center justify-center mb-2 relative overflow-hidden`}>
+                    <Icon className="h-7 w-7 text-foreground/60 group-hover:scale-110 transition-transform" />
                     <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-full bg-background/80 backdrop-blur text-[9px] font-bold text-muted-foreground">
                       {g.region}
+                    </div>
+                    <div className="absolute bottom-1.5 left-1.5 text-[8px] font-bold text-muted-foreground">
+                      #{String(i + 1).padStart(2, "0")}
                     </div>
                   </div>
                   <h3 className="text-xs font-bold text-foreground leading-tight">{g.name}</h3>
@@ -511,7 +539,7 @@ const May19 = () => {
           </div>
 
           <p className="text-[11px] text-muted-foreground text-center mt-6 italic">
-            Davet listesi güncellenmektedir. Konuk katılımları onay sürecindedir.
+            Saatler TSİ'ye göredir. Davet listesi güncellenmektedir; konuk katılımları onay sürecindedir.
           </p>
         </div>
       </section>
