@@ -28,6 +28,9 @@ import gErenBali from "@/assets/guests/eren-bali.png";
 import gCanYaman from "@/assets/guests/can-yaman.png";
 import gArdaGuler from "@/assets/guests/arda-guler.png";
 import gDilekGursoy from "@/assets/guests/dilek-gursoy.png";
+import gCemYilmaz from "@/assets/guests/cem-yilmaz.png";
+import gMetinAkpinar from "@/assets/guests/metin-akpinar.png";
+import gKaanSekban from "@/assets/guests/kaan-sekban.png";
 
 const guestPhotos: Record<string, string> = {
   "Aziz Sancar": gAzizSancar,
