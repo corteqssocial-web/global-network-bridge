@@ -174,22 +174,25 @@ const May19 = () => {
     }
   };
 
+  const inputCls = "h-9 text-sm";
+  const labelCls = "text-xs font-medium mb-1 block";
+
   const FileInput = (
-    <div>
-      <Label>Dosya / Fotoğraf / Video (opsiyonel, maks 5 × 25MB)</Label>
-      <label className="mt-1 flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-turquoise/60 hover:bg-turquoise/5 transition-colors">
-        <Upload className="h-4 w-4 text-turquoise" />
-        <span className="text-xs text-muted-foreground">Yüklemek için seç</span>
+    <div className="col-span-2">
+      <Label className={labelCls}>Dosya / Foto / Video (maks 5 × 25MB)</Label>
+      <label className="flex items-center justify-center gap-2 px-3 py-2 border-2 border-dashed border-border rounded-md cursor-pointer hover:border-turquoise/60 hover:bg-turquoise/5 transition-colors">
+        <Upload className="h-3.5 w-3.5 text-turquoise" />
+        <span className="text-[11px] text-muted-foreground">Yüklemek için seç</span>
         <input type="file" multiple className="hidden" onChange={handleFiles}
           accept=".pdf,.ppt,.pptx,.doc,.docx,.png,.jpg,.jpeg,.mp4,.mov,.webm" />
       </label>
       {files.length > 0 && (
-        <ul className="mt-2 space-y-1">
+        <ul className="mt-1.5 space-y-1">
           {files.map((f, i) => (
-            <li key={i} className="flex items-center justify-between text-xs bg-muted/50 px-2 py-1 rounded">
+            <li key={i} className="flex items-center justify-between text-[11px] bg-muted/50 px-2 py-0.5 rounded">
               <span className="truncate">{f.name}</span>
               <button type="button" onClick={() => setFiles((p) => p.filter((_, idx) => idx !== i))} className="text-destructive">
-                <X className="h-3.5 w-3.5" />
+                <X className="h-3 w-3" />
               </button>
             </li>
           ))}
@@ -197,6 +200,76 @@ const May19 = () => {
       )}
     </div>
   );
+
+  const ModuleVisual = ({ kind }: { kind: Kind }) => {
+    if (kind === "map_pin") return (
+      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden bg-gradient-to-br from-turquoise/20 via-turquoise/5 to-transparent border border-turquoise/20 p-5 flex flex-col justify-between">
+        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-turquoise/20 blur-2xl" />
+        <div className="absolute bottom-4 left-4 w-32 h-32 rounded-full bg-primary/10 blur-2xl" />
+        <svg viewBox="0 0 200 120" className="absolute inset-0 w-full h-full opacity-40 pointer-events-none">
+          <defs><pattern id="grid1" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.6" fill="hsl(174 72% 46%)"/></pattern></defs>
+          <rect width="200" height="120" fill="url(#grid1)"/>
+        </svg>
+        <div className="relative">
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-turquoise/20 text-[10px] font-bold text-turquoise">MODÜL 01</div>
+          <h3 className="text-xl font-extrabold mt-2 leading-tight">Global Haritada<br/>Kendini İşaretle</h3>
+          <p className="text-xs text-muted-foreground mt-2 leading-relaxed">Ülkeni, şehrini ve mesajını paylaş; CorteQS Türk Diaspora Haritası'nda parla.</p>
+        </div>
+        <div className="relative flex items-center gap-3 mt-4">
+          <div className="w-10 h-10 rounded-full bg-turquoise/30 flex items-center justify-center animate-pulse"><MapPin className="h-5 w-5 text-turquoise" /></div>
+          <div className="flex-1 text-[11px] text-muted-foreground">5 kıta · 80+ ülke · canlı pin akışı</div>
+        </div>
+      </div>
+    );
+    if (kind === "idea") return (
+      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden bg-gradient-to-br from-amber-400/25 via-amber-200/10 to-transparent border border-amber-400/30 p-5 flex flex-col justify-between">
+        <div className="absolute -top-12 -left-8 w-44 h-44 rounded-full bg-amber-300/30 blur-2xl" />
+        <div className="relative">
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/20 text-[10px] font-bold text-amber-700">MODÜL 02</div>
+          <h3 className="text-xl font-extrabold mt-2 leading-tight">Diasporayı Güçlendirecek<br/><span className="text-amber-600">19 Fikir</span></h3>
+          <p className="text-xs text-muted-foreground mt-2 leading-relaxed">En etkili 19 fikir CorteQS tarafından öne çıkarılır.</p>
+        </div>
+        <div className="relative grid grid-cols-3 gap-1.5 mt-4">
+          {[1,2,3,4,5,6,7,8,9].map(n => (
+            <div key={n} className="aspect-square rounded bg-amber-500/10 border border-amber-400/30 flex items-center justify-center text-[10px] font-bold text-amber-700">
+              {n === 5 ? <Lightbulb className="h-4 w-4" /> : n}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+    if (kind === "moment") return (
+      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden bg-gradient-to-br from-primary/25 via-primary/5 to-transparent border border-primary/30 p-5 flex flex-col justify-between">
+        <div className="absolute -bottom-10 -right-8 w-44 h-44 rounded-full bg-primary/20 blur-2xl" />
+        <div className="relative">
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-primary/20 text-[10px] font-bold text-primary">MODÜL 03</div>
+          <h3 className="text-xl font-extrabold mt-2 leading-tight">19 Mayıs ve<br/>Diaspora Anını Gönder</h3>
+          <p className="text-xs text-muted-foreground mt-2 leading-relaxed">Foto, 19 saniyelik video veya kısa mesaj — global hesaplarımızda paylaşalım.</p>
+        </div>
+        <div className="relative flex gap-2 mt-4">
+          <div className="aspect-[3/4] flex-1 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center"><Camera className="h-5 w-5 text-primary" /></div>
+          <div className="aspect-[3/4] flex-1 rounded-lg bg-primary/15 border border-primary/30 -mt-2 flex items-center justify-center text-[10px] font-bold text-primary">19s</div>
+          <div className="aspect-[3/4] flex-1 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-[10px] text-primary">★</div>
+        </div>
+      </div>
+    );
+    return (
+      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden bg-gradient-to-br from-rose-500/25 via-rose-300/10 to-transparent border border-rose-500/30 p-5 flex flex-col justify-between">
+        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-rose-400/25 blur-2xl" />
+        <div className="relative">
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-rose-500/20 text-[10px] font-bold text-rose-600">MODÜL 04</div>
+          <span className="inline-flex items-center gap-1.5 ml-2 px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-bold animate-pulse">● CANLI</span>
+          <h3 className="text-xl font-extrabold mt-2 leading-tight">5 Kıtada<br/>19 Saatlik Canlı Yayın</h3>
+          <p className="text-xs text-muted-foreground mt-2 leading-relaxed">19 Mayıs · 19.00 TR · canlı bağlantı, video mesaj veya yazılı destek.</p>
+        </div>
+        <div className="relative grid grid-cols-5 gap-1 mt-4">
+          {["EU","NA","SA","AS","OC"].map(c => (
+            <div key={c} className="aspect-square rounded bg-rose-500/10 border border-rose-400/30 flex items-center justify-center text-[10px] font-bold text-rose-700">{c}</div>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   const Done = ({ kind }: { kind: Kind }) => (
     <div className="flex flex-col items-center text-center py-12 gap-3">
