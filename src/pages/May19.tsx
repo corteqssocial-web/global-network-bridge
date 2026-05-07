@@ -31,6 +31,7 @@ import gDilekGursoy from "@/assets/guests/dilek-gursoy.png";
 import gCemYilmaz from "@/assets/guests/cem-yilmaz.png";
 import gMetinAkpinar from "@/assets/guests/metin-akpinar.png";
 import gKaanSekban from "@/assets/guests/kaan-sekban.png";
+import gFerzanOzpetek from "@/assets/guests/ferzan-ozpetek.png";
 
 const guestPhotos: Record<string, string> = {
   "Aziz Sancar": gAzizSancar,
