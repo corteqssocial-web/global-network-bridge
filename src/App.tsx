@@ -41,6 +41,7 @@ const HospitalAppointment = lazy(() => import("./pages/HospitalAppointment"));
 const Founders1000 = lazy(() => import("./pages/Founders1000"));
 const Career = lazy(() => import("./pages/Career"));
 const Dashboards = lazy(() => import("./pages/Dashboards"));
+const PostGenerator = lazy(() => import("./pages/PostGenerator"));
 const AITwin = lazy(() => import("./pages/AITwin"));
 const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/legal/TermsOfService"));
@@ -141,6 +142,7 @@ const App = () => (
                   <Route path="/city-news" element={<CityNews />} />
                   <Route path="/ambassador/:id" element={<AmbassadorDetail />} />
                   <Route path="/admin" element={<AdminDashboard />} />
+                  <Route path="/admin/post-generator" element={<PostGenerator />} />
                   <Route path="/hospital-appointment/:hospitalId?" element={<HospitalAppointment />} />
                   <Route path="/founders-1000" element={<Founders1000 />} />
                   <Route path="/founding-1000" element={<Founders1000 />} />
