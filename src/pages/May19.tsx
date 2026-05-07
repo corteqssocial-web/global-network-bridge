@@ -72,7 +72,7 @@ const guests = [
   { slot: "02:00", name: "Can Yaman", title: "Oyuncu", region: "Avrupa", continent: "EU", icon: Mic2 },
   { slot: "03:00", name: "Dilek Gürsoy", title: "Kalp Cerrahı", region: "Almanya", continent: "EU", icon: Star },
   { slot: "04:00", name: "Barbaros Özbuğutu", title: "Fintech Girişimcisi", region: "DE / TR", continent: "EU", icon: Briefcase },
-  { slot: "05:00", name: "Gökhan İnler", title: "Futbolcu", region: "İsviçre / TR", continent: "EU", icon: Trophy },
+  { slot: "05:00", name: "Ferzan Özpetek", title: "Sinema / Global Sanat", region: "İtalya", continent: "EU", icon: Palette },
   { slot: "06:00", name: "Arda Güler", title: "Futbolcu", region: "İspanya / TR", continent: "EU", icon: Trophy },
   { slot: "07:00", name: "Hanzade Doğan Boyner", title: "Dijital Ekonomi", region: "Türkiye", continent: "EU", icon: Briefcase },
   { slot: "08:00", name: "Demet Mutlu", title: "Teknoloji Girişimcisi", region: "Türkiye", continent: "EU", icon: Briefcase },
