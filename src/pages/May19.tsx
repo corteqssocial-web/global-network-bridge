@@ -19,6 +19,27 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import ideasImage from "@/assets/may19-ideas.jpg";
 import momentsImage from "@/assets/may19-moments.jpg";
+import gAzizSancar from "@/assets/guests/aziz-sancar.png";
+import gSelcukSirin from "@/assets/guests/selcuk-sirin.png";
+import gRefikAnadol from "@/assets/guests/refik-anadol.png";
+import gAlperenSengun from "@/assets/guests/alperen-sengun.png";
+import gMeltemDemirors from "@/assets/guests/meltem-demirors.png";
+import gErenBali from "@/assets/guests/eren-bali.png";
+import gCanYaman from "@/assets/guests/can-yaman.png";
+import gArdaGuler from "@/assets/guests/arda-guler.png";
+import gDilekGursoy from "@/assets/guests/dilek-gursoy.png";
+
+const guestPhotos: Record<string, string> = {
+  "Aziz Sancar": gAzizSancar,
+  "Selçuk Şirin": gSelcukSirin,
+  "Refik Anadol": gRefikAnadol,
+  "Alperen Şengün": gAlperenSengun,
+  "Meltem Demirors": gMeltemDemirors,
+  "Eren Bali": gErenBali,
+  "Can Yaman": gCanYaman,
+  "Arda Güler": gArdaGuler,
+  "Dilek Gürsoy": gDilekGursoy,
+};
 
 const isDriveLink = (url: string) =>
   /^https?:\/\/(drive|docs)\.google\.com\//i.test(url.trim());
@@ -542,11 +563,20 @@ const May19 = () => {
                     {g.slot}
                   </div>
                   <div className={`aspect-square rounded-lg bg-gradient-to-br ${continentColor[g.continent]} flex items-center justify-center mb-2 relative overflow-hidden`}>
-                    <Icon className="h-7 w-7 text-foreground/60 group-hover:scale-110 transition-transform" />
+                    {guestPhotos[g.name] ? (
+                      <img
+                        src={guestPhotos[g.name]}
+                        alt={g.name}
+                        loading="lazy"
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform"
+                      />
+                    ) : (
+                      <Icon className="h-7 w-7 text-foreground/60 group-hover:scale-110 transition-transform" />
+                    )}
                     <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-full bg-background/80 backdrop-blur text-[9px] font-bold text-muted-foreground">
                       {g.region}
                     </div>
-                    <div className="absolute bottom-1.5 left-1.5 text-[8px] font-bold text-muted-foreground">
+                    <div className="absolute bottom-1.5 left-1.5 text-[8px] font-bold text-muted-foreground bg-background/70 backdrop-blur rounded px-1">
                       #{String(i + 1).padStart(2, "0")}
                     </div>
                   </div>
