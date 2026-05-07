@@ -173,6 +173,51 @@ export type Database = {
         }
         Relationships: []
       }
+      generated_posts: {
+        Row: {
+          created_at: string
+          created_by: string
+          expertise: string | null
+          id: string
+          image_url: string
+          logo_url: string | null
+          platforms: string[]
+          recipient_name: string
+          share_text: string | null
+          tagline: string | null
+          template_type: string
+          thumbnail_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          expertise?: string | null
+          id?: string
+          image_url: string
+          logo_url?: string | null
+          platforms?: string[]
+          recipient_name: string
+          share_text?: string | null
+          tagline?: string | null
+          template_type: string
+          thumbnail_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          expertise?: string | null
+          id?: string
+          image_url?: string
+          logo_url?: string | null
+          platforms?: string[]
+          recipient_name?: string
+          share_text?: string | null
+          tagline?: string | null
+          template_type?: string
+          thumbnail_url?: string | null
+        }
+        Relationships: []
+      }
       interest_registrations: {
         Row: {
           attachment_urls: string[] | null
