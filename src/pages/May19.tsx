@@ -59,7 +59,28 @@ const momentExamples = [
   "Doha'dan global Türk diasporasına selamlar.",
 ];
 
-const May19 = () => {
+// 19 Kişilik global davet listesi
+const guests = [
+  { name: "Aziz Sancar", title: "Bilim / Nobel", region: "ABD", icon: Star },
+  { name: "Selçuk Şirin", title: "Akademi / Eğitim", region: "ABD", icon: Star },
+  { name: "Can Yaman", title: "Oyuncu", region: "Avrupa", icon: Mic2 },
+  { name: "Eren Bali", title: "Teknoloji Girişimcisi", region: "ABD", icon: Briefcase },
+  { name: "Refik Anadol", title: "AI Sanatçısı", region: "ABD / Global", icon: Palette },
+  { name: "Alperen Şengün", title: "NBA Oyuncusu", region: "ABD / TR", icon: Trophy },
+  { name: "Arda Güler", title: "Futbolcu", region: "İspanya / TR", icon: Trophy },
+  { name: "Cem Yılmaz", title: "Komedyen / Yönetmen", region: "Türkiye", icon: Mic2 },
+  { name: "Kaan Sekban", title: "Komedyen / Yazar", region: "Türkiye", icon: Mic2 },
+  { name: "Metin Akpınar", title: "Tiyatro Sanatçısı", region: "Türkiye", icon: Palette },
+  { name: "Müjdat Gezen", title: "Tiyatro / Eğitimci", region: "Türkiye", icon: Palette },
+  { name: "Hulusi Derici", title: "Reklam / Marka", region: "Türkiye", icon: Briefcase },
+  { name: "Dilek Gürsoy", title: "Kalp Cerrahı", region: "Almanya", icon: Star },
+  { name: "Barbaros Özbuğutu", title: "Fintech Girişimcisi", region: "DE / TR", icon: Briefcase },
+  { name: "Saygın Yalçın", title: "Girişimci / Yatırımcı", region: "Dubai", icon: Briefcase },
+  { name: "Hanzade Doğan Boyner", title: "Dijital Ekonomi", region: "Türkiye", icon: Briefcase },
+  { name: "Demet Mutlu", title: "Teknoloji Girişimcisi", region: "Türkiye", icon: Briefcase },
+  { name: "Meltem Demirors", title: "Yatırımcı / Dijital Varlıklar", region: "ABD / Global", icon: Briefcase },
+  { name: "Gökhan İnler", title: "Futbolcu", region: "İsviçre / TR", icon: Trophy },
+];
   const { toast } = useToast();
   const [tab, setTab] = useState<Kind>("map_pin");
   const [form, setForm] = useState(initialForm);
