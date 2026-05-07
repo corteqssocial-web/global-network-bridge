@@ -488,32 +488,47 @@ const May19 = () => {
         </div>
       </section>
 
-      {/* GUEST INVITATION LIST */}
+      {/* GUEST INVITATION LIST — 19h Schedule */}
       <section className="py-14 bg-card border-y border-border">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 mb-3">
-              <Radio className="h-3.5 w-3.5 text-rose-500" />
-              <span className="text-xs font-semibold text-rose-600">19 Kişilik Davet Listesi</span>
+              <Radio className="h-3.5 w-3.5 text-rose-500 animate-pulse" />
+              <span className="text-xs font-semibold text-rose-600">19 Saat • 5 Kıta • Canlı Yayın</span>
             </div>
             <h2 className="text-2xl md:text-4xl font-extrabold mb-2">
-              19 Saatlik Global Yayın <span className="text-gradient-primary">Konukları</span>
+              19 Saatlik Global <span className="text-gradient-primary">Canlı Yayın Konukları</span>
             </h2>
             <p className="text-sm text-muted-foreground max-w-2xl mx-auto font-body">
-              5 kıtadan bilim, sanat, spor, girişimcilik ve teknoloji dünyasının önde gelen Türk isimlerini
-              19 Mayıs canlı yayınımıza davet ediyoruz.
+              19 Mayıs günü 19:00'da Ankara'dan başlayıp güneşin batışını takip ederek 5 kıtayı dolaşan
+              19 saatlik kesintisiz yayın akışı.
             </p>
           </div>
 
+          {/* Continent legend */}
+          <div className="flex flex-wrap justify-center gap-2 mb-6">
+            {Object.entries(continentLabel).map(([k, label]) => (
+              <div key={k} className={`px-2.5 py-1 rounded-full text-[10px] font-semibold border border-border bg-gradient-to-r ${continentColor[k]}`}>
+                {label}
+              </div>
+            ))}
+          </div>
+
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {guests.map((g) => {
+            {guests.map((g, i) => {
               const Icon = g.icon;
               return (
                 <div key={g.name} className="group relative rounded-xl border border-border bg-background p-3 hover:border-turquoise/50 hover:shadow-card-hover transition-all">
-                  <div className="aspect-square rounded-lg bg-gradient-to-br from-turquoise/15 via-primary/10 to-amber-400/15 flex items-center justify-center mb-2 relative overflow-hidden">
-                    <Icon className="h-7 w-7 text-turquoise/70 group-hover:scale-110 transition-transform" />
+                  <div className={`absolute -top-2 -left-2 z-10 px-2 py-0.5 rounded-md bg-gradient-to-br ${continentColor[g.continent]} border border-border text-[10px] font-extrabold text-foreground shadow-sm`}>
+                    {g.slot}
+                  </div>
+                  <div className={`aspect-square rounded-lg bg-gradient-to-br ${continentColor[g.continent]} flex items-center justify-center mb-2 relative overflow-hidden`}>
+                    <Icon className="h-7 w-7 text-foreground/60 group-hover:scale-110 transition-transform" />
                     <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-full bg-background/80 backdrop-blur text-[9px] font-bold text-muted-foreground">
                       {g.region}
+                    </div>
+                    <div className="absolute bottom-1.5 left-1.5 text-[8px] font-bold text-muted-foreground">
+                      #{String(i + 1).padStart(2, "0")}
                     </div>
                   </div>
                   <h3 className="text-xs font-bold text-foreground leading-tight">{g.name}</h3>
@@ -524,7 +539,7 @@ const May19 = () => {
           </div>
 
           <p className="text-[11px] text-muted-foreground text-center mt-6 italic">
-            Davet listesi güncellenmektedir. Konuk katılımları onay sürecindedir.
+            Saatler TSİ'ye göredir. Davet listesi güncellenmektedir; konuk katılımları onay sürecindedir.
           </p>
         </div>
       </section>
