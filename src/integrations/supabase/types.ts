@@ -278,6 +278,87 @@ export type Database = {
         }
         Relationships: []
       }
+      may19_submissions: {
+        Row: {
+          attachment_urls: string[] | null
+          bio: string | null
+          city: string | null
+          consent: boolean | null
+          country: string | null
+          created_at: string
+          description: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          kind: string
+          link: string | null
+          livestream_participation: string | null
+          livestream_time_slot: string | null
+          livestream_topic: string | null
+          message: string | null
+          metadata: Json | null
+          phone: string | null
+          show_on_map: boolean | null
+          social_handle: string | null
+          status: string
+          title: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          attachment_urls?: string[] | null
+          bio?: string | null
+          city?: string | null
+          consent?: boolean | null
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          kind: string
+          link?: string | null
+          livestream_participation?: string | null
+          livestream_time_slot?: string | null
+          livestream_topic?: string | null
+          message?: string | null
+          metadata?: Json | null
+          phone?: string | null
+          show_on_map?: boolean | null
+          social_handle?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          attachment_urls?: string[] | null
+          bio?: string | null
+          city?: string | null
+          consent?: boolean | null
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          kind?: string
+          link?: string | null
+          livestream_participation?: string | null
+          livestream_time_slot?: string | null
+          livestream_topic?: string | null
+          message?: string | null
+          metadata?: Json | null
+          phone?: string | null
+          show_on_map?: boolean | null
+          social_handle?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string
