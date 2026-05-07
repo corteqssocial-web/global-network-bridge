@@ -19,6 +19,27 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import ideasImage from "@/assets/may19-ideas.jpg";
 import momentsImage from "@/assets/may19-moments.jpg";
+import gAzizSancar from "@/assets/guests/aziz-sancar.png";
+import gSelcukSirin from "@/assets/guests/selcuk-sirin.png";
+import gRefikAnadol from "@/assets/guests/refik-anadol.png";
+import gAlperenSengun from "@/assets/guests/alperen-sengun.png";
+import gMeltemDemirors from "@/assets/guests/meltem-demirors.png";
+import gErenBali from "@/assets/guests/eren-bali.png";
+import gCanYaman from "@/assets/guests/can-yaman.png";
+import gArdaGuler from "@/assets/guests/arda-guler.png";
+import gDilekGursoy from "@/assets/guests/dilek-gursoy.png";
+
+const guestPhotos: Record<string, string> = {
+  "Aziz Sancar": gAzizSancar,
+  "Selçuk Şirin": gSelcukSirin,
+  "Refik Anadol": gRefikAnadol,
+  "Alperen Şengün": gAlperenSengun,
+  "Meltem Demirors": gMeltemDemirors,
+  "Eren Bali": gErenBali,
+  "Can Yaman": gCanYaman,
+  "Arda Güler": gArdaGuler,
+  "Dilek Gürsoy": gDilekGursoy,
+};
 
 const isDriveLink = (url: string) =>
   /^https?:\/\/(drive|docs)\.google\.com\//i.test(url.trim());
