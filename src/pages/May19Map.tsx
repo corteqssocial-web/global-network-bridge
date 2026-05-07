@@ -1,27 +1,21 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  ComposableMap, Geographies, Geography, Marker, Line,
+  ComposableMap, Geographies, Geography, Marker, Line, Sphere, Graticule,
 } from "react-simple-maps";
-import { ArrowLeft, MapPin, Sparkles, Users, Globe2, Loader2 } from "lucide-react";
+import { ArrowLeft, MapPin, Sparkles, Users, Globe2, Loader2, Pause, Play } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 
 /**
- * 19 Mayıs Global Diaspora Haritası
- * Standalone animated world map – CorteQS palette.
- * Not the platform's /map. Landing-only experience.
+ * 19 Mayıs Global Diaspora — Animated rotating globe.
+ * Public, auto-rotates, hover names, CorteQS palette.
  */
 
-// World TopoJSON (Natural Earth, public CDN)
 const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
-
-// Ankara as the symbolic radiating origin for animated arcs.
 const ORIGIN: [number, number] = [32.85, 39.93];
 
-// Seed cities — major Turkish diaspora hubs (lng, lat).
-// Coordinates are well-known approximations.
 type Seed = { name: string; coords: [number, number]; country: string };
 const SEED_CITIES: Seed[] = [
   { name: "Berlin",     coords: [13.40, 52.52], country: "Almanya" },
@@ -83,6 +77,10 @@ const May19Map = () => {
   const [livePins, setLivePins] = useState<LivePin[]>([]);
   const [loading, setLoading] = useState(true);
   const [hovered, setHovered] = useState<string | null>(null);
+  const [rotation, setRotation] = useState<[number, number, number]>([-30, -15, 0]);
+  const [paused, setPaused] = useState(false);
+  const rafRef = useRef<number | null>(null);
+  const lastRef = useRef<number>(performance.now());
 
   useEffect(() => {
     (async () => {
@@ -98,7 +96,20 @@ const May19Map = () => {
     })();
   }, []);
 
-  // Stagger arc animations
+  // Smooth rotation loop
+  useEffect(() => {
+    const tick = (t: number) => {
+      const dt = t - lastRef.current;
+      lastRef.current = t;
+      if (!paused && !hovered) {
+        setRotation((r) => [(r[0] + dt * 0.012) % 360, r[1], r[2]]);
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+  }, [paused, hovered]);
+
   const arcs = useMemo(
     () => SEED_CITIES.map((c, i) => ({ ...c, delay: (i * 120) % 4000 })),
     [],
@@ -108,23 +119,23 @@ const May19Map = () => {
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
 
-      {/* Header bar */}
-      <header className="relative pt-20 pb-6 bg-gradient-hero border-b border-border">
+      {/* Header */}
+      <header className="relative pt-20 pb-5 bg-gradient-hero border-b border-border">
         <div className="container mx-auto px-4">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div>
-              <Link to="/19-mayis" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-3">
+              <Link to="/19-mayis" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-2">
                 <ArrowLeft className="h-3.5 w-3.5" /> 19 Mayıs Buluşması
               </Link>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-turquoise/15 border border-turquoise/30 mb-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-turquoise/15 border border-turquoise/30 mb-2">
                 <Sparkles className="h-3.5 w-3.5 text-turquoise" />
                 <span className="text-xs font-semibold text-turquoise">Canlı Yayın · 5 Kıta · 19 Saat</span>
               </div>
-              <h1 className="text-3xl md:text-5xl font-extrabold leading-tight">
+              <h1 className="text-2xl md:text-4xl font-extrabold leading-tight">
                 19 Mayıs <span className="text-gradient-primary">Global Diaspora Haritası</span>
               </h1>
-              <p className="text-sm md:text-base text-muted-foreground mt-2 max-w-2xl font-body">
-                Dünyanın dört bir yanındaki Türkler aynı anda burada. Şehrini ekle, haritada parlamaya başla.
+              <p className="text-xs md:text-sm text-muted-foreground mt-1.5 max-w-2xl font-body">
+                Dünya kendi ekseninde dönerken, diasporanın kalp atışı Ankara'dan tüm dünyaya yayılıyor. Şehir üzerine gelin, ismi parlasın.
               </p>
             </div>
             <div className="flex flex-col gap-2 items-end">
@@ -133,7 +144,7 @@ const May19Map = () => {
                   <MapPin className="h-4 w-4" /> Haritada Yerimi İşaretle
                 </Button>
               </Link>
-              <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              <div className="flex items-center gap-3 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5"><Globe2 className="h-3.5 w-3.5 text-turquoise" /> {arcs.length}+ Şehir</span>
                 <span className="inline-flex items-center gap-1.5"><Users className="h-3.5 w-3.5 text-primary" /> {livePins.length} Canlı Pin</span>
               </div>
@@ -146,11 +157,8 @@ const May19Map = () => {
       <main className="flex-1 relative bg-[hsl(220,30%,8%)] overflow-hidden">
         {/* Decorative glows */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full blur-3xl opacity-20"
-            style={{ background: TURQUOISE }} />
-          <div className="absolute bottom-0 right-1/4 w-[700px] h-[700px] rounded-full blur-3xl opacity-15"
-            style={{ background: PRIMARY }} />
-          {/* Star field */}
+          <div className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full blur-3xl opacity-20" style={{ background: TURQUOISE }} />
+          <div className="absolute bottom-0 right-1/4 w-[700px] h-[700px] rounded-full blur-3xl opacity-15" style={{ background: PRIMARY }} />
           <svg className="absolute inset-0 w-full h-full opacity-40" aria-hidden>
             <defs>
               <pattern id="stars" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
@@ -164,31 +172,54 @@ const May19Map = () => {
           </svg>
         </div>
 
-        {loading && (
-          <div className="absolute top-6 right-6 z-10 flex items-center gap-2 text-xs text-white/70 bg-white/5 backdrop-blur px-3 py-1.5 rounded-full border border-white/10">
-            <Loader2 className="h-3.5 w-3.5 animate-spin" /> Canlı pinler yükleniyor…
-          </div>
-        )}
+        {/* Top-right floating controls */}
+        <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+          {loading && (
+            <div className="flex items-center gap-2 text-xs text-white/70 bg-white/5 backdrop-blur px-3 py-1.5 rounded-full border border-white/10">
+              <Loader2 className="h-3.5 w-3.5 animate-spin" /> Canlı pinler…
+            </div>
+          )}
+          <button
+            onClick={() => setPaused((p) => !p)}
+            className="flex items-center gap-1.5 text-xs font-semibold text-white/90 bg-white/10 hover:bg-white/20 backdrop-blur px-3 py-1.5 rounded-full border border-white/15 transition"
+          >
+            {paused ? <><Play className="h-3.5 w-3.5" /> Döndür</> : <><Pause className="h-3.5 w-3.5" /> Durdur</>}
+          </button>
+        </div>
 
-        <div className="relative w-full" style={{ height: "min(78vh, 820px)" }}>
+        <div className="relative w-full" style={{ height: "min(82vh, 880px)" }}>
           <ComposableMap
-            projection="geoEqualEarth"
-            projectionConfig={{ scale: 175 }}
+            projection="geoOrthographic"
+            projectionConfig={{ scale: 340, rotate: rotation }}
             style={{ width: "100%", height: "100%" }}
           >
-            {/* Subtle ocean gradient via background already; geographies = land */}
+            {/* Globe sphere + atmosphere */}
+            <defs>
+              <radialGradient id="atmo" cx="50%" cy="50%" r="50%">
+                <stop offset="85%" stopColor="hsl(174,72%,46%)" stopOpacity="0" />
+                <stop offset="100%" stopColor="hsl(174,72%,46%)" stopOpacity="0.55" />
+              </radialGradient>
+              <radialGradient id="ocean" cx="35%" cy="35%" r="75%">
+                <stop offset="0%" stopColor="hsl(220, 35%, 22%)" />
+                <stop offset="100%" stopColor="hsl(220, 35%, 10%)" />
+              </radialGradient>
+            </defs>
+            <Sphere id="atmo-sphere" stroke="none" strokeWidth={0} fill="url(#atmo)" />
+            <Sphere id="ocean-sphere" stroke="hsl(174,72%,46% / 0.3)" strokeWidth={0.6} fill="url(#ocean)" />
+            <Graticule stroke="hsl(174,72%,46% / 0.12)" strokeWidth={0.4} />
+
             <Geographies geography={GEO_URL}>
               {({ geographies }) =>
                 geographies.map((geo) => (
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
-                    fill="hsl(220, 25%, 16%)"
-                    stroke="hsl(174, 72%, 46% / 0.25)"
+                    fill="hsl(220, 25%, 18%)"
+                    stroke="hsl(174, 72%, 46% / 0.3)"
                     strokeWidth={0.4}
                     style={{
                       default: { outline: "none" },
-                      hover:   { fill: "hsl(220, 25%, 22%)", outline: "none", transition: "fill 0.3s" },
+                      hover:   { fill: "hsl(220, 25%, 24%)", outline: "none", transition: "fill 0.3s" },
                       pressed: { outline: "none" },
                     }}
                   />
@@ -196,15 +227,15 @@ const May19Map = () => {
               }
             </Geographies>
 
-            {/* Animated arcs from origin to each seed city */}
+            {/* Animated arcs */}
             {arcs.map((c) => (
               <Line
                 key={`arc-${c.name}`}
                 from={ORIGIN}
                 to={c.coords}
                 stroke={TURQUOISE_LIGHT}
-                strokeWidth={0.6}
-                strokeOpacity={0.35}
+                strokeWidth={0.7}
+                strokeOpacity={0.4}
                 strokeLinecap="round"
                 strokeDasharray="2 4"
                 style={{
@@ -221,12 +252,12 @@ const May19Map = () => {
                 <animate attributeName="opacity" from="0.55" to="0" dur="2.4s" repeatCount="indefinite" />
               </circle>
               <circle r={5} fill={PRIMARY} stroke="white" strokeWidth={1.5} />
-              <text y={-12} textAnchor="middle" style={{ fontFamily: "Plus Jakarta Sans", fontSize: 10, fontWeight: 700, fill: "white" }}>
+              <text y={-12} textAnchor="middle" style={{ fontFamily: "Plus Jakarta Sans", fontSize: 11, fontWeight: 800, fill: "white", paintOrder: "stroke", stroke: NAVY, strokeWidth: 3 }}>
                 Türkiye
               </text>
             </Marker>
 
-            {/* Seed city pulses */}
+            {/* City markers with always-visible names */}
             {arcs.map((c, i) => (
               <Marker key={c.name} coordinates={c.coords}
                 onMouseEnter={() => setHovered(c.name)}
@@ -236,20 +267,33 @@ const May19Map = () => {
                   <animate attributeName="r" from="2" to="10" dur="2.6s" begin={`${(i % 18) * 0.18}s`} repeatCount="indefinite" />
                   <animate attributeName="opacity" from="0.55" to="0" dur="2.6s" begin={`${(i % 18) * 0.18}s`} repeatCount="indefinite" />
                 </circle>
-                <circle r={2.4} fill={TURQUOISE_LIGHT} stroke="white" strokeWidth={0.6}
-                  style={{ cursor: "pointer", filter: hovered === c.name ? "drop-shadow(0 0 6px white)" : undefined }} />
+                <circle r={hovered === c.name ? 3.6 : 2.4} fill={hovered === c.name ? "white" : TURQUOISE_LIGHT} stroke="white" strokeWidth={0.7}
+                  style={{ cursor: "pointer", transition: "r 0.2s" }} />
+                <text
+                  x={5} y={-5}
+                  style={{
+                    fontFamily: "Inter",
+                    fontSize: hovered === c.name ? 11 : 8.5,
+                    fontWeight: hovered === c.name ? 800 : 600,
+                    fill: hovered === c.name ? "white" : "hsl(0,0%,90%)",
+                    paintOrder: "stroke",
+                    stroke: NAVY,
+                    strokeWidth: hovered === c.name ? 3 : 2.2,
+                    pointerEvents: "none",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  {c.name}
+                </text>
                 {hovered === c.name && (
-                  <g>
-                    <rect x={6} y={-14} rx={4} ry={4} width={Math.max(48, c.name.length * 6 + 18)} height={18} fill={NAVY} opacity={0.92} />
-                    <text x={12} y={-2} style={{ fontFamily: "Inter", fontSize: 9, fontWeight: 600, fill: "white" }}>
-                      {c.name} · {c.country}
-                    </text>
-                  </g>
+                  <text x={5} y={6} style={{ fontFamily: "Inter", fontSize: 8, fontWeight: 600, fill: TURQUOISE_LIGHT, paintOrder: "stroke", stroke: NAVY, strokeWidth: 2.2, pointerEvents: "none" }}>
+                    {c.country}
+                  </text>
                 )}
               </Marker>
             ))}
 
-            {/* Live submitted pins (gold, slightly larger) – plotted only if we can resolve coords */}
+            {/* Live submitted pins */}
             {livePins.map((p) => {
               const seed = SEED_CITIES.find(
                 (s) => s.name.toLowerCase() === (p.city || "").toLowerCase(),
@@ -287,9 +331,7 @@ const May19Map = () => {
       </main>
 
       <style>{`
-        @keyframes dashFlow {
-          to { stroke-dashoffset: -120; }
-        }
+        @keyframes dashFlow { to { stroke-dashoffset: -120; } }
       `}</style>
     </div>
   );
