@@ -106,18 +106,16 @@ const Auth = () => {
 
   const handleGoogle = async () => {
     setLoading(true);
-    const { error, data } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: window.location.origin,
-      },
+    const { lovable } = await import("@/integrations/lovable/index");
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
     });
-    if (error) {
+    if (result.error) {
       setLoading(false);
-      toast({ title: "Google girişi başarısız", description: error.message, variant: "destructive" });
+      toast({ title: "Google girişi başarısız", description: String(result.error), variant: "destructive" });
       return;
     }
-    if (data.url) return;
+    if (result.redirected) return;
     setLoading(false);
   };
 
