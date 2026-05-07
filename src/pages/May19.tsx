@@ -145,11 +145,21 @@ const May19 = () => {
     if (kind === "map_pin" && (!form.full_name || !form.country || !form.city)) {
       toast({ title: "Ad, ülke ve şehir gerekli", variant: "destructive" }); return;
     }
-    if (kind === "idea" && (!form.title || !form.description || !form.consent)) {
-      toast({ title: "Başlık, açıklama ve onay gerekli", variant: "destructive" }); return;
+    if (kind === "idea") {
+      if (!form.title || !form.description || !form.consent) {
+        toast({ title: "Başlık, açıklama ve onay gerekli", variant: "destructive" }); return;
+      }
+      if (form.link && !isDriveLink(form.link)) {
+        toast({ title: "Sadece Google Drive linki", description: "Dosyalarını drive.google.com paylaşım linki olarak ekle.", variant: "destructive" }); return;
+      }
     }
-    if (kind === "moment" && (!form.title || !form.consent)) {
-      toast({ title: "Başlık ve paylaşım onayı gerekli", variant: "destructive" }); return;
+    if (kind === "moment") {
+      if (!form.title || !form.consent) {
+        toast({ title: "Başlık ve paylaşım onayı gerekli", variant: "destructive" }); return;
+      }
+      if (!form.link || !isDriveLink(form.link)) {
+        toast({ title: "Google Drive linki gerekli", description: "Foto / video içeriklerini drive.google.com üzerinden paylaş.", variant: "destructive" }); return;
+      }
     }
     if (kind === "livestream" && (!form.full_name || !form.livestream_participation)) {
       toast({ title: "Ad ve katılım türü gerekli", variant: "destructive" }); return;
