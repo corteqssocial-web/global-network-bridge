@@ -214,7 +214,7 @@ const May19 = () => {
               onClick={() => document.getElementById("modules")?.scrollIntoView({ behavior: "smooth" })}>
               <Sparkles className="h-5 w-5" /> Kayıt Ol ve Katıl
             </Button>
-            <Link to="/map"><Button size="lg" variant="outline" className="gap-2"><Globe className="h-4 w-4" />Haritayı Gör</Button></Link>
+            <Link to="/19-mayis/harita"><Button size="lg" variant="outline" className="gap-2"><Globe className="h-4 w-4" />Global Diaspora Haritası</Button></Link>
           </div>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-foreground mt-8">
             <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5 text-turquoise" /> 5 Kıta</span>
