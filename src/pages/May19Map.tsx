@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import {
   ComposableMap, Geographies, Geography, Marker, Line, Sphere, Graticule,
 } from "react-simple-maps";
-import { ArrowLeft, MapPin, Sparkles, Users, Globe2, Loader2, Pause, Play } from "lucide-react";
+import { geoDistance } from "d3-geo";
+import { ArrowLeft, MapPin, Sparkles, Users, Globe2, Loader2, Pause, Play, UserPlus } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import ataturkMarker from "@/assets/ataturk-marker.png";
 
 /**
  * 19 Mayıs Global Diaspora — Animated rotating globe.
