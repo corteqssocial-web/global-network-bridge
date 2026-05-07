@@ -17,6 +17,11 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import ideasImage from "@/assets/may19-ideas.jpg";
+import momentsImage from "@/assets/may19-moments.jpg";
+
+const isDriveLink = (url: string) =>
+  /^https?:\/\/(drive|docs)\.google\.com\//i.test(url.trim());
 
 
 type Kind = "map_pin" | "idea" | "moment" | "livestream";
@@ -140,11 +145,21 @@ const May19 = () => {
     if (kind === "map_pin" && (!form.full_name || !form.country || !form.city)) {
       toast({ title: "Ad, ülke ve şehir gerekli", variant: "destructive" }); return;
     }
-    if (kind === "idea" && (!form.title || !form.description || !form.consent)) {
-      toast({ title: "Başlık, açıklama ve onay gerekli", variant: "destructive" }); return;
+    if (kind === "idea") {
+      if (!form.title || !form.description || !form.consent) {
+        toast({ title: "Başlık, açıklama ve onay gerekli", variant: "destructive" }); return;
+      }
+      if (form.link && !isDriveLink(form.link)) {
+        toast({ title: "Sadece Google Drive linki", description: "Dosyalarını drive.google.com paylaşım linki olarak ekle.", variant: "destructive" }); return;
+      }
     }
-    if (kind === "moment" && (!form.title || !form.consent)) {
-      toast({ title: "Başlık ve paylaşım onayı gerekli", variant: "destructive" }); return;
+    if (kind === "moment") {
+      if (!form.title || !form.consent) {
+        toast({ title: "Başlık ve paylaşım onayı gerekli", variant: "destructive" }); return;
+      }
+      if (!form.link || !isDriveLink(form.link)) {
+        toast({ title: "Google Drive linki gerekli", description: "Foto / video içeriklerini drive.google.com üzerinden paylaş.", variant: "destructive" }); return;
+      }
     }
     if (kind === "livestream" && (!form.full_name || !form.livestream_participation)) {
       toast({ title: "Ad ve katılım türü gerekli", variant: "destructive" }); return;
@@ -235,34 +250,26 @@ const May19 = () => {
       </div>
     );
     if (kind === "idea") return (
-      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden bg-gradient-to-br from-amber-400/25 via-amber-200/10 to-transparent border border-amber-400/30 p-5 flex flex-col justify-between">
-        <div className="absolute -top-12 -left-8 w-44 h-44 rounded-full bg-amber-300/30 blur-2xl" />
-        <div className="relative">
-          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/20 text-[10px] font-bold text-amber-700">MODÜL 02</div>
-          <h3 className="text-xl font-extrabold mt-2 leading-tight">Diasporayı Güçlendirecek<br/><span className="text-amber-600">19 Fikir</span></h3>
-          <p className="text-xs text-muted-foreground mt-2 leading-relaxed">En etkili 19 fikir CorteQS tarafından öne çıkarılır.</p>
-        </div>
-        <div className="relative grid grid-cols-3 gap-1.5 mt-4">
-          {[1,2,3,4,5,6,7,8,9].map(n => (
-            <div key={n} className="aspect-square rounded bg-amber-500/10 border border-amber-400/30 flex items-center justify-center text-[10px] font-bold text-amber-700">
-              {n === 5 ? <Lightbulb className="h-4 w-4" /> : n}
-            </div>
-          ))}
+      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden border border-amber-400/30 flex flex-col justify-end">
+        <img src={ideasImage} alt="Diasporayı güçlendirecek 19 fikir" loading="lazy" width={768} height={768}
+          className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+        <div className="relative p-5">
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/30 backdrop-blur text-[10px] font-bold text-amber-100">MODÜL 02</div>
+          <h3 className="text-xl font-extrabold mt-2 leading-tight text-white drop-shadow">Diasporayı Güçlendirecek<br/><span className="text-amber-300">19 Fikir</span></h3>
+          <p className="text-xs text-white/80 mt-1.5 leading-relaxed">En etkili 19 fikir CorteQS tarafından öne çıkarılır.</p>
         </div>
       </div>
     );
     if (kind === "moment") return (
-      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden bg-gradient-to-br from-primary/25 via-primary/5 to-transparent border border-primary/30 p-5 flex flex-col justify-between">
-        <div className="absolute -bottom-10 -right-8 w-44 h-44 rounded-full bg-primary/20 blur-2xl" />
-        <div className="relative">
-          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-primary/20 text-[10px] font-bold text-primary">MODÜL 03</div>
-          <h3 className="text-xl font-extrabold mt-2 leading-tight">19 Mayıs ve<br/>Diaspora Anını Gönder</h3>
-          <p className="text-xs text-muted-foreground mt-2 leading-relaxed">Foto, 19 saniyelik video veya kısa mesaj — global hesaplarımızda paylaşalım.</p>
-        </div>
-        <div className="relative flex gap-2 mt-4">
-          <div className="aspect-[3/4] flex-1 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center"><Camera className="h-5 w-5 text-primary" /></div>
-          <div className="aspect-[3/4] flex-1 rounded-lg bg-primary/15 border border-primary/30 -mt-2 flex items-center justify-center text-[10px] font-bold text-primary">19s</div>
-          <div className="aspect-[3/4] flex-1 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-[10px] text-primary">★</div>
+      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden border border-primary/30 flex flex-col justify-end">
+        <img src={momentsImage} alt="19 Mayıs ve diaspora anları" loading="lazy" width={768} height={768}
+          className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+        <div className="relative p-5">
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-primary/30 backdrop-blur text-[10px] font-bold text-white">MODÜL 03</div>
+          <h3 className="text-xl font-extrabold mt-2 leading-tight text-white drop-shadow">19 Mayıs ve<br/>Diaspora Anını Gönder</h3>
+          <p className="text-xs text-white/80 mt-1.5 leading-relaxed">Foto, 19 saniyelik video veya kısa mesaj — global hesaplarımızda paylaşalım.</p>
         </div>
       </div>
     );
@@ -397,8 +404,11 @@ const May19 = () => {
                     <div className="col-span-2"><Label className={labelCls}>Diasporayı nasıl güçlendirir?</Label><Textarea rows={2} className="text-sm min-h-0" value={form.message} onChange={(e) => update("message", e.target.value)} /></div>
                     <div><Label className={labelCls}>Ülke / topluluk</Label><Input className={inputCls} value={form.country} onChange={(e) => update("country", e.target.value)} /></div>
                     <div><Label className={labelCls}>Şehir</Label><Input className={inputCls} value={form.city} onChange={(e) => update("city", e.target.value)} /></div>
-                    <div className="col-span-2"><Label className={labelCls}>Link (sunum / video / doküman)</Label><Input className={inputCls} value={form.link} onChange={(e) => update("link", e.target.value)} placeholder="https://..." /></div>
-                    {FileInput}
+                    <div className="col-span-2">
+                      <Label className={labelCls}>Google Drive linki (sunum / video / doküman)</Label>
+                      <Input className={inputCls} value={form.link} onChange={(e) => update("link", e.target.value)} placeholder="https://drive.google.com/..." />
+                      <p className="text-[10px] text-muted-foreground mt-1">Sadece Google Drive paylaşım linki kabul ediyoruz. Lütfen "Linke sahip herkes görüntüleyebilir" izni ver.</p>
+                    </div>
                     <label className="col-span-2 flex items-start gap-2 text-xs cursor-pointer">
                       <Checkbox checked={form.consent} onCheckedChange={(v) => update("consent", !!v)} className="mt-0.5" />
                       Fikrimin CorteQS tarafından değerlendirilip paylaşılmasına izin veriyorum *
@@ -407,6 +417,11 @@ const May19 = () => {
                       {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Lightbulb className="h-4 w-4 mr-2" />}
                       Fikrimi Gönder
                     </Button>
+                    <Link to="/auth" className="col-span-2">
+                      <Button type="button" variant="outline" size="sm" className="w-full border-amber-400/50 text-amber-700 hover:bg-amber-500/10">
+                        <Sparkles className="h-3.5 w-3.5 mr-2" /> Platforma Kaydımı Tamamla
+                      </Button>
+                    </Link>
                   </div>
                 )}
               </div>
@@ -429,9 +444,12 @@ const May19 = () => {
                     <div><Label className={labelCls}>Şehir</Label><Input className={inputCls} value={form.city} onChange={(e) => update("city", e.target.value)} /></div>
                     <div className="col-span-2"><Label className={labelCls}>İçerik başlığı *</Label><Input className={inputCls} value={form.title} onChange={(e) => update("title", e.target.value)} /></div>
                     <div className="col-span-2"><Label className={labelCls}>Kısa açıklama</Label><Textarea rows={2} className="text-sm min-h-0" value={form.description} onChange={(e) => update("description", e.target.value)} /></div>
-                    <div><Label className={labelCls}>Link (YouTube/Drive/IG)</Label><Input className={inputCls} value={form.link} onChange={(e) => update("link", e.target.value)} placeholder="https://..." /></div>
-                    <div><Label className={labelCls}>Sosyal medya</Label><Input className={inputCls} value={form.social_handle} onChange={(e) => update("social_handle", e.target.value)} /></div>
-                    {FileInput}
+                    <div className="col-span-2">
+                      <Label className={labelCls}>Google Drive linki (foto / video) *</Label>
+                      <Input className={inputCls} value={form.link} onChange={(e) => update("link", e.target.value)} placeholder="https://drive.google.com/..." />
+                      <p className="text-[10px] text-muted-foreground mt-1">Sadece Google Drive paylaşım linki kabul ediyoruz. "Linke sahip herkes görüntüleyebilir" izni açık olmalı.</p>
+                    </div>
+                    <div className="col-span-2"><Label className={labelCls}>Sosyal medya</Label><Input className={inputCls} value={form.social_handle} onChange={(e) => update("social_handle", e.target.value)} placeholder="@kullaniciadi" /></div>
                     <label className="col-span-2 flex items-start gap-2 text-xs cursor-pointer">
                       <Checkbox checked={form.consent} onCheckedChange={(v) => update("consent", !!v)} className="mt-0.5" />
                       İçeriğimin CorteQS platformunda, canlı yayın ve sosyal medyada paylaşılmasına izin veriyorum *
@@ -440,6 +458,11 @@ const May19 = () => {
                       {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Camera className="h-4 w-4 mr-2" />}
                       Anımı Gönder
                     </Button>
+                    <Link to="/auth" className="col-span-2">
+                      <Button type="button" variant="outline" size="sm" className="w-full border-primary/50 text-primary hover:bg-primary/10">
+                        <Sparkles className="h-3.5 w-3.5 mr-2" /> Platforma Kaydımı Tamamla
+                      </Button>
+                    </Link>
                   </div>
                 )}
               </div>
