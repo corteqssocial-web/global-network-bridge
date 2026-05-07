@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   MapPin, Lightbulb, Camera, Radio, Sparkles, Loader2, CheckCircle2,
-  Upload, X, Globe, Users, Calendar,
+  Upload, X, Globe, Users, Calendar, Star, Mic2, Trophy, Briefcase, Palette,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -17,6 +17,7 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 type Kind = "map_pin" | "idea" | "moment" | "livestream";
 
