@@ -230,71 +230,100 @@ const May19Map = () => {
               }
             </Geographies>
 
-            {/* Animated arcs */}
-            {arcs.map((c) => (
-              <Line
-                key={`arc-${c.name}`}
-                from={ORIGIN}
-                to={c.coords}
-                stroke={TURQUOISE_LIGHT}
-                strokeWidth={0.7}
-                strokeOpacity={0.4}
-                strokeLinecap="round"
-                strokeDasharray="2 4"
-                style={{
-                  animation: `dashFlow 6s linear infinite`,
-                  animationDelay: `${c.delay}ms`,
-                } as React.CSSProperties}
-              />
-            ))}
+            {/* Visibility center for orthographic projection (longitude, latitude in degrees).
+                rotation = [yaw, pitch, roll] where projection center = [-yaw, -pitch]. */}
+            {(() => {
+              const center: [number, number] = [-rotation[0], -rotation[1]];
+              const isVisible = (coords: [number, number]) =>
+                geoDistance(coords, center) < Math.PI / 2 - 0.05;
 
-            {/* Origin – Türkiye */}
-            <Marker coordinates={ORIGIN}>
-              <circle r={9} fill={PRIMARY} opacity={0.25}>
-                <animate attributeName="r" from="6" to="22" dur="2.4s" repeatCount="indefinite" />
-                <animate attributeName="opacity" from="0.55" to="0" dur="2.4s" repeatCount="indefinite" />
-              </circle>
-              <circle r={5} fill={PRIMARY} stroke="white" strokeWidth={1.5} />
-              <text y={-12} textAnchor="middle" style={{ fontFamily: "Plus Jakarta Sans", fontSize: 11, fontWeight: 800, fill: "white", paintOrder: "stroke", stroke: NAVY, strokeWidth: 3 }}>
-                Türkiye
-              </text>
-            </Marker>
+              return (
+                <>
+                  {/* Animated arcs — only when destination is on visible hemisphere */}
+                  {arcs.map((c) => isVisible(c.coords) && (
+                    <Line
+                      key={`arc-${c.name}`}
+                      from={ORIGIN}
+                      to={c.coords}
+                      stroke={TURQUOISE_LIGHT}
+                      strokeWidth={0.7}
+                      strokeOpacity={0.4}
+                      strokeLinecap="round"
+                      strokeDasharray="2 4"
+                      style={{
+                        animation: `dashFlow 6s linear infinite`,
+                        animationDelay: `${c.delay}ms`,
+                      } as React.CSSProperties}
+                    />
+                  ))}
 
-            {/* City markers with always-visible names */}
-            {arcs.map((c, i) => (
-              <Marker key={c.name} coordinates={c.coords}
-                onMouseEnter={() => setHovered(c.name)}
-                onMouseLeave={() => setHovered(null)}
-              >
-                <circle r={3} fill={TURQUOISE} opacity={0.35}>
-                  <animate attributeName="r" from="2" to="10" dur="2.6s" begin={`${(i % 18) * 0.18}s`} repeatCount="indefinite" />
-                  <animate attributeName="opacity" from="0.55" to="0" dur="2.6s" begin={`${(i % 18) * 0.18}s`} repeatCount="indefinite" />
-                </circle>
-                <circle r={hovered === c.name ? 3.6 : 2.4} fill={hovered === c.name ? "white" : TURQUOISE_LIGHT} stroke="white" strokeWidth={0.7}
-                  style={{ cursor: "pointer", transition: "r 0.2s" }} />
-                <text
-                  x={5} y={-5}
-                  style={{
-                    fontFamily: "Inter",
-                    fontSize: hovered === c.name ? 11 : 8.5,
-                    fontWeight: hovered === c.name ? 800 : 600,
-                    fill: hovered === c.name ? "white" : "hsl(0,0%,90%)",
-                    paintOrder: "stroke",
-                    stroke: NAVY,
-                    strokeWidth: hovered === c.name ? 3 : 2.2,
-                    pointerEvents: "none",
-                    transition: "all 0.2s",
-                  }}
-                >
-                  {c.name}
-                </text>
-                {hovered === c.name && (
-                  <text x={5} y={6} style={{ fontFamily: "Inter", fontSize: 8, fontWeight: 600, fill: TURQUOISE_LIGHT, paintOrder: "stroke", stroke: NAVY, strokeWidth: 2.2, pointerEvents: "none" }}>
-                    {c.country}
-                  </text>
-                )}
-              </Marker>
-            ))}
+                  {/* Origin – Türkiye */}
+                  {isVisible(ORIGIN) && (
+                    <Marker coordinates={ORIGIN}>
+                      <circle r={9} fill={PRIMARY} opacity={0.25}>
+                        <animate attributeName="r" from="6" to="22" dur="2.4s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" from="0.55" to="0" dur="2.4s" repeatCount="indefinite" />
+                      </circle>
+                      <circle r={5} fill={PRIMARY} stroke="white" strokeWidth={1.5} />
+                      <text y={-12} textAnchor="middle" style={{ fontFamily: "Plus Jakarta Sans", fontSize: 11, fontWeight: 800, fill: "white", paintOrder: "stroke", stroke: NAVY, strokeWidth: 3 }}>
+                        Türkiye
+                      </text>
+                    </Marker>
+                  )}
+
+                  {/* Samsun — 19 Mayıs 1919, marked with Atatürk silhouette */}
+                  {isVisible(SAMSUN) && (
+                    <Marker coordinates={SAMSUN}>
+                      <circle r={14} fill={PRIMARY} opacity={0.2}>
+                        <animate attributeName="r" from="10" to="26" dur="2.8s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" from="0.5" to="0" dur="2.8s" repeatCount="indefinite" />
+                      </circle>
+                      <circle r={11} fill="white" stroke={PRIMARY} strokeWidth={1.5} />
+                      <image href={ataturkMarker} x={-9} y={-10} width={18} height={18} preserveAspectRatio="xMidYMid meet" />
+                      <text y={22} textAnchor="middle" style={{ fontFamily: "Plus Jakarta Sans", fontSize: 10, fontWeight: 800, fill: "white", paintOrder: "stroke", stroke: NAVY, strokeWidth: 3 }}>
+                        Samsun · 19 Mayıs 1919
+                      </text>
+                    </Marker>
+                  )}
+
+                  {/* City markers — labels always visible on the front hemisphere */}
+                  {arcs.map((c, i) => isVisible(c.coords) && (
+                    <Marker key={c.name} coordinates={c.coords}
+                      onMouseEnter={() => setHovered(c.name)}
+                      onMouseLeave={() => setHovered(null)}
+                    >
+                      <circle r={3} fill={TURQUOISE} opacity={0.35}>
+                        <animate attributeName="r" from="2" to="10" dur="2.6s" begin={`${(i % 18) * 0.18}s`} repeatCount="indefinite" />
+                        <animate attributeName="opacity" from="0.55" to="0" dur="2.6s" begin={`${(i % 18) * 0.18}s`} repeatCount="indefinite" />
+                      </circle>
+                      <circle r={hovered === c.name ? 3.6 : 2.4} fill={hovered === c.name ? "white" : TURQUOISE_LIGHT} stroke="white" strokeWidth={0.7}
+                        style={{ cursor: "pointer", transition: "r 0.2s" }} />
+                      <text
+                        x={5} y={-5}
+                        style={{
+                          fontFamily: "Inter",
+                          fontSize: hovered === c.name ? 11 : 8.5,
+                          fontWeight: hovered === c.name ? 800 : 600,
+                          fill: hovered === c.name ? "white" : "hsl(0,0%,92%)",
+                          paintOrder: "stroke",
+                          stroke: NAVY,
+                          strokeWidth: hovered === c.name ? 3 : 2.4,
+                          pointerEvents: "none",
+                          transition: "all 0.2s",
+                        }}
+                      >
+                        {c.name}
+                      </text>
+                      {hovered === c.name && (
+                        <text x={5} y={6} style={{ fontFamily: "Inter", fontSize: 8, fontWeight: 600, fill: TURQUOISE_LIGHT, paintOrder: "stroke", stroke: NAVY, strokeWidth: 2.2, pointerEvents: "none" }}>
+                          {c.country}
+                        </text>
+                      )}
+                    </Marker>
+                  ))}
+                </>
+              );
+            })()}
 
             {/* Live submitted pins */}
             {livePins.map((p) => {
