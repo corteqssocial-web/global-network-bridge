@@ -17,6 +17,7 @@ import ataturkMarker from "@/assets/ataturk-marker.png";
 
 const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 const ORIGIN: [number, number] = [32.85, 39.93];
+const SAMSUN: [number, number] = [36.33, 41.29]; // 19 Mayıs 1919 — Atatürk's landing
 
 type Seed = { name: string; coords: [number, number]; country: string };
 const SEED_CITIES: Seed[] = [
