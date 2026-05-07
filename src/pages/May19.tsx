@@ -444,9 +444,12 @@ const May19 = () => {
                     <div><Label className={labelCls}>Şehir</Label><Input className={inputCls} value={form.city} onChange={(e) => update("city", e.target.value)} /></div>
                     <div className="col-span-2"><Label className={labelCls}>İçerik başlığı *</Label><Input className={inputCls} value={form.title} onChange={(e) => update("title", e.target.value)} /></div>
                     <div className="col-span-2"><Label className={labelCls}>Kısa açıklama</Label><Textarea rows={2} className="text-sm min-h-0" value={form.description} onChange={(e) => update("description", e.target.value)} /></div>
-                    <div><Label className={labelCls}>Link (YouTube/Drive/IG)</Label><Input className={inputCls} value={form.link} onChange={(e) => update("link", e.target.value)} placeholder="https://..." /></div>
-                    <div><Label className={labelCls}>Sosyal medya</Label><Input className={inputCls} value={form.social_handle} onChange={(e) => update("social_handle", e.target.value)} /></div>
-                    {FileInput}
+                    <div className="col-span-2">
+                      <Label className={labelCls}>Google Drive linki (foto / video) *</Label>
+                      <Input className={inputCls} value={form.link} onChange={(e) => update("link", e.target.value)} placeholder="https://drive.google.com/..." />
+                      <p className="text-[10px] text-muted-foreground mt-1">Sadece Google Drive paylaşım linki kabul ediyoruz. "Linke sahip herkes görüntüleyebilir" izni açık olmalı.</p>
+                    </div>
+                    <div className="col-span-2"><Label className={labelCls}>Sosyal medya</Label><Input className={inputCls} value={form.social_handle} onChange={(e) => update("social_handle", e.target.value)} placeholder="@kullaniciadi" /></div>
                     <label className="col-span-2 flex items-start gap-2 text-xs cursor-pointer">
                       <Checkbox checked={form.consent} onCheckedChange={(v) => update("consent", !!v)} className="mt-0.5" />
                       İçeriğimin CorteQS platformunda, canlı yayın ve sosyal medyada paylaşılmasına izin veriyorum *
@@ -455,6 +458,11 @@ const May19 = () => {
                       {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Camera className="h-4 w-4 mr-2" />}
                       Anımı Gönder
                     </Button>
+                    <Link to="/auth" className="col-span-2">
+                      <Button type="button" variant="outline" size="sm" className="w-full border-primary/50 text-primary hover:bg-primary/10">
+                        <Sparkles className="h-3.5 w-3.5 mr-2" /> Platforma Kaydımı Tamamla
+                      </Button>
+                    </Link>
                   </div>
                 )}
               </div>
