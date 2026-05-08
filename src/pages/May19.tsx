@@ -124,9 +124,6 @@ const May19 = () => {
         toast({ title: "Google Drive linki gerekli", description: "Foto / video içeriklerini drive.google.com üzerinden paylaş.", variant: "destructive" }); return;
       }
     }
-    if (kind === "livestream" && (!form.full_name || !form.livestream_participation)) {
-      toast({ title: "Ad ve katılım türü gerekli", variant: "destructive" }); return;
-    }
     setSubmitting(true);
     try {
       const attachment_urls = await upload(kind);
