@@ -295,21 +295,21 @@ const May19 = () => {
           <div className="absolute bottom-10 left-20 w-96 h-96 bg-primary/15 rounded-full blur-3xl" />
         </div>
         <div className="container mx-auto px-4 pt-20 pb-12 relative z-10 max-w-4xl">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-400/15 border border-amber-400/30 mb-6 shadow-md">
-            <Sparkles className="h-4 w-4 text-amber-500" />
-            <span className="text-sm font-semibold text-amber-600">19 Mayıs Gençlik ve Spor Bayramı</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-500/15 border border-rose-500/40 mb-6 shadow-md">
+            <Flag className="h-4 w-4 text-rose-600" />
+            <span className="text-sm font-semibold text-rose-700">19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı</span>
+            <PartyPopper className="h-4 w-4 text-amber-500" />
           </div>
           <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-5">
             19 Mayıs <span className="text-gradient-primary">Global Diaspora Buluşması</span>
           </h1>
           <p className="text-base md:text-lg text-muted-foreground max-w-2xl mb-8 font-body">
-            19 Mayıs Gençlik ve Spor Bayramı vesilesiyle, dünyanın dört bir yanındaki Türkleri CorteQS
-            platformunda bir araya getiriyoruz. Global haritada yerini işaretle, diasporayı güçlendirecek
-            fikrini paylaş, 19 Mayıs ve diaspora anını gönder, 5 kıtadan ünlü isimlerin de katılacağı
-            19 saatlik canlı yayında yerini al.
+            Bayram coşkusunu dünyanın dört bir yanındaki Türklerle paylaşıyoruz. Global haritada yerini
+            işaretle, diasporayı güçlendirecek <span className="font-semibold text-rose-600">19 fikrinden</span> birini paylaş ve
+            <span className="font-semibold text-primary"> 19 Mayıs anını</span> CorteQS global kanallarına gönder.
           </p>
           <div className="flex flex-wrap gap-3">
-            <Button size="lg" className="bg-turquoise hover:bg-turquoise-light text-primary-foreground gap-2"
+            <Button size="lg" className="bg-rose-500 hover:bg-rose-600 text-white gap-2 shadow-lg shadow-rose-500/30"
               onClick={() => document.getElementById("modules")?.scrollIntoView({ behavior: "smooth" })}>
               <Sparkles className="h-5 w-5" /> Kayıt Ol ve Katıl
             </Button>
@@ -317,7 +317,7 @@ const May19 = () => {
           </div>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-foreground mt-8">
             <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5 text-turquoise" /> 5 Kıta</span>
-            <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5 text-primary" /> 19 Saat Canlı</span>
+            <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5 text-rose-500" /> 19 Mayıs Bayram Haftası</span>
             <span className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5 text-amber-500" /> Global Diaspora</span>
           </div>
         </div>
