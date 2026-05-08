@@ -162,6 +162,7 @@ const May19 = () => {
   const inputCls = "h-9 text-sm";
   const labelCls = "text-xs font-medium mb-1 block";
 
+  const ModuleVisual = ({ kind }: { kind: Kind }) => {
     if (kind === "map_pin") return (
       <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden bg-gradient-to-br from-rose-500/20 via-turquoise/15 to-amber-300/20 border border-rose-500/30 p-5 flex flex-col justify-between">
         {/* festive blobs */}
