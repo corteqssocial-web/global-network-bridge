@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  MapPin, Lightbulb, Camera, Radio, Sparkles, Loader2, CheckCircle2,
-  Upload, X, Globe, Users, Calendar, Star, Mic2, Trophy, Briefcase, Palette,
+  MapPin, Lightbulb, Camera, Sparkles, Loader2, CheckCircle2,
+  Upload, X, Globe, Users, Calendar, Heart, Flag, PartyPopper,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
