@@ -60,37 +60,8 @@ const momentExamples = [
   "Doha'dan global Türk diasporasına selamlar.",
 ];
 
-// 19 Kişilik global davet listesi
-// 19 Saatlik Global Canlı Yayın — Konuk Listesi (saat dilimi + kıta ile)
-const guests = [
-  { slot: "19:00", name: "Aziz Sancar", title: "Bilim / Nobel Ödülü", region: "ABD", continent: "NA", icon: Star },
-  { slot: "20:00", name: "Selçuk Şirin", title: "Akademi / Eğitim", region: "ABD", continent: "NA", icon: Star },
-  { slot: "21:00", name: "Refik Anadol", title: "AI Sanatçısı", region: "ABD / Global", continent: "NA", icon: Palette },
-  { slot: "22:00", name: "Alperen Şengün", title: "NBA Oyuncusu", region: "ABD / TR", continent: "NA", icon: Trophy },
-  { slot: "23:00", name: "Meltem Demirors", title: "Yatırımcı / Dijital Varlıklar", region: "ABD / Global", continent: "NA", icon: Briefcase },
-  { slot: "00:00", name: "Eren Bali", title: "Teknoloji Girişimcisi", region: "ABD", continent: "NA", icon: Briefcase },
-  { slot: "01:00", name: "Saygın Yalçın", title: "Girişimci / Yatırımcı", region: "Dubai", continent: "AS", icon: Briefcase },
-  { slot: "02:00", name: "Can Yaman", title: "Oyuncu", region: "Avrupa", continent: "EU", icon: Mic2 },
-  { slot: "03:00", name: "Dilek Gürsoy", title: "Kalp Cerrahı", region: "Almanya", continent: "EU", icon: Star },
-  { slot: "04:00", name: "Ferzan Özpetek", title: "Sinema / Global Sanat", region: "İtalya", continent: "EU", icon: Palette },
-  { slot: "05:00", name: "Arda Güler", title: "Futbolcu", region: "İspanya / TR", continent: "EU", icon: Trophy },
-  { slot: "06:00", name: "Demet Mutlu", title: "Teknoloji Girişimcisi", region: "Türkiye", continent: "EU", icon: Briefcase },
-  { slot: "07:00", name: "Metin Akpınar", title: "Tiyatro Sanatçısı", region: "Türkiye", continent: "EU", icon: Palette },
-  { slot: "08:00", name: "Kaan Sekban", title: "Komedyen / Yazar", region: "Türkiye", continent: "EU", icon: Mic2 },
-  { slot: "09:00", name: "Cem Yılmaz", title: "Komedyen / Yönetmen", region: "Türkiye", continent: "EU", icon: Mic2 },
-];
-
-const continentLabel: Record<string, string> = {
-  NA: "Kuzey Amerika", EU: "Avrupa & TR", AS: "Asya / Orta Doğu", SA: "Güney Amerika", OC: "Okyanusya", AF: "Afrika",
-};
-const continentColor: Record<string, string> = {
-  NA: "from-turquoise/20 to-turquoise/5",
-  EU: "from-primary/20 to-primary/5",
-  AS: "from-amber-400/20 to-amber-400/5",
-  SA: "from-rose-500/20 to-rose-500/5",
-  OC: "from-emerald-500/20 to-emerald-500/5",
-  AF: "from-purple-500/20 to-purple-500/5",
-};
+const isDriveLink = (url: string) =>
+  /^https?:\/\/(drive|docs)\.google\.com\//i.test(url.trim());
 
 const May19 = () => {
   const { toast } = useToast();
