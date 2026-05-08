@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   MapPin, Lightbulb, Camera, Sparkles, Loader2, CheckCircle2,
-  Upload, X, Globe, Users, Calendar, Heart, Flag, PartyPopper,
+  Globe, Users, Calendar, Heart, Flag, PartyPopper,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
