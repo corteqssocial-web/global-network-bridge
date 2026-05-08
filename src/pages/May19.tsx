@@ -191,97 +191,83 @@ const May19 = () => {
 
   const ModuleVisual = ({ kind }: { kind: Kind }) => {
     if (kind === "map_pin") return (
-      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden bg-gradient-to-br from-turquoise/20 via-turquoise/5 to-transparent border border-turquoise/20 p-5 flex flex-col justify-between">
-        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-turquoise/20 blur-2xl" />
-        <div className="absolute bottom-4 left-4 w-32 h-32 rounded-full bg-primary/10 blur-2xl" />
-        <svg viewBox="0 0 200 120" className="absolute inset-0 w-full h-full opacity-40 pointer-events-none">
+      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden bg-gradient-to-br from-rose-500/20 via-turquoise/15 to-amber-300/20 border border-rose-500/30 p-5 flex flex-col justify-between">
+        {/* festive blobs */}
+        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-rose-500/25 blur-2xl animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-40 h-40 rounded-full bg-turquoise/30 blur-2xl" />
+        {/* confetti dots */}
+        <div className="absolute inset-0 pointer-events-none">
+          <span className="absolute top-3 left-6 w-1.5 h-1.5 rounded-full bg-rose-500" />
+          <span className="absolute top-8 right-12 w-2 h-2 rounded-sm bg-amber-400 rotate-12" />
+          <span className="absolute top-14 left-14 w-1 h-3 bg-turquoise rotate-45" />
+          <span className="absolute bottom-12 right-6 w-1.5 h-1.5 rounded-full bg-rose-500" />
+          <span className="absolute bottom-20 left-10 w-2 h-2 rounded-sm bg-amber-400 -rotate-12" />
+        </div>
+        <svg viewBox="0 0 200 120" className="absolute inset-0 w-full h-full opacity-30 pointer-events-none">
           <defs><pattern id="grid1" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.6" fill="hsl(174 72% 46%)"/></pattern></defs>
           <rect width="200" height="120" fill="url(#grid1)"/>
         </svg>
+        {/* corner ribbon */}
+        <div className="absolute -top-1 -right-1 z-10 px-3 py-1 bg-rose-500 text-white text-[9px] font-extrabold shadow-md rotate-3 rounded-bl-md flex items-center gap-1">
+          <Flag className="h-2.5 w-2.5" /> 19 MAYIS
+        </div>
         <div className="relative">
-          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-turquoise/20 text-[10px] font-bold text-turquoise">MODÜL 01</div>
-          <h3 className="text-xl font-extrabold mt-2 leading-tight">Global Haritada<br/>Kendini İşaretle</h3>
-          <p className="text-xs text-muted-foreground mt-2 leading-relaxed">Ülkeni, şehrini ve mesajını paylaş; CorteQS Türk Diaspora Haritası'nda parla.</p>
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-turquoise/30 text-[10px] font-extrabold text-turquoise mt-4">MODÜL 01</div>
+          <h3 className="text-xl font-extrabold mt-2 leading-tight">Global Haritada<br/><span className="text-rose-600">Kendini İşaretle</span></h3>
+          <p className="text-xs text-muted-foreground mt-2 leading-relaxed">Bayram coşkusunu dünyanın dört bir yanından paylaş; CorteQS Türk Diaspora Haritası'nda parla.</p>
         </div>
         <div className="relative flex items-center gap-3 mt-4">
-          <div className="w-10 h-10 rounded-full bg-turquoise/30 flex items-center justify-center animate-pulse"><MapPin className="h-5 w-5 text-turquoise" /></div>
-          <div className="flex-1 text-[11px] text-muted-foreground">5 kıta · 80+ ülke · canlı pin akışı</div>
+          <div className="w-10 h-10 rounded-full bg-rose-500 flex items-center justify-center animate-pulse shadow-lg shadow-rose-500/40"><MapPin className="h-5 w-5 text-white" /></div>
+          <div className="flex-1 text-[11px] font-semibold text-foreground/80">5 kıta · 80+ ülke · canlı pin akışı</div>
         </div>
       </div>
     );
     if (kind === "idea") return (
-      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden border border-amber-400/30 flex flex-col justify-end">
+      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden border border-amber-400/40 flex flex-col justify-end">
         <img src={ideasImage} alt="Diasporayı güçlendirecek 19 fikir" loading="lazy" width={768} height={768}
           className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-rose-900/80 via-rose-900/40 to-amber-500/30" />
+        {/* sparkles */}
+        <div className="absolute inset-0 pointer-events-none">
+          <Sparkles className="absolute top-4 right-4 h-5 w-5 text-amber-200 animate-pulse" />
+          <span className="absolute top-12 left-6 w-1.5 h-1.5 rounded-full bg-amber-300" />
+          <span className="absolute top-20 right-12 w-1 h-1 rounded-full bg-white/80" />
+          <span className="absolute top-6 left-20 w-1 h-1 rounded-full bg-amber-200" />
+        </div>
+        <div className="absolute -top-1 -right-1 z-10 px-3 py-1 bg-amber-400 text-rose-900 text-[9px] font-extrabold shadow-md rotate-3 rounded-bl-md flex items-center gap-1">
+          <PartyPopper className="h-2.5 w-2.5" /> COŞKU HAFTASI
+        </div>
         <div className="relative p-5">
-          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/30 backdrop-blur text-[10px] font-bold text-amber-100">MODÜL 02</div>
-          <h3 className="text-xl font-extrabold mt-2 leading-tight text-white drop-shadow">Diasporayı Güçlendirecek<br/><span className="text-amber-300">19 Fikir</span></h3>
-          <p className="text-xs text-white/80 mt-1.5 leading-relaxed">En etkili 19 fikir CorteQS tarafından öne çıkarılır.</p>
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-400 text-rose-900 text-[10px] font-extrabold">MODÜL 02</div>
+          <h3 className="text-xl font-extrabold mt-2 leading-tight text-white drop-shadow-lg">
+            Diasporayı Güçlendirecek<br/><span className="text-amber-300">19 Fikir</span>
+          </h3>
+          <p className="text-xs text-white/90 mt-1.5 leading-relaxed">En etkili 19 fikir CorteQS tarafından öne çıkarılır ve duyurulur.</p>
         </div>
       </div>
     );
-    if (kind === "moment") return (
-      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden border border-primary/30 flex flex-col justify-end">
+    // MOMENT
+    return (
+      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden border border-primary/40 flex flex-col justify-end">
         <img src={momentsImage} alt="19 Mayıs ve diaspora anları" loading="lazy" width={768} height={768}
           className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-rose-900/85 via-rose-700/40 to-transparent" />
+        {/* hearts + confetti */}
+        <div className="absolute inset-0 pointer-events-none">
+          <Heart className="absolute top-4 right-5 h-4 w-4 text-rose-300 fill-rose-400 animate-pulse" />
+          <Heart className="absolute top-16 left-6 h-3 w-3 text-rose-200 fill-rose-300" />
+          <span className="absolute top-8 left-16 w-1.5 h-1.5 rounded-full bg-amber-300" />
+          <span className="absolute top-20 right-16 w-2 h-2 rounded-sm bg-white/70 rotate-12" />
+        </div>
+        <div className="absolute -top-1 -right-1 z-10 px-3 py-1 bg-rose-500 text-white text-[9px] font-extrabold shadow-md rotate-3 rounded-bl-md flex items-center gap-1">
+          <Flag className="h-2.5 w-2.5" /> BAYRAM
+        </div>
         <div className="relative p-5">
-          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-primary/30 backdrop-blur text-[10px] font-bold text-white">MODÜL 03</div>
-          <h3 className="text-xl font-extrabold mt-2 leading-tight text-white drop-shadow">19 Mayıs ve<br/>Diaspora Anını Gönder</h3>
-          <p className="text-xs text-white/80 mt-1.5 leading-relaxed">Foto, 19 saniyelik video veya kısa mesaj — global hesaplarımızda paylaşalım.</p>
-        </div>
-      </div>
-    );
-    // MODULE 04 — YouTube livestream composition with tiny guest tiles
-    const liveTiles = [
-      gAzizSancar, gRefikAnadol, gAlperenSengun, gMeltemDemirors,
-      gErenBali, gCanYaman, gDilekGursoy, gFerzanOzpetek,
-      gArdaGuler, gMetinAkpinar, gKaanSekban, gCemYilmaz,
-    ];
-    return (
-      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden bg-gradient-to-br from-rose-500/15 via-background to-background border border-rose-500/30 p-5 flex flex-col justify-between">
-        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-rose-500/15 blur-2xl" />
-        <div className="relative">
-          <div className="flex items-center gap-2 flex-wrap">
-            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-rose-500/20 text-[10px] font-bold text-rose-600">MODÜL 04</div>
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-bold animate-pulse">● CANLI</span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-foreground text-background text-[10px] font-extrabold">
-              <span className="w-3.5 h-2.5 rounded-[2px] bg-rose-500 inline-flex items-center justify-center">
-                <svg viewBox="0 0 24 24" className="w-2 h-2 fill-white"><path d="M8 5v14l11-7z"/></svg>
-              </span>
-              YouTube
-            </span>
-          </div>
-          <h3 className="text-xl font-extrabold mt-2 leading-tight">5 Kıtada<br/>19 Saatlik Canlı Yayın</h3>
-          <p className="text-[11px] text-muted-foreground mt-1.5 leading-relaxed">
-            <span className="font-bold text-foreground">CorteQS</span> YouTube kanalında · 19 Mayıs · 19.00 TR
-          </p>
-        </div>
-
-        {/* Mock YouTube grid screen */}
-        <div className="relative mt-3 rounded-lg overflow-hidden border border-foreground/15 bg-[hsl(220,30%,8%)] shadow-lg">
-          <div className="flex items-center justify-between px-2 py-1 bg-[hsl(220,30%,5%)] border-b border-white/5">
-            <div className="flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            </div>
-            <span className="text-[8px] font-bold text-white/60 tracking-wider">youtube.com/@corteqs · LIVE</span>
-            <span className="text-[8px] text-white/50">19:00 TSİ</span>
-          </div>
-          <div className="grid grid-cols-4 gap-0.5 p-0.5">
-            {liveTiles.map((src, i) => (
-              <div key={i} className="relative aspect-square overflow-hidden bg-black">
-                <img src={src} alt="" loading="lazy" className="w-full h-full object-cover" />
-                <span className="absolute top-0.5 left-0.5 px-0.5 py-px rounded-sm bg-rose-500 text-white text-[6px] font-extrabold leading-none">●</span>
-              </div>
-            ))}
-          </div>
-          <div className="flex items-center justify-between px-2 py-1 bg-[hsl(220,30%,5%)] border-t border-white/5">
-            <span className="text-[8px] text-white/70">19 konuk · 5 kıta</span>
-            <span className="text-[8px] text-white/70">●  REC  ·  19h</span>
-          </div>
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white text-rose-600 text-[10px] font-extrabold">MODÜL 03</div>
+          <h3 className="text-xl font-extrabold mt-2 leading-tight text-white drop-shadow-lg">
+            19 Mayıs ve<br/><span className="text-amber-300">Diaspora Anını Gönder</span>
+          </h3>
+          <p className="text-xs text-white/90 mt-1.5 leading-relaxed">Foto, 19 saniyelik video veya kısa mesaj — global hesaplarımızda paylaşalım.</p>
         </div>
       </div>
     );
