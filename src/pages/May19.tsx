@@ -162,31 +162,6 @@ const May19 = () => {
   const inputCls = "h-9 text-sm";
   const labelCls = "text-xs font-medium mb-1 block";
 
-  const FileInput = (
-    <div className="col-span-2">
-      <Label className={labelCls}>Dosya / Foto / Video (maks 5 × 25MB)</Label>
-      <label className="flex items-center justify-center gap-2 px-3 py-2 border-2 border-dashed border-border rounded-md cursor-pointer hover:border-turquoise/60 hover:bg-turquoise/5 transition-colors">
-        <Upload className="h-3.5 w-3.5 text-turquoise" />
-        <span className="text-[11px] text-muted-foreground">Yüklemek için seç</span>
-        <input type="file" multiple className="hidden" onChange={handleFiles}
-          accept=".pdf,.ppt,.pptx,.doc,.docx,.png,.jpg,.jpeg,.mp4,.mov,.webm" />
-      </label>
-      {files.length > 0 && (
-        <ul className="mt-1.5 space-y-1">
-          {files.map((f, i) => (
-            <li key={i} className="flex items-center justify-between text-[11px] bg-muted/50 px-2 py-0.5 rounded">
-              <span className="truncate">{f.name}</span>
-              <button type="button" onClick={() => setFiles((p) => p.filter((_, idx) => idx !== i))} className="text-destructive">
-                <X className="h-3 w-3" />
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-
-  const ModuleVisual = ({ kind }: { kind: Kind }) => {
     if (kind === "map_pin") return (
       <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden bg-gradient-to-br from-rose-500/20 via-turquoise/15 to-amber-300/20 border border-rose-500/30 p-5 flex flex-col justify-between">
         {/* festive blobs */}
