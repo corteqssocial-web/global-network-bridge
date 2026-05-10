@@ -256,10 +256,15 @@ const ProfileIndividual = () => {
                   <Linkedin className="h-4 w-4" /> LinkedIn
                 </a>
               )}
-              {cvUploaded && (
-                <span className="flex items-center gap-1 text-sm text-muted-foreground">
-                  <FileText className="h-4 w-4" /> CV yüklendi
-                </span>
+              {cvDoc && (
+                <button onClick={() => handleDocOpen("cv")} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
+                  <FileText className="h-4 w-4" /> CV
+                </button>
+              )}
+              {pptDoc && (
+                <button onClick={() => handleDocOpen("presentation")} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
+                  <Presentation className="h-4 w-4" /> Sunum
+                </button>
               )}
             </div>
           </div>
