@@ -23,6 +23,7 @@ import QRScannerMock from "@/components/QRScannerMock";
 import MapAddressBanner from "@/components/MapAddressBanner";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 import NotificationsList from "@/components/NotificationsList";
+import SocialMediaInputs from "@/components/SocialMediaInputs";
 
 const ProfileBusiness = () => {
   const [isVerified, setIsVerified] = useState(true);
