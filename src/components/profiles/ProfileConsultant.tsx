@@ -20,6 +20,8 @@ import ConsultantServiceRequests from "@/components/ConsultantServiceRequests";
 import ConsultantCategoryManager from "@/components/ConsultantCategoryManager";
 import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
 import MapAddressBanner from "@/components/MapAddressBanner";
+import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
+import NotificationsList from "@/components/NotificationsList";
 
 const ProfileConsultant = () => {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
