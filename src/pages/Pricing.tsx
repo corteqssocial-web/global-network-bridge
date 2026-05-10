@@ -93,10 +93,10 @@ const associationPlans = {
     ],
   },
   premium: {
-    name: "Kuruluş Pro",
+    name: "Premium Pro",
     icon: Crown,
-    monthlyPrice: 50,
-    yearlyPrice: 40,
+    monthlyPrice: 10,
+    yearlyPrice: 8,
     desc: "Tam güçle organize olun",
     badge: "Kurumsal",
     features: [
@@ -110,6 +110,23 @@ const associationPlans = {
       { text: "Kampanya & duyuru araçları", included: true },
       { text: "Kurumsal analitik dashboard", included: true },
       { text: "Boost & duyuru paketleri", included: true },
+    ],
+  },
+  founding: {
+    name: "Founding 1000",
+    icon: Sparkles,
+    monthlyPrice: 99,
+    yearlyPrice: 99,
+    yearlyOnly: true,
+    desc: "Erken dönem üyelik — sınırlı kontenjan",
+    badge: "En Popüler",
+    features: [
+      { text: "Premium Pro'nun tüm özellikleri", included: true },
+      { text: "Tek seferlik €99 ödeme · 1 yıl geçerli", included: true },
+      { text: "€399 değerinde kategori vitrini · 6 ay", included: true },
+      { text: "Ana sayfa carousel görünürlüğü · 6 ay", included: true },
+      { text: "Founding üye rozeti", included: true },
+      { text: "Öncelikli destek", included: true },
     ],
   },
 };
