@@ -10,6 +10,7 @@ import { associations } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
 import DemoPageBanner from "@/components/DemoPageBanner";
 import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
+import PublicEventsList from "@/components/PublicEventsList";
 
 const AssociationDetail = () => {
   const { id } = useParams<{ id: string }>();
