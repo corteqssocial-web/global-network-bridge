@@ -129,7 +129,10 @@ const StripeTransactionsPanel = ({
           <Card className="border-border">
             <CardContent className="p-5">
               <div className="flex items-center justify-between mb-1">
-                <p className="text-xs text-muted-foreground">Toplam Tahsilat</p>
+                <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+                  Toplam Tahsilat
+                  {isDemo && <Badge variant="outline" className="border-amber-500/40 text-amber-700 text-[9px] h-4 px-1.5">Demo</Badge>}
+                </p>
                 <TrendingUp className="h-4 w-4 text-success" />
               </div>
               <p className="text-2xl font-extrabold text-foreground">
@@ -142,7 +145,10 @@ const StripeTransactionsPanel = ({
         <Card className="border-border">
           <CardContent className="p-5">
             <div className="flex items-center justify-between mb-1">
-              <p className="text-xs text-muted-foreground">Toplam Harcama</p>
+              <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+                Toplam Harcama
+                {isDemo && <Badge variant="outline" className="border-amber-500/40 text-amber-700 text-[9px] h-4 px-1.5">Demo</Badge>}
+              </p>
               <TrendingDown className="h-4 w-4 text-destructive" />
             </div>
             <p className="text-2xl font-extrabold text-foreground">
@@ -155,7 +161,10 @@ const StripeTransactionsPanel = ({
           <Card className="border-border">
             <CardContent className="p-5">
               <div className="flex items-center justify-between mb-1">
-                <p className="text-xs text-muted-foreground">Net</p>
+                <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+                  Net
+                  {isDemo && <Badge variant="outline" className="border-amber-500/40 text-amber-700 text-[9px] h-4 px-1.5">Demo</Badge>}
+                </p>
                 <Wallet className="h-4 w-4 text-primary" />
               </div>
               <p className={`text-2xl font-extrabold ${totals.net >= 0 ? "text-success" : "text-destructive"}`}>
