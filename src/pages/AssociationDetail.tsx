@@ -1,6 +1,6 @@
 import { useFollow } from "@/hooks/useFollow";
 import { useParams, Link } from "react-router-dom";
-import { Users, MapPin, Calendar as CalendarIcon, Globe as GlobeIcon, ArrowLeft, ExternalLink, MessageSquare, Share2, UserPlus, UserCheck, Heart, CreditCard, Ticket, Music, Radio, Landmark, Clock, FileText, Stethoscope, Navigation } from "lucide-react";
+import { Users, MapPin, Calendar as CalendarIcon, Globe as GlobeIcon, ArrowLeft, ExternalLink, MessageSquare, Share2, UserPlus, UserCheck, Heart, CreditCard, Ticket, Music, Radio, Landmark, Clock, FileText, Stethoscope, Navigation, Mail, Phone, Instagram, Facebook, Award, Target, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navbar from "@/components/Navbar";
@@ -210,7 +210,36 @@ const AssociationDetail = () => {
             </TabsList>
 
             <TabsContent value="about" className="mt-6">
-              <DemoTabPlaceholder label="Hakkında — Demo" />
+              <div className="grid gap-6 md:grid-cols-3">
+                <div className="md:col-span-2 rounded-2xl border border-border bg-card p-6">
+                  <h3 className="text-xl font-bold mb-3 flex items-center gap-2"><FileText className="h-5 w-5 text-turquoise" /> Kuruluş Hakkında</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                    {assoc.name}, {assoc.founded} yılında {assoc.city} merkezli olarak kurulmuş, {assoc.country} genelinde diaspora topluluğuna hizmet veren bir {assoc.type.toLowerCase()}dir. Kültürel, sosyal ve eğitim faaliyetleriyle topluluğumuzu bir araya getirir.
+                  </p>
+                  <div className="grid sm:grid-cols-2 gap-3 text-sm">
+                    <div className="flex items-start gap-2"><Target className="h-4 w-4 text-turquoise mt-0.5" /><div><div className="font-semibold">Misyon</div><div className="text-muted-foreground">Diaspora kimliğini güçlendirmek, üyeler arası dayanışmayı artırmak.</div></div></div>
+                    <div className="flex items-start gap-2"><Award className="h-4 w-4 text-turquoise mt-0.5" /><div><div className="font-semibold">Vizyon</div><div className="text-muted-foreground">Bölgenin en aktif ve referans alınan kuruluşu olmak.</div></div></div>
+                    <div className="flex items-start gap-2"><Briefcase className="h-4 w-4 text-turquoise mt-0.5" /><div><div className="font-semibold">Faaliyet Alanları</div><div className="text-muted-foreground">Eğitim, kültür-sanat, sosyal yardım, gençlik programları.</div></div></div>
+                    <div className="flex items-start gap-2"><CalendarIcon className="h-4 w-4 text-turquoise mt-0.5" /><div><div className="font-semibold">Kuruluş Yılı</div><div className="text-muted-foreground">{assoc.founded}</div></div></div>
+                  </div>
+                </div>
+                <div className="rounded-2xl border border-border bg-card p-6">
+                  <h3 className="font-bold mb-3">Yönetim Kurulu</h3>
+                  <ul className="space-y-3 text-sm">
+                    {[
+                      { name: "Mehmet Yıldız", role: "Başkan" },
+                      { name: "Ayşe Demir", role: "Başkan Yardımcısı" },
+                      { name: "Ali Kaya", role: "Genel Sekreter" },
+                      { name: "Zeynep Aksoy", role: "Sayman" },
+                    ].map((m) => (
+                      <li key={m.name} className="flex items-center gap-3">
+                        <div className="h-9 w-9 rounded-full bg-turquoise/10 border border-turquoise/20 flex items-center justify-center text-xs font-bold text-turquoise">{m.name.split(" ").map(p=>p[0]).join("")}</div>
+                        <div><div className="font-semibold">{m.name}</div><div className="text-xs text-muted-foreground">{m.role}</div></div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </TabsContent>
 
             <TabsContent value="events" className="mt-6">
@@ -218,11 +247,47 @@ const AssociationDetail = () => {
             </TabsContent>
 
             <TabsContent value="members" className="mt-6">
-              <DemoTabPlaceholder label="Üyeler — Demo" />
+              <div className="rounded-2xl border border-border bg-card p-6">
+                <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                  <h3 className="font-bold flex items-center gap-2"><Users className="h-5 w-5 text-turquoise" /> Üye İstatistikleri</h3>
+                  <Badge variant="secondary">{assoc.members.toLocaleString()} kayıtlı üye</Badge>
+                </div>
+                <div className="grid sm:grid-cols-3 gap-3 mb-6">
+                  <div className="rounded-xl border border-border p-4 text-center"><div className="text-2xl font-extrabold text-turquoise">68%</div><div className="text-xs text-muted-foreground">Aktif Üye</div></div>
+                  <div className="rounded-xl border border-border p-4 text-center"><div className="text-2xl font-extrabold text-turquoise">240+</div><div className="text-xs text-muted-foreground">Bu yıl yeni üye</div></div>
+                  <div className="rounded-xl border border-border p-4 text-center"><div className="text-2xl font-extrabold text-turquoise">12</div><div className="text-xs text-muted-foreground">Aktif çalışma grubu</div></div>
+                </div>
+                <h4 className="font-semibold mb-3 text-sm">Çalışma Grupları</h4>
+                <div className="flex flex-wrap gap-2">
+                  {["Gençlik", "Kadın", "Eğitim", "Kültür-Sanat", "Spor", "Sosyal Yardım", "İş Geliştirme", "Hukuk Danışma"].map((g) => (
+                    <Badge key={g} variant="outline" className="text-xs">{g}</Badge>
+                  ))}
+                </div>
+              </div>
             </TabsContent>
 
             <TabsContent value="contact" className="mt-6">
-              <DemoTabPlaceholder label="İletişim — Demo" />
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="rounded-2xl border border-border bg-card p-6 space-y-3">
+                  <h3 className="font-bold mb-2">İletişim Bilgileri</h3>
+                  <div className="flex items-center gap-3 text-sm"><Mail className="h-4 w-4 text-turquoise" /> <a href={`mailto:info@${assoc.id}.org`} className="hover:underline">info@{assoc.id}.org</a></div>
+                  <div className="flex items-center gap-3 text-sm"><Phone className="h-4 w-4 text-turquoise" /> +49 30 555 0{Math.abs(assoc.id.length * 137) % 1000}</div>
+                  <div className="flex items-center gap-3 text-sm"><MapPin className="h-4 w-4 text-turquoise" /> {assoc.city}, {assoc.country}</div>
+                  <div className="flex items-center gap-3 text-sm"><Clock className="h-4 w-4 text-turquoise" /> Pzt–Cum 09:00–18:00</div>
+                  {assoc.website && (
+                    <div className="flex items-center gap-3 text-sm"><GlobeIcon className="h-4 w-4 text-turquoise" /> <a href={assoc.website} target="_blank" rel="noopener noreferrer" className="hover:underline">{assoc.website.replace(/^https?:\/\//, "")}</a></div>
+                  )}
+                </div>
+                <div className="rounded-2xl border border-border bg-card p-6">
+                  <h3 className="font-bold mb-3">Sosyal Medya</h3>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <Button variant="outline" size="sm" className="gap-2"><Instagram className="h-4 w-4" /> @{assoc.id}</Button>
+                    <Button variant="outline" size="sm" className="gap-2"><Facebook className="h-4 w-4" /> {assoc.name.split(" ")[0]}</Button>
+                  </div>
+                  <h3 className="font-bold mb-3 mt-4">Hızlı İletişim</h3>
+                  <Button className="w-full gap-2 bg-turquoise hover:bg-turquoise/90"><MessageSquare className="h-4 w-4" /> Mesaj Gönder</Button>
+                </div>
+              </div>
             </TabsContent>
           </Tabs>
         </div>
