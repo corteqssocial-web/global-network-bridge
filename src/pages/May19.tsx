@@ -16,6 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import ideasImage from "@/assets/may19-ideas.jpg";
 import momentsImage from "@/assets/may19-moments.jpg";
+import globePinsImage from "@/assets/may19-globe-pins.png";
 
 type Kind = "map_pin" | "idea" | "moment";
 
@@ -164,34 +165,36 @@ const May19 = () => {
 
   const ModuleVisual = ({ kind }: { kind: Kind }) => {
     if (kind === "map_pin") return (
-      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden bg-gradient-to-br from-rose-500/20 via-turquoise/15 to-amber-300/20 border border-rose-500/30 p-5 flex flex-col justify-between">
-        {/* festive blobs */}
-        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-rose-500/25 blur-2xl animate-pulse" />
-        <div className="absolute bottom-0 left-0 w-40 h-40 rounded-full bg-turquoise/30 blur-2xl" />
-        {/* confetti dots */}
+      <div className="relative h-full min-h-[260px] rounded-xl overflow-hidden border border-rose-500/30 flex flex-col justify-end">
+        <img
+          src={globePinsImage}
+          alt="Dünya üzerinde Türk diasporası pin'leri"
+          loading="lazy"
+          width={1024}
+          height={1024}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* readability overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/10" />
+        {/* confetti accents */}
         <div className="absolute inset-0 pointer-events-none">
-          <span className="absolute top-3 left-6 w-1.5 h-1.5 rounded-full bg-rose-500" />
+          <span className="absolute top-3 left-6 w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
           <span className="absolute top-8 right-12 w-2 h-2 rounded-sm bg-amber-400 rotate-12" />
-          <span className="absolute top-14 left-14 w-1 h-3 bg-turquoise rotate-45" />
-          <span className="absolute bottom-12 right-6 w-1.5 h-1.5 rounded-full bg-rose-500" />
-          <span className="absolute bottom-20 left-10 w-2 h-2 rounded-sm bg-amber-400 -rotate-12" />
+          <span className="absolute top-16 left-1/3 w-1 h-3 bg-turquoise rotate-45" />
+          <span className="absolute bottom-24 right-8 w-1.5 h-1.5 rounded-full bg-rose-500" />
         </div>
-        <svg viewBox="0 0 200 120" className="absolute inset-0 w-full h-full opacity-30 pointer-events-none">
-          <defs><pattern id="grid1" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.6" fill="hsl(174 72% 46%)"/></pattern></defs>
-          <rect width="200" height="120" fill="url(#grid1)"/>
-        </svg>
         {/* corner ribbon */}
         <div className="absolute -top-1 -right-1 z-10 px-3 py-1 bg-rose-500 text-white text-[9px] font-extrabold shadow-md rotate-3 rounded-bl-md flex items-center gap-1">
           <Flag className="h-2.5 w-2.5" /> 19 MAYIS
         </div>
-        <div className="relative">
-          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-turquoise/30 text-[10px] font-extrabold text-turquoise mt-4">MODÜL 01</div>
-          <h3 className="text-xl font-extrabold mt-2 leading-tight">Global Haritada<br/><span className="text-rose-600">Kendini İşaretle</span></h3>
+        <div className="relative p-5">
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-turquoise/30 text-[10px] font-extrabold text-turquoise">MODÜL 01</div>
+          <h3 className="text-xl font-extrabold mt-2 leading-tight text-foreground">Global Haritada<br/><span className="text-rose-600">Kendini İşaretle</span></h3>
           <p className="text-xs text-muted-foreground mt-2 leading-relaxed">Bayram coşkusunu dünyanın dört bir yanından paylaş; CorteQS Türk Diaspora Haritası'nda parla.</p>
-        </div>
-        <div className="relative flex items-center gap-3 mt-4">
-          <div className="w-10 h-10 rounded-full bg-rose-500 flex items-center justify-center animate-pulse shadow-lg shadow-rose-500/40"><MapPin className="h-5 w-5 text-white" /></div>
-          <div className="flex-1 text-[11px] font-semibold text-foreground/80">5 kıta · 80+ ülke · canlı pin akışı</div>
+          <div className="flex items-center gap-3 mt-4">
+            <div className="w-9 h-9 rounded-full bg-rose-500 flex items-center justify-center animate-pulse shadow-lg shadow-rose-500/40"><MapPin className="h-4 w-4 text-white" /></div>
+            <div className="flex-1 text-[11px] font-semibold text-foreground/80">5 kıta · 80+ ülke · canlı pin akışı</div>
+          </div>
         </div>
       </div>
     );
