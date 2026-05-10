@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useDiaspora, diasporaOptions, countryList } from "@/contexts/DiasporaContext";
+import { useDiaspora, countryList } from "@/contexts/DiasporaContext";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
