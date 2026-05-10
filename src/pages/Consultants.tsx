@@ -335,7 +335,7 @@ const Consultants = () => {
                 specialties: amb.specialties?.slice(0, 2) || [],
                 isAmbassador: true,
               },
-              ...["dr-hasan-turk", "ayse-kara", "mehmet-yilmaz"]
+              ...["dr-hasan-turk", "dilek-aydin-psk", "ozlem-gonullu"]
                 .map((id) => consultants.find((c) => c.id === id))
                 .filter(Boolean)
                 .map((c: any) => ({ ...c, isAmbassador: false })),
