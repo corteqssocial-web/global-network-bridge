@@ -305,16 +305,6 @@ const Pricing = () => {
                   </p>
                 </div>
 
-                {/* Free Trial Banner */}
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-emerald-500/10 border border-emerald-500/20 p-4 text-center">
-                  <div className="flex items-center justify-center gap-2">
-                    <Gift className="h-5 w-5 text-emerald-600" />
-                    <span className="text-base font-bold text-foreground">1 Ay Ücretsiz Premium Pro Deneme!</span>
-                  </div>
-                  <p className="text-xs text-muted-foreground font-body mt-1">
-                    Herkese açık — kredi kartı gerekmez, dilediğiniz zaman iptal edin.
-                  </p>
-                </div>
               </div>
             </div>
           )}
