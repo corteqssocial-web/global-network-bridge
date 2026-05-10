@@ -290,11 +290,6 @@ const ProfileIndividual = () => {
           <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Ayarlar</TabsTrigger>
         </TabsList>
 
-        {/* TRANSACTIONS (Stripe) */}
-        <TabsContent value="transactions" className="mt-6">
-          <StripeTransactionsPanel stripeConnected={false} outgoingOnly />
-        </TabsContent>
-
         {/* EVENTS - user can create & manage events too */}
         <TabsContent value="events" className="mt-6">
           {managingEvent ? (
