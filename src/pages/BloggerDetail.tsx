@@ -72,7 +72,7 @@ const BloggerDetail = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <main className="pt-24 pb-16">
-        <DemoPageBanner categoryLabel="Blogger / Vlogger" listingHref="/bloggers" />
+        <DemoPageBanner categoryLabel="Blogger / Vlogger" listingHref="/bloggers" hideFounders registerCtaLabel="Hemen Kaydol — Global Görünürlüğünü Başlat" />
         <div className="container mx-auto px-4">
           <Link to="/bloggers" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
             <ArrowLeft className="h-4 w-4" /> Geri dön
@@ -137,8 +137,9 @@ const BloggerDetail = () => {
                   </div>
                 </div>
                 {/* AI Twin & Canlı Görüşme */}
-                <Button className="gap-2 w-full bg-gradient-to-r from-primary to-primary-glow text-primary-foreground font-semibold">
+                <Button disabled className="gap-2 w-full bg-gradient-to-r from-primary to-primary-glow text-primary-foreground font-semibold relative opacity-80">
                   <Bot className="h-4 w-4" /> AI Twin ile Sohbet
+                  <Badge className="ml-1 bg-gold text-foreground hover:bg-gold">Yakında</Badge>
                 </Button>
                 <Button variant="outline" className="gap-2 w-full border-success text-success hover:bg-success/10">
                   <Phone className="h-4 w-4" /> Canlı Görüşme
