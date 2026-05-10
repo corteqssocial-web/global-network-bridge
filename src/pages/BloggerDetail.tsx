@@ -137,8 +137,9 @@ const BloggerDetail = () => {
                   </div>
                 </div>
                 {/* AI Twin & Canlı Görüşme */}
-                <Button className="gap-2 w-full bg-gradient-to-r from-primary to-primary-glow text-primary-foreground font-semibold">
+                <Button disabled className="gap-2 w-full bg-gradient-to-r from-primary to-primary-glow text-primary-foreground font-semibold relative opacity-80">
                   <Bot className="h-4 w-4" /> AI Twin ile Sohbet
+                  <Badge className="ml-1 bg-gold text-foreground hover:bg-gold">Yakında</Badge>
                 </Button>
                 <Button variant="outline" className="gap-2 w-full border-success text-success hover:bg-success/10">
                   <Phone className="h-4 w-4" /> Canlı Görüşme
