@@ -741,26 +741,37 @@ const ProfileIndividual = () => {
                     type="file"
                     accept=".pdf,.doc,.docx"
                     className="hidden"
-                    onChange={handleCvUpload}
+                    onChange={(e) => handleDocUpload(e, "cv")}
                   />
-                  <div className="mt-2">
-                    {cvUploaded ? (
-                      <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-                        <FileText className="h-5 w-5 text-primary" />
-                        <div className="flex-1">
-                          <p className="text-sm font-medium text-foreground">{cvFile?.name || "emre_aydin_cv.pdf"}</p>
-                          <p className="text-xs text-muted-foreground">
-                            Yüklendi{cvFile ? ` · ${(cvFile.size / (1024 * 1024)).toFixed(1)} MB` : " · 2.3 MB"}
-                          </p>
-                        </div>
-                        <Button variant="outline" size="sm" onClick={handleCvRemove}>Kaldır</Button>
-                      </div>
-                    ) : (
-                      <Button variant="outline" className="w-full gap-2" onClick={() => cvInputRef.current?.click()}>
-                        <FileText className="h-4 w-4" /> CV Yükle (PDF)
-                      </Button>
-                    )}
-                  </div>
+                  <DocumentSlot
+                    doc={cvDoc}
+                    uploading={uploadingKind === "cv"}
+                    icon={<FileText className="h-5 w-5 text-primary" />}
+                    uploadLabel="CV Yükle (PDF, DOC, DOCX)"
+                    onPick={() => cvInputRef.current?.click()}
+                    onOpen={() => handleDocOpen("cv")}
+                    onRemove={() => handleDocRemove("cv")}
+                  />
+                </div>
+
+                <div>
+                  <Label>Sunum / Tanıtım</Label>
+                  <input
+                    ref={pptInputRef}
+                    type="file"
+                    accept=".pdf,.ppt,.pptx,.key"
+                    className="hidden"
+                    onChange={(e) => handleDocUpload(e, "presentation")}
+                  />
+                  <DocumentSlot
+                    doc={pptDoc}
+                    uploading={uploadingKind === "presentation"}
+                    icon={<Presentation className="h-5 w-5 text-primary" />}
+                    uploadLabel="Sunum Yükle (PDF, PPT, PPTX, KEY)"
+                    onPick={() => pptInputRef.current?.click()}
+                    onOpen={() => handleDocOpen("presentation")}
+                    onRemove={() => handleDocRemove("presentation")}
+                  />
                 </div>
               </div>
             </div>
