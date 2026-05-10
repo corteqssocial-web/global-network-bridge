@@ -362,6 +362,54 @@ export type Database = {
         }
         Relationships: []
       }
+      messages: {
+        Row: {
+          body: string
+          context_url: string | null
+          created_at: string
+          id: string
+          is_read: boolean
+          recipient_kind: string
+          recipient_name: string | null
+          recipient_slug: string | null
+          recipient_user_id: string | null
+          sender_id: string
+          sender_name: string | null
+          subject: string | null
+          thread_id: string
+        }
+        Insert: {
+          body: string
+          context_url?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          recipient_kind?: string
+          recipient_name?: string | null
+          recipient_slug?: string | null
+          recipient_user_id?: string | null
+          sender_id: string
+          sender_name?: string | null
+          subject?: string | null
+          thread_id?: string
+        }
+        Update: {
+          body?: string
+          context_url?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          recipient_kind?: string
+          recipient_name?: string | null
+          recipient_slug?: string | null
+          recipient_user_id?: string | null
+          sender_id?: string
+          sender_name?: string | null
+          subject?: string | null
+          thread_id?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string
