@@ -8,7 +8,7 @@ import {
   Globe, Trash2, ExternalLink, ClipboardList, Download, ChevronDown, ChevronUp, Info,
   Presentation, Loader2
 } from "lucide-react";
-import StripeTransactionsPanel from "@/components/StripeTransactionsPanel";
+
 import NotificationsList from "@/components/NotificationsList";
 import QRScannerMock from "@/components/QRScannerMock";
 import CreateEventForm from "@/components/CreateEventForm";
