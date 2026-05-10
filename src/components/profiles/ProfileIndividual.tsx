@@ -325,6 +325,9 @@ const ProfileIndividual = () => {
                       <Globe className="h-3.5 w-3.5" /> Taşınma Motoru
                     </Button>
                   </Link>
+                  <p className="mt-4 text-xs font-semibold text-primary">
+                    Yakında: Akıllı Taşınma Motorunuz Gelecek
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-3">
