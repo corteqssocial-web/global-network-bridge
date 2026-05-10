@@ -5,6 +5,7 @@ import {
   Send, CheckCircle, XCircle, Eye, Settings, ExternalLink, Video, ArrowLeft
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import MessagesInbox from "@/components/messaging/MessagesInbox";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
