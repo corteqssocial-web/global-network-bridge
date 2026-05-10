@@ -113,6 +113,7 @@ export type Database = {
           organizer_name: string | null
           organizer_type: string
           price: number | null
+          registration_url: string | null
           start_time: string | null
           status: string
           tags: string[] | null
@@ -138,6 +139,7 @@ export type Database = {
           organizer_name?: string | null
           organizer_type?: string
           price?: number | null
+          registration_url?: string | null
           start_time?: string | null
           status?: string
           tags?: string[] | null
@@ -163,6 +165,7 @@ export type Database = {
           organizer_name?: string | null
           organizer_type?: string
           price?: number | null
+          registration_url?: string | null
           start_time?: string | null
           status?: string
           tags?: string[] | null
