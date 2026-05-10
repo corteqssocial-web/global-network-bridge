@@ -17,7 +17,7 @@ import { useAuth } from "@/contexts/AuthContext";
 interface CreateEventFormProps {
   onClose?: () => void;
   onCreated?: () => void;
-  organizerType?: "community" | "corteqs";
+  organizerType?: "community" | "corteqs" | "member";
 }
 
 const emptyForm = {
@@ -146,10 +146,19 @@ const CreateEventForm = ({ onClose, onCreated, organizerType = "community" }: Cr
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
           <Calendar className="h-5 w-5 text-primary" />
-          {organizerType === "corteqs" ? "Yeni CorteQS Etkinliği Oluştur" : "Yeni Etkinlik Oluştur"}
+          {organizerType === "corteqs"
+            ? "Yeni CorteQS Etkinliği Oluştur"
+            : organizerType === "member"
+            ? "Yeni Üye Etkinliği Oluştur"
+            : "Yeni Etkinlik Oluştur"}
           {organizerType === "corteqs" && (
             <Badge className="bg-primary/15 text-primary border-primary/30 gap-1">
               <Shield className="h-3 w-3" /> Resmi
+            </Badge>
+          )}
+          {organizerType === "member" && (
+            <Badge className="bg-turquoise/15 text-turquoise border-turquoise/30 gap-1">
+              <Users className="h-3 w-3" /> Üye Etkinliği
             </Badge>
           )}
         </h2>
