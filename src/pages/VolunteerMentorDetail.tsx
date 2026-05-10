@@ -135,7 +135,6 @@ const VolunteerMentorDetail = () => {
                   <div className="flex items-center gap-1.5 text-sm">
                     <Star className="h-4 w-4 text-gold fill-gold" />
                     <span className="font-semibold text-foreground">{mentor.rating}</span>
-                    <span className="text-xs text-muted-foreground">({mentor.reviews} teşekkür)</span>
                   </div>
                 </div>
 
