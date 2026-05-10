@@ -297,14 +297,20 @@ const CreateEventForm = ({ onClose, onCreated, organizerType = "community" }: Cr
           <div>
             <Label className="flex items-center gap-1.5 mb-1.5">
               <DollarSign className="h-4 w-4 text-primary" /> Ücret (€)
+              <Badge variant="outline" className="ml-1 text-[10px] h-4 px-1.5 border-primary/40 text-primary">Yakında</Badge>
             </Label>
             <Input
               type="number"
               value={form.price}
+              disabled
+              placeholder="0"
               onChange={(e) =>
                 setForm({ ...form, price: Number(e.target.value) })
               }
             />
+            <p className="text-[10px] text-muted-foreground mt-1 leading-tight">
+              Ücretli etkinlik tahsilatı yakında platform üzerinden (Stripe altyapısı) yapılacak ve tutar size aktarılacak.
+            </p>
           </div>
           <div>
             <Label className="flex items-center gap-1.5 mb-1.5">
