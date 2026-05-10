@@ -324,6 +324,11 @@ const ProfileAssociation = () => {
           <WhatsAppGroupsTab />
         </TabsContent>
 
+        {/* NOTIFICATIONS */}
+        <TabsContent value="notifications" className="mt-6">
+          <NotificationsList />
+        </TabsContent>
+
         {/* SETTINGS */}
         <TabsContent value="settings" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
