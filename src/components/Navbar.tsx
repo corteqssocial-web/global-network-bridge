@@ -54,43 +54,7 @@ const Navbar = () => {
               <img src={corteqsLogo} alt="CorteQS" className="w-auto" style={{ height: '4rem' }} />
             </Link>
 
-            {/* Diaspora Selector */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="gap-1.5 text-base px-2">
-                  <span className="text-lg">{currentOption.flag}</span>
-                  <span className="hidden sm:inline text-xs text-muted-foreground">{currentOption.label}</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56">
-                <DropdownMenuLabel className="text-xs text-muted-foreground">{t.nav.selectDiaspora}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {diasporaOptions.map((opt) => (
-                  <DropdownMenuItem
-                    key={opt.key}
-                    className={`gap-2 cursor-pointer ${diaspora === opt.key ? "bg-accent/50 font-semibold" : ""}`}
-                    onClick={() => { setDiaspora(opt.key); navigate("/"); }}
-                  >
-                    <span className="text-lg">{opt.flag}</span>
-                    <div className="flex flex-col">
-                      <span className="text-sm">{opt.label}</span>
-                      <span className="text-xs text-muted-foreground">{opt.nativeLabel}</span>
-                    </div>
-                  </DropdownMenuItem>
-                ))}
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="gap-2 cursor-pointer"
-                  onClick={() => navigate("/register-diaspora")}
-                >
-                  <span className="text-lg">🌐</span>
-                  <div className="flex flex-col">
-                    <span className="text-sm font-semibold">Register Diaspora</span>
-                    <span className="text-xs text-muted-foreground">Request your community</span>
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {/* Diaspora selector kaldırıldı — yalnızca Türk Diasporası aktif */}
 
             {/* Country Selector — hidden on home page */}
             {showNavbarCountry && (
