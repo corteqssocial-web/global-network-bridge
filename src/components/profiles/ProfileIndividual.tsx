@@ -11,6 +11,8 @@ import {
 import StripeTransactionsPanel from "@/components/StripeTransactionsPanel";
 import NotificationsList from "@/components/NotificationsList";
 import QRScannerMock from "@/components/QRScannerMock";
+import CreateEventForm from "@/components/CreateEventForm";
+import EventManagePanel from "@/components/EventManagePanel";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
@@ -41,6 +43,8 @@ const ProfileIndividual = () => {
   const [cvDoc, setCvDoc] = useState<{ path: string; name: string } | null>(null);
   const [pptDoc, setPptDoc] = useState<{ path: string; name: string } | null>(null);
   const [uploadingKind, setUploadingKind] = useState<null | "cv" | "presentation">(null);
+  const [showCreateEvent, setShowCreateEvent] = useState(false);
+  const [managingEvent, setManagingEvent] = useState<any | null>(null);
 
   const user = {
     name: "Emre Aydın",
@@ -285,6 +289,7 @@ const ProfileIndividual = () => {
           <TabsTrigger value="service-requests" className="gap-1.5"><ClipboardList className="h-4 w-4" /> Hizmet Talepleri</TabsTrigger>
           <TabsTrigger value="relocations" className="gap-1.5"><Globe className="h-4 w-4" /> Taşınma Yönetimi</TabsTrigger>
           <TabsTrigger value="calendar" className="gap-1.5"><Calendar className="h-4 w-4" /> Takvim</TabsTrigger>
+          <TabsTrigger value="events" className="gap-1.5"><Calendar className="h-4 w-4" /> Etkinliklerim</TabsTrigger>
           <TabsTrigger value="coupons" className="gap-1.5"><Tag className="h-4 w-4" /> Kuponlar</TabsTrigger>
           <TabsTrigger value="following" className="gap-1.5"><Users className="h-4 w-4" /> Takip</TabsTrigger>
           <TabsTrigger value="notifications" className="gap-1.5"><Bell className="h-4 w-4" /> Bildirimler</TabsTrigger>
@@ -295,6 +300,34 @@ const ProfileIndividual = () => {
         {/* TRANSACTIONS (Stripe) */}
         <TabsContent value="transactions" className="mt-6">
           <StripeTransactionsPanel stripeConnected={false} outgoingOnly />
+        </TabsContent>
+
+        {/* EVENTS - user can create & manage events too */}
+        <TabsContent value="events" className="mt-6">
+          {managingEvent ? (
+            <EventManagePanel event={managingEvent} onBack={() => setManagingEvent(null)} />
+          ) : showCreateEvent ? (
+            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+              <Button variant="ghost" size="sm" className="gap-1 mb-4" onClick={() => setShowCreateEvent(false)}>
+                <ArrowLeft className="h-4 w-4" /> Etkinliklere Dön
+              </Button>
+              <CreateEventForm onClose={() => setShowCreateEvent(false)} />
+            </div>
+          ) : (
+            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-primary" /> Etkinliklerim
+                </h2>
+                <Button className="gap-2" onClick={() => setShowCreateEvent(true)}>
+                  <Plus className="h-4 w-4" /> Etkinlik Oluştur
+                </Button>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Oluşturduğun etkinlikler hem platformda hem de profilinde görünür. Kayıt için kendi Google Form linkini kullanabilirsin.
+              </p>
+            </div>
+          )}
         </TabsContent>
 
         {/* RELOCATION MANAGEMENT */}
