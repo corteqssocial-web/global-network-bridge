@@ -96,9 +96,18 @@ const VolunteerMentorDetail = () => {
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4 max-w-5xl">
-          <Link to="/consultants?filter=gonullu" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
+          <Link to="/consultants?filter=gonullu" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors">
             <ArrowLeft className="h-4 w-4" /> Gönüllülere dön
           </Link>
+
+          {/* Demo notice */}
+          <div className="bg-gold/15 border border-gold/40 rounded-xl px-4 py-2.5 mb-4 flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-foreground shrink-0" />
+            <p className="text-xs md:text-sm text-foreground font-body">
+              <span className="font-bold uppercase tracking-wider mr-1">Demo</span>
+              Bu sayfa örnek içeriktir. Gerçek gönüllü mentör profilleri yakında.
+            </p>
+          </div>
 
           {/* Solidarity banner */}
           <div className="bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/30 rounded-2xl p-4 mb-6 flex items-center gap-3">
