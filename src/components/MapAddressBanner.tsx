@@ -16,7 +16,7 @@ const MapAddressBanner = () => {
           </h3>
         </div>
         <p className="text-xs md:text-sm text-muted-foreground font-body">
-          <span className="font-semibold text-foreground">Ayarlar</span> sekmesinden adresinizi girin ve yanındaki <span className="font-semibold text-orange-700">"Haritada yer almak istiyorum"</span> kutucuğunu işaretleyin. Bu kutucuk işaretli olmayan profiller Diaspora Haritası'nda görünmez.
+          <span className="font-semibold text-foreground">Profilinden adresini girerek</span> ve yanındaki <span className="font-semibold text-orange-700">"Haritada yer almak istiyorum"</span> kutucuğunu işaretleyerek haritada görünebilirsin. Bu kutucuk işaretli olmayan profiller Diaspora Haritası'nda görünmez.
         </p>
       </div>
       <Link to="/map" className="shrink-0">

@@ -652,6 +652,17 @@ const ProfileConsultant = () => {
                     <Label>Web Sitesi</Label>
                     <Input defaultValue={consultant.website} />
                   </div>
+                  <div>
+                    <Label>Adres</Label>
+                    <Input placeholder="Sokak, No, Mahalle, İlçe, Şehir, Ülke" />
+                  </div>
+                  <div className="flex items-start justify-between gap-3 rounded-lg border border-orange-500/30 bg-orange-500/5 p-3">
+                    <div>
+                      <p className="font-medium text-foreground text-sm">Haritada yer almak istiyorum</p>
+                      <p className="text-xs text-muted-foreground">Adresin Diaspora Haritası'nda gösterilsin</p>
+                    </div>
+                    <Switch />
+                  </div>
                   <Button variant="outline" className="w-full">Kaydet</Button>
                 </div>
               </div>
