@@ -319,26 +319,29 @@ const Consultants = () => {
 
           {!activeFilter?.subs && <div className="mb-5" />}
 
-          {/* MVP: Sadece 4 demo danışman (Şehir Elçisi / Doktor / Emlakçı / Vizeci) */}
+          {/* Demo: 4 professional consultants on top + 2 community cards (Volunteer + Ambassador) below */}
           {(() => {
             const amb = cityAmbassadors[0];
-            const demoCards = [
-              {
-                id: amb.id,
-                name: amb.name,
-                role: "Şehir Elçisi",
-                city: amb.city,
-                country: amb.country,
-                photo: amb.photo,
-                rating: amb.rating,
-                reviews: amb.usersOnboarded,
-                specialties: amb.specialties?.slice(0, 2) || [],
-                isAmbassador: true,
-              },
-              ...["dr-hasan-turk", "dilek-aydin-psk", "ozlem-gonullu"]
-                .map((id) => consultants.find((c) => c.id === id))
-                .filter(Boolean)
-                .map((c: any) => ({ ...c, isAmbassador: false })),
+            const ambassadorCard = {
+              id: amb.id,
+              name: amb.name,
+              role: "Şehir Elçisi",
+              city: amb.city,
+              country: amb.country,
+              photo: amb.photo,
+              rating: amb.rating,
+              reviews: amb.usersOnboarded,
+              specialties: amb.specialties?.slice(0, 2) || [],
+              isAmbassador: true,
+            };
+            const professionalCards = ["dr-hasan-turk", "dilek-aydin-psk", "mehmet-yilmaz", "ayse-kara"]
+              .map((id) => consultants.find((c) => c.id === id))
+              .filter(Boolean)
+              .map((c: any) => ({ ...c, isAmbassador: false }));
+            const volunteerCard = consultants.find((c) => c.id === "ozlem-gonullu");
+            const communityCards = [
+              ...(volunteerCard ? [{ ...volunteerCard, isAmbassador: false }] : []),
+              ambassadorCard,
             ];
 
             return (
@@ -346,7 +349,7 @@ const Consultants = () => {
                 <CategoryListingBanner categoryLabel="Danışmanlık" formAnchorId="kayit-form" />
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-                  {demoCards.map((c: any) => {
+                  {[...professionalCards, ...communityCards].map((c: any) => {
                     const isVolunteer = volunteerMentorIds.has(c.id);
                     const linkTo = c.isAmbassador
                       ? `/ambassador/${c.id}`
