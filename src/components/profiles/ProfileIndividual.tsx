@@ -43,6 +43,8 @@ const ProfileIndividual = () => {
   const [cvDoc, setCvDoc] = useState<{ path: string; name: string } | null>(null);
   const [pptDoc, setPptDoc] = useState<{ path: string; name: string } | null>(null);
   const [uploadingKind, setUploadingKind] = useState<null | "cv" | "presentation">(null);
+  const [showCreateEvent, setShowCreateEvent] = useState(false);
+  const [managingEvent, setManagingEvent] = useState<any | null>(null);
 
   const user = {
     name: "Emre Aydın",
