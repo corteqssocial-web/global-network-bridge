@@ -302,6 +302,34 @@ const ProfileIndividual = () => {
           <StripeTransactionsPanel stripeConnected={false} outgoingOnly />
         </TabsContent>
 
+        {/* EVENTS - user can create & manage events too */}
+        <TabsContent value="events" className="mt-6">
+          {managingEvent ? (
+            <EventManagePanel event={managingEvent} onBack={() => setManagingEvent(null)} />
+          ) : showCreateEvent ? (
+            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+              <Button variant="ghost" size="sm" className="gap-1 mb-4" onClick={() => setShowCreateEvent(false)}>
+                <ArrowLeft className="h-4 w-4" /> Etkinliklere Dön
+              </Button>
+              <CreateEventForm onClose={() => setShowCreateEvent(false)} />
+            </div>
+          ) : (
+            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-primary" /> Etkinliklerim
+                </h2>
+                <Button className="gap-2" onClick={() => setShowCreateEvent(true)}>
+                  <Plus className="h-4 w-4" /> Etkinlik Oluştur
+                </Button>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Oluşturduğun etkinlikler hem platformda hem de profilinde görünür. Kayıt için kendi Google Form linkini kullanabilirsin.
+              </p>
+            </div>
+          )}
+        </TabsContent>
+
         {/* RELOCATION MANAGEMENT */}
         <TabsContent value="relocations" className="mt-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
