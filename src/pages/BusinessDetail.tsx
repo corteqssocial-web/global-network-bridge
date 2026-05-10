@@ -341,6 +341,14 @@ const BusinessDetail = () => {
               ))}
             </div>
           )}
+
+          {/* Yaklaşan Etkinlikler — Supabase events tablosundan canlı */}
+          <div className="mt-10">
+            <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-primary" /> Yaklaşan Etkinlikler
+            </h2>
+            <PublicEventsList emptyLabel="Bu işletmenin yaklaşan etkinliği yok." />
+          </div>
         </div>
       </main>
       <Footer />
