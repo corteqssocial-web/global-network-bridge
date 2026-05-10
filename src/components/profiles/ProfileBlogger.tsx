@@ -18,6 +18,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
+import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
+import NotificationsList from "@/components/NotificationsList";
 import { addDiasporaBlogLink, getDiasporaBlogLinksByAuthor, removeDiasporaBlogLink, type DiasporaBlogLink } from "@/lib/diasporaBlogLinks";
 import { toast } from "@/hooks/use-toast";
 
