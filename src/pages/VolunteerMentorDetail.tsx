@@ -23,7 +23,6 @@ const seedComments: Comment[] = [
 
 const VolunteerMentorDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
   const mentor = consultants.find((c) => c.id === id);
