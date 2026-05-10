@@ -54,13 +54,14 @@ const consultantPlans = {
   founding: {
     name: "Founding 1000",
     icon: Sparkles,
-    monthlyPrice: 10,
-    yearlyPrice: 8,
+    monthlyPrice: 99,
+    yearlyPrice: 99,
+    yearlyOnly: true,
     desc: "Erken dönem üyelik — sınırlı kontenjan",
     badge: "En Popüler",
     features: [
       { text: "Premium Pro'nun tüm özellikleri", included: true },
-      { text: "Yıllık €99 (€120 yerine)", included: true },
+      { text: "Tek seferlik €99 ödeme · 1 yıl geçerli", included: true },
       { text: "€399 değerinde kategori vitrini · 6 ay", included: true },
       { text: "Ana sayfa carousel görünürlüğü · 6 ay", included: true },
       { text: "Founding üye rozeti", included: true },
