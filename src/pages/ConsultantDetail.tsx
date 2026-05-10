@@ -113,7 +113,7 @@ const ConsultantDetail = () => {
                     </div>
                     <div className="w-px bg-border" />
                     <div>
-                      <p className="text-lg font-bold text-foreground">€5</p>
+                      <p className="text-lg font-bold text-success">Ücretsiz</p>
                       <p className="text-[10px] text-muted-foreground">AI Twin / 15dk</p>
                     </div>
                   </div>
