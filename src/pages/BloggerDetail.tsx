@@ -264,103 +264,22 @@ const BloggerDetail = () => {
             </TabsList>
 
             <TabsContent value="blog" className="mt-6">
-              {blogger.blogPosts.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {blogger.blogPosts.map((post) => (
-                    <div key={post.id} className="bg-card rounded-2xl border border-border overflow-hidden shadow-card hover:shadow-card-hover transition-all">
-                      <div className="aspect-video">
-                        <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover" />
-                      </div>
-                      <div className="p-5">
-                        <div className="flex flex-wrap gap-1 mb-2">
-                          {post.tags.map((tag) => (
-                            <span key={tag} className="text-[10px] bg-primary/10 text-primary rounded-full px-2 py-0.5">#{tag}</span>
-                          ))}
-                        </div>
-                        <h3 className="font-bold text-foreground text-lg mb-2">{post.title}</h3>
-                        <p className="text-sm text-muted-foreground font-body mb-3">{post.excerpt}</p>
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
-                          <div className="flex items-center gap-3">
-                            <span className="flex items-center gap-1"><Heart className="h-3 w-3" /> {post.likes}</span>
-                            <span className="flex items-center gap-1"><Eye className="h-3 w-3" /> {post.views.toLocaleString()}</span>
-                          </div>
-                          <span>{post.publishedAt}</span>
-                        </div>
-                        <Button variant="outline" size="sm" className="w-full mt-3 gap-1">
-                          <PenLine className="h-3 w-3" /> Yazıyı Oku
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12 text-muted-foreground font-body">Henüz blog yazısı yok.</div>
-              )}
+              <DemoTabPlaceholder label="Blog Yazıları — Demo" />
             </TabsContent>
 
             {blogger.vlogs.length > 0 && (
               <TabsContent value="vlogs" className="mt-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {blogger.vlogs.map((vlog) => (
-                    <div key={vlog.id} className="bg-card rounded-2xl border border-border overflow-hidden shadow-card">
-                      <div className="aspect-video relative group">
-                        <img src={vlog.thumbnail} alt={vlog.title} className="w-full h-full object-cover" />
-                        <div className="absolute inset-0 bg-foreground/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                          <div className="bg-primary text-primary-foreground rounded-full p-3">
-                            <Play className="h-6 w-6" />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="p-5">
-                        <h3 className="font-bold text-foreground mb-1">{vlog.title}</h3>
-                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Eye className="h-3 w-3" /> {vlog.views.toLocaleString()} görüntülenme
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <DemoTabPlaceholder label="Vloglar — Demo" />
               </TabsContent>
             )}
 
             <TabsContent value="about" className="mt-6">
-              <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-                <h2 className="text-xl font-bold text-foreground mb-4">Hakkında</h2>
-                <p className="text-muted-foreground font-body leading-relaxed mb-6">{blogger.bio}</p>
-                <h3 className="font-semibold text-foreground mb-3">Uzmanlık Alanları</h3>
-                <div className="flex flex-wrap gap-2">
-                  {blogger.specialties.map((s) => (
-                    <span key={s} className="bg-muted text-muted-foreground rounded-full px-3 py-1 text-sm">{s}</span>
-                  ))}
-                </div>
-              </div>
+              <DemoTabPlaceholder label="Hakkında — Demo" />
             </TabsContent>
 
             <TabsContent value="contact" className="mt-6">
-              <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-                <h2 className="text-xl font-bold text-foreground mb-4">İletişim</h2>
-                <div className="space-y-4">
-                  <a href={blogger.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                    <GlobeIcon className="h-5 w-5 text-primary" />
-                    <span className="text-foreground font-body">{blogger.website}</span>
-                    <ExternalLink className="h-4 w-4 text-muted-foreground ml-auto" />
-                  </a>
-                  {blogger.instagram && (
-                    <div className="flex items-center gap-3 p-4 rounded-xl bg-muted/50">
-                      <Instagram className="h-5 w-5 text-primary" />
-                      <span className="text-foreground font-body">{blogger.instagram}</span>
-                    </div>
-                  )}
-                  {blogger.youtube && (
-                    <div className="flex items-center gap-3 p-4 rounded-xl bg-muted/50">
-                      <Video className="h-5 w-5 text-primary" />
-                      <span className="text-foreground font-body">{blogger.youtube}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
+              <DemoTabPlaceholder label="İletişim — Demo" />
             </TabsContent>
-          </Tabs>
         </div>
       </main>
       <Footer />
