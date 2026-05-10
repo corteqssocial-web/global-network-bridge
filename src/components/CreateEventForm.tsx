@@ -367,6 +367,22 @@ const CreateEventForm = ({ onClose, onCreated, organizerType = "community" }: Cr
         />
       </div>
 
+      {/* Registration / RSVP Link */}
+      <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
+        <Label className="flex items-center gap-1.5 mb-1.5">
+          <LinkIcon className="h-4 w-4 text-primary" /> Kayıt / Katılım Bağlantısı
+          <Badge variant="outline" className="ml-1 text-[10px] h-5">Google Form, Eventbrite, Luma…</Badge>
+        </Label>
+        <Input
+          value={form.registrationUrl}
+          onChange={(e) => setForm({ ...form, registrationUrl: e.target.value })}
+          placeholder="https://forms.gle/... veya https://lu.ma/..."
+        />
+        <p className="text-[11px] text-muted-foreground mt-1.5">
+          Bu sürümde platform üzerinden ödeme/CRM almıyoruz. Kendi formunu (Google Form önerilir) hazırla, linkini buraya yapıştır — etkinlik mikrositeinde "Kayıt Ol" butonu doğrudan bu bağlantıya gidecek.
+        </p>
+      </div>
+
       {/* ── SOCIAL MEDIA PREVIEW & PUBLISH ── */}
       <div className="border-t border-border pt-6">
         <h3 className="text-lg font-bold text-foreground mb-1 flex items-center gap-2">
