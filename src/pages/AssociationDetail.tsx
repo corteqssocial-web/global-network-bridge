@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { associations } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
 import DemoPageBanner from "@/components/DemoPageBanner";
+import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
 
 const AssociationDetail = () => {
   const { id } = useParams<{ id: string }>();
