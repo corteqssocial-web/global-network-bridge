@@ -133,7 +133,7 @@ const ConsultantDetail = () => {
                         <span className="absolute -top-2 -right-2 bg-accent text-accent-foreground rounded-full p-0.5">
                           <Info className="h-3 w-3" />
                         </span>
-                        <Bot className="h-4 w-4" /> AI Twin Seans — €5 / 15dk
+                        <Bot className="h-4 w-4" /> AI Twin Seans — Ücretsiz / 15dk
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent side="bottom" className="max-w-[250px] text-center">
