@@ -329,14 +329,14 @@ const PlanCard = ({ plan, isYearly, featured }: PlanCardProps) => {
 
   return (
     <div
-      className={`relative rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 flex flex-col ${
+      className={`relative rounded-lg p-5 transition-all duration-300 hover:-translate-y-0.5 flex flex-col ${
         featured
-          ? "bg-secondary text-secondary-foreground shadow-elevated border-2 border-primary scale-[1.02]"
+          ? "bg-secondary text-secondary-foreground shadow-elevated border-2 border-primary"
           : "bg-card text-card-foreground shadow-card border border-border"
       }`}
     >
       {plan.badge && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-primary text-primary-foreground text-xs font-bold rounded-full whitespace-nowrap">
+        <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-gradient-primary text-primary-foreground text-[11px] font-bold rounded-md whitespace-nowrap">
           {plan.badge}
         </div>
       )}
