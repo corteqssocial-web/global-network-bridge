@@ -277,7 +277,7 @@ const May19 = () => {
         </div>
         <div className="container mx-auto px-4 pt-20 pb-12 relative z-10 max-w-4xl">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-500/15 border border-rose-500/40 mb-6 shadow-md">
-            <Flag className="h-4 w-4 text-rose-600" />
+            <span className="text-base leading-none" aria-label="Türk Bayrağı" role="img">🇹🇷</span>
             <span className="text-sm font-semibold text-rose-700">19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı</span>
             <PartyPopper className="h-4 w-4 text-amber-500" />
           </div>

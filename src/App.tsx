@@ -47,7 +47,7 @@ const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/legal/TermsOfService"));
 const KVKK = lazy(() => import("./pages/legal/KVKK"));
 const CookiePolicy = lazy(() => import("./pages/legal/CookiePolicy"));
-const RegisterDiaspora = lazy(() => import("./pages/RegisterDiaspora"));
+
 const May19 = lazy(() => import("./pages/May19"));
 const May19Map = lazy(() => import("./pages/May19Map"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -156,7 +156,7 @@ const App = () => (
                   <Route path="/legal/terms" element={<TermsOfService />} />
                   <Route path="/legal/kvkk" element={<KVKK />} />
                   <Route path="/legal/cookies" element={<CookiePolicy />} />
-                  <Route path="/register-diaspora" element={<RegisterDiaspora />} />
+                  
                   <Route path="/19-mayis" element={<May19 />} />
                   <Route path="/19-mayis/harita" element={<May19Map />} />
                   <Route path="/may19" element={<May19 />} />
