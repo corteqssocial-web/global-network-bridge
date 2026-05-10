@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
-import { LayoutDashboard, Shield, User, Building2, Briefcase, Mic, Flag, Megaphone, CreditCard } from "lucide-react";
+import { LayoutDashboard, Shield, User, Building2, Briefcase, Mic, Flag, Megaphone } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const dashboards = [
-  { to: "/profile?view=individual&tab=transactions", title: "İşlemlerim (Stripe)", desc: "Stripe üzerinden tahsilat ve harcama izleri. Stripe Ready.", icon: CreditCard },
-  { to: "/profile?view=individual", title: "Kullanıcı Profili / Dashboard", desc: "Son kullanıcı için kişisel dashboard.", icon: User },
+  { to: "/profile?view=individual", title: "Kullanıcı Dashboard", desc: "Son kullanıcı için kişisel dashboard.", icon: User },
   { to: "/profile?view=admin", title: "Admin Dashboard", desc: "Platform yönetimi, kayıtlar, gelir takibi.", icon: Shield },
   { to: "/profile?view=ambassador", title: "City Ambassadors", desc: "Şehir elçileri programı paneli.", icon: Flag },
   { to: "/profile?view=business", title: "Businesses", desc: "İşletme listeleme ve yönetim.", icon: Building2 },
