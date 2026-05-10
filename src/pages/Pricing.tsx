@@ -33,10 +33,9 @@ const consultantPlans = {
   premium: {
     name: "Premium Pro",
     icon: Crown,
-    monthlyPrice: 10,
-    yearlyPrice: 8,
+    monthlyPrice: 25,
+    yearlyPrice: 20,
     desc: "Tüm araçlarla büyü, öne çık",
-    badge: "Founding 1000 — En Popüler",
     features: [
       { text: "Temel profil sayfası", included: true },
       { text: "Kategori Dizininde Listelenme", included: true },
@@ -50,6 +49,22 @@ const consultantPlans = {
       { text: "Sosyal medya AI içerik üretimi", included: true },
       { text: "Etkinlik bilet satışı", included: true },
       { text: "Boost paketleri erişimi", included: true },
+    ],
+  },
+  founding: {
+    name: "Founding 1000",
+    icon: Sparkles,
+    monthlyPrice: 10,
+    yearlyPrice: 8,
+    desc: "Erken dönem üyelik — sınırlı kontenjan",
+    badge: "En Popüler",
+    features: [
+      { text: "Premium Pro'nun tüm özellikleri", included: true },
+      { text: "Yıllık €99 (€120 yerine)", included: true },
+      { text: "€399 değerinde kategori vitrini · 6 ay", included: true },
+      { text: "Ana sayfa carousel görünürlüğü · 6 ay", included: true },
+      { text: "Founding üye rozeti", included: true },
+      { text: "Öncelikli destek", included: true },
     ],
   },
 };
