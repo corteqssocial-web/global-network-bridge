@@ -161,7 +161,7 @@ const ProfileConsultant = () => {
           <TabsTrigger value="sessions" className="gap-1.5"><Video className="h-4 w-4" /> Seanslar</TabsTrigger>
           <TabsTrigger value="incoming-requests" className="gap-1.5"><ClipboardList className="h-4 w-4" /> Gelen Talepler</TabsTrigger>
           <TabsTrigger value="ai-twin" className="gap-1.5"><Bot className="h-4 w-4" /> AI Twin</TabsTrigger>
-          <TabsTrigger value="events" className="gap-1.5"><Calendar className="h-4 w-4" /> Etkinlikler</TabsTrigger>
+          <TabsTrigger value="events" className="gap-1.5"><Calendar className="h-4 w-4" /> Takvim/Etkinlikler</TabsTrigger>
           <TabsTrigger value="reviews" className="gap-1.5"><Star className="h-4 w-4" /> Değerlendirmeler</TabsTrigger>
           <TabsTrigger value="analytics" className="gap-1.5"><BarChart3 className="h-4 w-4" /> Analitik</TabsTrigger>
           <TabsTrigger value="campaign" className="gap-1.5"><Megaphone className="h-4 w-4" /> Tanıtım</TabsTrigger>
