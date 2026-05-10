@@ -294,6 +294,54 @@ const VolunteerMentorDetail = () => {
           </div>
         </div>
       </main>
+
+      {/* Auth gate dialog */}
+      <Dialog open={authPromptOpen} onOpenChange={setAuthPromptOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Lock className="h-5 w-5 text-primary" /> Mesaj göndermek için kayıt ol
+            </DialogTitle>
+            <DialogDescription>
+              Gönüllü mentörlerimizin gizliliğini korumak için iletişim platform üzerinden yapılır.
+              Ücretsiz hesabını oluştur, kayıt biter bitmez bu mentörle mesaj penceresinden devam edeceksin.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-2">
+            <Button variant="outline" onClick={() => setAuthPromptOpen(false)}>Vazgeç</Button>
+            <Button onClick={goToAuth} className="gap-2">
+              <Mail className="h-4 w-4" /> Kayıt Ol / Giriş Yap
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Message composer */}
+      <Dialog open={messageOpen} onOpenChange={setMessageOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <MessageSquare className="h-5 w-5 text-primary" /> {mentor.name}'e mesaj
+            </DialogTitle>
+            <DialogDescription>
+              Mesajın platform üzerinden iletilir. Mentör cevap verdiğinde bildirim alırsın.
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            placeholder="Merhaba, yeni taşındım ve okul başvuruları konusunda yardımına ihtiyacım var..."
+            value={messageText}
+            onChange={(e) => setMessageText(e.target.value)}
+            rows={5}
+          />
+          <DialogFooter className="gap-2 sm:gap-2">
+            <Button variant="outline" onClick={() => setMessageOpen(false)}>İptal</Button>
+            <Button onClick={sendMessage} className="gap-2" disabled={!messageText.trim()}>
+              <Send className="h-4 w-4" /> Gönder
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Footer />
     </div>
   );
