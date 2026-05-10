@@ -33,8 +33,8 @@ const consultantPlans = {
   premium: {
     name: "Premium Pro",
     icon: Crown,
-    monthlyPrice: 25,
-    yearlyPrice: 20,
+    monthlyPrice: 10,
+    yearlyPrice: 8,
     desc: "Tüm araçlarla büyü, öne çık",
     features: [
       { text: "Temel profil sayfası", included: true },
