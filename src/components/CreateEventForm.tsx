@@ -36,6 +36,7 @@ const emptyForm = {
   maxAttendees: 100,
   tags: "",
   image: "",
+  registrationUrl: "",
 };
 
 const audienceSegments = [
