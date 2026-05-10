@@ -10,6 +10,7 @@ import { businesses } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
 import { markRealCouponPurchase, markRealTransaction } from "@/lib/demoFlags";
 import DemoPageBanner from "@/components/DemoPageBanner";
+import PublicEventsList from "@/components/PublicEventsList";
 
 const offeringColors: Record<string, string> = {
   "iş ilanı": "bg-turquoise/10 text-turquoise border-turquoise/20",
