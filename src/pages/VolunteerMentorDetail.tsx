@@ -144,9 +144,6 @@ const VolunteerMentorDetail = () => {
                 <Button className="gap-2 w-full" onClick={handleMessageClick}>
                   <MessageSquare className="h-4 w-4" /> Mesaj Gönder
                 </Button>
-                <Button variant="outline" className="gap-2 w-full border-emerald-500/40 text-emerald-700 hover:bg-emerald-500/10">
-                  <Sparkles className="h-4 w-4" /> Teşekkür Gönder
-                </Button>
               </div>
             </div>
           </div>
