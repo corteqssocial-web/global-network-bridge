@@ -68,12 +68,50 @@ const isSocialPostLink = (url: string) =>
 const isAcceptedShareLink = (url: string) => isDriveLink(url) || isSocialPostLink(url);
 
 const May19 = () => {
-  const { toast } = useToast();
+  const { user, profile } = useAuth();
   const [tab, setTab] = useState<Kind>("map_pin");
   const [form, setForm] = useState(initialForm);
   const [files, setFiles] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [doneKind, setDoneKind] = useState<Kind | null>(null);
+  const [identityLocked, setIdentityLocked] = useState(false);
+  const [editingIdentity, setEditingIdentity] = useState(false);
+
+  // Prefill from profile or last submission so logged-in users don't
+  // re-enter name/email/city/country across the three actions.
+  useEffect(() => {
+    let cancelled = false;
+    const prefill = async () => {
+      if (!user) return;
+      const { data: prior } = await supabase
+        .from("may19_submissions")
+        .select("full_name, email, phone, country, city, social_handle")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (cancelled) return;
+      const src = prior ?? {};
+      const fullName = (src as any).full_name || profile?.full_name || "";
+      const email = (src as any).email || user.email || "";
+      const country = (src as any).country || (profile as any)?.country || "";
+      const city = (src as any).city || (profile as any)?.city || "";
+      const phone = (src as any).phone || profile?.phone || "";
+      const social = (src as any).social_handle || "";
+      setForm((p) => ({
+        ...p,
+        full_name: fullName,
+        email,
+        country,
+        city,
+        phone,
+        social_handle: social || p.social_handle,
+      }));
+      if (fullName && country && city) setIdentityLocked(true);
+    };
+    prefill();
+    return () => { cancelled = true; };
+  }, [user, profile]);
 
   const update = <K extends keyof typeof initialForm>(k: K, v: (typeof initialForm)[K]) =>
     setForm((p) => ({ ...p, [k]: v }));
