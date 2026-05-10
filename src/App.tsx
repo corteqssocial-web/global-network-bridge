@@ -13,6 +13,7 @@ import { recoverFromWhiteScreen } from "@/lib/recoveryReload";
 const Index = lazy(() => import("./pages/Index"));
 const Consultants = lazy(() => import("./pages/Consultants"));
 const ConsultantDetail = lazy(() => import("./pages/ConsultantDetail"));
+const VolunteerMentorDetail = lazy(() => import("./pages/VolunteerMentorDetail"));
 const Associations = lazy(() => import("./pages/Associations"));
 const AssociationDetail = lazy(() => import("./pages/AssociationDetail"));
 const Businesses = lazy(() => import("./pages/Businesses"));
