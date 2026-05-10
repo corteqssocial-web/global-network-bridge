@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Trophy, PenLine, Calendar, BarChart3, Heart, CheckCircle2, ArrowRight, Star, Clock, Award, Upload, Plane } from "lucide-react";
+import { Trophy, PenLine, Calendar, BarChart3, Heart, CheckCircle2, ArrowRight, Star, Clock, Award, LinkIcon, AlertTriangle, Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -41,21 +41,20 @@ const BlogContest = () => {
     postTheme: "",
     description: "",
     socialHandles: "",
+    postLink: "",
     referral: REFERRAL_CODE,
   });
-  const [postFile, setPostFile] = useState<File | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
-      title: "Başvuru Alındı! 🎉",
-      description: "Blog yazısı yarışmasına başvurunuz başarıyla alındı. Detaylar e-posta ile gönderilecektir.",
+      title: "Katılımınız için teşekkür ederiz! 🎉",
+      description: "Platformdaki profilinizden ve e-postalarınızdan gelişmeleri takip edin. Gönderdiğiniz linkler kontrol edildikten sonra size bildirim yapılacaktır.",
     });
     setFormData({
       name: "", email: "", phone: "", blogUrl: "", country: "", city: "",
-      postTitle: "", postTheme: "", description: "", socialHandles: "", referral: REFERRAL_CODE,
+      postTitle: "", postTheme: "", description: "", socialHandles: "", postLink: "", referral: REFERRAL_CODE,
     });
-    setPostFile(null);
   };
 
   return (
@@ -237,22 +236,27 @@ const BlogContest = () => {
                     <Textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} placeholder="Yazınız hakkında kısa bilgi (2-3 cümle)" rows={3} />
                   </div>
 
-                  {/* Upload area */}
+                  {/* Yazı linki */}
                   <div>
-                    <label className="text-sm font-semibold text-foreground mb-1.5 block">Yazı Yükleme (opsiyonel)</label>
-                    <label className="flex flex-col items-center justify-center border-2 border-dashed border-border rounded-xl p-6 cursor-pointer hover:border-primary/50 hover:bg-muted/30 transition-colors">
-                      <Upload className="h-8 w-8 text-primary mb-2" />
-                      <span className="text-sm font-semibold text-foreground">
-                        {postFile ? postFile.name : "Dosya seç veya buraya sürükle"}
-                      </span>
-                      <span className="text-xs text-muted-foreground mt-1">PDF, DOCX, MD, TXT · Maks 25 MB</span>
-                      <input
-                        type="file"
-                        accept=".pdf,.doc,.docx,.md,.txt"
-                        className="hidden"
-                        onChange={(e) => setPostFile(e.target.files?.[0] ?? null)}
+                    <label className="text-sm font-semibold text-foreground mb-1.5 block">Yazı Linki *</label>
+                    <div className="relative">
+                      <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        type="url"
+                        value={formData.postLink}
+                        onChange={(e) => setFormData({ ...formData, postLink: e.target.value })}
+                        placeholder="https://myblog.com/yazi  veya  Google Drive / Medium linki"
+                        className="pl-9"
+                        required
                       />
-                    </label>
+                    </div>
+                    <div className="mt-2 flex items-start gap-2 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30">
+                      <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
+                      <p className="text-xs text-foreground/90 font-body">
+                        Lütfen gönderdiğiniz linkin <strong>herkese açık</strong>, görüntülenebilir ve
+                        indirilebilir ayarda olduğundan emin olun. Erişilemeyen linkler değerlendirmeye alınmaz.
+                      </p>
+                    </div>
                   </div>
 
                   <div>

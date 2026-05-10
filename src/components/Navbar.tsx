@@ -129,6 +129,11 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
+            <Link to="/19-mayis">
+              <Button size="sm" className="gap-1.5 bg-rose-500 hover:bg-rose-600 text-white shadow-md shadow-rose-500/30">
+                <Flag className="h-4 w-4" /> 19Mayıs1919
+              </Button>
+            </Link>
             {user ? (
               <>
                 <Link to="/profile">
@@ -189,6 +194,7 @@ const Navbar = () => {
               <Link to="/city-news" className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1" onClick={() => setIsOpen(false)}><Newspaper className="h-3 w-3" />{t.nav.media}</Link>
               
               <Link to="/map" className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1" onClick={() => setIsOpen(false)}><MapPin className="h-3 w-3" />{t.nav.map}</Link>
+              <Link to="/19-mayis" className="text-sm font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1" onClick={() => setIsOpen(false)}><Flag className="h-3 w-3" />19Mayıs1919</Link>
               <div className="border-t border-border pt-3 mt-1">
                 {user ? (
                   <>
