@@ -285,9 +285,12 @@ const Pricing = () => {
           )}
 
           {/* Plans Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className={`grid grid-cols-1 ${("founding" in plans) ? "md:grid-cols-3" : "md:grid-cols-2"} gap-5 max-w-5xl mx-auto items-stretch`}>
             <PlanCard plan={plans.freemium} isYearly={isYearly} featured={false} />
-            <PlanCard plan={plans.premium} isYearly={isYearly} featured={true} />
+            {"founding" in plans && (
+              <PlanCard plan={(plans as any).founding} isYearly={isYearly} featured={true} />
+            )}
+            <PlanCard plan={plans.premium} isYearly={isYearly} featured={false} />
           </div>
 
           {/* FAQ hint */}
