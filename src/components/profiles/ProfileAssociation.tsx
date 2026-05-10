@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
+import MapAddressBanner from "@/components/MapAddressBanner";
 
 const ProfileAssociation = () => {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
