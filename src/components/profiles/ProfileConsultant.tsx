@@ -22,6 +22,7 @@ import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
 import MapAddressBanner from "@/components/MapAddressBanner";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 import NotificationsList from "@/components/NotificationsList";
+import SocialMediaInputs from "@/components/SocialMediaInputs";
 
 const ProfileConsultant = () => {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
@@ -677,6 +678,9 @@ const ProfileConsultant = () => {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="mt-6">
+            <SocialMediaInputs />
           </div>
         </TabsContent>
         {/* INCOMING REQUESTS */}
