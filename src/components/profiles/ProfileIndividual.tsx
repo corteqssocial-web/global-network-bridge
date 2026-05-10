@@ -1,11 +1,12 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import {
   Calendar, Tag, Users, Bell, CreditCard,
   ArrowLeft, Plus, ChevronRight, Star, Bot, MessageSquare,
   MapPin, Clock, Gift, TrendingUp, Briefcase, Linkedin,
   FileText, Eye, EyeOff, Settings, Shield, UserPlus, ScanLine, QrCode,
-  Globe, Trash2, ExternalLink, ClipboardList, Download, ChevronDown, ChevronUp, Info
+  Globe, Trash2, ExternalLink, ClipboardList, Download, ChevronDown, ChevronUp, Info,
+  Presentation, Loader2
 } from "lucide-react";
 import StripeTransactionsPanel from "@/components/StripeTransactionsPanel";
 import NotificationsList from "@/components/NotificationsList";
@@ -24,6 +25,9 @@ import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
 import WelcomePack from "@/components/profiles/WelcomePack";
 import { useDemoFlag } from "@/lib/demoFlags";
 import { useFollow } from "@/hooks/useFollow";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 
 
