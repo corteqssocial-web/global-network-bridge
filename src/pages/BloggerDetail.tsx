@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
+import PublicEventsList from "@/components/PublicEventsList";
 import { bloggers } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
 import { useFollow } from "@/hooks/useFollow";
