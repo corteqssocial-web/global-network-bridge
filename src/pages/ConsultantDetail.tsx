@@ -129,11 +129,12 @@ const ConsultantDetail = () => {
                   
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button variant="outline" className="gap-2 w-full relative">
+                      <Button disabled variant="outline" className="gap-2 w-full relative opacity-80">
                         <span className="absolute -top-2 -right-2 bg-accent text-accent-foreground rounded-full p-0.5">
                           <Info className="h-3 w-3" />
                         </span>
                         <Bot className="h-4 w-4" /> AI Twin Seans — Ücretsiz / 15dk
+                        <Badge className="ml-1 bg-gold text-foreground hover:bg-gold">Yakında</Badge>
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent side="bottom" className="max-w-[250px] text-center">
