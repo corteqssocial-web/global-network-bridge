@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import NotificationsList from "@/components/NotificationsList";
+import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 import QRScannerMock from "@/components/QRScannerMock";
 import CreateEventForm from "@/components/CreateEventForm";
 import EventManagePanel from "@/components/EventManagePanel";
