@@ -585,6 +585,11 @@ const ProfileConsultant = () => {
           <WhatsAppGroupsTab />
         </TabsContent>
 
+        {/* NOTIFICATIONS */}
+        <TabsContent value="notifications" className="mt-6">
+          <NotificationsList />
+        </TabsContent>
+
         {/* PROFILE EDIT / SETTINGS */}
         <TabsContent value="settings" className="mt-6">
           {/* Category Manager */}
