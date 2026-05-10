@@ -416,41 +416,20 @@ const ProfileConsultant = () => {
                 </div>
               </div>
 
-              {/* Randevular - sessions.live'den çekilen gerçek randevular */}
+              {/* Randevular */}
               <div className="mb-6">
                 <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                  <Video className="h-4 w-4 text-primary" /> Randevularım ({sessions.live.length})
+                  <Video className="h-4 w-4 text-primary" /> Randevularım
                 </h3>
-                {sessions.live.length === 0 ? (
-                  <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
-                    Yaklaşan randevunuz yok.
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    {sessions.live.map((s) => (
-                      <div key={s.id} className="flex items-center gap-4 p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                        <div className="text-center shrink-0 w-14">
-                          <div className="text-base font-bold text-primary">{s.date.split(" ")[0]}</div>
-                          <div className="text-xs text-muted-foreground">{s.date.split(" ")[1]}</div>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-foreground text-sm">{s.client}</p>
-                          <p className="text-xs text-muted-foreground flex items-center gap-2">
-                            <Clock className="h-3 w-3" /> {s.time} • {s.duration}
-                            <Badge variant="outline" className="text-[10px]">{s.status}</Badge>
-                          </p>
-                        </div>
-                        <Badge className="bg-primary/10 text-primary border-0">{s.type}</Badge>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
+                  Onaylanan randevularınız burada gözükecek.
+                </div>
               </div>
 
               {/* Düzenlediği Etkinlikler */}
               <div>
                 <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-turquoise" /> Düzenlediğim Etkinlikler ({myEvents.length + events.length})
+                  <Calendar className="h-4 w-4 text-turquoise" /> Düzenlediğim Etkinlikler ({myEvents.length})
                 </h3>
                 <div className="space-y-3">
                   {myEvents.map((event) => (
@@ -474,25 +453,9 @@ const ProfileConsultant = () => {
                       </div>
                     </div>
                   ))}
-                  {events.map((event) => (
-                    <div key={event.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                      <div className="text-center shrink-0 w-14">
-                        <div className="text-xl font-bold text-primary">{event.date.split(" ")[0]}</div>
-                        <div className="text-xs text-muted-foreground">{event.date.split(" ")[1]}</div>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-foreground">{event.title}</h3>
-                        <p className="text-sm text-muted-foreground flex items-center gap-2">
-                          <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {event.attendees} katılımcı</span>
-                          <Badge variant="outline" className="text-xs">{event.status}</Badge>
-                        </p>
-                      </div>
-                      <Button variant="outline" size="sm" onClick={() => setManagingEvent(event)}>Yönet</Button>
-                    </div>
-                  ))}
-                  {myEvents.length + events.length === 0 && (
+                  {myEvents.length === 0 && (
                     <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
-                      Henüz etkinlik düzenlemediniz. "Etkinlik Oluştur" butonu ile yeni bir etkinlik açın.
+                      Düzenlediğiniz etkinlikler burada gözükecek. "Etkinlik Oluştur" butonu ile yeni bir etkinlik açın.
                     </div>
                   )}
                 </div>
