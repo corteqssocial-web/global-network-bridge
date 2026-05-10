@@ -785,6 +785,9 @@ const ProfileIndividual = () => {
               </div>
             </div>
           </div>
+          <div className="mt-6">
+            <SocialMediaInputs defaultValues={{ linkedin: linkedinUrl }} />
+          </div>
         </TabsContent>
         {/* SERVICE REQUESTS */}
         <TabsContent value="service-requests" className="mt-6">
