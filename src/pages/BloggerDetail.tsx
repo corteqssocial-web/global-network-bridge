@@ -243,6 +243,7 @@ const BloggerDetail = () => {
               <TabsTrigger value="blog">Blog Yazıları</TabsTrigger>
               {blogger.vlogs.length > 0 && <TabsTrigger value="vlogs">Vloglar</TabsTrigger>}
               <TabsTrigger value="about">Hakkında</TabsTrigger>
+              <TabsTrigger value="events">Etkinlikler</TabsTrigger>
               <TabsTrigger value="contact">İletişim</TabsTrigger>
               {blogger.instagram && (
                 <a href={`https://instagram.com/${blogger.instagram.replace("@", "")}`} target="_blank" rel="noopener noreferrer" className="ml-auto flex items-center">
