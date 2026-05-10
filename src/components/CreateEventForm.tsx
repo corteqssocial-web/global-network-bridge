@@ -468,7 +468,8 @@ const CreateEventForm = ({ onClose, onCreated, organizerType = "community" }: Cr
           <Rocket className="h-5 w-5 text-primary" /> Tanıtım Seçenekleri
         </h3>
 
-        <div className="space-y-4">
+        <div className="relative">
+          <div className="space-y-4 blur-sm pointer-events-none select-none opacity-70">
           {/* Featured on Homepage */}
           <div className="flex items-start gap-4 p-4 rounded-xl border border-border hover:border-primary/30 transition-colors bg-muted/30">
             <div className="w-10 h-10 rounded-lg bg-gold/15 flex items-center justify-center shrink-0 mt-0.5">
@@ -479,14 +480,14 @@ const CreateEventForm = ({ onClose, onCreated, organizerType = "community" }: Cr
                 <h4 className="font-semibold text-foreground">
                   Ana Sayfa "Öne Çıkan Etkinlikler"
                 </h4>
-                <Switch checked={featuredHome} onCheckedChange={setFeaturedHome} />
+                <Switch checked={false} disabled />
               </div>
               <p className="text-sm text-muted-foreground mt-1">
                 Etkinliğiniz ana sayfadaki Featured Etkinlikler karuselinde 7 gün
                 boyunca görünür.
               </p>
               <Badge className="bg-gold/15 text-gold border-gold/30 mt-2">
-                €29 / hafta
+                € / hafta
               </Badge>
             </div>
           </div>
@@ -501,17 +502,14 @@ const CreateEventForm = ({ onClose, onCreated, organizerType = "community" }: Cr
                 <h4 className="font-semibold text-foreground">
                   Ülke Aramasında Öne Çıkarma
                 </h4>
-                <Switch
-                  checked={featuredCountry}
-                  onCheckedChange={setFeaturedCountry}
-                />
+                <Switch checked={false} disabled />
               </div>
               <p className="text-sm text-muted-foreground mt-1">
                 "{form.country}" ülke filtresinde etkinlikler listesinin en üstünde
                 "⭐ Öne Çıkan" etiketiyle görünür.
               </p>
               <Badge className="bg-turquoise/15 text-turquoise border-turquoise/30 mt-2">
-                €19 / hafta
+                € / hafta
               </Badge>
             </div>
           </div>
@@ -526,51 +524,24 @@ const CreateEventForm = ({ onClose, onCreated, organizerType = "community" }: Cr
                 <h4 className="font-semibold text-foreground">
                   AI Eşleşmeli E-posta Duyurusu
                 </h4>
-                <Switch checked={emailNotify} onCheckedChange={setEmailNotify} />
+                <Switch checked={false} disabled />
               </div>
               <p className="text-sm text-muted-foreground mt-1">
                 Platform veritabanındaki etkinlikle eşleşen kullanıcılara otomatik
                 e-posta duyurusu gönderilir.
               </p>
               <Badge className="bg-primary/15 text-primary border-primary/30 mt-2">
-                €15 / duyuru
+                € / duyuru
               </Badge>
-
-              {/* AI matched segments preview */}
-              {emailNotify && (
-                <div className="mt-3 space-y-2 p-3 rounded-lg bg-background border border-border">
-                  <p className="text-xs font-medium text-foreground flex items-center gap-1">
-                    <Sparkles className="h-3 w-3 text-primary" /> AI Eşleşen Hedef
-                    Kitleler
-                  </p>
-                  {audienceSegments.map((seg) => (
-                    <div
-                      key={seg.name}
-                      className="flex items-center justify-between text-xs"
-                    >
-                      <span className="text-muted-foreground">{seg.name}</span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-muted-foreground">
-                          {seg.members} kişi
-                        </span>
-                        <Badge
-                          variant="outline"
-                          className="text-[10px] px-1.5 py-0"
-                        >
-                          %{seg.match} eşleşme
-                        </Badge>
-                      </div>
-                    </div>
-                  ))}
-                  <p className="text-xs text-muted-foreground pt-1 border-t border-border/50">
-                    Tahmini erişim:{" "}
-                    <span className="font-semibold text-foreground">
-                      ~{audienceSegments.reduce((a, s) => a + s.members, 0)} kişi
-                    </span>
-                  </p>
-                </div>
-              )}
             </div>
+          </div>
+          </div>
+
+          {/* Yakında overlay */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Badge className="bg-primary text-primary-foreground border-primary px-4 py-2 text-sm font-semibold shadow-lg">
+              <Sparkles className="h-4 w-4 mr-1.5" /> Yakında
+            </Badge>
           </div>
         </div>
       </div>
