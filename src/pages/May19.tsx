@@ -335,6 +335,11 @@ const May19 = () => {
                       {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <MapPin className="h-4 w-4 mr-2" />}
                       Haritada Yerimi İşaretle
                     </Button>
+                    <Link to="/auth?mode=signup" className="col-span-2">
+                      <Button variant="outline" size="sm" className="w-full border-rose-500/40 text-rose-600 hover:bg-rose-500/10">
+                        <Sparkles className="h-4 w-4 mr-2" /> Platforma Kaydımı Tamamla
+                      </Button>
+                    </Link>
                   </div>
                 )}
               </div>
