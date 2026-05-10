@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import {
-  Calendar, Tag, Users, Bell, CreditCard,
+  Calendar, Tag, Users, Bell,
   ArrowLeft, Plus, ChevronRight, Star, Bot, MessageSquare,
   MapPin, Clock, Gift, TrendingUp, Briefcase, Linkedin,
   FileText, Eye, EyeOff, Settings, Shield, UserPlus, ScanLine, QrCode,
   Globe, Trash2, ExternalLink, ClipboardList, Download, ChevronDown, ChevronUp, Info,
   Presentation, Loader2
 } from "lucide-react";
-import StripeTransactionsPanel from "@/components/StripeTransactionsPanel";
+
 import NotificationsList from "@/components/NotificationsList";
 import QRScannerMock from "@/components/QRScannerMock";
 import CreateEventForm from "@/components/CreateEventForm";
@@ -35,7 +35,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const ProfileIndividual = () => {
   const [searchParams] = useSearchParams();
-  const initialTab = searchParams.get("tab") || "transactions";
+  const initialTab = searchParams.get("tab") || "service-requests";
   const [isJobSeeking, setIsJobSeeking] = useState(true);
   const [_showWelcomePack, _setShowWelcomePack] = useState(true); // kept for future use
   const [profileVisible, setProfileVisible] = useState(true);
@@ -272,12 +272,6 @@ const ProfileIndividual = () => {
               )}
             </div>
           </div>
-          <div className="bg-primary/10 rounded-xl p-4 text-center shrink-0 min-w-[140px]">
-            <CreditCard className="h-5 w-5 text-primary mx-auto mb-1" />
-            <p className="text-xs text-muted-foreground mt-1">Stripe ile</p>
-            <p className="text-sm font-semibold text-foreground">İşlemlerim</p>
-            <p className="text-[10px] text-muted-foreground mt-0.5">Yakında aktif</p>
-          </div>
         </div>
       </div>
 
@@ -285,7 +279,6 @@ const ProfileIndividual = () => {
       {/* Tabs */}
       <Tabs defaultValue={initialTab} className="w-full">
         <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
-          <TabsTrigger value="transactions" className="gap-1.5"><CreditCard className="h-4 w-4" /> İşlemlerim</TabsTrigger>
           <TabsTrigger value="service-requests" className="gap-1.5"><ClipboardList className="h-4 w-4" /> Hizmet Talepleri</TabsTrigger>
           <TabsTrigger value="relocations" className="gap-1.5"><Globe className="h-4 w-4" /> Taşınma Yönetimi</TabsTrigger>
           <TabsTrigger value="calendar" className="gap-1.5"><Calendar className="h-4 w-4" /> Takvim</TabsTrigger>
@@ -296,11 +289,6 @@ const ProfileIndividual = () => {
           <TabsTrigger value="whatsapp" className="gap-1.5"><MessageSquare className="h-4 w-4" /> WhatsApp</TabsTrigger>
           <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Ayarlar</TabsTrigger>
         </TabsList>
-
-        {/* TRANSACTIONS (Stripe) */}
-        <TabsContent value="transactions" className="mt-6">
-          <StripeTransactionsPanel stripeConnected={false} outgoingOnly />
-        </TabsContent>
 
         {/* EVENTS - user can create & manage events too */}
         <TabsContent value="events" className="mt-6">
