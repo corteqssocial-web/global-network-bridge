@@ -17,6 +17,7 @@ import CreateEventForm from "@/components/CreateEventForm";
 import EventManagePanel from "@/components/EventManagePanel";
 import StripeTransactionsPanel, { type StripeTxn } from "@/components/StripeTransactionsPanel";
 import NotificationsList from "@/components/NotificationsList";
+import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 
 type AmbassadorEvent = {
   id: number;
@@ -139,8 +140,8 @@ const ProfileAmbassador = () => {
           <TabsTrigger value="messaging" className="gap-1.5"><MessageSquare className="h-4 w-4" /> Mesajlar</TabsTrigger>
           <TabsTrigger value="performance" className="gap-1.5"><TrendingUp className="h-4 w-4" /> Performans</TabsTrigger>
           <TabsTrigger value="community" className="gap-1.5"><Globe className="h-4 w-4" /> Topluluk</TabsTrigger>
+          <NotificationsTabTrigger />
           <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Ayarlar</TabsTrigger>
-          <TabsTrigger value="notifications" className="gap-1.5"><Bell className="h-4 w-4" /> Bildirimler</TabsTrigger>
         </TabsList>
 
         {/* TRANSACTIONS (Stripe) */}

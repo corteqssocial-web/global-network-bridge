@@ -20,6 +20,8 @@ import ConsultantServiceRequests from "@/components/ConsultantServiceRequests";
 import ConsultantCategoryManager from "@/components/ConsultantCategoryManager";
 import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
 import MapAddressBanner from "@/components/MapAddressBanner";
+import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
+import NotificationsList from "@/components/NotificationsList";
 
 const ProfileConsultant = () => {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
@@ -161,6 +163,7 @@ const ProfileConsultant = () => {
           <TabsTrigger value="analytics" className="gap-1.5"><BarChart3 className="h-4 w-4" /> Analitik</TabsTrigger>
           <TabsTrigger value="campaign" className="gap-1.5"><Megaphone className="h-4 w-4" /> Tanıtım</TabsTrigger>
           <TabsTrigger value="whatsapp" className="gap-1.5"><MessageSquare className="h-4 w-4" /> WhatsApp</TabsTrigger>
+          <NotificationsTabTrigger />
           <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Profil Düzenle</TabsTrigger>
         </TabsList>
 
@@ -580,6 +583,11 @@ const ProfileConsultant = () => {
 
         <TabsContent value="whatsapp" className="mt-6">
           <WhatsAppGroupsTab />
+        </TabsContent>
+
+        {/* NOTIFICATIONS */}
+        <TabsContent value="notifications" className="mt-6">
+          <NotificationsList />
         </TabsContent>
 
         {/* PROFILE EDIT / SETTINGS */}
