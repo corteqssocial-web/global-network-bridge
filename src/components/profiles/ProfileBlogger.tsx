@@ -49,6 +49,8 @@ const ProfileBlogger = () => {
   const [linkUrl, setLinkUrl] = useState("");
   const [linkTitle, setLinkTitle] = useState("");
   const [linkDesc, setLinkDesc] = useState("");
+  const [showCreateEvent, setShowCreateEvent] = useState(false);
+  const [managingEvent, setManagingEvent] = useState<any | null>(null);
 
   useEffect(() => {
     setMyBlogLinks(getDiasporaBlogLinksByAuthor(blogger.name));
