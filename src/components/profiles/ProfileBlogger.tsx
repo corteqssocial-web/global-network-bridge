@@ -177,6 +177,7 @@ const ProfileBlogger = () => {
           <TabsTrigger value="content" className="gap-1.5"><PenLine className="h-4 w-4" /> İçerikler</TabsTrigger>
           <TabsTrigger value="sessions" className="gap-1.5"><Video className="h-4 w-4" /> Görüşmeler</TabsTrigger>
           <TabsTrigger value="collaborations" className="gap-1.5"><Handshake className="h-4 w-4" /> İşbirlikleri</TabsTrigger>
+          <TabsTrigger value="events" className="gap-1.5"><Calendar className="h-4 w-4" /> Etkinlikler</TabsTrigger>
           <TabsTrigger value="analytics" className="gap-1.5"><BarChart3 className="h-4 w-4" /> Analitik</TabsTrigger>
           <TabsTrigger value="promotions" className="gap-1.5"><Megaphone className="h-4 w-4" /> Tanıtım</TabsTrigger>
           <TabsTrigger value="whatsapp" className="gap-1.5"><MessageSquare className="h-4 w-4" /> WhatsApp</TabsTrigger>
