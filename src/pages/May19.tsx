@@ -172,6 +172,7 @@ const May19 = () => {
       const attachment_urls = await upload(kind);
       const { error } = await supabase.from("may19_submissions").insert({
         kind,
+        user_id: user?.id ?? null,
         full_name: form.full_name || null,
         email: form.email || null,
         phone: form.phone || null,
