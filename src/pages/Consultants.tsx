@@ -229,7 +229,9 @@ const Consultants = () => {
   const filtered = consultants.filter((c) => {
     const matchesCountry = country === "all" || c.country === country;
     const matchesCity = city === "all" || c.city === city;
-    const matchesCategory = category === "ambassador" ? false : matchesFilter(c, activeFilter, activeSubFilter?.keywords);
+    if (category === "ambassador") return false;
+    if (category === "gonullu") return matchesCountry && matchesCity && volunteerMentorIds.has(c.id);
+    const matchesCategory = matchesFilter(c, activeFilter, activeSubFilter?.keywords);
     return matchesCountry && matchesCity && matchesCategory;
   });
 
