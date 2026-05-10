@@ -11,6 +11,8 @@ import {
 import StripeTransactionsPanel from "@/components/StripeTransactionsPanel";
 import NotificationsList from "@/components/NotificationsList";
 import QRScannerMock from "@/components/QRScannerMock";
+import CreateEventForm from "@/components/CreateEventForm";
+import EventManagePanel from "@/components/EventManagePanel";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
