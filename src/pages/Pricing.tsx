@@ -283,32 +283,6 @@ const Pricing = () => {
             )}
           </div>
 
-          {/* Early Bird Banner - Business */}
-          {(userType === "business" || userType === "consultant" || userType === "association") && (
-            <div className="max-w-4xl mx-auto mb-8">
-              <div className="space-y-3">
-                {/* Early Bird %50 Discount Banner */}
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border border-primary/20 p-5 text-center">
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <Flame className="h-5 w-5 text-primary" />
-                    <span className="text-lg font-extrabold text-foreground">
-                      {userType === "business" 
-                        ? "İlk 1.000 İşletme İçin %50 İndirim!" 
-                        : userType === "consultant" 
-                          ? "İlk 1.000 Danışman İçin %50 İndirim!" 
-                          : "İlk 1.000 Kuruluş İçin %50 İndirim!"}
-                    </span>
-                    <Flame className="h-5 w-5 text-primary" />
-                  </div>
-                  <p className="text-sm text-muted-foreground font-body">
-                    3 ay süreyle Premium Pro fiyatlarda %50 indirim — erken kayıt avantajından yararlanın.
-                  </p>
-                </div>
-
-              </div>
-            </div>
-          )}
-
           {/* Plans Grid */}
           <div className={`grid grid-cols-1 ${("founding" in plans) ? "md:grid-cols-3" : "md:grid-cols-2"} gap-5 max-w-5xl mx-auto items-stretch`}>
             <PlanCard plan={plans.freemium} isYearly={isYearly} featured={false} />
