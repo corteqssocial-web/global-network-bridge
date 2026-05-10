@@ -272,12 +272,6 @@ const ProfileIndividual = () => {
               )}
             </div>
           </div>
-          <div className="bg-primary/10 rounded-xl p-4 text-center shrink-0 min-w-[140px]">
-            <CreditCard className="h-5 w-5 text-primary mx-auto mb-1" />
-            <p className="text-xs text-muted-foreground mt-1">Stripe ile</p>
-            <p className="text-sm font-semibold text-foreground">İşlemlerim</p>
-            <p className="text-[10px] text-muted-foreground mt-0.5">Yakında aktif</p>
-          </div>
         </div>
       </div>
 
