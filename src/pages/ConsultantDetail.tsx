@@ -11,6 +11,7 @@ import { consultants } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
 import DemoPageBanner from "@/components/DemoPageBanner";
 import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
+import PublicEventsList from "@/components/PublicEventsList";
 
 const ConsultantDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -190,7 +191,7 @@ const ConsultantDetail = () => {
             </TabsContent>
 
             <TabsContent value="events" className="mt-6">
-              <DemoTabPlaceholder label="Etkinlik Takvimi — Demo" />
+              <PublicEventsList emptyLabel="Bu danışmanın yaklaşan etkinliği yok." />
             </TabsContent>
 
             <TabsContent value="contact" className="mt-6">

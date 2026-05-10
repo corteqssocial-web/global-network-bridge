@@ -10,6 +10,7 @@ import { businesses } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
 import { markRealCouponPurchase, markRealTransaction } from "@/lib/demoFlags";
 import DemoPageBanner from "@/components/DemoPageBanner";
+import PublicEventsList from "@/components/PublicEventsList";
 
 const offeringColors: Record<string, string> = {
   "iş ilanı": "bg-turquoise/10 text-turquoise border-turquoise/20",
@@ -340,6 +341,14 @@ const BusinessDetail = () => {
               ))}
             </div>
           )}
+
+          {/* Yaklaşan Etkinlikler — Supabase events tablosundan canlı */}
+          <div className="mt-10">
+            <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-primary" /> Yaklaşan Etkinlikler
+            </h2>
+            <PublicEventsList emptyLabel="Bu işletmenin yaklaşan etkinliği yok." />
+          </div>
         </div>
       </main>
       <Footer />

@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
+import PublicEventsList from "@/components/PublicEventsList";
 import { bloggers } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
 import { useFollow } from "@/hooks/useFollow";
@@ -242,6 +243,7 @@ const BloggerDetail = () => {
               <TabsTrigger value="blog">Blog Yazıları</TabsTrigger>
               {blogger.vlogs.length > 0 && <TabsTrigger value="vlogs">Vloglar</TabsTrigger>}
               <TabsTrigger value="about">Hakkında</TabsTrigger>
+              <TabsTrigger value="events">Etkinlikler</TabsTrigger>
               <TabsTrigger value="contact">İletişim</TabsTrigger>
               {blogger.instagram && (
                 <a href={`https://instagram.com/${blogger.instagram.replace("@", "")}`} target="_blank" rel="noopener noreferrer" className="ml-auto flex items-center">
@@ -276,6 +278,10 @@ const BloggerDetail = () => {
 
             <TabsContent value="about" className="mt-6">
               <DemoTabPlaceholder label="Hakkında — Demo" />
+            </TabsContent>
+
+            <TabsContent value="events" className="mt-7">
+              <PublicEventsList emptyLabel="Bu içerik üreticinin yaklaşan etkinliği yok." />
             </TabsContent>
 
             <TabsContent value="contact" className="mt-6">

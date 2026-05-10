@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import { ArrowLeft, Plus } from "lucide-react";
+import CreateEventForm from "@/components/CreateEventForm";
+import EventManagePanel from "@/components/EventManagePanel";
 import SocialMediaCampaignDialog from "@/components/SocialMediaCampaignDialog";
 import CategoryShowcasePurchase from "@/components/CategoryShowcasePurchase";
 import {
@@ -46,6 +49,8 @@ const ProfileBlogger = () => {
   const [linkUrl, setLinkUrl] = useState("");
   const [linkTitle, setLinkTitle] = useState("");
   const [linkDesc, setLinkDesc] = useState("");
+  const [showCreateEvent, setShowCreateEvent] = useState(false);
+  const [managingEvent, setManagingEvent] = useState<any | null>(null);
 
   useEffect(() => {
     setMyBlogLinks(getDiasporaBlogLinksByAuthor(blogger.name));
@@ -174,6 +179,7 @@ const ProfileBlogger = () => {
           <TabsTrigger value="content" className="gap-1.5"><PenLine className="h-4 w-4" /> İçerikler</TabsTrigger>
           <TabsTrigger value="sessions" className="gap-1.5"><Video className="h-4 w-4" /> Görüşmeler</TabsTrigger>
           <TabsTrigger value="collaborations" className="gap-1.5"><Handshake className="h-4 w-4" /> İşbirlikleri</TabsTrigger>
+          <TabsTrigger value="events" className="gap-1.5"><Calendar className="h-4 w-4" /> Etkinlikler</TabsTrigger>
           <TabsTrigger value="analytics" className="gap-1.5"><BarChart3 className="h-4 w-4" /> Analitik</TabsTrigger>
           <TabsTrigger value="promotions" className="gap-1.5"><Megaphone className="h-4 w-4" /> Tanıtım</TabsTrigger>
           <TabsTrigger value="whatsapp" className="gap-1.5"><MessageSquare className="h-4 w-4" /> WhatsApp</TabsTrigger>
@@ -523,6 +529,34 @@ const ProfileBlogger = () => {
               </div>
             </div>
           </div>
+        </TabsContent>
+
+        {/* EVENTS */}
+        <TabsContent value="events" className="mt-6">
+          {managingEvent ? (
+            <EventManagePanel event={managingEvent} onBack={() => setManagingEvent(null)} />
+          ) : showCreateEvent ? (
+            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+              <Button variant="ghost" size="sm" className="gap-1 mb-4" onClick={() => setShowCreateEvent(false)}>
+                <ArrowLeft className="h-4 w-4" /> Etkinliklere Dön
+              </Button>
+              <CreateEventForm onClose={() => setShowCreateEvent(false)} />
+            </div>
+          ) : (
+            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-primary" /> Etkinliklerim
+                </h2>
+                <Button className="gap-2" onClick={() => setShowCreateEvent(true)}>
+                  <Plus className="h-4 w-4" /> Etkinlik Oluştur
+                </Button>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Yarattığın etkinlikler hem platformda hem de profil mikrositende görünür. Kayıt için kendi Google Form linkini kullanabilirsin.
+              </p>
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="whatsapp" className="mt-6">
