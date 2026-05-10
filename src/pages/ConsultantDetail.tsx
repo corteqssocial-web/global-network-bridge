@@ -181,77 +181,19 @@ const ConsultantDetail = () => {
             </TabsList>
 
             <TabsContent value="bio" className="mt-6">
-              <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-                <h2 className="text-xl font-bold text-foreground mb-4">Biyografi</h2>
-                <p className="text-muted-foreground font-body leading-relaxed">{consultant.bio}</p>
-              </div>
+              <DemoTabPlaceholder label="Biyografi — Demo" />
             </TabsContent>
 
             <TabsContent value="specialties" className="mt-6">
-              <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-                <h2 className="text-xl font-bold text-foreground mb-4">Uzmanlık Alanları</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {consultant.specialties.map((s) => (
-                    <div key={s} className="flex items-center gap-3 p-4 rounded-xl bg-muted/50">
-                      <div className="w-2 h-2 rounded-full bg-primary shrink-0" />
-                      <span className="text-foreground font-body">{s}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <DemoTabPlaceholder label="Uzmanlık Alanları — Demo" />
             </TabsContent>
-
 
             <TabsContent value="events" className="mt-6">
-              <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-                <h2 className="text-xl font-bold text-foreground mb-4">Etkinlik Takvimi</h2>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-4 p-4 rounded-xl bg-muted/50">
-                    <div className="text-center shrink-0">
-                      <div className="text-2xl font-bold text-primary">15</div>
-                      <div className="text-xs text-muted-foreground">Mar</div>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-foreground">Yatırım Webinarı</h3>
-                      <p className="text-sm text-muted-foreground font-body">Online · 20:00 CET</p>
-                    </div>
-                    <Button variant="outline" size="sm" className="ml-auto shrink-0">Katıl</Button>
-                  </div>
-                  <div className="flex items-center gap-4 p-4 rounded-xl bg-muted/50">
-                    <div className="text-center shrink-0">
-                      <div className="text-2xl font-bold text-primary">22</div>
-                      <div className="text-xs text-muted-foreground">Mar</div>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-foreground">Birebir Danışmanlık Günü</h3>
-                      <p className="text-sm text-muted-foreground font-body">{consultant.city} · 10:00-17:00</p>
-                    </div>
-                    <Button variant="outline" size="sm" className="ml-auto shrink-0">Randevu</Button>
-                  </div>
-                </div>
-              </div>
+              <DemoTabPlaceholder label="Etkinlik Takvimi — Demo" />
             </TabsContent>
 
-            <TabsContent value="contact" className="mt-6 space-y-6">
-              <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-                <h2 className="text-xl font-bold text-foreground mb-4">İletişim</h2>
-                <div className="space-y-4">
-                  <a href={consultant.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                    <GlobeIcon className="h-5 w-5 text-primary" />
-                    <span className="text-foreground font-body">{consultant.website}</span>
-                    <ExternalLink className="h-4 w-4 text-muted-foreground ml-auto" />
-                  </a>
-                  <a href={`https://wa.me/${consultant.whatsapp.replace('+', '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                    <MessageSquare className="h-5 w-5 text-primary" />
-                    <span className="text-foreground font-body">WhatsApp: {consultant.whatsapp}</span>
-                    <ExternalLink className="h-4 w-4 text-muted-foreground ml-auto" />
-                  </a>
-                  <Button variant="default" className="w-full gap-2 mt-4">
-                    <Calendar className="h-4 w-4" /> Mesaj Gönder
-                  </Button>
-                </div>
-              </div>
-
+            <TabsContent value="contact" className="mt-6">
+              <DemoTabPlaceholder label="İletişim — Demo" />
             </TabsContent>
           </Tabs>
 
