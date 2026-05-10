@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import { consultants } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
 import DemoPageBanner from "@/components/DemoPageBanner";
+import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
 
 const ConsultantDetail = () => {
   const { id } = useParams<{ id: string }>();
