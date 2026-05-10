@@ -678,6 +678,9 @@ const ProfileConsultant = () => {
               </div>
             </div>
           </div>
+          <div className="mt-6">
+            <SocialMediaInputs />
+          </div>
         </TabsContent>
         {/* INCOMING REQUESTS */}
         <TabsContent value="incoming-requests" className="mt-6">
