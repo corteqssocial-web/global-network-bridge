@@ -1,5 +1,6 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useParams, Link } from "react-router-dom";
+import PlatformMessageButton from "@/components/messaging/PlatformMessageButton";
 import { useFollow } from "@/hooks/useFollow";
 import { Star, Bot, MessageSquare, Calendar, Video, Globe as GlobeIcon, ArrowLeft, ExternalLink, UserPlus, UserCheck, Zap, Info, Clock, Home, MapPin, BedDouble, Bath, Maximize, Crown, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -72,7 +73,8 @@ const ConsultantDetail = () => {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3 flex-wrap">
                   <h1 className="text-2xl md:text-3xl font-bold text-foreground">{consultant.name}</h1>
-                  <Button
+                  <PlatformMessageButton recipientKind="consultant" recipientSlug={consultant.id} recipientName={consultant.name} fullWidth />
+                <Button
                     variant={isFollowing ? "secondary" : "outline"}
                     size="sm"
                     className="gap-1"
