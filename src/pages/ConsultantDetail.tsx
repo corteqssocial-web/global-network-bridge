@@ -191,7 +191,7 @@ const ConsultantDetail = () => {
             </TabsContent>
 
             <TabsContent value="events" className="mt-6">
-              <DemoTabPlaceholder label="Etkinlik Takvimi — Demo" />
+              <PublicEventsList emptyLabel="Bu danışmanın yaklaşan etkinliği yok." />
             </TabsContent>
 
             <TabsContent value="contact" className="mt-6">
