@@ -95,6 +95,7 @@ const ProfileConsultant = () => {
 
   return (
     <>
+      <MapAddressBanner />
       {/* Consultant header */}
       <div className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-card mb-8">
         <div className="flex flex-col sm:flex-row sm:items-start gap-6">
