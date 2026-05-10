@@ -35,7 +35,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const ProfileIndividual = () => {
   const [searchParams] = useSearchParams();
-  const initialTab = searchParams.get("tab") || "transactions";
+  const initialTab = searchParams.get("tab") || "service-requests";
   const [isJobSeeking, setIsJobSeeking] = useState(true);
   const [_showWelcomePack, _setShowWelcomePack] = useState(true); // kept for future use
   const [profileVisible, setProfileVisible] = useState(true);
