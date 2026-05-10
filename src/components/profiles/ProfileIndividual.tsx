@@ -278,6 +278,28 @@ const ProfileIndividual = () => {
       </div>
 
 
+      {/* Volunteer Mentor CTA */}
+      <div className="bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/30 rounded-2xl p-5 md:p-6 mb-8 flex flex-col sm:flex-row sm:items-center gap-4">
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-emerald-500/15 text-emerald-600">
+              <Users className="h-5 w-5" />
+            </span>
+            <h3 className="text-lg font-bold text-foreground">Gönüllü Mentör Ol</h3>
+          </div>
+          <p className="text-sm text-muted-foreground font-body">
+            Yaşadığın şehirde, uzman olduğun bir konuda yeni gelen Türklere <strong>gönüllü</strong> olarak destek ol.
+            Şehrini, uzmanlık alanını ve haftalık ayırabileceğin saati belirt; CorteQS seni ihtiyaç duyan kişilerle eşleştirsin.
+            Gönüllü Mentörler Danışmanlar sayfasında <strong>"Gönüllüler"</strong> alt kategorisi altında <strong>Gönüllü Mentör</strong> rozetiyle listelenir.
+          </p>
+        </div>
+        <Link to="/consultants?filter=gonullu" className="shrink-0">
+          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
+            <Users className="h-4 w-4" /> Gönüllü Mentör Ol
+          </Button>
+        </Link>
+      </div>
+
       {/* Tabs */}
       <Tabs defaultValue={initialTab} className="w-full">
         <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
