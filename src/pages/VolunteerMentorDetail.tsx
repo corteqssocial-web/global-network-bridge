@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, HandHeart, Heart, MessageSquare, MapPin, UserPlus, UserCheck, Send, Instagram, Linkedin, Facebook, Sparkles, Star, Lock, Mail } from "lucide-react";
+import { useParams, Link } from "react-router-dom";
+import { ArrowLeft, HandHeart, Heart, MessageSquare, MapPin, UserPlus, UserCheck, Send, Instagram, Linkedin, Facebook, Sparkles, Star, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PlatformMessageDialog from "@/components/messaging/PlatformMessageDialog";
 
 import { consultants } from "@/data/mock";
 import { useFollow } from "@/hooks/useFollow";
