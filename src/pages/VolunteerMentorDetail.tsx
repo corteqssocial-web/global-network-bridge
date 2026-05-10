@@ -231,17 +231,20 @@ const VolunteerMentorDetail = () => {
             {/* Right column: Contact + Social */}
             <div className="space-y-6">
               <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-                <h2 className="text-lg font-bold text-foreground mb-3">İletişim</h2>
-                <div className="space-y-2 text-sm">
-                  <a href={`https://wa.me/${mentor.whatsapp.replace(/\D/g, "")}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-foreground hover:text-primary">
-                    <MessageSquare className="h-4 w-4" /> {mentor.whatsapp}
-                  </a>
-                  {mentor.website && (
-                    <a href={mentor.website} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-foreground hover:text-primary break-all">
-                      <GlobeIcon className="h-4 w-4 shrink-0" /> {mentor.website}
-                    </a>
-                  )}
-                </div>
+                <h2 className="text-lg font-bold text-foreground mb-3 flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5 text-primary" /> İletişim
+                </h2>
+                <p className="text-xs text-muted-foreground font-body mb-3">
+                  Gönüllülerimizin gizliliğini korumak için telefon veya e-posta paylaşılmaz. Mesajını platform üzerinden gönder.
+                </p>
+                <Button className="w-full gap-2" onClick={handleMessageClick}>
+                  <MessageSquare className="h-4 w-4" /> Mesaj Gönder
+                </Button>
+                {!user && (
+                  <p className="text-[11px] text-muted-foreground mt-2 flex items-center gap-1 font-body">
+                    <Lock className="h-3 w-3" /> Mesaj göndermek için ücretsiz kayıt gerekir.
+                  </p>
+                )}
               </div>
 
               <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
