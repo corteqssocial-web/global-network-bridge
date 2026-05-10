@@ -118,6 +118,7 @@ const CreateEventForm = ({ onClose, onCreated, organizerType = "community" }: Cr
       price: form.price || 0,
       max_attendees: form.maxAttendees || null,
       cover_image: form.image || null,
+      registration_url: form.registrationUrl?.trim() || null,
       tags: form.tags ? form.tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
       organizer_name: organizerType === "corteqs" ? "CorteQS" : (user.user_metadata?.full_name || user.email || null),
       organizer_type: organizerType,
