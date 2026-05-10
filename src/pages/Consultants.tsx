@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { Star, Bot, Video, UserPlus, UserCheck, Home, Plane, Briefcase, Scale, TrendingUp, Heart, Flag, Crown, Stethoscope, Users, GraduationCap, ShieldCheck, Landmark, Truck, Building2, Globe, Baby, Brain, Package, MessageCircle } from "lucide-react";
+import { Star, Bot, Video, UserPlus, UserCheck, Home, Plane, Briefcase, Scale, TrendingUp, Heart, Flag, Crown, Stethoscope, Users, GraduationCap, ShieldCheck, Landmark, Truck, Building2, Globe, Baby, Brain, Package, MessageCircle, HandHeart } from "lucide-react";
 import MapShareButtons from "@/components/MapShareButtons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +31,7 @@ type CategoryFilter = {
 const categoryFilters: CategoryFilter[] = [
   { key: "all", label: "Tümü", icon: null },
   { key: "ambassador", label: "Şehir Elçileri", icon: Flag },
+  { key: "gonullu", label: "Gönüllüler", icon: HandHeart },
 
   // Main categories with sub-filters
   {
@@ -182,6 +183,9 @@ const showcasePurchasedIds = new Set([
   "ayse-kara", "elif-demir", "zeynep-arslan", "selin-yildiz", "derya-emlak", "osman-vize"
 ]);
 
+// Volunteer mentor IDs — appear with a "Gönüllü Mentör" badge and under the Gönüllüler filter
+const volunteerMentorIds = new Set(["mehmet-yilmaz"]);
+
 const Consultants = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { selectedCountry: country } = useDiaspora();
@@ -225,7 +229,9 @@ const Consultants = () => {
   const filtered = consultants.filter((c) => {
     const matchesCountry = country === "all" || c.country === country;
     const matchesCity = city === "all" || c.city === city;
-    const matchesCategory = category === "ambassador" ? false : matchesFilter(c, activeFilter, activeSubFilter?.keywords);
+    if (category === "ambassador") return false;
+    if (category === "gonullu") return matchesCountry && matchesCity && volunteerMentorIds.has(c.id);
+    const matchesCategory = matchesFilter(c, activeFilter, activeSubFilter?.keywords);
     return matchesCountry && matchesCity && matchesCategory;
   });
 
@@ -350,6 +356,11 @@ const Consultants = () => {
                         className="group relative bg-card rounded-2xl p-6 pt-9 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 block overflow-hidden border border-border"
                       >
                         <DemoBadge variant="card" />
+                        {volunteerMentorIds.has(c.id) && (
+                          <Badge className="absolute top-2 right-2 z-10 gap-1 bg-emerald-500/15 text-emerald-700 border border-emerald-500/40 hover:bg-emerald-500/20">
+                            <HandHeart className="h-3 w-3" /> Gönüllü Mentör
+                          </Badge>
+                        )}
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-3 min-w-0">
                             <img src={c.photo} alt={c.name} className="w-14 h-14 rounded-full object-cover shrink-0" />
