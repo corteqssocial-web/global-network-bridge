@@ -348,8 +348,8 @@ const Consultants = () => {
               <>
                 <CategoryListingBanner categoryLabel="Danışmanlık" formAnchorId="kayit-form" />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-                  {[...professionalCards, ...communityCards].map((c: any) => {
+                {(() => {
+                  const renderCard = (c: any) => {
                     const isVolunteer = volunteerMentorIds.has(c.id);
                     const linkTo = c.isAmbassador
                       ? `/ambassador/${c.id}`
@@ -364,7 +364,7 @@ const Consultants = () => {
                         className="group relative bg-card rounded-2xl p-6 pt-9 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 block overflow-hidden border border-border"
                       >
                         <DemoBadge variant="card" />
-                        {volunteerMentorIds.has(c.id) && (
+                        {isVolunteer && (
                           <Badge className="absolute top-2 right-2 z-10 gap-1 bg-emerald-500/15 text-emerald-700 border border-emerald-500/40 hover:bg-emerald-500/20">
                             <HandHeart className="h-3 w-3" /> Gönüllü Mentör
                           </Badge>
@@ -443,8 +443,27 @@ const Consultants = () => {
                         )}
                       </Link>
                     );
-                  })}
-                </div>
+                  };
+
+                  return (
+                    <div className="max-w-6xl mx-auto space-y-6">
+                      {/* Top row: 4 professional consultants */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {professionalCards.map(renderCard)}
+                      </div>
+
+                      {/* Bottom row: Volunteer Mentor + City Ambassador (community) */}
+                      <div className="pt-2">
+                        <p className="text-xs text-muted-foreground font-body mb-3 text-center uppercase tracking-wider">
+                          Topluluk & Dayanışma
+                        </p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                          {communityCards.map(renderCard)}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
               </>
             );
           })()}
