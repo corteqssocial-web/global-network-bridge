@@ -17,7 +17,7 @@ import { useAuth } from "@/contexts/AuthContext";
 interface CreateEventFormProps {
   onClose?: () => void;
   onCreated?: () => void;
-  organizerType?: "community" | "corteqs";
+  organizerType?: "community" | "corteqs" | "member";
 }
 
 const emptyForm = {
