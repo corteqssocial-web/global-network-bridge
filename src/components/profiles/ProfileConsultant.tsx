@@ -29,8 +29,20 @@ import NotificationsList from "@/components/NotificationsList";
 import SocialMediaInputs from "@/components/SocialMediaInputs";
 
 const ProfileConsultant = () => {
+  const { user } = useAuth();
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<null | typeof events[0]>(null);
+  const [myEvents, setMyEvents] = useState<Array<{ id: string; title: string; event_date: string; max_attendees: number | null; status: string }>>([]);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("events")
+      .select("id,title,event_date,max_attendees,status")
+      .eq("user_id", user.id)
+      .order("event_date", { ascending: true })
+      .then(({ data }) => setMyEvents(data || []));
+  }, [user]);
 
   const consultant = {
     name: "Dr. Ayşe Kara",
