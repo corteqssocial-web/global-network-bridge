@@ -807,4 +807,37 @@ const ProfileIndividual = () => {
   );
 };
 
+interface DocumentSlotProps {
+  doc: { path: string; name: string } | null;
+  uploading: boolean;
+  icon: React.ReactNode;
+  uploadLabel: string;
+  onPick: () => void;
+  onOpen: () => void;
+  onRemove: () => void;
+}
+
+const DocumentSlot = ({ doc, uploading, icon, uploadLabel, onPick, onOpen, onRemove }: DocumentSlotProps) => (
+  <div className="mt-2">
+    {doc ? (
+      <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+        {icon}
+        <button onClick={onOpen} className="flex-1 min-w-0 text-left">
+          <p className="text-sm font-medium text-foreground truncate hover:text-primary">{doc.name}</p>
+          <p className="text-xs text-muted-foreground">Görüntülemek için tıkla</p>
+        </button>
+        <Button variant="outline" size="sm" onClick={onPick} disabled={uploading}>
+          {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Değiştir"}
+        </Button>
+        <Button variant="ghost" size="sm" onClick={onRemove} disabled={uploading}>Kaldır</Button>
+      </div>
+    ) : (
+      <Button variant="outline" className="w-full gap-2" onClick={onPick} disabled={uploading}>
+        {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileText className="h-4 w-4" />}
+        {uploading ? "Yükleniyor..." : uploadLabel}
+      </Button>
+    )}
+  </div>
+);
+
 export default ProfileIndividual;
