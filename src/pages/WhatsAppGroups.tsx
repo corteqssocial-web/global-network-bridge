@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   MessageSquare, Users, GraduationCap, Heart, PlusCircle, Sparkles, Stethoscope,
-  ShieldCheck, Layout, FileText,
+  ShieldCheck, Layout, FileText, Send,
   TrendingUp, Rocket, BookOpen, HandHeart, Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
