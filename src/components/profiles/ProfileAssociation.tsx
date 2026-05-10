@@ -374,6 +374,9 @@ const ProfileAssociation = () => {
               </div>
             </div>
           </div>
+          <div className="mt-6">
+            <SocialMediaInputs />
+          </div>
         </TabsContent>
       </Tabs>
     </>
