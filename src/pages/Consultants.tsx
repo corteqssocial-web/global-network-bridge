@@ -183,6 +183,9 @@ const showcasePurchasedIds = new Set([
   "ayse-kara", "elif-demir", "zeynep-arslan", "selin-yildiz", "derya-emlak", "osman-vize"
 ]);
 
+// Volunteer mentor IDs — appear with a "Gönüllü Mentör" badge and under the Gönüllüler filter
+const volunteerMentorIds = new Set(["mehmet-yilmaz"]);
+
 const Consultants = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { selectedCountry: country } = useDiaspora();
