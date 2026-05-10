@@ -207,6 +207,23 @@ const May19 = () => {
   };
 
   const inputCls = "h-9 text-sm";
+
+  const showPersonal = !identityLocked || editingIdentity;
+  const IdentityCard = () => (
+    <div className="col-span-2 flex items-center justify-between gap-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl px-3 py-2">
+      <div className="flex items-center gap-2 text-xs text-foreground min-w-0">
+        <UserCheck className="h-4 w-4 text-emerald-600 shrink-0" />
+        <span className="truncate">
+          <span className="font-semibold">{form.full_name}</span>
+          {form.city || form.country ? <> — {form.city}{form.city && form.country ? ", " : ""}{form.country}</> : null}
+          {form.email ? <span className="text-muted-foreground"> · {form.email}</span> : null}
+        </span>
+      </div>
+      <Button type="button" variant="ghost" size="sm" className="text-xs h-7" onClick={() => setEditingIdentity(true)}>
+        Değiştir
+      </Button>
+    </div>
+  );
   const labelCls = "text-xs font-medium mb-1 block";
 
   const ModuleVisual = ({ kind }: { kind: Kind }) => {
