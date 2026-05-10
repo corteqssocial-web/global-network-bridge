@@ -1,14 +1,17 @@
 import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, HandHeart, Heart, MessageSquare, MapPin, UserPlus, UserCheck, Send, Instagram, Linkedin, Facebook, Globe as GlobeIcon, Sparkles, Star } from "lucide-react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { ArrowLeft, HandHeart, Heart, MessageSquare, MapPin, UserPlus, UserCheck, Send, Instagram, Linkedin, Facebook, Sparkles, Star, Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+
 import { consultants } from "@/data/mock";
 import { useFollow } from "@/hooks/useFollow";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 type Comment = { id: string; name: string; avatar: string; text: string; date: string; likes: number };
 
@@ -20,7 +23,9 @@ const seedComments: Comment[] = [
 
 const VolunteerMentorDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
   const mentor = consultants.find((c) => c.id === id);
   const { isFollowed, toggle } = useFollow();
   const isFollowing = mentor ? isFollowed("consultant", mentor.id) : false;
@@ -29,6 +34,31 @@ const VolunteerMentorDetail = () => {
   const [likeCount, setLikeCount] = useState(238);
   const [comments, setComments] = useState<Comment[]>(seedComments);
   const [newComment, setNewComment] = useState("");
+  const [authPromptOpen, setAuthPromptOpen] = useState(false);
+  const [messageOpen, setMessageOpen] = useState(false);
+  const [messageText, setMessageText] = useState("");
+
+  const handleMessageClick = () => {
+    if (!user) {
+      setAuthPromptOpen(true);
+      return;
+    }
+    setMessageOpen(true);
+  };
+
+  const goToAuth = () => {
+    const redirect = encodeURIComponent(`/volunteer/${id}?openMessage=1`);
+    navigate(`/auth?redirect=${redirect}`);
+  };
+
+  const sendMessage = () => {
+    const text = messageText.trim();
+    if (!text) return;
+    toast({ title: "Mesaj gönderildi", description: `${mentor?.name} en kısa sürede sana dönecek.` });
+    setMessageText("");
+    setMessageOpen(false);
+  };
+
 
   if (!mentor) {
     return (
@@ -66,9 +96,18 @@ const VolunteerMentorDetail = () => {
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4 max-w-5xl">
-          <Link to="/consultants?filter=gonullu" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
+          <Link to="/consultants?filter=gonullu" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors">
             <ArrowLeft className="h-4 w-4" /> Gönüllülere dön
           </Link>
+
+          {/* Demo notice */}
+          <div className="bg-gold/15 border border-gold/40 rounded-xl px-4 py-2.5 mb-4 flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-foreground shrink-0" />
+            <p className="text-xs md:text-sm text-foreground font-body">
+              <span className="font-bold uppercase tracking-wider mr-1">Demo</span>
+              Bu sayfa örnek içeriktir. Gerçek gönüllü mentör profilleri yakında.
+            </p>
+          </div>
 
           {/* Solidarity banner */}
           <div className="bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/30 rounded-2xl p-4 mb-6 flex items-center gap-3">
@@ -105,7 +144,6 @@ const VolunteerMentorDetail = () => {
                   <div className="flex items-center gap-1.5 text-sm">
                     <Star className="h-4 w-4 text-gold fill-gold" />
                     <span className="font-semibold text-foreground">{mentor.rating}</span>
-                    <span className="text-xs text-muted-foreground">({mentor.reviews} teşekkür)</span>
                   </div>
                 </div>
 
@@ -125,8 +163,8 @@ const VolunteerMentorDetail = () => {
                   {isFollowing ? <UserCheck className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
                   {isFollowing ? "Takipte" : "Takip Et"}
                 </Button>
-                <Button variant="outline" className="gap-2 w-full" onClick={() => window.open(`https://wa.me/${mentor.whatsapp.replace(/\D/g, "")}`, "_blank")}>
-                  <MessageSquare className="h-4 w-4" /> WhatsApp ile Yaz
+                <Button className="gap-2 w-full" onClick={handleMessageClick}>
+                  <MessageSquare className="h-4 w-4" /> Mesaj Gönder
                 </Button>
                 <Button variant="outline" className="gap-2 w-full border-emerald-500/40 text-emerald-700 hover:bg-emerald-500/10">
                   <Sparkles className="h-4 w-4" /> Teşekkür Gönder
@@ -202,17 +240,20 @@ const VolunteerMentorDetail = () => {
             {/* Right column: Contact + Social */}
             <div className="space-y-6">
               <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-                <h2 className="text-lg font-bold text-foreground mb-3">İletişim</h2>
-                <div className="space-y-2 text-sm">
-                  <a href={`https://wa.me/${mentor.whatsapp.replace(/\D/g, "")}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-foreground hover:text-primary">
-                    <MessageSquare className="h-4 w-4" /> {mentor.whatsapp}
-                  </a>
-                  {mentor.website && (
-                    <a href={mentor.website} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-foreground hover:text-primary break-all">
-                      <GlobeIcon className="h-4 w-4 shrink-0" /> {mentor.website}
-                    </a>
-                  )}
-                </div>
+                <h2 className="text-lg font-bold text-foreground mb-3 flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5 text-primary" /> İletişim
+                </h2>
+                <p className="text-xs text-muted-foreground font-body mb-3">
+                  Gönüllülerimizin gizliliğini korumak için telefon veya e-posta paylaşılmaz. Mesajını platform üzerinden gönder.
+                </p>
+                <Button className="w-full gap-2" onClick={handleMessageClick}>
+                  <MessageSquare className="h-4 w-4" /> Mesaj Gönder
+                </Button>
+                {!user && (
+                  <p className="text-[11px] text-muted-foreground mt-2 flex items-center gap-1 font-body">
+                    <Lock className="h-3 w-3" /> Mesaj göndermek için ücretsiz kayıt gerekir.
+                  </p>
+                )}
               </div>
 
               <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
@@ -253,6 +294,54 @@ const VolunteerMentorDetail = () => {
           </div>
         </div>
       </main>
+
+      {/* Auth gate dialog */}
+      <Dialog open={authPromptOpen} onOpenChange={setAuthPromptOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Lock className="h-5 w-5 text-primary" /> Mesaj göndermek için kayıt ol
+            </DialogTitle>
+            <DialogDescription>
+              Gönüllü mentörlerimizin gizliliğini korumak için iletişim platform üzerinden yapılır.
+              Ücretsiz hesabını oluştur, kayıt biter bitmez bu mentörle mesaj penceresinden devam edeceksin.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-2">
+            <Button variant="outline" onClick={() => setAuthPromptOpen(false)}>Vazgeç</Button>
+            <Button onClick={goToAuth} className="gap-2">
+              <Mail className="h-4 w-4" /> Kayıt Ol / Giriş Yap
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Message composer */}
+      <Dialog open={messageOpen} onOpenChange={setMessageOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <MessageSquare className="h-5 w-5 text-primary" /> {mentor.name}'e mesaj
+            </DialogTitle>
+            <DialogDescription>
+              Mesajın platform üzerinden iletilir. Mentör cevap verdiğinde bildirim alırsın.
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            placeholder="Merhaba, yeni taşındım ve okul başvuruları konusunda yardımına ihtiyacım var..."
+            value={messageText}
+            onChange={(e) => setMessageText(e.target.value)}
+            rows={5}
+          />
+          <DialogFooter className="gap-2 sm:gap-2">
+            <Button variant="outline" onClick={() => setMessageOpen(false)}>İptal</Button>
+            <Button onClick={sendMessage} className="gap-2" disabled={!messageText.trim()}>
+              <Send className="h-4 w-4" /> Gönder
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Footer />
     </div>
   );
