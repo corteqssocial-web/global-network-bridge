@@ -33,8 +33,8 @@ const consultantPlans = {
   premium: {
     name: "Premium Pro",
     icon: Crown,
-    monthlyPrice: 25,
-    yearlyPrice: 20,
+    monthlyPrice: 10,
+    yearlyPrice: 8,
     desc: "Tüm araçlarla büyü, öne çık",
     features: [
       { text: "Temel profil sayfası", included: true },
@@ -54,13 +54,14 @@ const consultantPlans = {
   founding: {
     name: "Founding 1000",
     icon: Sparkles,
-    monthlyPrice: 10,
-    yearlyPrice: 8,
+    monthlyPrice: 99,
+    yearlyPrice: 99,
+    yearlyOnly: true,
     desc: "Erken dönem üyelik — sınırlı kontenjan",
     badge: "En Popüler",
     features: [
       { text: "Premium Pro'nun tüm özellikleri", included: true },
-      { text: "Yıllık €99 (€120 yerine)", included: true },
+      { text: "Tek seferlik €99 ödeme · 1 yıl geçerli", included: true },
       { text: "€399 değerinde kategori vitrini · 6 ay", included: true },
       { text: "Ana sayfa carousel görünürlüğü · 6 ay", included: true },
       { text: "Founding üye rozeti", included: true },
@@ -92,10 +93,10 @@ const associationPlans = {
     ],
   },
   premium: {
-    name: "Kuruluş Pro",
+    name: "Premium Pro",
     icon: Crown,
-    monthlyPrice: 50,
-    yearlyPrice: 40,
+    monthlyPrice: 10,
+    yearlyPrice: 8,
     desc: "Tam güçle organize olun",
     badge: "Kurumsal",
     features: [
@@ -109,6 +110,23 @@ const associationPlans = {
       { text: "Kampanya & duyuru araçları", included: true },
       { text: "Kurumsal analitik dashboard", included: true },
       { text: "Boost & duyuru paketleri", included: true },
+    ],
+  },
+  founding: {
+    name: "Founding 1000",
+    icon: Sparkles,
+    monthlyPrice: 99,
+    yearlyPrice: 99,
+    yearlyOnly: true,
+    desc: "Erken dönem üyelik — sınırlı kontenjan",
+    badge: "En Popüler",
+    features: [
+      { text: "Premium Pro'nun tüm özellikleri", included: true },
+      { text: "Tek seferlik €99 ödeme · 1 yıl geçerli", included: true },
+      { text: "€399 değerinde kategori vitrini · 6 ay", included: true },
+      { text: "Ana sayfa carousel görünürlüğü · 6 ay", included: true },
+      { text: "Founding üye rozeti", included: true },
+      { text: "Öncelikli destek", included: true },
     ],
   },
 };
@@ -140,10 +158,10 @@ const businessPlans = {
     ],
   },
   premium: {
-    name: "İşletme Pro",
+    name: "Premium Pro",
     icon: Crown,
-    monthlyPrice: 75,
-    yearlyPrice: 60,
+    monthlyPrice: 10,
+    yearlyPrice: 8,
     desc: "Tam güçle büyüyün",
     badge: "İşletme",
     features: [
@@ -160,6 +178,23 @@ const businessPlans = {
       { text: "API erişimi", included: true },
       { text: "Boost & duyuru paketleri", included: true },
       { text: "Özel destek hattı", included: true },
+    ],
+  },
+  founding: {
+    name: "Founding 1000",
+    icon: Sparkles,
+    monthlyPrice: 99,
+    yearlyPrice: 99,
+    yearlyOnly: true,
+    desc: "Erken dönem üyelik — sınırlı kontenjan",
+    badge: "En Popüler",
+    features: [
+      { text: "Premium Pro'nun tüm özellikleri", included: true },
+      { text: "Tek seferlik €99 ödeme · 1 yıl geçerli", included: true },
+      { text: "€399 değerinde kategori vitrini · 6 ay", included: true },
+      { text: "Ana sayfa carousel görünürlüğü · 6 ay", included: true },
+      { text: "Founding üye rozeti", included: true },
+      { text: "Öncelikli destek", included: true },
     ],
   },
 };
@@ -270,16 +305,6 @@ const Pricing = () => {
                   </p>
                 </div>
 
-                {/* Free Trial Banner */}
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-emerald-500/10 border border-emerald-500/20 p-4 text-center">
-                  <div className="flex items-center justify-center gap-2">
-                    <Gift className="h-5 w-5 text-emerald-600" />
-                    <span className="text-base font-bold text-foreground">1 Ay Ücretsiz Premium Pro Deneme!</span>
-                  </div>
-                  <p className="text-xs text-muted-foreground font-body mt-1">
-                    Herkese açık — kredi kartı gerekmez, dilediğiniz zaman iptal edin.
-                  </p>
-                </div>
               </div>
             </div>
           )}
@@ -314,6 +339,7 @@ interface PlanCardProps {
     icon: React.ElementType;
     monthlyPrice: number;
     yearlyPrice: number;
+    yearlyOnly?: boolean;
     desc: string;
     badge?: string;
     features: { text: string; included: boolean }[];
@@ -324,7 +350,8 @@ interface PlanCardProps {
 
 const PlanCard = ({ plan, isYearly, featured }: PlanCardProps) => {
   const Icon = plan.icon;
-  const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
+  const yearlyOnly = plan.yearlyOnly;
+  const price = yearlyOnly ? plan.yearlyPrice : (isYearly ? plan.yearlyPrice : plan.monthlyPrice);
   const isFree = price === 0;
 
   return (
@@ -357,6 +384,16 @@ const PlanCard = ({ plan, isYearly, featured }: PlanCardProps) => {
       <div className="mb-4">
         {isFree ? (
           <span className="text-3xl font-extrabold">Ücretsiz</span>
+        ) : yearlyOnly ? (
+          <>
+            <span className="text-3xl font-extrabold">€{price}</span>
+            <span className={`text-xs ${featured ? "text-secondary-foreground/60" : "text-muted-foreground"}`}>
+              /yıl
+            </span>
+            <p className={`text-[11px] mt-0.5 ${featured ? "text-secondary-foreground/50" : "text-muted-foreground"}`}>
+              Tek seferlik ödeme · 1 yıl geçerli
+            </p>
+          </>
         ) : (
           <>
             <span className="text-3xl font-extrabold">€{price}</span>
@@ -371,6 +408,14 @@ const PlanCard = ({ plan, isYearly, featured }: PlanCardProps) => {
           </>
         )}
       </div>
+
+      {yearlyOnly && (
+        <div className="mb-3 px-2.5 py-2 rounded-md bg-primary/15 border border-primary/30">
+          <p className="text-[11px] font-bold text-primary leading-snug">
+            Founding 1000 için 1 yıllık süre 29 Ekim 2027'den itibaren başlayacaktır.
+          </p>
+        </div>
+      )}
 
       <ul className="space-y-2 mb-5 flex-1">
         {plan.features.map((f, i) => (
@@ -392,7 +437,7 @@ const PlanCard = ({ plan, isYearly, featured }: PlanCardProps) => {
         className="w-full"
         size="default"
       >
-        {isFree ? "Ücretsiz Başla" : "1 Ay Ücretsiz Dene"}
+        {isFree ? "Ücretsiz Başla" : yearlyOnly ? "Şimdi Satın Al" : "Premium'a Geç"}
       </Button>
     </div>
   );
