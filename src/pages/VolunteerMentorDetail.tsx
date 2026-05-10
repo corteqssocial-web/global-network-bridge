@@ -144,9 +144,6 @@ const VolunteerMentorDetail = () => {
                 <Button className="gap-2 w-full" onClick={handleMessageClick}>
                   <MessageSquare className="h-4 w-4" /> Mesaj Gönder
                 </Button>
-                <Button variant="outline" className="gap-2 w-full border-emerald-500/40 text-emerald-700 hover:bg-emerald-500/10">
-                  <Sparkles className="h-4 w-4" /> Teşekkür Gönder
-                </Button>
               </div>
             </div>
           </div>
@@ -217,22 +214,6 @@ const VolunteerMentorDetail = () => {
 
             {/* Right column: Contact + Social */}
             <div className="space-y-6">
-              <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-                <h2 className="text-lg font-bold text-foreground mb-3 flex items-center gap-2">
-                  <MessageSquare className="h-5 w-5 text-primary" /> İletişim
-                </h2>
-                <p className="text-xs text-muted-foreground font-body mb-3">
-                  Gönüllülerimizin gizliliğini korumak için telefon veya e-posta paylaşılmaz. Mesajını platform üzerinden gönder.
-                </p>
-                <Button className="w-full gap-2" onClick={handleMessageClick}>
-                  <MessageSquare className="h-4 w-4" /> Mesaj Gönder
-                </Button>
-                {!user && (
-                  <p className="text-[11px] text-muted-foreground mt-2 flex items-center gap-1 font-body">
-                    <Lock className="h-3 w-3" /> Mesaj göndermek için ücretsiz kayıt gerekir.
-                  </p>
-                )}
-              </div>
 
               <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
                 <h2 className="text-lg font-bold text-foreground mb-3">Sosyal Medya</h2>
