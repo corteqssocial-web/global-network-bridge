@@ -1,14 +1,17 @@
 import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, HandHeart, Heart, MessageSquare, MapPin, UserPlus, UserCheck, Send, Instagram, Linkedin, Facebook, Globe as GlobeIcon, Sparkles, Star } from "lucide-react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { ArrowLeft, HandHeart, Heart, MessageSquare, MapPin, UserPlus, UserCheck, Send, Instagram, Linkedin, Facebook, Sparkles, Star, Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import DemoBadge from "@/components/DemoBadge";
 import { consultants } from "@/data/mock";
 import { useFollow } from "@/hooks/useFollow";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 type Comment = { id: string; name: string; avatar: string; text: string; date: string; likes: number };
 
