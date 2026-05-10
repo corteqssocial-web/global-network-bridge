@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { Star, Bot, Video, UserPlus, UserCheck, Home, Plane, Briefcase, Scale, TrendingUp, Heart, Flag, Crown, Stethoscope, Users, GraduationCap, ShieldCheck, Landmark, Truck, Building2, Globe, Baby, Brain, Package, MessageCircle } from "lucide-react";
+import { Star, Bot, Video, UserPlus, UserCheck, Home, Plane, Briefcase, Scale, TrendingUp, Heart, Flag, Crown, Stethoscope, Users, GraduationCap, ShieldCheck, Landmark, Truck, Building2, Globe, Baby, Brain, Package, MessageCircle, HandHeart } from "lucide-react";
 import MapShareButtons from "@/components/MapShareButtons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
