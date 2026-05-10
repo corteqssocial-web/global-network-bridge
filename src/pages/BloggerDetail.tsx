@@ -280,6 +280,10 @@ const BloggerDetail = () => {
               <DemoTabPlaceholder label="Hakkında — Demo" />
             </TabsContent>
 
+            <TabsContent value="events" className="mt-7">
+              <PublicEventsList emptyLabel="Bu içerik üreticinin yaklaşan etkinliği yok." />
+            </TabsContent>
+
             <TabsContent value="contact" className="mt-6">
               <DemoTabPlaceholder label="İletişim — Demo" />
             </TabsContent>
