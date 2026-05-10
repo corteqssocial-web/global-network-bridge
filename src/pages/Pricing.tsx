@@ -158,10 +158,10 @@ const businessPlans = {
     ],
   },
   premium: {
-    name: "İşletme Pro",
+    name: "Premium Pro",
     icon: Crown,
-    monthlyPrice: 75,
-    yearlyPrice: 60,
+    monthlyPrice: 10,
+    yearlyPrice: 8,
     desc: "Tam güçle büyüyün",
     badge: "İşletme",
     features: [
@@ -178,6 +178,23 @@ const businessPlans = {
       { text: "API erişimi", included: true },
       { text: "Boost & duyuru paketleri", included: true },
       { text: "Özel destek hattı", included: true },
+    ],
+  },
+  founding: {
+    name: "Founding 1000",
+    icon: Sparkles,
+    monthlyPrice: 99,
+    yearlyPrice: 99,
+    yearlyOnly: true,
+    desc: "Erken dönem üyelik — sınırlı kontenjan",
+    badge: "En Popüler",
+    features: [
+      { text: "Premium Pro'nun tüm özellikleri", included: true },
+      { text: "Tek seferlik €99 ödeme · 1 yıl geçerli", included: true },
+      { text: "€399 değerinde kategori vitrini · 6 ay", included: true },
+      { text: "Ana sayfa carousel görünürlüğü · 6 ay", included: true },
+      { text: "Founding üye rozeti", included: true },
+      { text: "Öncelikli destek", included: true },
     ],
   },
 };
