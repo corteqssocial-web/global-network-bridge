@@ -698,17 +698,11 @@ const ProfileIndividual = () => {
             <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
               <Users className="h-5 w-5 text-turquoise" /> Takip Ettiğim Dernekler
             </h2>
-            <div className="space-y-3">
-              {followedAssociations.map((a) => (
-                <Link to={`/association/${a.id}`} key={a.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                  <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center text-secondary-foreground font-bold shrink-0">{a.logo}</div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-foreground">{a.name}</h3>
-                    <p className="text-sm text-muted-foreground">{a.type} · {a.city}</p>
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
-                </Link>
-              ))}
+            <div className="text-center py-8 border border-dashed border-border rounded-xl">
+              <Users className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+              <p className="text-sm text-muted-foreground">
+                Sadece takip ettiğiniz hesaplar burada listelenecek.
+              </p>
             </div>
           </div>
         </TabsContent>
