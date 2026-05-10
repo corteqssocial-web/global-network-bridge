@@ -71,8 +71,8 @@ const BloggerDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <DemoPageBanner categoryLabel="Blogger / Vlogger" listingHref="/bloggers" />
-      <main className="pt-8 pb-16">
+      <main className="pt-24 pb-16">
+        <DemoPageBanner categoryLabel="Blogger / Vlogger" listingHref="/bloggers" />
         <div className="container mx-auto px-4">
           <Link to="/bloggers" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
             <ArrowLeft className="h-4 w-4" /> Geri dön
