@@ -83,6 +83,12 @@ const AssociationDetail = () => {
                 </span>
                 <div className="flex items-center gap-3 flex-wrap">
                   <h1 className="text-2xl md:text-3xl font-bold text-foreground">{assoc.name}</h1>
+                  <PlatformMessageButton
+                    recipientKind="association"
+                    recipientSlug={assoc.id}
+                    recipientName={assoc.name}
+                    size="sm"
+                  />
                   <Button
                     variant={isFollowing ? "secondary" : "outline"}
                     size="sm"
