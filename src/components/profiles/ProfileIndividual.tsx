@@ -311,7 +311,7 @@ const ProfileIndividual = () => {
               <Button variant="ghost" size="sm" className="gap-1 mb-4" onClick={() => setShowCreateEvent(false)}>
                 <ArrowLeft className="h-4 w-4" /> Etkinliklere Dön
               </Button>
-              <CreateEventForm onClose={() => setShowCreateEvent(false)} />
+              <CreateEventForm onClose={() => setShowCreateEvent(false)} organizerType="member" />
             </div>
           ) : (
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
