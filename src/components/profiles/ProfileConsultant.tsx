@@ -274,7 +274,7 @@ const ProfileConsultant = () => {
 
               <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50 border border-border">
                 <div className="text-xs text-muted-foreground">
-                  💸 AI Twin gelirinden <span className="font-bold text-foreground">%10 platform kesintisi</span> uygulanır.
+                  💸 AI Twin görüşmeleri <span className="font-bold text-foreground">tamamen ücretsizdir</span> — platformda komisyon alınmaz.
                 </div>
                 <a href="/ai-twin" className="text-xs font-semibold text-primary hover:underline shrink-0">
                   Yeni model talep et →
@@ -294,7 +294,7 @@ const ProfileConsultant = () => {
                 </Badge>
               </div>
               <p className="text-sm text-muted-foreground mb-4">
-                AI Twin'iniz 7/24 müşterilerinize hizmet veriyor. Seans başına €10 · İlk 10dk ücretsiz.
+                AI Twin'iniz 7/24 müşterilerinize hizmet veriyor. Tüm AI Twin görüşmeleri ücretsizdir.
               </p>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
@@ -302,7 +302,7 @@ const ProfileConsultant = () => {
                   { label: "Toplam AI Seans", value: stats.aiTwinSessions, color: "text-primary" },
                   { label: "Bu Hafta", value: sessions.aiTwin.length, color: "text-turquoise" },
                   { label: "Ort. Süre", value: "24dk", color: "text-gold" },
-                  { label: "Bu Hafta Gelir", value: `€${sessions.aiTwin.length * 10}`, color: "text-success" },
+                  { label: "Erişim", value: "Ücretsiz", color: "text-success" },
                 ].map((s, i) => (
                   <div key={i} className="p-3 rounded-lg bg-muted/50 text-center">
                     <p className="text-lg font-bold text-foreground">{s.value}</p>

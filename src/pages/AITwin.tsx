@@ -105,10 +105,10 @@ const AITwin = () => {
                 <Percent className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h3 className="font-bold text-foreground">AI Twin kullanımı %10 kesintiyle karşılanır</h3>
+                <h3 className="font-bold text-foreground">AI Twin görüşmeleri kullanıcılar için tamamen ücretsizdir</h3>
                 <p className="text-sm text-muted-foreground font-body">
-                  AI Twin seanslarından elde ettiğin gelirin %10'u altyapı (model, ses/görüntü işleme,
-                  RAG veritabanı) için kesilir. Ek lisans veya kurulum ücreti yoktur.
+                  Platform, AI Twin altyapısını (model, ses/görüntü işleme, RAG veritabanı) ücretsiz sunar.
+                  Danışmandan komisyon, kullanıcıdan seans ücreti alınmaz.
                 </p>
               </div>
             </div>
