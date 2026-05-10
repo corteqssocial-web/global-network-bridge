@@ -347,7 +347,12 @@ const Consultants = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
                   {demoCards.map((c: any) => {
-                    const linkTo = c.isAmbassador ? `/ambassador/${c.id}` : `/consultant/${c.id}`;
+                    const isVolunteer = volunteerMentorIds.has(c.id);
+                    const linkTo = c.isAmbassador
+                      ? `/ambassador/${c.id}`
+                      : isVolunteer
+                        ? `/volunteer/${c.id}`
+                        : `/consultant/${c.id}`;
                     const isFollowed = isFollowedFn(c.isAmbassador ? "ambassador" : "consultant", c.id);
                     return (
                       <Link
