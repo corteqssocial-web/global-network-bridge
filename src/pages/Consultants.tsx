@@ -31,6 +31,7 @@ type CategoryFilter = {
 const categoryFilters: CategoryFilter[] = [
   { key: "all", label: "Tümü", icon: null },
   { key: "ambassador", label: "Şehir Elçileri", icon: Flag },
+  { key: "gonullu", label: "Gönüllüler", icon: HandHeart },
 
   // Main categories with sub-filters
   {
