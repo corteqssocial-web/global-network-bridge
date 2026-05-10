@@ -61,6 +61,11 @@ const momentExamples = [
 const isDriveLink = (url: string) =>
   /^https?:\/\/(drive|docs)\.google\.com\//i.test(url.trim());
 
+const isSocialPostLink = (url: string) =>
+  /^https?:\/\/([a-z0-9-]+\.)*(instagram\.com|facebook\.com|fb\.watch|tiktok\.com|x\.com|twitter\.com|youtube\.com|youtu\.be|linkedin\.com|threads\.net|pinterest\.com)\//i.test(url.trim());
+
+const isAcceptedShareLink = (url: string) => isDriveLink(url) || isSocialPostLink(url);
+
 const May19 = () => {
   const { toast } = useToast();
   const [tab, setTab] = useState<Kind>("map_pin");
@@ -110,16 +115,16 @@ const May19 = () => {
       if (!form.title || !form.description || !form.consent) {
         toast({ title: "Başlık, açıklama ve onay gerekli", variant: "destructive" }); return;
       }
-      if (form.link && !isDriveLink(form.link)) {
-        toast({ title: "Sadece Google Drive linki", description: "Dosyalarını drive.google.com paylaşım linki olarak ekle.", variant: "destructive" }); return;
+      if (form.link && !isAcceptedShareLink(form.link)) {
+        toast({ title: "Geçersiz link", description: "Google Drive ya da sosyal medya post linki ekle.", variant: "destructive" }); return;
       }
     }
     if (kind === "moment") {
       if (!form.title || !form.consent) {
         toast({ title: "Başlık ve paylaşım onayı gerekli", variant: "destructive" }); return;
       }
-      if (!form.link || !isDriveLink(form.link)) {
-        toast({ title: "Google Drive linki gerekli", description: "Foto / video içeriklerini drive.google.com üzerinden paylaş.", variant: "destructive" }); return;
+      if (!form.link || !isAcceptedShareLink(form.link)) {
+        toast({ title: "Google Drive veya sosyal medya post linki gerekli", description: "Foto / videonu Google Drive ya da Instagram, TikTok, YouTube, X gibi sosyal medya post linkiyle paylaş.", variant: "destructive" }); return;
       }
     }
     setSubmitting(true);
@@ -365,9 +370,9 @@ const May19 = () => {
                     <div><Label className={labelCls}>Ülke / topluluk</Label><Input className={inputCls} value={form.country} onChange={(e) => update("country", e.target.value)} /></div>
                     <div><Label className={labelCls}>Şehir</Label><Input className={inputCls} value={form.city} onChange={(e) => update("city", e.target.value)} /></div>
                     <div className="col-span-2">
-                      <Label className={labelCls}>Google Drive linki (sunum / video / doküman)</Label>
-                      <Input className={inputCls} value={form.link} onChange={(e) => update("link", e.target.value)} placeholder="https://drive.google.com/..." />
-                      <p className="text-[10px] text-muted-foreground mt-1">Sadece Google Drive paylaşım linki kabul ediyoruz. Lütfen "Linke sahip herkes görüntüleyebilir" izni ver.</p>
+                      <Label className={labelCls}>Google Drive veya sosyal medya post linki (sunum / video / doküman)</Label>
+                      <Input className={inputCls} value={form.link} onChange={(e) => update("link", e.target.value)} placeholder="https://drive.google.com/... veya https://instagram.com/p/..." />
+                      <p className="text-[10px] text-muted-foreground mt-1">Google Drive ("Linke sahip herkes görüntüleyebilir") ya da Instagram / TikTok / YouTube / X / LinkedIn post linki kabul ediyoruz.</p>
                     </div>
                     <label className="col-span-2 flex items-start gap-2 text-xs cursor-pointer">
                       <Checkbox checked={form.consent} onCheckedChange={(v) => update("consent", !!v)} className="mt-0.5" />
@@ -405,9 +410,9 @@ const May19 = () => {
                     <div className="col-span-2"><Label className={labelCls}>İçerik başlığı *</Label><Input className={inputCls} value={form.title} onChange={(e) => update("title", e.target.value)} /></div>
                     <div className="col-span-2"><Label className={labelCls}>Kısa açıklama</Label><Textarea rows={2} className="text-sm min-h-0" value={form.description} onChange={(e) => update("description", e.target.value)} /></div>
                     <div className="col-span-2">
-                      <Label className={labelCls}>Google Drive linki (foto / video) *</Label>
-                      <Input className={inputCls} value={form.link} onChange={(e) => update("link", e.target.value)} placeholder="https://drive.google.com/..." />
-                      <p className="text-[10px] text-muted-foreground mt-1">Sadece Google Drive paylaşım linki kabul ediyoruz. "Linke sahip herkes görüntüleyebilir" izni açık olmalı.</p>
+                      <Label className={labelCls}>Google Drive veya sosyal medya post linki (foto / video) *</Label>
+                      <Input className={inputCls} value={form.link} onChange={(e) => update("link", e.target.value)} placeholder="https://drive.google.com/... veya https://instagram.com/p/..." />
+                      <p className="text-[10px] text-muted-foreground mt-1">Google Drive ("Linke sahip herkes görüntüleyebilir") ya da Instagram / TikTok / YouTube / X / Facebook / LinkedIn post linki kabul ediyoruz.</p>
                     </div>
                     <div className="col-span-2"><Label className={labelCls}>Sosyal medya</Label><Input className={inputCls} value={form.social_handle} onChange={(e) => update("social_handle", e.target.value)} placeholder="@kullaniciadi" /></div>
                     <label className="col-span-2 flex items-start gap-2 text-xs cursor-pointer">
