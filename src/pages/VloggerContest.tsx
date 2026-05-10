@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Trophy, Video, Calendar, BarChart3, Heart, CheckCircle2, ArrowRight, Star, Clock, Award, Film, Upload, Plane } from "lucide-react";
+import { Trophy, Video, Calendar, BarChart3, Heart, CheckCircle2, ArrowRight, Star, Clock, Award, Film, LinkIcon, AlertTriangle, Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -41,21 +41,20 @@ const VloggerContest = () => {
     videoTheme: "",
     description: "",
     socialHandles: "",
+    videoLink: "",
     referral: REFERRAL_CODE,
   });
-  const [videoFile, setVideoFile] = useState<File | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
-      title: "Başvuru Alındı! 🎬",
-      description: "Vlogger yarışmasına başvurunuz başarıyla alındı. Detaylar e-posta ile gönderilecektir.",
+      title: "Katılımınız için teşekkür ederiz! 🎬",
+      description: "Platformdaki profilinizden ve e-postalarınızdan gelişmeleri takip edin. Gönderdiğiniz linkler kontrol edildikten sonra size bildirim yapılacaktır.",
     });
     setFormData({
       name: "", email: "", phone: "", channelUrl: "", country: "", city: "",
-      videoTitle: "", videoTheme: "", description: "", socialHandles: "", referral: REFERRAL_CODE,
+      videoTitle: "", videoTheme: "", description: "", socialHandles: "", videoLink: "", referral: REFERRAL_CODE,
     });
-    setVideoFile(null);
   };
 
   return (
@@ -237,22 +236,27 @@ const VloggerContest = () => {
                     <Textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} placeholder="Videonuz hakkında kısa bilgi (2-3 cümle)" rows={3} />
                   </div>
 
-                  {/* Upload area */}
+                  {/* Video linki */}
                   <div>
-                    <label className="text-sm font-semibold text-foreground mb-1.5 block">Video Yükleme (opsiyonel)</label>
-                    <label className="flex flex-col items-center justify-center border-2 border-dashed border-border rounded-xl p-6 cursor-pointer hover:border-primary/50 hover:bg-muted/30 transition-colors">
-                      <Upload className="h-8 w-8 text-primary mb-2" />
-                      <span className="text-sm font-semibold text-foreground">
-                        {videoFile ? videoFile.name : "Video dosyası seç veya buraya sürükle"}
-                      </span>
-                      <span className="text-xs text-muted-foreground mt-1">MP4, MOV, WEBM · Maks 500 MB</span>
-                      <input
-                        type="file"
-                        accept="video/*"
-                        className="hidden"
-                        onChange={(e) => setVideoFile(e.target.files?.[0] ?? null)}
+                    <label className="text-sm font-semibold text-foreground mb-1.5 block">Video Linki *</label>
+                    <div className="relative">
+                      <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        type="url"
+                        value={formData.videoLink}
+                        onChange={(e) => setFormData({ ...formData, videoLink: e.target.value })}
+                        placeholder="YouTube, Instagram, TikTok, Vimeo veya Google Drive linki"
+                        className="pl-9"
+                        required
                       />
-                    </label>
+                    </div>
+                    <div className="mt-2 flex items-start gap-2 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30">
+                      <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
+                      <p className="text-xs text-foreground/90 font-body">
+                        Lütfen gönderdiğiniz linkin <strong>herkese açık</strong>, görüntülenebilir ve
+                        indirilebilir ayarda olduğundan emin olun. Erişilemeyen linkler değerlendirmeye alınmaz.
+                      </p>
+                    </div>
                   </div>
 
                   <div>
