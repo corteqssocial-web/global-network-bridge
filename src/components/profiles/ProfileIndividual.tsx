@@ -12,6 +12,7 @@ import {
 import NotificationsList from "@/components/NotificationsList";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 import QRScannerMock from "@/components/QRScannerMock";
+import SocialMediaInputs from "@/components/SocialMediaInputs";
 import CreateEventForm from "@/components/CreateEventForm";
 import EventManagePanel from "@/components/EventManagePanel";
 import { Button } from "@/components/ui/button";
@@ -784,6 +785,9 @@ const ProfileIndividual = () => {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="mt-6">
+            <SocialMediaInputs defaultValues={{ linkedin: linkedinUrl }} />
           </div>
         </TabsContent>
         {/* SERVICE REQUESTS */}
