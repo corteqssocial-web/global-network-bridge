@@ -21,6 +21,8 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import QRScannerMock from "@/components/QRScannerMock";
 import MapAddressBanner from "@/components/MapAddressBanner";
+import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
+import NotificationsList from "@/components/NotificationsList";
 
 const ProfileBusiness = () => {
   const [isVerified, setIsVerified] = useState(true);
