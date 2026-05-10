@@ -302,13 +302,13 @@ const May19 = () => {
           <Tabs value={tab} onValueChange={(v) => { setTab(v as Kind); setDoneKind(null); }}>
             <TabsList className="grid grid-cols-3 h-auto gap-1.5 bg-transparent p-0 mb-5">
               <TabsTrigger value="map_pin" className="data-[state=active]:bg-turquoise data-[state=active]:text-primary-foreground rounded-lg border border-border h-auto py-2 flex flex-col gap-0.5">
-                <MapPin className="h-4 w-4" /><span className="text-[11px] font-semibold">1. Harita</span>
+                <MapPin className="h-4 w-4" /><span className="text-[11px] font-semibold leading-tight text-center">1. Dünya Üzerinde Yerini İşaretle</span>
               </TabsTrigger>
               <TabsTrigger value="idea" className="data-[state=active]:bg-amber-500 data-[state=active]:text-white rounded-lg border border-border h-auto py-2 flex flex-col gap-0.5">
-                <Lightbulb className="h-4 w-4" /><span className="text-[11px] font-semibold">2. 19 Fikir</span>
+                <Lightbulb className="h-4 w-4" /><span className="text-[11px] font-semibold leading-tight text-center">2. 19 Kelimelik Fikrini Gönder</span>
               </TabsTrigger>
               <TabsTrigger value="moment" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg border border-border h-auto py-2 flex flex-col gap-0.5">
-                <Camera className="h-4 w-4" /><span className="text-[11px] font-semibold">3. Anı Gönder</span>
+                <Camera className="h-4 w-4" /><span className="text-[11px] font-semibold leading-tight text-center">3. 19 Mayıs Anını Paylaş</span>
               </TabsTrigger>
             </TabsList>
 
