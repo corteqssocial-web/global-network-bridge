@@ -384,6 +384,7 @@ const May19 = () => {
                 <ModuleVisual kind="map_pin" />
                 {doneKind === "map_pin" ? <Done kind="map_pin" /> : (
                   <div className="grid grid-cols-2 gap-3">
+                    {identityLocked && !editingIdentity && <IdentityCard />}
                     <div className="col-span-2"><Label className={labelCls}>Ad Soyad *</Label><Input className={inputCls} value={form.full_name} onChange={(e) => update("full_name", e.target.value)} /></div>
                     <div><Label className={labelCls}>Ülke *</Label><Input className={inputCls} value={form.country} onChange={(e) => update("country", e.target.value)} /></div>
                     <div><Label className={labelCls}>Şehir *</Label><Input className={inputCls} value={form.city} onChange={(e) => update("city", e.target.value)} /></div>
@@ -414,6 +415,7 @@ const May19 = () => {
                 <ModuleVisual kind="idea" />
                 {doneKind === "idea" ? <Done kind="idea" /> : (
                   <div className="grid grid-cols-2 gap-3">
+                    {identityLocked && !editingIdentity && <IdentityCard />}
                     <details className="col-span-2 text-xs bg-amber-50/50 dark:bg-amber-500/5 border border-amber-200/50 rounded-md px-2 py-1.5">
                       <summary className="cursor-pointer font-semibold text-amber-700">Fikir örnekleri</summary>
                       <ul className="list-disc pl-4 mt-1 space-y-0.5 text-muted-foreground">
@@ -456,6 +458,7 @@ const May19 = () => {
                 <ModuleVisual kind="moment" />
                 {doneKind === "moment" ? <Done kind="moment" /> : (
                   <div className="grid grid-cols-2 gap-3">
+                    {identityLocked && !editingIdentity && <IdentityCard />}
                     <details className="col-span-2 text-xs bg-primary/5 border border-primary/20 rounded-md px-2 py-1.5">
                       <summary className="cursor-pointer font-semibold text-primary">Örnek içerikler</summary>
                       <ul className="list-disc pl-4 mt-1 space-y-0.5 text-muted-foreground">
