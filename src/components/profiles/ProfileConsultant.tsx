@@ -19,6 +19,7 @@ import { Switch } from "@/components/ui/switch";
 import ConsultantServiceRequests from "@/components/ConsultantServiceRequests";
 import ConsultantCategoryManager from "@/components/ConsultantCategoryManager";
 import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
+import MapAddressBanner from "@/components/MapAddressBanner";
 
 const ProfileConsultant = () => {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
@@ -94,6 +95,7 @@ const ProfileConsultant = () => {
 
   return (
     <>
+      <MapAddressBanner />
       {/* Consultant header */}
       <div className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-card mb-8">
         <div className="flex flex-col sm:flex-row sm:items-start gap-6">

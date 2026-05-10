@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import QRScannerMock from "@/components/QRScannerMock";
+import MapAddressBanner from "@/components/MapAddressBanner";
 
 const ProfileBusiness = () => {
   const [isVerified, setIsVerified] = useState(true);
@@ -63,6 +64,7 @@ const ProfileBusiness = () => {
 
   return (
     <>
+      <MapAddressBanner />
       {/* Business header */}
       <div className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-card mb-8">
         <div className="flex flex-col sm:flex-row sm:items-start gap-6">
