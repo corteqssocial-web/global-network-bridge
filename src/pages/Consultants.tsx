@@ -184,7 +184,7 @@ const showcasePurchasedIds = new Set([
 ]);
 
 // Volunteer mentor IDs — appear with a "Gönüllü Mentör" badge and under the Gönüllüler filter
-const volunteerMentorIds = new Set(["ozlem-gonullu", "mehmet-yilmaz"]);
+const volunteerMentorIds = new Set(["ozlem-gonullu"]);
 
 const Consultants = () => {
   const [searchParams, setSearchParams] = useSearchParams();
