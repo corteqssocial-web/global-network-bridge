@@ -16,15 +16,18 @@ interface DemoPageBannerProps {
 const DemoPageBanner = ({ categoryLabel, listingHref }: DemoPageBannerProps) => {
   return (
     <div className="bg-gradient-to-r from-gold/15 via-orange-50 to-turquoise/10 border-y border-gold/30">
-      <div className="container mx-auto px-4 py-2.5 flex flex-col md:flex-row items-center justify-between gap-2">
-        <div className="flex items-center gap-2 text-xs md:text-sm">
-          <Sparkles className="h-3.5 w-3.5 text-gold shrink-0" />
-          <span className="font-semibold uppercase tracking-wider text-foreground">DEMO</span>
-          <span className="text-muted-foreground">
-            – Bu profil örnek içeriktir. {categoryLabel} kategorimize başvurular değerlendirildikçe gerçek profiller yayına alınır.
+      <div className="container mx-auto px-4 py-3 flex flex-col items-center gap-2 text-center">
+        <div className="flex items-center gap-2">
+          <Sparkles className="h-4 w-4 text-gold shrink-0" />
+          <span className="font-extrabold uppercase tracking-[0.2em] text-sm md:text-base text-foreground">
+            DEMO Hesap Görünümü
           </span>
+          <Sparkles className="h-4 w-4 text-gold shrink-0" />
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+        <p className="text-xs md:text-sm text-muted-foreground max-w-2xl">
+          Bu profil örnek içeriktir. {categoryLabel} kategorimize başvurular değerlendirildikçe gerçek profiller yayına alınır.
+        </p>
+        <div className="flex items-center gap-2 flex-wrap justify-center">
           <Link to="/founders-1000">
             <Button size="sm" variant="default" className="h-7 text-xs gap-1 bg-gold text-foreground hover:bg-gold/90">
               <Crown className="h-3 w-3" /> Founders 1000
