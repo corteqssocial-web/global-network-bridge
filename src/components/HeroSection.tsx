@@ -1,7 +1,8 @@
-import { ArrowRight, Globe, MapPin, Users, Trophy, MessageCircle, Sparkles, Video, PenSquare, UserPlus, Flag } from "lucide-react";
+import { ArrowRight, Globe, MapPin, Users, Trophy, MessageCircle, Sparkles, Video, PenSquare, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import landmarksImage from "@/assets/landmarks-collage.png";
+import may19Globe from "@/assets/may19-globe-pins-cta.png";
 import { useDiaspora } from "@/contexts/DiasporaContext";
 import HeroCityCounters from "@/components/HeroCityCounters";
 
@@ -88,9 +89,12 @@ const HeroSection = () => {
           {/* 19 Mayıs CTA — coşkulu */}
           <Link to="/19-mayis" className="block mt-6 animate-fade-in-up max-w-xl lg:max-w-lg" style={{ animationDelay: '0.34s' }}>
             <div className="bg-gradient-to-r from-rose-500 to-rose-600 border border-rose-400/40 rounded-2xl p-4 flex items-center gap-4 hover:from-rose-600 hover:to-rose-700 transition-colors cursor-pointer group shadow-lg shadow-rose-500/30">
-              <div className="bg-white/20 p-2.5 rounded-full shrink-0">
-                <Flag className="h-6 w-6 text-white" />
-              </div>
+              <img
+                src={may19Globe}
+                alt="Türk diasporası dünya pin'leri"
+                loading="lazy"
+                className="w-14 h-14 rounded-xl object-cover shrink-0 ring-2 ring-white/40 shadow-md"
+              />
               <div className="flex-1 min-w-0">
                 <p className="font-bold text-white text-sm">🇹🇷 19 Mayıs Global Diaspora Buluşması — Yerini İşaretle, Fikrini Paylaş!</p>
                 <p className="text-xs text-white/90 font-body mt-0.5">5 kıtada bayram coşkusu · 19 Mayıs Bayram Haftası etkinlikleri başlıyor</p>
