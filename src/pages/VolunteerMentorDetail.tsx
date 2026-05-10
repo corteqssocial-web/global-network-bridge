@@ -23,7 +23,9 @@ const seedComments: Comment[] = [
 
 const VolunteerMentorDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
   const mentor = consultants.find((c) => c.id === id);
   const { isFollowed, toggle } = useFollow();
   const isFollowing = mentor ? isFollowed("consultant", mentor.id) : false;
@@ -32,6 +34,31 @@ const VolunteerMentorDetail = () => {
   const [likeCount, setLikeCount] = useState(238);
   const [comments, setComments] = useState<Comment[]>(seedComments);
   const [newComment, setNewComment] = useState("");
+  const [authPromptOpen, setAuthPromptOpen] = useState(false);
+  const [messageOpen, setMessageOpen] = useState(false);
+  const [messageText, setMessageText] = useState("");
+
+  const handleMessageClick = () => {
+    if (!user) {
+      setAuthPromptOpen(true);
+      return;
+    }
+    setMessageOpen(true);
+  };
+
+  const goToAuth = () => {
+    const redirect = encodeURIComponent(`/volunteer/${id}?openMessage=1`);
+    navigate(`/auth?redirect=${redirect}`);
+  };
+
+  const sendMessage = () => {
+    const text = messageText.trim();
+    if (!text) return;
+    toast({ title: "Mesaj gönderildi", description: `${mentor?.name} en kısa sürede sana dönecek.` });
+    setMessageText("");
+    setMessageOpen(false);
+  };
+
 
   if (!mentor) {
     return (
