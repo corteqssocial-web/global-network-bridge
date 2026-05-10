@@ -341,46 +341,46 @@ const PlanCard = ({ plan, isYearly, featured }: PlanCardProps) => {
         </div>
       )}
 
-      <div className="flex items-center gap-3 mb-3">
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+      <div className="flex items-center gap-2.5 mb-2">
+        <div className={`w-9 h-9 rounded-md flex items-center justify-center ${
           featured ? "bg-primary/20" : "bg-muted"
         }`}>
-          <Icon className={`h-5 w-5 ${featured ? "text-primary" : "text-muted-foreground"}`} />
+          <Icon className={`h-4.5 w-4.5 ${featured ? "text-primary" : "text-muted-foreground"}`} />
         </div>
-        <h3 className="text-xl font-bold">{plan.name}</h3>
+        <h3 className="text-lg font-bold">{plan.name}</h3>
       </div>
 
-      <p className={`text-sm mb-6 font-body ${featured ? "text-secondary-foreground/70" : "text-muted-foreground"}`}>
+      <p className={`text-xs mb-4 font-body ${featured ? "text-secondary-foreground/70" : "text-muted-foreground"}`}>
         {plan.desc}
       </p>
 
-      <div className="mb-6">
+      <div className="mb-4">
         {isFree ? (
-          <span className="text-4xl font-extrabold">Ücretsiz</span>
+          <span className="text-3xl font-extrabold">Ücretsiz</span>
         ) : (
           <>
-            <span className="text-4xl font-extrabold">€{price}</span>
-            <span className={`text-sm ${featured ? "text-secondary-foreground/60" : "text-muted-foreground"}`}>
+            <span className="text-3xl font-extrabold">€{price}</span>
+            <span className={`text-xs ${featured ? "text-secondary-foreground/60" : "text-muted-foreground"}`}>
               /ay
             </span>
             {isYearly && (
-              <p className={`text-xs mt-1 ${featured ? "text-secondary-foreground/50" : "text-muted-foreground"}`}>
-                Yıllık faturalandırma · €{price * 12}/yıl
+              <p className={`text-[11px] mt-0.5 ${featured ? "text-secondary-foreground/50" : "text-muted-foreground"}`}>
+                Yıllık · €{price * 12}/yıl
               </p>
             )}
           </>
         )}
       </div>
 
-      <ul className="space-y-3 mb-8 flex-1">
+      <ul className="space-y-2 mb-5 flex-1">
         {plan.features.map((f, i) => (
-          <li key={i} className={`flex items-center gap-2.5 text-sm font-body ${
+          <li key={i} className={`flex items-start gap-2 text-xs font-body ${
             !f.included ? (featured ? "text-secondary-foreground/30" : "text-muted-foreground/50") : ""
           }`}>
             {f.included ? (
-              <Check className="h-4 w-4 text-success flex-shrink-0" />
+              <Check className="h-3.5 w-3.5 text-success flex-shrink-0 mt-0.5" />
             ) : (
-              <X className="h-4 w-4 text-muted-foreground/30 flex-shrink-0" />
+              <X className="h-3.5 w-3.5 text-muted-foreground/30 flex-shrink-0 mt-0.5" />
             )}
             {f.text}
           </li>
@@ -390,7 +390,7 @@ const PlanCard = ({ plan, isYearly, featured }: PlanCardProps) => {
       <Button
         variant={featured ? "hero" : "outline"}
         className="w-full"
-        size="lg"
+        size="default"
       >
         {isFree ? "Ücretsiz Başla" : "1 Ay Ücretsiz Dene"}
       </Button>
