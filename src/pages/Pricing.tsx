@@ -349,6 +349,7 @@ interface PlanCardProps {
     icon: React.ElementType;
     monthlyPrice: number;
     yearlyPrice: number;
+    yearlyOnly?: boolean;
     desc: string;
     badge?: string;
     features: { text: string; included: boolean }[];
@@ -359,7 +360,8 @@ interface PlanCardProps {
 
 const PlanCard = ({ plan, isYearly, featured }: PlanCardProps) => {
   const Icon = plan.icon;
-  const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
+  const yearlyOnly = plan.yearlyOnly;
+  const price = yearlyOnly ? plan.yearlyPrice : (isYearly ? plan.yearlyPrice : plan.monthlyPrice);
   const isFree = price === 0;
 
   return (
@@ -392,6 +394,16 @@ const PlanCard = ({ plan, isYearly, featured }: PlanCardProps) => {
       <div className="mb-4">
         {isFree ? (
           <span className="text-3xl font-extrabold">Ücretsiz</span>
+        ) : yearlyOnly ? (
+          <>
+            <span className="text-3xl font-extrabold">€{price}</span>
+            <span className={`text-xs ${featured ? "text-secondary-foreground/60" : "text-muted-foreground"}`}>
+              /yıl
+            </span>
+            <p className={`text-[11px] mt-0.5 ${featured ? "text-secondary-foreground/50" : "text-muted-foreground"}`}>
+              Tek seferlik ödeme · 1 yıl geçerli
+            </p>
+          </>
         ) : (
           <>
             <span className="text-3xl font-extrabold">€{price}</span>
@@ -406,6 +418,14 @@ const PlanCard = ({ plan, isYearly, featured }: PlanCardProps) => {
           </>
         )}
       </div>
+
+      {yearlyOnly && (
+        <div className="mb-3 px-2.5 py-2 rounded-md bg-primary/15 border border-primary/30">
+          <p className="text-[11px] font-bold text-primary leading-snug">
+            Founding 1000 için 1 yıllık süre 29 Ekim 2027'den itibaren başlayacaktır.
+          </p>
+        </div>
+      )}
 
       <ul className="space-y-2 mb-5 flex-1">
         {plan.features.map((f, i) => (
@@ -427,7 +447,7 @@ const PlanCard = ({ plan, isYearly, featured }: PlanCardProps) => {
         className="w-full"
         size="default"
       >
-        {isFree ? "Ücretsiz Başla" : "1 Ay Ücretsiz Dene"}
+        {isFree ? "Ücretsiz Başla" : yearlyOnly ? "Şimdi Satın Al" : "Premium'a Geç"}
       </Button>
     </div>
   );
