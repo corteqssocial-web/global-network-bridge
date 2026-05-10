@@ -356,6 +356,11 @@ const Consultants = () => {
                         className="group relative bg-card rounded-2xl p-6 pt-9 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 block overflow-hidden border border-border"
                       >
                         <DemoBadge variant="card" />
+                        {volunteerMentorIds.has(c.id) && (
+                          <Badge className="absolute top-2 right-2 z-10 gap-1 bg-emerald-500/15 text-emerald-700 border border-emerald-500/40 hover:bg-emerald-500/20">
+                            <HandHeart className="h-3 w-3" /> Gönüllü Mentör
+                          </Badge>
+                        )}
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-3 min-w-0">
                             <img src={c.photo} alt={c.name} className="w-14 h-14 rounded-full object-cover shrink-0" />
