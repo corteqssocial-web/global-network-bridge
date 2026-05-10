@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
+import DemoPageBanner from "@/components/DemoPageBanner";
 import PublicEventsList from "@/components/PublicEventsList";
 import { bloggers } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
@@ -70,7 +71,8 @@ const BloggerDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="pt-24 pb-16">
+      <DemoPageBanner categoryLabel="Blogger / Vlogger" listingHref="/bloggers" />
+      <main className="pt-8 pb-16">
         <div className="container mx-auto px-4">
           <Link to="/bloggers" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
             <ArrowLeft className="h-4 w-4" /> Geri dön
