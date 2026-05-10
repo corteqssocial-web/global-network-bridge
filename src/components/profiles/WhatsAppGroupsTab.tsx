@@ -70,7 +70,10 @@ const WhatsAppGroupsTab = () => {
             <Bot className="h-6 w-6 text-success" />
           </div>
           <div className="min-w-0">
-            <h3 className="font-bold text-foreground text-base">CorBot — CorteQS'in yapay zekâ WhatsApp botu</h3>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h3 className="font-bold text-foreground text-base">CorBot — CorteQS'in yapay zekâ WhatsApp botu</h3>
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-warning/20 text-warning border border-warning/40">Yakında</span>
+            </div>
             <p className="text-xs text-muted-foreground">Hızlı erişim & bilgi · Bildirimler, mesajlar ve destek tek bir yerde</p>
             <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1.5 text-xs">
               <a href="https://wa.me/491637084577?text=Merhaba" target="_blank" rel="noopener noreferrer" className="text-success hover:underline font-medium inline-flex items-center gap-1">🤖 CorBot — WhatsApp Bot</a>
