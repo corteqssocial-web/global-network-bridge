@@ -68,6 +68,7 @@ const isSocialPostLink = (url: string) =>
 const isAcceptedShareLink = (url: string) => isDriveLink(url) || isSocialPostLink(url);
 
 const May19 = () => {
+  const { toast } = useToast();
   const { user, profile } = useAuth();
   const [tab, setTab] = useState<Kind>("map_pin");
   const [form, setForm] = useState(initialForm);
