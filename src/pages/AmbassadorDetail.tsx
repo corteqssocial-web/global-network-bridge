@@ -48,8 +48,8 @@ const AmbassadorDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <DemoPageBanner categoryLabel="Şehir Elçileri" listingHref="/city-ambassadors" />
-      <main className="pt-8 pb-16">
+      <main className="pt-24 pb-16">
+        <DemoPageBanner categoryLabel="Şehir Elçileri" listingHref="/city-ambassadors" />
         <div className="container mx-auto px-4 max-w-4xl">
           <Link to="/consultants" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6">
             <ArrowLeft className="h-4 w-4" /> Danışmanlara Dön
