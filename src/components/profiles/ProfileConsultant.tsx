@@ -19,6 +19,7 @@ import { Switch } from "@/components/ui/switch";
 import ConsultantServiceRequests from "@/components/ConsultantServiceRequests";
 import ConsultantCategoryManager from "@/components/ConsultantCategoryManager";
 import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
+import MapAddressBanner from "@/components/MapAddressBanner";
 
 const ProfileConsultant = () => {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
