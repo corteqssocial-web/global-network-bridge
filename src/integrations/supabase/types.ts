@@ -399,10 +399,14 @@ export type Database = {
           city: string | null
           country: string | null
           created_at: string
+          cv_name: string | null
+          cv_path: string | null
           full_name: string | null
           id: string
           onboarding_completed: boolean
           phone: string | null
+          presentation_name: string | null
+          presentation_path: string | null
           updated_at: string
         }
         Insert: {
@@ -411,10 +415,14 @@ export type Database = {
           city?: string | null
           country?: string | null
           created_at?: string
+          cv_name?: string | null
+          cv_path?: string | null
           full_name?: string | null
           id: string
           onboarding_completed?: boolean
           phone?: string | null
+          presentation_name?: string | null
+          presentation_path?: string | null
           updated_at?: string
         }
         Update: {
@@ -423,10 +431,14 @@ export type Database = {
           city?: string | null
           country?: string | null
           created_at?: string
+          cv_name?: string | null
+          cv_path?: string | null
           full_name?: string | null
           id?: string
           onboarding_completed?: boolean
           phone?: string | null
+          presentation_name?: string | null
+          presentation_path?: string | null
           updated_at?: string
         }
         Relationships: []

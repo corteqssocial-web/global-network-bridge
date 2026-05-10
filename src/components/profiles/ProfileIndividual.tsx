@@ -1,11 +1,12 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import {
   Calendar, Tag, Users, Bell, CreditCard,
   ArrowLeft, Plus, ChevronRight, Star, Bot, MessageSquare,
   MapPin, Clock, Gift, TrendingUp, Briefcase, Linkedin,
   FileText, Eye, EyeOff, Settings, Shield, UserPlus, ScanLine, QrCode,
-  Globe, Trash2, ExternalLink, ClipboardList, Download, ChevronDown, ChevronUp, Info
+  Globe, Trash2, ExternalLink, ClipboardList, Download, ChevronDown, ChevronUp, Info,
+  Presentation, Loader2
 } from "lucide-react";
 import StripeTransactionsPanel from "@/components/StripeTransactionsPanel";
 import NotificationsList from "@/components/NotificationsList";
@@ -24,6 +25,9 @@ import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
 import WelcomePack from "@/components/profiles/WelcomePack";
 import { useDemoFlag } from "@/lib/demoFlags";
 import { useFollow } from "@/hooks/useFollow";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 
 
@@ -34,8 +38,9 @@ const ProfileIndividual = () => {
   const [_showWelcomePack, _setShowWelcomePack] = useState(true); // kept for future use
   const [profileVisible, setProfileVisible] = useState(true);
   const [linkedinUrl, setLinkedinUrl] = useState("https://linkedin.com/in/emreaydin");
-  const [cvFile, setCvFile] = useState<File | null>(null);
-  const [cvUploaded, setCvUploaded] = useState(true);
+  const [cvDoc, setCvDoc] = useState<{ path: string; name: string } | null>(null);
+  const [pptDoc, setPptDoc] = useState<{ path: string; name: string } | null>(null);
+  const [uploadingKind, setUploadingKind] = useState<null | "cv" | "presentation">(null);
 
   const user = {
     name: "Emre Aydın",
@@ -64,19 +69,100 @@ const ProfileIndividual = () => {
   const [expandedResearchId, setExpandedResearchId] = useState<string | null>(null);
   const [expandedChatId, setExpandedChatId] = useState<string | null>(null);
   const cvInputRef = useRef<HTMLInputElement>(null);
+  const pptInputRef = useRef<HTMLInputElement>(null);
+  const { user: authUser } = useAuth();
+  const { toast } = useToast();
 
-  const handleCvUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Load existing documents from profile
+  useEffect(() => {
+    if (!authUser?.id) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("cv_path, cv_name, presentation_path, presentation_name")
+        .eq("id", authUser.id)
+        .maybeSingle();
+      if (cancelled || !data) return;
+      if (data.cv_path) setCvDoc({ path: data.cv_path, name: data.cv_name || "CV" });
+      if (data.presentation_path) setPptDoc({ path: data.presentation_path, name: data.presentation_name || "Sunum" });
+    })();
+    return () => { cancelled = true; };
+  }, [authUser?.id]);
+
+  const handleDocUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    kind: "cv" | "presentation"
+  ) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setCvFile(file);
-      setCvUploaded(true);
+    if (!file) return;
+    if (!authUser?.id) {
+      toast({ title: "Giriş yapın", description: "Dosya yüklemek için oturum açmanız gerekiyor.", variant: "destructive" });
+      return;
+    }
+    if (file.size > 20 * 1024 * 1024) {
+      toast({ title: "Dosya çok büyük", description: "Maksimum 20 MB.", variant: "destructive" });
+      return;
+    }
+    setUploadingKind(kind);
+    try {
+      const ext = file.name.split(".").pop() || "bin";
+      const path = `${authUser.id}/${kind}-${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage
+        .from("user-documents")
+        .upload(path, file, { upsert: true, contentType: file.type });
+      if (upErr) throw upErr;
+
+      const prev = kind === "cv" ? cvDoc : pptDoc;
+      if (prev?.path && prev.path !== path) {
+        await supabase.storage.from("user-documents").remove([prev.path]);
+      }
+
+      const updates = kind === "cv"
+        ? { cv_path: path, cv_name: file.name }
+        : { presentation_path: path, presentation_name: file.name };
+      const { error: dbErr } = await supabase.from("profiles").update(updates).eq("id", authUser.id);
+      if (dbErr) throw dbErr;
+
+      const next = { path, name: file.name };
+      if (kind === "cv") setCvDoc(next); else setPptDoc(next);
+      toast({ title: "Yüklendi", description: file.name });
+    } catch (err: any) {
+      toast({ title: "Yükleme hatası", description: err?.message || "Tekrar deneyin", variant: "destructive" });
+    } finally {
+      setUploadingKind(null);
+      if (e.target) e.target.value = "";
     }
   };
 
-  const handleCvRemove = () => {
-    setCvFile(null);
-    setCvUploaded(false);
-    if (cvInputRef.current) cvInputRef.current.value = "";
+  const handleDocRemove = async (kind: "cv" | "presentation") => {
+    if (!authUser?.id) return;
+    const doc = kind === "cv" ? cvDoc : pptDoc;
+    if (!doc) return;
+    try {
+      await supabase.storage.from("user-documents").remove([doc.path]);
+      const updates = kind === "cv"
+        ? { cv_path: null, cv_name: null }
+        : { presentation_path: null, presentation_name: null };
+      await supabase.from("profiles").update(updates).eq("id", authUser.id);
+      if (kind === "cv") setCvDoc(null); else setPptDoc(null);
+      toast({ title: "Kaldırıldı" });
+    } catch (err: any) {
+      toast({ title: "Hata", description: err?.message || "Tekrar deneyin", variant: "destructive" });
+    }
+  };
+
+  const handleDocOpen = async (kind: "cv" | "presentation") => {
+    const doc = kind === "cv" ? cvDoc : pptDoc;
+    if (!doc) return;
+    const { data, error } = await supabase.storage
+      .from("user-documents")
+      .createSignedUrl(doc.path, 60 * 5);
+    if (error || !data?.signedUrl) {
+      toast({ title: "Açılamadı", description: error?.message || "Tekrar deneyin", variant: "destructive" });
+      return;
+    }
+    window.open(data.signedUrl, "_blank", "noopener,noreferrer");
   };
 
   // Notifications now load from the live notifications table via NotificationsList component.
@@ -170,10 +256,15 @@ const ProfileIndividual = () => {
                   <Linkedin className="h-4 w-4" /> LinkedIn
                 </a>
               )}
-              {cvUploaded && (
-                <span className="flex items-center gap-1 text-sm text-muted-foreground">
-                  <FileText className="h-4 w-4" /> CV yüklendi
-                </span>
+              {cvDoc && (
+                <button onClick={() => handleDocOpen("cv")} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
+                  <FileText className="h-4 w-4" /> CV
+                </button>
+              )}
+              {pptDoc && (
+                <button onClick={() => handleDocOpen("presentation")} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
+                  <Presentation className="h-4 w-4" /> Sunum
+                </button>
               )}
             </div>
           </div>
@@ -650,26 +741,37 @@ const ProfileIndividual = () => {
                     type="file"
                     accept=".pdf,.doc,.docx"
                     className="hidden"
-                    onChange={handleCvUpload}
+                    onChange={(e) => handleDocUpload(e, "cv")}
                   />
-                  <div className="mt-2">
-                    {cvUploaded ? (
-                      <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-                        <FileText className="h-5 w-5 text-primary" />
-                        <div className="flex-1">
-                          <p className="text-sm font-medium text-foreground">{cvFile?.name || "emre_aydin_cv.pdf"}</p>
-                          <p className="text-xs text-muted-foreground">
-                            Yüklendi{cvFile ? ` · ${(cvFile.size / (1024 * 1024)).toFixed(1)} MB` : " · 2.3 MB"}
-                          </p>
-                        </div>
-                        <Button variant="outline" size="sm" onClick={handleCvRemove}>Kaldır</Button>
-                      </div>
-                    ) : (
-                      <Button variant="outline" className="w-full gap-2" onClick={() => cvInputRef.current?.click()}>
-                        <FileText className="h-4 w-4" /> CV Yükle (PDF)
-                      </Button>
-                    )}
-                  </div>
+                  <DocumentSlot
+                    doc={cvDoc}
+                    uploading={uploadingKind === "cv"}
+                    icon={<FileText className="h-5 w-5 text-primary" />}
+                    uploadLabel="CV Yükle (PDF, DOC, DOCX)"
+                    onPick={() => cvInputRef.current?.click()}
+                    onOpen={() => handleDocOpen("cv")}
+                    onRemove={() => handleDocRemove("cv")}
+                  />
+                </div>
+
+                <div>
+                  <Label>Sunum / Tanıtım</Label>
+                  <input
+                    ref={pptInputRef}
+                    type="file"
+                    accept=".pdf,.ppt,.pptx,.key"
+                    className="hidden"
+                    onChange={(e) => handleDocUpload(e, "presentation")}
+                  />
+                  <DocumentSlot
+                    doc={pptDoc}
+                    uploading={uploadingKind === "presentation"}
+                    icon={<Presentation className="h-5 w-5 text-primary" />}
+                    uploadLabel="Sunum Yükle (PDF, PPT, PPTX, KEY)"
+                    onPick={() => pptInputRef.current?.click()}
+                    onOpen={() => handleDocOpen("presentation")}
+                    onRemove={() => handleDocRemove("presentation")}
+                  />
                 </div>
               </div>
             </div>
@@ -704,5 +806,38 @@ const ProfileIndividual = () => {
     </>
   );
 };
+
+interface DocumentSlotProps {
+  doc: { path: string; name: string } | null;
+  uploading: boolean;
+  icon: React.ReactNode;
+  uploadLabel: string;
+  onPick: () => void;
+  onOpen: () => void;
+  onRemove: () => void;
+}
+
+const DocumentSlot = ({ doc, uploading, icon, uploadLabel, onPick, onOpen, onRemove }: DocumentSlotProps) => (
+  <div className="mt-2">
+    {doc ? (
+      <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+        {icon}
+        <button onClick={onOpen} className="flex-1 min-w-0 text-left">
+          <p className="text-sm font-medium text-foreground truncate hover:text-primary">{doc.name}</p>
+          <p className="text-xs text-muted-foreground">Görüntülemek için tıkla</p>
+        </button>
+        <Button variant="outline" size="sm" onClick={onPick} disabled={uploading}>
+          {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Değiştir"}
+        </Button>
+        <Button variant="ghost" size="sm" onClick={onRemove} disabled={uploading}>Kaldır</Button>
+      </div>
+    ) : (
+      <Button variant="outline" className="w-full gap-2" onClick={onPick} disabled={uploading}>
+        {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileText className="h-4 w-4" />}
+        {uploading ? "Yükleniyor..." : uploadLabel}
+      </Button>
+    )}
+  </div>
+);
 
 export default ProfileIndividual;
