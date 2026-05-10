@@ -38,7 +38,9 @@ const Navbar = () => {
   // diaspora landing — hide it entirely so it isn't confused with the diaspora picker.
   const isInternational = diaspora !== "tr";
   const isRegisterDiaspora = location.pathname.startsWith("/register-diaspora");
-  const showNavbarCountry = !isHome && !hasOwnSelector && !isInternational && !isRegisterDiaspora;
+  // Each category page now has its own CountryCitySelector, so the duplicate
+  // navbar-level country picker is hidden everywhere to avoid confusion.
+  const showNavbarCountry = false;
 
   const handleSignOut = async () => {
     await signOut();
