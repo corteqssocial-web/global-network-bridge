@@ -280,6 +280,7 @@ const BloggerDetail = () => {
             <TabsContent value="contact" className="mt-6">
               <DemoTabPlaceholder label="İletişim — Demo" />
             </TabsContent>
+          </Tabs>
         </div>
       </main>
       <Footer />
