@@ -13,6 +13,7 @@ import { recoverFromWhiteScreen } from "@/lib/recoveryReload";
 const Index = lazy(() => import("./pages/Index"));
 const Consultants = lazy(() => import("./pages/Consultants"));
 const ConsultantDetail = lazy(() => import("./pages/ConsultantDetail"));
+const VolunteerMentorDetail = lazy(() => import("./pages/VolunteerMentorDetail"));
 const Associations = lazy(() => import("./pages/Associations"));
 const AssociationDetail = lazy(() => import("./pages/AssociationDetail"));
 const Businesses = lazy(() => import("./pages/Businesses"));
@@ -120,6 +121,7 @@ const App = () => (
                   <Route path="/" element={<Index />} />
                   <Route path="/consultants" element={<Consultants />} />
                   <Route path="/consultant/:id" element={<ConsultantDetail />} />
+                  <Route path="/volunteer/:id" element={<VolunteerMentorDetail />} />
                   <Route path="/associations" element={<Associations />} />
                   <Route path="/association/:id" element={<AssociationDetail />} />
                   <Route path="/businesses" element={<Businesses />} />
