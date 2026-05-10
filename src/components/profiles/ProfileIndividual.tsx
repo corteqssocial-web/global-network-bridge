@@ -69,19 +69,100 @@ const ProfileIndividual = () => {
   const [expandedResearchId, setExpandedResearchId] = useState<string | null>(null);
   const [expandedChatId, setExpandedChatId] = useState<string | null>(null);
   const cvInputRef = useRef<HTMLInputElement>(null);
+  const pptInputRef = useRef<HTMLInputElement>(null);
+  const { user: authUser } = useAuth();
+  const { toast } = useToast();
 
-  const handleCvUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Load existing documents from profile
+  useEffect(() => {
+    if (!authUser?.id) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("cv_path, cv_name, presentation_path, presentation_name")
+        .eq("id", authUser.id)
+        .maybeSingle();
+      if (cancelled || !data) return;
+      if (data.cv_path) setCvDoc({ path: data.cv_path, name: data.cv_name || "CV" });
+      if (data.presentation_path) setPptDoc({ path: data.presentation_path, name: data.presentation_name || "Sunum" });
+    })();
+    return () => { cancelled = true; };
+  }, [authUser?.id]);
+
+  const handleDocUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    kind: "cv" | "presentation"
+  ) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setCvFile(file);
-      setCvUploaded(true);
+    if (!file) return;
+    if (!authUser?.id) {
+      toast({ title: "Giriş yapın", description: "Dosya yüklemek için oturum açmanız gerekiyor.", variant: "destructive" });
+      return;
+    }
+    if (file.size > 20 * 1024 * 1024) {
+      toast({ title: "Dosya çok büyük", description: "Maksimum 20 MB.", variant: "destructive" });
+      return;
+    }
+    setUploadingKind(kind);
+    try {
+      const ext = file.name.split(".").pop() || "bin";
+      const path = `${authUser.id}/${kind}-${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage
+        .from("user-documents")
+        .upload(path, file, { upsert: true, contentType: file.type });
+      if (upErr) throw upErr;
+
+      const prev = kind === "cv" ? cvDoc : pptDoc;
+      if (prev?.path && prev.path !== path) {
+        await supabase.storage.from("user-documents").remove([prev.path]);
+      }
+
+      const updates = kind === "cv"
+        ? { cv_path: path, cv_name: file.name }
+        : { presentation_path: path, presentation_name: file.name };
+      const { error: dbErr } = await supabase.from("profiles").update(updates).eq("id", authUser.id);
+      if (dbErr) throw dbErr;
+
+      const next = { path, name: file.name };
+      if (kind === "cv") setCvDoc(next); else setPptDoc(next);
+      toast({ title: "Yüklendi", description: file.name });
+    } catch (err: any) {
+      toast({ title: "Yükleme hatası", description: err?.message || "Tekrar deneyin", variant: "destructive" });
+    } finally {
+      setUploadingKind(null);
+      if (e.target) e.target.value = "";
     }
   };
 
-  const handleCvRemove = () => {
-    setCvFile(null);
-    setCvUploaded(false);
-    if (cvInputRef.current) cvInputRef.current.value = "";
+  const handleDocRemove = async (kind: "cv" | "presentation") => {
+    if (!authUser?.id) return;
+    const doc = kind === "cv" ? cvDoc : pptDoc;
+    if (!doc) return;
+    try {
+      await supabase.storage.from("user-documents").remove([doc.path]);
+      const updates = kind === "cv"
+        ? { cv_path: null, cv_name: null }
+        : { presentation_path: null, presentation_name: null };
+      await supabase.from("profiles").update(updates).eq("id", authUser.id);
+      if (kind === "cv") setCvDoc(null); else setPptDoc(null);
+      toast({ title: "Kaldırıldı" });
+    } catch (err: any) {
+      toast({ title: "Hata", description: err?.message || "Tekrar deneyin", variant: "destructive" });
+    }
+  };
+
+  const handleDocOpen = async (kind: "cv" | "presentation") => {
+    const doc = kind === "cv" ? cvDoc : pptDoc;
+    if (!doc) return;
+    const { data, error } = await supabase.storage
+      .from("user-documents")
+      .createSignedUrl(doc.path, 60 * 5);
+    if (error || !data?.signedUrl) {
+      toast({ title: "Açılamadı", description: error?.message || "Tekrar deneyin", variant: "destructive" });
+      return;
+    }
+    window.open(data.signedUrl, "_blank", "noopener,noreferrer");
   };
 
   // Notifications now load from the live notifications table via NotificationsList component.
