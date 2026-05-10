@@ -274,7 +274,7 @@ const ProfileConsultant = () => {
 
               <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50 border border-border">
                 <div className="text-xs text-muted-foreground">
-                  💸 AI Twin gelirinden <span className="font-bold text-foreground">%10 platform kesintisi</span> uygulanır.
+                  💸 AI Twin görüşmeleri <span className="font-bold text-foreground">tamamen ücretsizdir</span> — platformda komisyon alınmaz.
                 </div>
                 <a href="/ai-twin" className="text-xs font-semibold text-primary hover:underline shrink-0">
                   Yeni model talep et →
