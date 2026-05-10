@@ -85,6 +85,20 @@ const HeroSection = () => {
             </Link>
           </div>
 
+          {/* 19 Mayıs CTA — coşkulu */}
+          <Link to="/19-mayis" className="block mt-6 animate-fade-in-up max-w-xl lg:max-w-lg" style={{ animationDelay: '0.34s' }}>
+            <div className="bg-gradient-to-r from-rose-500 to-rose-600 border border-rose-400/40 rounded-2xl p-4 flex items-center gap-4 hover:from-rose-600 hover:to-rose-700 transition-colors cursor-pointer group shadow-lg shadow-rose-500/30">
+              <div className="bg-white/20 p-2.5 rounded-full shrink-0">
+                <Flag className="h-6 w-6 text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-white text-sm">🇹🇷 19 Mayıs Global Diaspora Buluşması — Yerini İşaretle, Fikrini Paylaş!</p>
+                <p className="text-xs text-white/90 font-body mt-0.5">5 kıtada bayram coşkusu · 19 Mayıs Bayram Haftası etkinlikleri başlıyor</p>
+              </div>
+              <ArrowRight className="h-5 w-5 text-white shrink-0 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+
           {/* Blog Contest Teaser — limited width so it stays clear of the landmarks image on the right */}
           <Link to="/blog-contest" className="block mt-8 animate-fade-in-up max-w-xl lg:max-w-lg" style={{ animationDelay: '0.35s' }}>
             <div className="bg-gold/10 border border-gold/30 rounded-2xl p-4 flex items-center gap-4 hover:bg-gold/15 transition-colors cursor-pointer group">
