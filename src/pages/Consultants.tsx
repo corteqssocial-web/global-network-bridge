@@ -393,24 +393,51 @@ const Consultants = () => {
                           <span className="text-xs text-muted-foreground">({c.reviews})</span>
                         </div>
 
-                        <p className="text-[10px] text-success font-semibold mb-2">🎁 İlk 10 dk ücretsiz</p>
-                        <div className="flex gap-1.5" onClick={(e) => e.preventDefault()}>
-                          <Button variant="default" size="sm" className="flex-1 gap-1 text-[11px] px-1.5">
-                            <Video className="h-3 w-3" /> Canlı €2/dk
-                          </Button>
-                          <Button variant="outline" size="sm" className="flex-1 gap-1 text-[11px] px-1.5">
-                            <Bot className="h-3 w-3" /> AI €1/dk
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="gap-1 text-[11px] px-2 border-success/40 text-success hover:bg-success/10"
-                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open("https://wa.me/", "_blank"); }}
-                            title="WhatsApp"
-                          >
-                            <MessageCircle className="h-3 w-3" />
-                          </Button>
-                        </div>
+                        {isVolunteer ? (
+                          <>
+                            <p className="text-[10px] text-emerald-600 font-semibold mb-2">🤝 Ücretsiz gönüllü mentörlük</p>
+                            <div className="flex gap-1.5" onClick={(e) => e.preventDefault()}>
+                              <Button
+                                variant="default"
+                                size="sm"
+                                className="flex-1 gap-1 text-[11px] px-1.5 bg-emerald-600 hover:bg-emerald-700 text-white"
+                                onClick={(e) => { e.preventDefault(); window.location.href = `/volunteer/${c.id}`; }}
+                              >
+                                <HandHeart className="h-3 w-3" /> Profili Gör
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="gap-1 text-[11px] px-2 border-success/40 text-success hover:bg-success/10"
+                                onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open("https://wa.me/", "_blank"); }}
+                                title="WhatsApp"
+                              >
+                                <MessageCircle className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <p className="text-[10px] text-success font-semibold mb-2">🎁 İlk 10 dk ücretsiz</p>
+                            <div className="flex gap-1.5" onClick={(e) => e.preventDefault()}>
+                              <Button variant="default" size="sm" className="flex-1 gap-1 text-[11px] px-1.5">
+                                <Video className="h-3 w-3" /> Canlı €2/dk
+                              </Button>
+                              <Button variant="outline" size="sm" className="flex-1 gap-1 text-[11px] px-1.5">
+                                <Bot className="h-3 w-3" /> AI €1/dk
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="gap-1 text-[11px] px-2 border-success/40 text-success hover:bg-success/10"
+                                onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open("https://wa.me/", "_blank"); }}
+                                title="WhatsApp"
+                              >
+                                <MessageCircle className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          </>
+                        )}
                       </Link>
                     );
                   })}
