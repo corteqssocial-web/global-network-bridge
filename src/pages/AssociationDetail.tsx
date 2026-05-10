@@ -214,7 +214,7 @@ const AssociationDetail = () => {
             </TabsContent>
 
             <TabsContent value="events" className="mt-6">
-              <DemoTabPlaceholder label="Etkinlikler — Demo" />
+              <PublicEventsList emptyLabel="Bu kuruluşun yaklaşan etkinliği yok." />
             </TabsContent>
 
             <TabsContent value="members" className="mt-6">
