@@ -17,6 +17,8 @@ import CreateEventForm from "@/components/CreateEventForm";
 import EventManagePanel from "@/components/EventManagePanel";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import MessagesInbox from "@/components/messaging/MessagesInbox";
+import { Inbox as InboxIcon } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -310,6 +312,7 @@ const ProfileIndividual = () => {
           <TabsTrigger value="coupons" className="gap-1.5"><Tag className="h-4 w-4" /> Kuponlar</TabsTrigger>
           <TabsTrigger value="following" className="gap-1.5"><Users className="h-4 w-4" /> Takip</TabsTrigger>
           <TabsTrigger value="whatsapp" className="gap-1.5"><MessageSquare className="h-4 w-4" /> WhatsApp</TabsTrigger>
+          <TabsTrigger value="messages" className="gap-1.5"><InboxIcon className="h-4 w-4" /> Mesaj Kutusu</TabsTrigger>
           <NotificationsTabTrigger />
           <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Ayarlar</TabsTrigger>
         </TabsList>
@@ -734,6 +737,10 @@ const ProfileIndividual = () => {
         </TabsContent>
 
         {/* SETTINGS */}
+        <TabsContent value="messages" className="space-y-4">
+          <MessagesInbox />
+        </TabsContent>
+
         <TabsContent value="settings" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">

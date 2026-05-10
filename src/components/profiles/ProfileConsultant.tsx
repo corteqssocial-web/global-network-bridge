@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import MessagesInbox from "@/components/messaging/MessagesInbox";
+import { Inbox as InboxIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -164,6 +166,7 @@ const ProfileConsultant = () => {
           <TabsTrigger value="analytics" className="gap-1.5"><BarChart3 className="h-4 w-4" /> Analitik</TabsTrigger>
           <TabsTrigger value="campaign" className="gap-1.5"><Megaphone className="h-4 w-4" /> Tanıtım</TabsTrigger>
           <TabsTrigger value="whatsapp" className="gap-1.5"><MessageSquare className="h-4 w-4" /> WhatsApp</TabsTrigger>
+          <TabsTrigger value="messages" className="gap-1.5"><InboxIcon className="h-4 w-4" /> Mesaj Kutusu</TabsTrigger>
           <NotificationsTabTrigger />
           <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Profil Düzenle</TabsTrigger>
         </TabsList>
@@ -592,6 +595,10 @@ const ProfileConsultant = () => {
         </TabsContent>
 
         {/* PROFILE EDIT / SETTINGS */}
+        <TabsContent value="messages" className="space-y-4">
+          <MessagesInbox />
+        </TabsContent>
+
         <TabsContent value="settings" className="mt-6">
           {/* Category Manager */}
           <div className="bg-card rounded-2xl border border-border p-6 shadow-card mb-6">
