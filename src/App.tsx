@@ -156,7 +156,7 @@ const App = () => (
                   <Route path="/legal/terms" element={<TermsOfService />} />
                   <Route path="/legal/kvkk" element={<KVKK />} />
                   <Route path="/legal/cookies" element={<CookiePolicy />} />
-                  <Route path="/register-diaspora" element={<RegisterDiaspora />} />
+                  
                   <Route path="/19-mayis" element={<May19 />} />
                   <Route path="/19-mayis/harita" element={<May19Map />} />
                   <Route path="/may19" element={<May19 />} />
