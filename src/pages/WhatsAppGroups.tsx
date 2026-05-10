@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   MessageSquare, Users, GraduationCap, Heart, PlusCircle, Sparkles, Stethoscope,
-  ShieldCheck, Layout, FileText,
+  ShieldCheck, Layout, FileText, Send,
   TrendingUp, Rocket, BookOpen, HandHeart, Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -152,26 +152,34 @@ const WhatsAppGroups = () => {
           {/* Header row: title + Country/City selector */}
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-foreground flex items-center gap-3">
-                <MessageSquare className="h-8 w-8 text-[#25D366]" /> WhatsApp Grupları
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground flex items-center gap-3 flex-wrap">
+                <MessageSquare className="h-8 w-8 text-[#25D366]" />
+                <Send className="h-7 w-7 text-[#229ED9]" />
+                Mesajlaşma Grupları
               </h1>
               <p className="text-muted-foreground font-body mt-1">
-                Diasporanın WhatsApp gruplarını ülke ve şehir bazında filtrele.
+                Diasporanın WhatsApp ve Telegram gruplarını ülke ve şehir bazında filtrele.
               </p>
             </div>
             <CountryCitySelector city={filterCity} onCityChange={setFilterCity} />
           </div>
 
           {/* Hero */}
-          <section className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-[#25D366]/10 via-turquoise/5 to-primary/10 p-6 md:p-10 mb-8 text-center">
-            <Badge className="mb-4 bg-[#25D366]/15 text-[#25D366] border-0">
-              <MessageSquare className="h-3 w-3 mr-1" /> WhatsApp Diaspora Ağı
-            </Badge>
+          <section className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-[#25D366]/10 via-[#229ED9]/10 to-primary/10 p-6 md:p-10 mb-8 text-center">
+            <div className="flex items-center justify-center gap-2 mb-4 flex-wrap">
+              <Badge className="bg-[#25D366]/15 text-[#25D366] border-0">
+                <MessageSquare className="h-3 w-3 mr-1" /> WhatsApp
+              </Badge>
+              <Badge className="bg-[#229ED9]/15 text-[#229ED9] border-0">
+                <Send className="h-3 w-3 mr-1" /> Telegram
+              </Badge>
+              <Badge className="bg-primary/10 text-primary border-0">Diaspora Ağı</Badge>
+            </div>
             <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-3">
-              Diasporanın WhatsApp Gruplarını <span className="text-gradient-primary">Tek Çatı Altında</span> Bul
+              Diasporanın WhatsApp & Telegram Gruplarını <span className="text-gradient-primary">Tek Çatı Altında</span> Bul
             </h1>
             <p className="text-base md:text-lg text-muted-foreground font-body max-w-3xl mx-auto mb-2">
-              Alumni, doktor, hobi ve iş gruplarına saniyeler içinde katıl — ya da kendi grubun için ücretsiz bir landing sayfası yayınla.
+              Alumni, doktor, hobi ve iş gruplarına saniyeler içinde katıl — ya da kendi WhatsApp/Telegram grubun için ücretsiz bir landing sayfası yayınla.
             </p>
             <Badge className="bg-success/15 text-success border-0 text-sm px-3 py-1 mt-2">
               <ShieldCheck className="h-3.5 w-3.5 mr-1.5" /> Grup listeleme ve landing page tamamen ücretsiz

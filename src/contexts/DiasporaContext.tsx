@@ -24,7 +24,7 @@ export const diasporaTranslations: Record<DiasporaKey, {
   hero: { badge: string; title: string; titleHighlight: string; titleEnd: string; subtitle: string; cta1: string; cta2: string; stat1: string; stat2: string; stat3: string };
 }> = {
   tr: {
-    nav: { consultants: "Danışmanlar", organizations: "Kuruluşlar", businesses: "İşletmeler", groups: "Chat Grupları", events: "Etkinlikler", map: "Harita", profile: "Kullanıcılar", login: "Giriş Yap", signup: "Kayıt Ol", more: "Daha Fazla", dashboard: "Dashboard", logout: "Çıkış", media: "MEDYA", vblogger: "V/Blogger", registerDiaspora: "Register Diaspora", registerDiasporaDesc: "Request your community", selectDiaspora: "Diaspora Seçin", selectCountry: "Ülke Seçin", allCountries: "Tüm Ülkeler" },
+    nav: { consultants: "Danışmanlar", organizations: "Kuruluşlar", businesses: "İşletmeler", groups: "Mesajlaşma Grupları", events: "Etkinlikler", map: "Harita", profile: "Kullanıcılar", login: "Giriş Yap", signup: "Kayıt Ol", more: "Daha Fazla", dashboard: "Dashboard", logout: "Çıkış", media: "MEDYA", vblogger: "V/Blogger", registerDiaspora: "Register Diaspora", registerDiasporaDesc: "Request your community", selectDiaspora: "Diaspora Seçin", selectCountry: "Ülke Seçin", allCountries: "Tüm Ülkeler" },
     hero: { badge: "Türk Diaspora Ağı", title: "Gittiğin ülkede ", titleHighlight: "organize bir ağ", titleEnd: " seni bekliyor", subtitle: "Danışmanlar, dernekler, etkinlikler ve AI destekli araçlarla diasporadaki yaşamınızı kolaylaştırın.", cta1: "Hemen Başla", cta2: "Danışman Ol", stat1: "45+ Ülke", stat2: "500+ Danışman", stat3: "200+ Dernek" },
   },
   in: {
