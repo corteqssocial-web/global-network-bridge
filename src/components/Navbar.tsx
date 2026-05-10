@@ -166,18 +166,7 @@ const Navbar = () => {
         {isOpen && (
           <div className="md:hidden pb-4 border-t border-border pt-4 animate-fade-in">
             <div className="flex flex-col gap-3">
-              {/* Mobile Diaspora Selector */}
-              <div className="flex gap-2 mb-2">
-                {diasporaOptions.map((opt) => (
-                  <button
-                    key={opt.key}
-                    onClick={() => { setDiaspora(opt.key); navigate("/"); setIsOpen(false); }}
-                    className={`text-xl p-1.5 rounded-lg transition-all ${diaspora === opt.key ? "bg-primary/15 ring-2 ring-primary/30 scale-110" : "hover:bg-muted"}`}
-                  >
-                    {opt.flag}
-                  </button>
-                ))}
-              </div>
+              {/* Mobile diaspora selector kaldırıldı */}
               {/* Mobile Country Selector — hidden on home */}
               {showNavbarCountry && (
                 <select
