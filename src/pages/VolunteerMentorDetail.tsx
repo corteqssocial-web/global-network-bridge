@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, HandHeart, Heart, MessageSquare, MapPin, UserPlus, UserCheck, Send, Instagram, Linkedin, Facebook, Sparkles, Star, Lock, Mail } from "lucide-react";
+import { useParams, Link } from "react-router-dom";
+import { ArrowLeft, HandHeart, Heart, MessageSquare, MapPin, UserPlus, UserCheck, Send, Instagram, Linkedin, Facebook, Sparkles, Star, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PlatformMessageDialog from "@/components/messaging/PlatformMessageDialog";
 
 import { consultants } from "@/data/mock";
 import { useFollow } from "@/hooks/useFollow";
@@ -23,7 +23,6 @@ const seedComments: Comment[] = [
 
 const VolunteerMentorDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
   const mentor = consultants.find((c) => c.id === id);
@@ -34,30 +33,9 @@ const VolunteerMentorDetail = () => {
   const [likeCount, setLikeCount] = useState(238);
   const [comments, setComments] = useState<Comment[]>(seedComments);
   const [newComment, setNewComment] = useState("");
-  const [authPromptOpen, setAuthPromptOpen] = useState(false);
   const [messageOpen, setMessageOpen] = useState(false);
-  const [messageText, setMessageText] = useState("");
 
-  const handleMessageClick = () => {
-    if (!user) {
-      setAuthPromptOpen(true);
-      return;
-    }
-    setMessageOpen(true);
-  };
-
-  const goToAuth = () => {
-    const redirect = encodeURIComponent(`/volunteer/${id}?openMessage=1`);
-    navigate(`/auth?redirect=${redirect}`);
-  };
-
-  const sendMessage = () => {
-    const text = messageText.trim();
-    if (!text) return;
-    toast({ title: "Mesaj gönderildi", description: `${mentor?.name} en kısa sürede sana dönecek.` });
-    setMessageText("");
-    setMessageOpen(false);
-  };
+  const handleMessageClick = () => setMessageOpen(true);
 
 
   if (!mentor) {
@@ -295,52 +273,14 @@ const VolunteerMentorDetail = () => {
         </div>
       </main>
 
-      {/* Auth gate dialog */}
-      <Dialog open={authPromptOpen} onOpenChange={setAuthPromptOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Lock className="h-5 w-5 text-primary" /> Mesaj göndermek için kayıt ol
-            </DialogTitle>
-            <DialogDescription>
-              Gönüllü mentörlerimizin gizliliğini korumak için iletişim platform üzerinden yapılır.
-              Ücretsiz hesabını oluştur, kayıt biter bitmez bu mentörle mesaj penceresinden devam edeceksin.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2 sm:gap-2">
-            <Button variant="outline" onClick={() => setAuthPromptOpen(false)}>Vazgeç</Button>
-            <Button onClick={goToAuth} className="gap-2">
-              <Mail className="h-4 w-4" /> Kayıt Ol / Giriş Yap
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Message composer */}
-      <Dialog open={messageOpen} onOpenChange={setMessageOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <MessageSquare className="h-5 w-5 text-primary" /> {mentor.name}'e mesaj
-            </DialogTitle>
-            <DialogDescription>
-              Mesajın platform üzerinden iletilir. Mentör cevap verdiğinde bildirim alırsın.
-            </DialogDescription>
-          </DialogHeader>
-          <Textarea
-            placeholder="Merhaba, yeni taşındım ve okul başvuruları konusunda yardımına ihtiyacım var..."
-            value={messageText}
-            onChange={(e) => setMessageText(e.target.value)}
-            rows={5}
-          />
-          <DialogFooter className="gap-2 sm:gap-2">
-            <Button variant="outline" onClick={() => setMessageOpen(false)}>İptal</Button>
-            <Button onClick={sendMessage} className="gap-2" disabled={!messageText.trim()}>
-              <Send className="h-4 w-4" /> Gönder
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <PlatformMessageDialog
+        open={messageOpen}
+        onOpenChange={setMessageOpen}
+        recipientKind="volunteer"
+        recipientSlug={mentor.id}
+        recipientName={mentor.name}
+        defaultSubject={`Gönüllü mentörlük talebi — ${mentor.city}`}
+      />
 
       <Footer />
     </div>

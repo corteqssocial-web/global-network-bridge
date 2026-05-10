@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import PlatformMessageButton from "@/components/messaging/PlatformMessageButton";
 import { useFollow } from "@/hooks/useFollow";
 import { MapPin, Users, Briefcase, Globe, Mail, Building2, Calendar, UserPlus, UserCheck, ArrowLeft, Tag, Store, Stethoscope, ExternalLink, Navigation } from "lucide-react";
 
@@ -97,15 +98,23 @@ const BusinessDetail = () => {
                   </div>
                 </div>
               </div>
-              <Button
-                variant={isFollowed ? "default" : "outline"}
-                size="sm"
-                onClick={toggleFollow}
-                className="gap-1.5 shrink-0"
-              >
-                {isFollowed ? <UserCheck className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
-                {isFollowed ? "Takip Ediliyor" : "Takip Et"}
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-2 shrink-0">
+                <PlatformMessageButton
+                  recipientKind="business"
+                  recipientSlug={b.id}
+                  recipientName={b.name}
+                  size="sm"
+                />
+                <Button
+                  variant={isFollowed ? "default" : "outline"}
+                  size="sm"
+                  onClick={toggleFollow}
+                  className="gap-1.5"
+                >
+                  {isFollowed ? <UserCheck className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
+                  {isFollowed ? "Takip Ediliyor" : "Takip Et"}
+                </Button>
+              </div>
             </div>
 
             <p className="text-muted-foreground font-body mt-6">{b.description}</p>

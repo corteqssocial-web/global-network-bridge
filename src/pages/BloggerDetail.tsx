@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import PlatformMessageButton from "@/components/messaging/PlatformMessageButton";
 import { Star, PenLine, Video, Instagram, Globe as GlobeIcon, ArrowLeft, ExternalLink, UserPlus, UserCheck, Eye, Heart, MessageSquare, Calendar, Handshake, Play, Users, Phone, Bot, MessageCircle, Mail, Building2, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -88,7 +89,8 @@ const BloggerDetail = () => {
                   <Badge variant={blogger.type === "blogger" ? "secondary" : "default"}>
                     {blogger.type === "youtuber" ? "YouTuber" : blogger.type === "influencer" ? "Vlogger" : "Blogger"}
                   </Badge>
-                  <Button variant={isFollowing ? "secondary" : "outline"} size="sm" className="gap-1" onClick={toggleFollow}>
+                  <PlatformMessageButton recipientKind="blogger" recipientSlug={blogger.id} recipientName={blogger.name} fullWidth />
+                <Button variant={isFollowing ? "secondary" : "outline"} size="sm" className="gap-1" onClick={toggleFollow}>
                     {isFollowing ? <UserCheck className="h-3.5 w-3.5" /> : <UserPlus className="h-3.5 w-3.5" />}
                     {isFollowing ? "Takipte" : "Takip Et"}
                   </Button>

@@ -15,6 +15,8 @@ import SocialMediaCampaignDialog from "@/components/SocialMediaCampaignDialog";
 import CategoryShowcasePurchase from "@/components/CategoryShowcasePurchase";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import MessagesInbox from "@/components/messaging/MessagesInbox";
+import { Inbox as InboxIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -131,6 +133,7 @@ const ProfileBusiness = () => {
           <TabsTrigger value="analytics" className="gap-1.5"><BarChart3 className="h-4 w-4" /> Analitik</TabsTrigger>
           <TabsTrigger value="promotions" className="gap-1.5"><Megaphone className="h-4 w-4" /> Tanıtım</TabsTrigger>
           <TabsTrigger value="whatsapp" className="gap-1.5"><Globe className="h-4 w-4" /> WhatsApp</TabsTrigger>
+          <TabsTrigger value="messages" className="gap-1.5"><InboxIcon className="h-4 w-4" /> Mesaj Kutusu</TabsTrigger>
           <NotificationsTabTrigger />
           <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Ayarlar</TabsTrigger>
         </TabsList>
@@ -435,6 +438,10 @@ const ProfileBusiness = () => {
         </TabsContent>
 
         {/* SETTINGS */}
+        <TabsContent value="messages" className="space-y-4">
+          <MessagesInbox />
+        </TabsContent>
+
         <TabsContent value="settings" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">

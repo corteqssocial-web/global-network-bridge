@@ -1,5 +1,6 @@
 import { useFollow } from "@/hooks/useFollow";
 import { useParams, Link } from "react-router-dom";
+import PlatformMessageButton from "@/components/messaging/PlatformMessageButton";
 import { Users, MapPin, Calendar as CalendarIcon, Globe as GlobeIcon, ArrowLeft, ExternalLink, MessageSquare, Share2, UserPlus, UserCheck, Heart, CreditCard, Ticket, Music, Radio, Landmark, Clock, FileText, Stethoscope, Navigation, Mail, Phone, Instagram, Facebook, Award, Target, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -83,6 +84,12 @@ const AssociationDetail = () => {
                 </span>
                 <div className="flex items-center gap-3 flex-wrap">
                   <h1 className="text-2xl md:text-3xl font-bold text-foreground">{assoc.name}</h1>
+                  <PlatformMessageButton
+                    recipientKind="association"
+                    recipientSlug={assoc.id}
+                    recipientName={assoc.name}
+                    size="sm"
+                  />
                   <Button
                     variant={isFollowing ? "secondary" : "outline"}
                     size="sm"

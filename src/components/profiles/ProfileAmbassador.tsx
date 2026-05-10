@@ -5,6 +5,7 @@ import {
   Send, CheckCircle, XCircle, Eye, Settings, ExternalLink, Video, ArrowLeft
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import MessagesInbox from "@/components/messaging/MessagesInbox";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -407,43 +408,8 @@ const ProfileAmbassador = () => {
         </TabsContent>
 
         {/* MESSAGING */}
-        <TabsContent value="messaging" className="mt-6">
-          <Card className="border-border">
-            <CardContent className="p-6">
-              <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
-                <MessageSquare className="h-5 w-5 text-turquoise" /> Mesajlar
-              </h3>
-              <div className="space-y-3 mb-6 max-h-80 overflow-y-auto">
-                {messages.map((m, i) => (
-                  <div key={i} className={`flex items-start gap-3 p-3 rounded-xl ${!m.read ? "bg-primary/5 border border-primary/10" : "bg-muted/50"}`}>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${m.from === "HQ" ? "bg-gold/15" : "bg-primary/10"}`}>
-                      {m.from === "HQ" ? <Star className="h-4 w-4 text-gold" /> : <Users className="h-4 w-4 text-primary" />}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-semibold text-foreground">{m.from}</p>
-                        {!m.read && <Badge className="bg-primary/15 text-primary text-[10px] px-1.5 py-0">Yeni</Badge>}
-                      </div>
-                      <p className="text-sm text-muted-foreground">{m.text}</p>
-                    </div>
-                    <span className="text-[10px] text-muted-foreground shrink-0">{m.time}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={messageText}
-                  onChange={(e) => setMessageText(e.target.value)}
-                  placeholder="Mesaj yaz..."
-                  className="flex-1 bg-muted/50 border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none"
-                />
-                <Button className="gap-1.5 shrink-0">
-                  <Send className="h-4 w-4" /> Gönder
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="messaging" className="mt-6 space-y-4">
+          <MessagesInbox />
         </TabsContent>
 
         {/* PERFORMANCE */}

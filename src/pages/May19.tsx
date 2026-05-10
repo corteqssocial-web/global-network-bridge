@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   MapPin, Lightbulb, Camera, Sparkles, Loader2, CheckCircle2,
-  Globe, Users, Calendar, Heart, Flag, PartyPopper,
+  Globe, Users, Calendar, Heart, Flag, PartyPopper, UserCheck,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -14,6 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 import ideasImage from "@/assets/may19-ideas.jpg";
 import momentsImage from "@/assets/may19-moments.jpg";
 import globePinsImage from "@/assets/may19-globe-pins.png";
@@ -68,11 +69,50 @@ const isAcceptedShareLink = (url: string) => isDriveLink(url) || isSocialPostLin
 
 const May19 = () => {
   const { toast } = useToast();
+  const { user, profile } = useAuth();
   const [tab, setTab] = useState<Kind>("map_pin");
   const [form, setForm] = useState(initialForm);
   const [files, setFiles] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [doneKind, setDoneKind] = useState<Kind | null>(null);
+  const [identityLocked, setIdentityLocked] = useState(false);
+  const [editingIdentity, setEditingIdentity] = useState(false);
+
+  // Prefill from profile or last submission so logged-in users don't
+  // re-enter name/email/city/country across the three actions.
+  useEffect(() => {
+    let cancelled = false;
+    const prefill = async () => {
+      if (!user) return;
+      const { data: prior } = await supabase
+        .from("may19_submissions")
+        .select("full_name, email, phone, country, city, social_handle")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (cancelled) return;
+      const src = prior ?? {};
+      const fullName = (src as any).full_name || profile?.full_name || "";
+      const email = (src as any).email || user.email || "";
+      const country = (src as any).country || (profile as any)?.country || "";
+      const city = (src as any).city || (profile as any)?.city || "";
+      const phone = (src as any).phone || profile?.phone || "";
+      const social = (src as any).social_handle || "";
+      setForm((p) => ({
+        ...p,
+        full_name: fullName,
+        email,
+        country,
+        city,
+        phone,
+        social_handle: social || p.social_handle,
+      }));
+      if (fullName && country && city) setIdentityLocked(true);
+    };
+    prefill();
+    return () => { cancelled = true; };
+  }, [user, profile]);
 
   const update = <K extends keyof typeof initialForm>(k: K, v: (typeof initialForm)[K]) =>
     setForm((p) => ({ ...p, [k]: v }));
@@ -132,6 +172,7 @@ const May19 = () => {
       const attachment_urls = await upload(kind);
       const { error } = await supabase.from("may19_submissions").insert({
         kind,
+        user_id: user?.id ?? null,
         full_name: form.full_name || null,
         email: form.email || null,
         phone: form.phone || null,
@@ -166,6 +207,23 @@ const May19 = () => {
   };
 
   const inputCls = "h-9 text-sm";
+
+  const showPersonal = !identityLocked || editingIdentity;
+  const IdentityCard = () => (
+    <div className="col-span-2 flex items-center justify-between gap-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl px-3 py-2">
+      <div className="flex items-center gap-2 text-xs text-foreground min-w-0">
+        <UserCheck className="h-4 w-4 text-emerald-600 shrink-0" />
+        <span className="truncate">
+          <span className="font-semibold">{form.full_name}</span>
+          {form.city || form.country ? <> — {form.city}{form.city && form.country ? ", " : ""}{form.country}</> : null}
+          {form.email ? <span className="text-muted-foreground"> · {form.email}</span> : null}
+        </span>
+      </div>
+      <Button type="button" variant="ghost" size="sm" className="text-xs h-7" onClick={() => setEditingIdentity(true)}>
+        Değiştir
+      </Button>
+    </div>
+  );
   const labelCls = "text-xs font-medium mb-1 block";
 
   const ModuleVisual = ({ kind }: { kind: Kind }) => {
@@ -326,6 +384,7 @@ const May19 = () => {
                 <ModuleVisual kind="map_pin" />
                 {doneKind === "map_pin" ? <Done kind="map_pin" /> : (
                   <div className="grid grid-cols-2 gap-3">
+                    {identityLocked && !editingIdentity && <IdentityCard />}
                     <div className="col-span-2"><Label className={labelCls}>Ad Soyad *</Label><Input className={inputCls} value={form.full_name} onChange={(e) => update("full_name", e.target.value)} /></div>
                     <div><Label className={labelCls}>Ülke *</Label><Input className={inputCls} value={form.country} onChange={(e) => update("country", e.target.value)} /></div>
                     <div><Label className={labelCls}>Şehir *</Label><Input className={inputCls} value={form.city} onChange={(e) => update("city", e.target.value)} /></div>
@@ -356,6 +415,7 @@ const May19 = () => {
                 <ModuleVisual kind="idea" />
                 {doneKind === "idea" ? <Done kind="idea" /> : (
                   <div className="grid grid-cols-2 gap-3">
+                    {identityLocked && !editingIdentity && <IdentityCard />}
                     <details className="col-span-2 text-xs bg-amber-50/50 dark:bg-amber-500/5 border border-amber-200/50 rounded-md px-2 py-1.5">
                       <summary className="cursor-pointer font-semibold text-amber-700">Fikir örnekleri</summary>
                       <ul className="list-disc pl-4 mt-1 space-y-0.5 text-muted-foreground">
@@ -398,6 +458,7 @@ const May19 = () => {
                 <ModuleVisual kind="moment" />
                 {doneKind === "moment" ? <Done kind="moment" /> : (
                   <div className="grid grid-cols-2 gap-3">
+                    {identityLocked && !editingIdentity && <IdentityCard />}
                     <details className="col-span-2 text-xs bg-primary/5 border border-primary/20 rounded-md px-2 py-1.5">
                       <summary className="cursor-pointer font-semibold text-primary">Örnek içerikler</summary>
                       <ul className="list-disc pl-4 mt-1 space-y-0.5 text-muted-foreground">
