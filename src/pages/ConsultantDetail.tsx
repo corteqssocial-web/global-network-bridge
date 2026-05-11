@@ -130,7 +130,7 @@ const ConsultantDetail = () => {
                     <span className="absolute -top-2 -right-2 bg-[hsl(var(--success))] text-primary-foreground text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
                       <Clock className="h-3 w-3" /> Şu an müsait
                     </span>
-                    <Video className="h-4 w-4" /> Canlı Görüşme — €30 / 30dk
+                    <Video className="h-4 w-4" /> Canlı Görüşme — € / 30dk
                   </Button>
                   
                   <Tooltip>
