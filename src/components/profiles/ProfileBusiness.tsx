@@ -136,6 +136,23 @@ const ProfileBusiness = () => {
     await (supabase.from("profiles") as any).update(patch).eq("id", user.id);
   };
 
+  const submitApproval = async (request_type: "verified_business" | "hiring_mode") => {
+    if (!user) return;
+    const { error } = await (supabase.from("approval_requests" as any) as any).insert({
+      user_id: user.id,
+      request_type,
+      payload: { business_name: biz.business_name, sector: biz.business_sector, country: biz.country, city: biz.city },
+      status: "pending",
+    });
+    if (error) {
+      toast({ title: "Hata", description: error.message, variant: "destructive" });
+      return;
+    }
+    if (request_type === "verified_business") setVerifiedReq({ status: "pending" });
+    else setHiringReq({ status: "pending" });
+    toast({ title: "Onaya gönderildi ✅", description: "Yönetici incelemesi sonrası aktifleşecek (24 saate kadar)." });
+  };
+
   const handleAvatarUpload = async (file: File) => {
     if (!user) return;
     setUploadingAvatar(true);
