@@ -377,7 +377,7 @@ const ProfileConsultant = () => {
         {/* EVENTS */}
         <TabsContent value="events" className="mt-6">
           {managingEvent ? (
-            <EventManagePanel event={managingEvent} onBack={() => setManagingEvent(null)} />
+            <EventManagePanel event={{ id: 0, title: managingEvent.title, date: managingEvent.event_date, attendees: managingEvent.max_attendees ?? 0, status: managingEvent.status }} onBack={() => setManagingEvent(null)} />
           ) : showCreateEvent ? (
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
               <Button variant="ghost" size="sm" className="gap-1 mb-4" onClick={() => setShowCreateEvent(false)}>
