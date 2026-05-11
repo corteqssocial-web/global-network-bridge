@@ -626,10 +626,36 @@ export type Database = {
         }
         Relationships: []
       }
+      profile_views: {
+        Row: {
+          created_at: string
+          id: string
+          profile_id: string
+          viewer_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          profile_id: string
+          viewer_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          profile_id?: string
+          viewer_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           account_type: string | null
+          address: string | null
           avatar_url: string | null
+          business_description: string | null
+          business_name: string | null
+          business_sector: string | null
+          business_website: string | null
           city: string | null
           country: string | null
           created_at: string
@@ -643,11 +669,17 @@ export type Database = {
           presentation_path: string | null
           profession: string | null
           school: string | null
+          show_on_map: boolean
           updated_at: string
         }
         Insert: {
           account_type?: string | null
+          address?: string | null
           avatar_url?: string | null
+          business_description?: string | null
+          business_name?: string | null
+          business_sector?: string | null
+          business_website?: string | null
           city?: string | null
           country?: string | null
           created_at?: string
@@ -661,11 +693,17 @@ export type Database = {
           presentation_path?: string | null
           profession?: string | null
           school?: string | null
+          show_on_map?: boolean
           updated_at?: string
         }
         Update: {
           account_type?: string | null
+          address?: string | null
           avatar_url?: string | null
+          business_description?: string | null
+          business_name?: string | null
+          business_sector?: string | null
+          business_website?: string | null
           city?: string | null
           country?: string | null
           created_at?: string
@@ -679,6 +717,7 @@ export type Database = {
           presentation_path?: string | null
           profession?: string | null
           school?: string | null
+          show_on_map?: boolean
           updated_at?: string
         }
         Relationships: []
