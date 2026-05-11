@@ -200,51 +200,58 @@ const ProfileConsultant = () => {
                 <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                   <Bot className="h-5 w-5 text-primary" /> AI Twin Yönetimi
                 </h2>
-                <Badge className="bg-turquoise/15 text-turquoise border-turquoise/30 gap-1">
-                  <CheckCircle className="h-3 w-3" /> Aktif
+                <Badge className="bg-gold/15 text-gold border-gold/30 gap-1">
+                  <Lock className="h-3 w-3" /> Yakında
                 </Badge>
               </div>
               <p className="text-sm text-muted-foreground mb-4">
-                AI Twin'iniz 7/24 müşterilerinize hizmet veriyor. Tüm AI Twin görüşmeleri ücretsizdir.
+                AI Twin'iniz 7/24 müşterilerinize hizmet verecek. Tüm AI Twin görüşmeleri ücretsiz olacak.
               </p>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
                 {[
-                  { label: "Toplam AI Seans", value: stats.aiTwinSessions, color: "text-primary" },
-                  { label: "Bu Hafta", value: sessions.aiTwin.length, color: "text-turquoise" },
-                  { label: "Ort. Süre", value: "24dk", color: "text-gold" },
-                  { label: "Erişim", value: "Ücretsiz", color: "text-success" },
+                  { label: "Toplam AI Seans", color: "text-primary" },
+                  { label: "Bu Hafta", color: "text-turquoise" },
+                  { label: "Ort. Süre", color: "text-gold" },
+                  { label: "Erişim", color: "text-success" },
                 ].map((s, i) => (
                   <div key={i} className="p-3 rounded-lg bg-muted/50 text-center">
-                    <p className="text-lg font-bold text-foreground">{s.value}</p>
+                    <p className="text-lg font-bold text-muted-foreground">—</p>
                     <p className="text-[11px] text-muted-foreground">{s.label}</p>
                   </div>
                 ))}
               </div>
 
-              {/* AI Twin config */}
-              <div className="p-4 rounded-xl border border-border space-y-3">
-                <h3 className="font-semibold text-foreground text-sm">AI Twin Ayarları</h3>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-foreground">AI Twin Aktif</p>
-                    <p className="text-xs text-muted-foreground">Devre dışı bırakarak seansları durdurabilirsiniz</p>
+              {/* AI Twin config — locked */}
+              <div className="relative p-4 rounded-xl border border-border space-y-3 overflow-hidden">
+                <div className="opacity-60 pointer-events-none space-y-3">
+                  <h3 className="font-semibold text-foreground text-sm">AI Twin Ayarları</h3>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">AI Twin Aktif</p>
+                      <p className="text-xs text-muted-foreground">Devre dışı bırakarak seansları durdurabilirsiniz</p>
+                    </div>
+                    <Switch disabled />
                   </div>
-                  <Switch defaultChecked />
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Otomatik Canlı Yönlendirme</p>
+                      <p className="text-xs text-muted-foreground">Karmaşık sorularda canlı seans önersin</p>
+                    </div>
+                    <Switch disabled />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Mesai Dışı Modu</p>
+                      <p className="text-xs text-muted-foreground">Sadece mesai dışında AI Twin aktif olsun</p>
+                    </div>
+                    <Switch disabled />
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-foreground">Otomatik Canlı Yönlendirme</p>
-                    <p className="text-xs text-muted-foreground">Karmaşık sorularda canlı seans önersin</p>
-                  </div>
-                  <Switch defaultChecked />
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-foreground">Mesai Dışı Modu</p>
-                    <p className="text-xs text-muted-foreground">Sadece mesai dışında AI Twin aktif olsun</p>
-                  </div>
-                  <Switch />
+                <div className="absolute inset-0 flex items-center justify-center bg-background/40 backdrop-blur-[1px]">
+                  <Badge className="bg-gold/15 text-gold border-gold/30 gap-1">
+                    <Lock className="h-3 w-3" /> Yakında — Ayarlar kilitli
+                  </Badge>
                 </div>
               </div>
             </div>
