@@ -27,10 +27,10 @@ export const CouponManager = ({ businessName }: { businessName: string }) => {
   const { toast } = useToast();
   const [showForm, setShowForm] = useState(false);
   const [coupons, setCoupons] = useState<Coupon[]>([
-    { id: 1, title: "Hoşgeldin İndirimi", code: "HOSGELDIN15", type: "percent", value: 15, description: "İlk alışverişe özel %15 indirim", expires: "30 Nis 2026", usageLimit: 100, usedCount: 34, active: true, businessName, businessLogo: "" },
-    { id: 2, title: "Hediye Tatlı", code: "TATLI1", type: "gift", value: 0, description: "50€ üzeri siparişlerde 1 adet baklava hediye", expires: "15 Mar 2026", usageLimit: 50, usedCount: 48, active: true, businessName, businessLogo: "" },
+    { id: 1, title: "Hoşgeldin İndirimi", code: "HOSGELDIN15", type: "percent", value: 15, description: "İlk alışverişe özel %15 indirim", expires: "", usageLimit: 100, usedCount: 0, active: false, businessName, businessLogo: "" },
   ]);
   const [form, setForm] = useState({ title: "", code: "", type: "percent" as Coupon["type"], value: 0, description: "", expires: "", usageLimit: 100 });
+  const [pendingActivationId, setPendingActivationId] = useState<number | null>(null);
 
   const handleCreate = () => {
     if (!form.title || !form.code) return;
