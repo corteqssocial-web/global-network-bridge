@@ -389,69 +389,23 @@ const ProfileBusiness = () => {
 
         {/* LOYALTY */}
         <TabsContent value="loyalty" className="mt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Scanner */}
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <ScanLine className="h-5 w-5 text-primary" /> Kupon Okuyucu
-              </h2>
-              <p className="text-sm text-muted-foreground mb-6">Müşterinin kuponunu tarayarak indirimi uygulayın.</p>
-              <QRScannerMock />
+          <div className="bg-card rounded-2xl border border-border p-10 shadow-card text-center">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
+              <ScanLine className="h-7 w-7 text-primary" />
             </div>
-
-            {/* Discount report */}
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                  <BarChart2 className="h-5 w-5 text-turquoise" /> İndirim Raporu
-                </h2>
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <Download className="h-4 w-4" /> Dışa Aktar
-                </Button>
-              </div>
-              <div className="space-y-3 mb-6">
-                {[
-                  { code: "HOSGELDIN15", title: "Hoşgeldin İndirimi", downloaded: 342, processed: 89, revenue: "€4,450" },
-                  { code: "YAZ25", title: "Yaz Kampanyası %25", downloaded: 215, processed: 56, revenue: "€2,800" },
-                  { code: "SADIK10", title: "Sadık Müşteri %10", downloaded: 128, processed: 112, revenue: "€8,960" },
-                ].map((r, i) => (
-                  <div key={i} className="p-4 rounded-xl bg-muted/50">
-                    <div className="flex items-center justify-between mb-2">
-                      <div>
-                        <p className="font-semibold text-foreground text-sm">{r.title}</p>
-                        <code className="text-xs text-primary">{r.code}</code>
-                      </div>
-                      <p className="text-sm font-bold text-success">{r.revenue}</p>
-                    </div>
-                    <div className="flex gap-4 text-xs text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <Download className="h-3 w-3" /> {r.downloaded} indirme
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <ScanLine className="h-3 w-3" /> {r.processed} kullanım
-                      </span>
-                      <span className="text-turquoise font-semibold">
-                        %{Math.round((r.processed / r.downloaded) * 100)} dönüşüm
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="grid grid-cols-3 gap-3 p-4 rounded-xl bg-primary/5 border border-primary/10">
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-foreground">685</p>
-                  <p className="text-[11px] text-muted-foreground">Toplam İndirme</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-turquoise">257</p>
-                  <p className="text-[11px] text-muted-foreground">Toplam Kullanım</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-success">€16,210</p>
-                  <p className="text-[11px] text-muted-foreground">Kuponlu Gelir</p>
-                </div>
-              </div>
-            </div>
+            <Badge variant="outline" className="bg-gold/10 text-gold border-gold/30 mb-3">Yakında</Badge>
+            <h2 className="text-xl font-bold text-foreground mb-2">Loyalty & Kupon Okuyucu</h2>
+            <p className="text-sm text-muted-foreground max-w-md mx-auto">
+              Müşteri kuponlarını tarayıp indirim uygulayabileceğin sadakat sistemini hazırlıyoruz. Açıldığında bildirim ve e-posta göndereceğiz.
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-5"
+              onClick={() => toast({ title: "Listeye eklendin 🚀", description: "Loyalty açıldığında haber vereceğiz." })}
+            >
+              Bana Haber Ver
+            </Button>
           </div>
         </TabsContent>
 
