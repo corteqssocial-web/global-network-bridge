@@ -1,4 +1,5 @@
 import { useState } from "react";
+import AppointmentBookingDialog from "@/components/booking/AppointmentBookingDialog";
 import { useParams, Link } from "react-router-dom";
 import PlatformMessageButton from "@/components/messaging/PlatformMessageButton";
 import { Star, PenLine, Video, Instagram, Globe as GlobeIcon, ArrowLeft, ExternalLink, UserPlus, UserCheck, Eye, Heart, MessageSquare, Calendar, Handshake, Play, Users, Phone, Bot, MessageCircle, Mail, Building2, Send } from "lucide-react";
@@ -26,6 +27,7 @@ const BloggerDetail = () => {
   const { isFollowed, toggle } = useFollow();
   const isFollowing = blogger ? isFollowed("blogger", blogger.id) : false;
   const [collabOpen, setCollabOpen] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
   const [collabForm, setCollabForm] = useState({
     name: "",
     company: "",
@@ -143,9 +145,16 @@ const BloggerDetail = () => {
                   <Bot className="h-4 w-4" /> AI Twin ile Sohbet
                   <Badge className="ml-1 bg-gold text-foreground hover:bg-gold">Yakında</Badge>
                 </Button>
-                <Button variant="outline" className="gap-2 w-full border-success text-success hover:bg-success/10">
-                  <Phone className="h-4 w-4" /> Canlı Görüşme
+                <Button variant="outline" className="gap-2 w-full border-success text-success hover:bg-success/10" onClick={() => setBookingOpen(true)}>
+                  <Calendar className="h-4 w-4" /> Randevulu Canlı Görüşme
                 </Button>
+                <AppointmentBookingDialog
+                  open={bookingOpen}
+                  onOpenChange={setBookingOpen}
+                  providerId={blogger.id}
+                  providerName={blogger.name}
+                  providerKind="blogger"
+                />
                 <Button variant="outline" className="gap-2 w-full border-green-600 text-green-600 hover:bg-green-600/10">
                   <MessageCircle className="h-4 w-4" /> WhatsApp Görüşme
                 </Button>

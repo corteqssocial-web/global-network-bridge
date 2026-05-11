@@ -7,6 +7,8 @@ import SocialMediaCampaignDialog from "@/components/SocialMediaCampaignDialog";
 import CategoryShowcasePurchase from "@/components/CategoryShowcasePurchase";
 import CorBotPromoBanner from "@/components/CorBotPromoBanner";
 import EmptyDashboardState from "@/components/EmptyDashboardState";
+import AppointmentManagePanel from "@/components/booking/AppointmentManagePanel";
+import { Lock } from "lucide-react";
 import {
   User, MapPin, Globe, Star, Calendar, Users, Clock, Eye,
   TrendingUp, Settings, BarChart3, CreditCard, Plus, ChevronRight, Crown,
@@ -185,121 +187,14 @@ const ProfileConsultant = () => {
               </div>
             </div>
 
-            {/* Upcoming sessions */}
-            <h3 className="font-semibold text-foreground mb-3 text-sm">Yaklaşan Seanslar</h3>
-            <div className="space-y-2 mb-6">
-              {sessions.live.length === 0 ? (
-                <EmptyDashboardState
-                  icon={Video}
-                  title="Henüz canlı seans yok"
-                  description="Müşterilerin profilinden randevu aldığında onayladıkların burada görünür. Randevu kabulü Profil Ayarları → Seans Ayarları'ndan açıktır."
-                />
-              ) : sessions.live.map((s) => (
-                <div key={s.id} className="flex items-center gap-3 p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                    <Video className="h-4 w-4 text-primary" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-foreground text-sm">{s.client}</p>
-                    <p className="text-xs text-muted-foreground">{s.date} · {s.time} · {s.duration}</p>
-                  </div>
-                  <Badge
-                    className={`text-[10px] shrink-0 ${
-                      s.status === "Onaylı" ? "bg-turquoise/15 text-turquoise border-turquoise/30" :
-                      "bg-gold/15 text-gold border-gold/30"
-                    }`}
-                  >
-                    {s.status}
-                  </Badge>
-                  <span className="text-sm font-semibold text-foreground">€{s.amount}</span>
-                  {s.status === "Beklemede" && (
-                    <div className="flex gap-1.5">
-                      <Button size="sm" className="h-7 text-xs gap-1"><CheckCircle className="h-3 w-3" /> Onayla</Button>
-                      <Button size="sm" variant="outline" className="h-7 text-xs text-destructive">Reddet</Button>
-                    </div>
-                  )}
-                  {s.status === "Onaylı" && (
-                    <Button size="sm" variant="outline" className="h-7 text-xs gap-1">
-                      <Video className="h-3 w-3" /> Başlat
-                    </Button>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Session summary */}
-            <div className="grid grid-cols-3 gap-3 p-4 rounded-xl bg-muted/30 border border-border">
-              <div className="text-center">
-                <p className="text-lg font-bold text-foreground">{sessions.live.filter(s => s.status === "Onaylı").length}</p>
-                <p className="text-[11px] text-muted-foreground">Onaylı</p>
-              </div>
-              <div className="text-center">
-                <p className="text-lg font-bold text-gold">{sessions.live.filter(s => s.status === "Beklemede").length}</p>
-                <p className="text-[11px] text-muted-foreground">Beklemede</p>
-              </div>
-              <div className="text-center">
-                <p className="text-lg font-bold text-success">€{sessions.live.filter(s => s.status === "Onaylı").reduce((sum, s) => sum + s.amount, 0)}</p>
-                <p className="text-[11px] text-muted-foreground">Planlanan Gelir</p>
-              </div>
-            </div>
+            <h3 className="font-semibold text-foreground mb-3 text-sm">Randevu Talepleri & Yaklaşan Seanslar</h3>
+            <AppointmentManagePanel />
           </div>
         </TabsContent>
 
         {/* AI TWIN */}
         <TabsContent value="ai-twin" className="mt-6">
           <div className="space-y-6">
-            {/* AI Twin Activation flow card */}
-            <div className="bg-gradient-to-br from-primary/5 via-turquoise/5 to-primary/5 rounded-2xl border-2 border-primary/20 p-6 shadow-card">
-              <div className="flex items-start justify-between gap-4 mb-4 flex-wrap">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-primary/15 flex items-center justify-center">
-                    <Bot className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-foreground">AI Twin Aktivasyon Süreci</h3>
-                    <p className="text-xs text-muted-foreground">Premium Pro paketi + admin onayı gereklidir</p>
-                  </div>
-                </div>
-                <Badge className="bg-success/15 text-success border-success/30 gap-1">
-                  <CheckCircle className="h-3 w-3" /> Aktivasyon Tamamlandı
-                </Badge>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
-                <div className="p-3 rounded-lg bg-card border border-border">
-                  <div className="flex items-center gap-2 mb-1">
-                    <CheckCircle className="h-4 w-4 text-success" />
-                    <span className="text-xs font-bold text-foreground">1. Premium Pro</span>
-                  </div>
-                  <p className="text-[11px] text-muted-foreground">Paket aktif</p>
-                </div>
-                <div className="p-3 rounded-lg bg-card border border-border">
-                  <div className="flex items-center gap-2 mb-1">
-                    <CheckCircle className="h-4 w-4 text-success" />
-                    <span className="text-xs font-bold text-foreground">2. Veri Yükleme</span>
-                  </div>
-                  <p className="text-[11px] text-muted-foreground">128 sayfa · 18dk ses · 2dk video</p>
-                </div>
-                <div className="p-3 rounded-lg bg-card border border-border">
-                  <div className="flex items-center gap-2 mb-1">
-                    <CheckCircle className="h-4 w-4 text-success" />
-                    <span className="text-xs font-bold text-foreground">3. RAG Eğitim</span>
-                  </div>
-                  <p className="text-[11px] text-muted-foreground">v2.1 · 04 Mar 2026</p>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50 border border-border">
-                <div className="text-xs text-muted-foreground">
-                  💸 AI Twin görüşmeleri <span className="font-bold text-foreground">tamamen ücretsizdir</span> — platformda komisyon alınmaz.
-                </div>
-                <a href="/ai-twin" className="text-xs font-semibold text-primary hover:underline shrink-0">
-                  Yeni model talep et →
-                </a>
-              </div>
-            </div>
-
-
             {/* AI Twin status card */}
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
               <div className="flex items-center justify-between mb-4">
@@ -383,10 +278,63 @@ const ProfileConsultant = () => {
                 ))}
               </div>
             </div>
+
+            {/* AI Twin Activation flow — locked teaser, sits below the AI Twin button area */}
+            <div className="relative rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary/5 via-turquoise/5 to-primary/5 p-6 shadow-card overflow-hidden">
+              <div className="blur-sm select-none pointer-events-none">
+                <div className="flex items-start justify-between gap-4 mb-4 flex-wrap">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-primary/15 flex items-center justify-center">
+                      <Bot className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-foreground">AI Twin Aktivasyon Süreci</h3>
+                      <p className="text-xs text-muted-foreground">Premium Pro paketi + admin onayı gereklidir</p>
+                    </div>
+                  </div>
+                  <Badge className="bg-success/15 text-success border-success/30 gap-1">
+                    <CheckCircle className="h-3 w-3" /> Aktivasyon Tamamlandı
+                  </Badge>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                  <div className="p-3 rounded-lg bg-card border border-border">
+                    <div className="flex items-center gap-2 mb-1">
+                      <CheckCircle className="h-4 w-4 text-success" />
+                      <span className="text-xs font-bold text-foreground">1. Premium Pro</span>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground">Paket aktif</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-card border border-border">
+                    <div className="flex items-center gap-2 mb-1">
+                      <CheckCircle className="h-4 w-4 text-success" />
+                      <span className="text-xs font-bold text-foreground">2. Veri Yükleme</span>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground">— sayfa · — ses · — video</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-card border border-border">
+                    <div className="flex items-center gap-2 mb-1">
+                      <CheckCircle className="h-4 w-4 text-success" />
+                      <span className="text-xs font-bold text-foreground">3. RAG Eğitim</span>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground">v— · —</p>
+                  </div>
+                </div>
+                <div className="p-3 rounded-lg bg-muted/50 border border-border text-xs text-muted-foreground">
+                  AI Twin görüşmeleri tamamen ücretsizdir — platformda komisyon alınmaz.
+                </div>
+              </div>
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/40 backdrop-blur-[2px]">
+                <div className="bg-background/90 border border-border rounded-full px-4 py-1.5 flex items-center gap-2 shadow-card">
+                  <Lock className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-semibold text-foreground">Yakında — AI Twin aktivasyonu kilitli</span>
+                </div>
+                <p className="text-xs text-muted-foreground bg-background/80 rounded-md px-3 py-1">
+                  Premium Pro paketi açıldığında bu akış aktive edilebilir.
+                </p>
+              </div>
+            </div>
           </div>
         </TabsContent>
-
-        {/* EVENTS */}
         <TabsContent value="events" className="mt-6">
           {managingEvent ? (
             <EventManagePanel event={{ id: 0, title: managingEvent.title, date: managingEvent.event_date, attendees: managingEvent.max_attendees ?? 0, status: managingEvent.status }} onBack={() => setManagingEvent(null)} />
@@ -471,36 +419,20 @@ const ProfileConsultant = () => {
               <Star className="h-5 w-5 text-gold" /> Değerlendirmeler ({consultant.reviewCount})
             </h2>
 
-            {/* Rating summary */}
-            <div className="flex items-center gap-6 p-4 rounded-xl bg-muted/50 mb-6">
-              <div className="text-center">
-                <p className="text-4xl font-bold text-foreground">{consultant.rating}</p>
-                <div className="flex items-center gap-0.5 mt-1">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <Star key={s} className={`h-4 w-4 ${s <= Math.round(consultant.rating) ? "text-gold fill-gold" : "text-muted-foreground"}`} />
-                  ))}
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">{consultant.reviewCount} değerlendirme</p>
-              </div>
-              <div className="flex-1 space-y-1.5">
-                {[
-                  { stars: 5, pct: 82 },
-                  { stars: 4, pct: 12 },
-                  { stars: 3, pct: 4 },
-                  { stars: 2, pct: 1 },
-                  { stars: 1, pct: 1 },
-                ].map((r) => (
-                  <div key={r.stars} className="flex items-center gap-2">
-                    <span className="text-xs text-muted-foreground w-3">{r.stars}</span>
-                    <Star className="h-3 w-3 text-gold" />
-                    <div className="flex-1 bg-muted rounded-full h-2">
-                      <div className="bg-gold rounded-full h-2" style={{ width: `${r.pct}%` }} />
-                    </div>
-                    <span className="text-xs text-muted-foreground w-8 text-right">{r.pct}%</span>
+            {/* Rating summary — only shows when real reviews exist */}
+            {consultant.reviewCount > 0 && (
+              <div className="flex items-center gap-6 p-4 rounded-xl bg-muted/50 mb-6">
+                <div className="text-center">
+                  <p className="text-4xl font-bold text-foreground">{consultant.rating}</p>
+                  <div className="flex items-center gap-0.5 mt-1">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star key={s} className={`h-4 w-4 ${s <= Math.round(consultant.rating) ? "text-gold fill-gold" : "text-muted-foreground"}`} />
+                    ))}
                   </div>
-                ))}
+                  <p className="text-xs text-muted-foreground mt-1">{consultant.reviewCount} değerlendirme</p>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Recent reviews */}
             <div className="space-y-3">

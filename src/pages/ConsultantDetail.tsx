@@ -11,6 +11,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { consultants } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import AppointmentBookingDialog from "@/components/booking/AppointmentBookingDialog";
 import DemoPageBanner from "@/components/DemoPageBanner";
 import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
 import PublicEventsList from "@/components/PublicEventsList";
@@ -22,6 +24,7 @@ const ConsultantDetail = () => {
   const consultant = consultants.find((c) => c.id === id);
   const { isFollowed, toggle } = useFollow();
   const isFollowing = consultant ? isFollowed("consultant", consultant.id) : false;
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   // Check if logged-in user is the consultant (mock: match by email or id)
   const isOwner = !!user && !!consultant;
@@ -150,9 +153,16 @@ const ConsultantDetail = () => {
                 <Button variant="outline" className="gap-2 w-full">
                   <MessageSquare className="h-4 w-4" /> WhatsApp ile Görüş
                 </Button>
-                <Button variant="outline" className="gap-2 w-full">
+                <Button variant="outline" className="gap-2 w-full" onClick={() => setBookingOpen(true)}>
                   <Calendar className="h-4 w-4" /> Randevu Al
                 </Button>
+                <AppointmentBookingDialog
+                  open={bookingOpen}
+                  onOpenChange={setBookingOpen}
+                  providerId={consultant.id}
+                  providerName={consultant.name}
+                  providerKind="consultant"
+                />
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(consultant.name + ', ' + consultant.city + ', ' + consultant.country)}`}
                   target="_blank"

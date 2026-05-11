@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import AppointmentManagePanel from "@/components/booking/AppointmentManagePanel";
 import MessagesInbox from "@/components/messaging/MessagesInbox";
 import { Inbox as InboxIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -315,31 +316,15 @@ const ProfileBlogger = () => {
             </div>
           </div>
 
-          {/* Live sessions */}
+          {/* Live sessions — real appointment requests */}
           <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <Video className="h-5 w-5 text-turquoise" /> Canlı Görüşmeler
+                <Video className="h-5 w-5 text-turquoise" /> Canlı Görüşme Randevuları
               </h2>
-              <div className="text-sm text-muted-foreground">€20/30dk</div>
+              <div className="text-sm text-muted-foreground">Müşterinin saat dilimine göre talep edilir</div>
             </div>
-            <div className="space-y-2">
-              {sessions.live.map((s) => (
-                <div key={s.id} className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
-                  <div className="w-9 h-9 rounded-full bg-turquoise/10 flex items-center justify-center shrink-0">
-                    <Video className="h-4 w-4 text-turquoise" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-foreground text-sm">{s.client}</p>
-                    <p className="text-xs text-muted-foreground">{s.date} · {s.time} · {s.duration}</p>
-                  </div>
-                  <Badge className={`text-[10px] ${s.status === "Onaylı" ? "bg-turquoise/15 text-turquoise border-turquoise/30" : "bg-gold/15 text-gold border-gold/30"}`}>
-                    {s.status}
-                  </Badge>
-                  <span className="text-sm font-semibold text-foreground">€{s.amount}</span>
-                </div>
-              ))}
-            </div>
+            <AppointmentManagePanel />
           </div>
         </TabsContent>
 
