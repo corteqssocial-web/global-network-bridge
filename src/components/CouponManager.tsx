@@ -58,7 +58,7 @@ export const CouponManager = ({ businessName }: { businessName: string }) => {
     if (!c) return;
     if (!c.active) {
       // Activating: open prefilled form so business completes details (price/free, expiry, etc.)
-      setForm({ title: c.title, code: c.code, type: c.type, value: c.value, description: c.description, expires: c.expires, usageLimit: c.usageLimit });
+      setForm({ title: c.title, code: c.code, type: c.type, value: c.value, description: c.description, expires: c.expires, usageLimit: c.usageLimit, isFree: c.isFree ?? true, price: c.price ?? 0 });
       setPendingActivationId(id);
       setShowForm(true);
       toast({ title: "Detayları tamamlayın", description: "Son kullanma tarihi ve diğer detayları girip aktifleştirin." });
