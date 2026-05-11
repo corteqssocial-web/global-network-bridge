@@ -49,6 +49,11 @@ const ProfileIndividual = () => {
   const [uploadingKind, setUploadingKind] = useState<null | "cv" | "presentation">(null);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<any | null>(null);
+  const [activeTab, setActiveTab] = useState(initialTab);
+  const [isVolunteerMentor, setIsVolunteerMentor] = useState(false);
+  const [mentorTopics, setMentorTopics] = useState("");
+  const [mentorWeeklyHours, setMentorWeeklyHours] = useState("");
+  const [savingMentor, setSavingMentor] = useState(false);
 
   const user = {
     name: "Emre Aydın",
@@ -81,22 +86,62 @@ const ProfileIndividual = () => {
   const { user: authUser } = useAuth();
   const { toast } = useToast();
 
-  // Load existing documents from profile
+  // Load existing documents + mentor settings from profile
   useEffect(() => {
     if (!authUser?.id) return;
     let cancelled = false;
     (async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("cv_path, cv_name, presentation_path, presentation_name")
+        .select("cv_path, cv_name, presentation_path, presentation_name, is_volunteer_mentor, mentor_topics, mentor_weekly_hours")
         .eq("id", authUser.id)
         .maybeSingle();
       if (cancelled || !data) return;
       if (data.cv_path) setCvDoc({ path: data.cv_path, name: data.cv_name || "CV" });
       if (data.presentation_path) setPptDoc({ path: data.presentation_path, name: data.presentation_name || "Sunum" });
+      setIsVolunteerMentor(!!data.is_volunteer_mentor);
+      setMentorTopics(data.mentor_topics || "");
+      setMentorWeeklyHours(data.mentor_weekly_hours || "");
     })();
     return () => { cancelled = true; };
   }, [authUser?.id]);
+
+  const saveMentorSettings = async () => {
+    if (!authUser?.id) {
+      toast({ title: "Giriş yapın", description: "Mentör ayarlarını kaydetmek için oturum açın.", variant: "destructive" });
+      return;
+    }
+    if (isVolunteerMentor && !mentorTopics.trim()) {
+      toast({ title: "Konu gerekli", description: "Mentörlük yapmak istediğin konuları yaz.", variant: "destructive" });
+      return;
+    }
+    setSavingMentor(true);
+    try {
+      const { error } = await supabase.from("profiles").update({
+        is_volunteer_mentor: isVolunteerMentor,
+        mentor_topics: mentorTopics.trim() || null,
+        mentor_weekly_hours: mentorWeeklyHours.trim() || null,
+      }).eq("id", authUser.id);
+      if (error) throw error;
+      toast({
+        title: isVolunteerMentor ? "Mentör kartın oluşturuldu" : "Mentör kaydın güncellendi",
+        description: isVolunteerMentor
+          ? "Danışmanlar → Gönüllüler altında listeleneceksin."
+          : "Mentör listesinden çıkarıldın.",
+      });
+    } catch (err: any) {
+      toast({ title: "Kaydedilemedi", description: err?.message || "Tekrar deneyin", variant: "destructive" });
+    } finally {
+      setSavingMentor(false);
+    }
+  };
+
+  const goToMentorSettings = () => {
+    setActiveTab("settings");
+    setTimeout(() => {
+      document.getElementById("mentor-settings")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  };
 
   const handleDocUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -295,15 +340,13 @@ const ProfileIndividual = () => {
             Gönüllü Mentörler Danışmanlar sayfasında <strong>"Gönüllüler"</strong> alt kategorisi altında <strong>Gönüllü Mentör</strong> rozetiyle listelenir.
           </p>
         </div>
-        <Link to="/consultants?filter=gonullu" className="shrink-0">
-          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
-            <Users className="h-4 w-4" /> Gönüllü Mentör Ol
-          </Button>
-        </Link>
+        <Button onClick={goToMentorSettings} className="shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
+          <Users className="h-4 w-4" /> Gönüllü Mentör Ol
+        </Button>
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue={initialTab} className="w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
           <TabsTrigger value="service-requests" className="gap-1.5"><ClipboardList className="h-4 w-4" /> Hizmet Talepleri</TabsTrigger>
           <TabsTrigger value="relocations" className="gap-1.5"><Globe className="h-4 w-4" /> Taşınma Yönetimi</TabsTrigger>
@@ -742,6 +785,53 @@ const ProfileIndividual = () => {
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6">
+          {/* Volunteer Mentor settings */}
+          <div id="mentor-settings" className="bg-card rounded-2xl border border-emerald-500/30 p-6 shadow-card mb-6">
+            <div className="flex items-start justify-between gap-4 flex-wrap mb-4">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-emerald-500/15 text-emerald-600">
+                  <Users className="h-5 w-5" />
+                </span>
+                <div>
+                  <h2 className="text-xl font-bold text-foreground">Gönüllü Mentörlük</h2>
+                  <p className="text-sm text-muted-foreground">Açtığında profilinden otomatik bir Gönüllü Mentör kartı oluşturulur.</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">Mentör olmak istiyorum</span>
+                <Switch checked={isVolunteerMentor} onCheckedChange={setIsVolunteerMentor} />
+              </div>
+            </div>
+            {isVolunteerMentor && (
+              <div className="space-y-4">
+                <div>
+                  <Label>Mentörlük yapacağınız konular</Label>
+                  <textarea
+                    value={mentorTopics}
+                    onChange={(e) => setMentorTopics(e.target.value)}
+                    placeholder="Örn: Almanya'da iş başvurusu, vize süreci, yazılım kariyeri…"
+                    rows={3}
+                    className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">Şehir, dil ve uzmanlık bilgilerin profilinden otomatik kullanılır.</p>
+                </div>
+                <div>
+                  <Label>Haftalık ayırabileceğin saat (opsiyonel)</Label>
+                  <Input
+                    value={mentorWeeklyHours}
+                    onChange={(e) => setMentorWeeklyHours(e.target.value)}
+                    placeholder="Örn: 2-3 saat"
+                  />
+                </div>
+              </div>
+            )}
+            <div className="flex justify-end mt-4">
+              <Button onClick={saveMentorSettings} disabled={savingMentor} className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
+                {savingMentor ? <Loader2 className="h-4 w-4 animate-spin" /> : <Users className="h-4 w-4" />}
+                {isVolunteerMentor ? "Kaydet & Kartı Oluştur" : "Kaydet"}
+              </Button>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
               <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">

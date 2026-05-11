@@ -827,6 +827,9 @@ export type Database = {
           hiring_mode: boolean
           id: string
           is_verified: boolean
+          is_volunteer_mentor: boolean
+          mentor_topics: string | null
+          mentor_weekly_hours: string | null
           onboarding_completed: boolean
           phone: string | null
           presentation_name: string | null
@@ -853,6 +856,9 @@ export type Database = {
           hiring_mode?: boolean
           id: string
           is_verified?: boolean
+          is_volunteer_mentor?: boolean
+          mentor_topics?: string | null
+          mentor_weekly_hours?: string | null
           onboarding_completed?: boolean
           phone?: string | null
           presentation_name?: string | null
@@ -879,6 +885,9 @@ export type Database = {
           hiring_mode?: boolean
           id?: string
           is_verified?: boolean
+          is_volunteer_mentor?: boolean
+          mentor_topics?: string | null
+          mentor_weekly_hours?: string | null
           onboarding_completed?: boolean
           phone?: string | null
           presentation_name?: string | null
