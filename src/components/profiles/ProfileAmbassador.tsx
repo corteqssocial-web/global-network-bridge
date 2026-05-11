@@ -45,48 +45,24 @@ const ProfileAmbassador = () => {
     profilePublic: true,
   });
 
-  // Mock KPI data
+  // KPIs and lists are reset to zero/empty for launch — real values will be
+  // populated from Stripe (transactions/payouts), events, profiles (onboarded users),
+  // and platform messages tables as activity comes in.
   const kpis = {
-    usersOnboarded: 47,
+    usersOnboarded: 0,
     usersTarget: 100,
-    activeAdvisors: 12,
+    activeAdvisors: 0,
     advisorsTarget: 20,
-    eventsOrganized: 3,
+    eventsOrganized: 0,
     eventsTarget: 5,
-    revenueGenerated: 1240,
-    totalAttendees: 144,
+    revenueGenerated: 0,
+    totalAttendees: 0,
   };
 
-  const stripeTxns: StripeTxn[] = [
-    { id: "py_001", date: "2026-03-28", description: "Danışman onboarding komisyonu", direction: "in", amount: 25, status: "succeeded", source: "Komisyon", stripeRef: "py_3PXa1b" },
-    { id: "py_002", date: "2026-03-25", description: "Etkinlik bilet komisyonu", direction: "in", amount: 45, status: "succeeded", source: "Etkinlik", stripeRef: "py_3PXa2c" },
-    { id: "py_003", date: "2026-03-22", description: "İşletme kayıt komisyonu", direction: "in", amount: 30, status: "succeeded", source: "Komisyon", stripeRef: "py_3PXa3d" },
-    { id: "po_004", date: "2026-03-20", description: "Ödeme talebi (payout)", direction: "out", amount: 200, status: "succeeded", source: "Payout", stripeRef: "po_3PXa4e" },
-    { id: "py_005", date: "2026-03-18", description: "Kullanıcı onboarding x5", direction: "in", amount: 50, status: "succeeded", source: "Komisyon", stripeRef: "py_3PXa5f" },
-    { id: "py_006", date: "2026-03-15", description: "Etkinlik organizasyon bonusu", direction: "in", amount: 100, status: "succeeded", source: "Bonus", stripeRef: "py_3PXa6g" },
-  ];
-
-  const events = [
-    { id: 1, title: "Berlin Networking Buluşması", date: "15 Nisan 2026", attendees: 45, maxCapacity: 60, status: "upcoming" as const },
-    { id: 2, title: "Türk Girişimciler Meetup", date: "28 Mart 2026", attendees: 32, maxCapacity: 40, status: "completed" as const },
-    { id: 3, title: "CorteQS Tanıtım Gecesi", date: "10 Mart 2026", attendees: 67, maxCapacity: 80, status: "completed" as const },
-  ];
-
-  const onboardedUsers = [
-    { name: "Ahmet Y.", type: "Bireysel", date: "27 Mar", status: "active" },
-    { name: "Selin K.", type: "Danışman", date: "25 Mar", status: "active" },
-    { name: "Oğuz T.", type: "İşletme", date: "22 Mar", status: "active" },
-    { name: "Deniz A.", type: "Bireysel", date: "20 Mar", status: "pending" },
-    { name: "Fatma B.", type: "V/Blogger", date: "18 Mar", status: "active" },
-    { name: "Kerem S.", type: "Bireysel", date: "15 Mar", status: "inactive" },
-  ];
-
-  const messages = [
-    { from: "HQ", text: "Berlin etkinliği için poster hazır. İndirmek için paneli kontrol edin.", time: "2 saat önce", read: false },
-    { from: "Elif K.", text: "Networking buluşması için mekan ayarlandı!", time: "5 saat önce", read: true },
-    { from: "HQ", text: "Bu haftaki performans raporunuz hazır.", time: "1 gün önce", read: true },
-    { from: "Murat D.", text: "London elçisi olarak deneyimlerimi paylaşmak isterim.", time: "2 gün önce", read: true },
-  ];
+  const stripeTxns: StripeTxn[] = [];
+  const events: Array<{ id: number; title: string; date: string; attendees: number; maxCapacity: number; status: "upcoming" | "completed" }> = [];
+  const onboardedUsers: Array<{ name: string; type: string; date: string; status: string }> = [];
+  const messages: Array<{ from: string; text: string; time: string; read: boolean }> = [];
 
   // Notifications loaded live via NotificationsList component.
 
