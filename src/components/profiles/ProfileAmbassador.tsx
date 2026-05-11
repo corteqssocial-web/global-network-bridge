@@ -19,6 +19,7 @@ import EventManagePanel from "@/components/EventManagePanel";
 import StripeTransactionsPanel, { type StripeTxn } from "@/components/StripeTransactionsPanel";
 import NotificationsList from "@/components/NotificationsList";
 import CorBotPromoBanner from "@/components/CorBotPromoBanner";
+import EmptyDashboardState from "@/components/EmptyDashboardState";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 
 type AmbassadorEvent = {
