@@ -46,7 +46,11 @@ const dialFor = (country?: string | null) => (country && COUNTRY_DIAL[country]) 
 
 const ProfileBusiness = () => {
   const { user } = useAuth();
-  const [isVerified, setIsVerified] = useState(true);
+  const [isVerified, setIsVerified] = useState(false);
+  const [hiringMode, setHiringMode] = useState(false);
+  const [verifiedReq, setVerifiedReq] = useState<{ status: string } | null>(null);
+  const [hiringReq, setHiringReq] = useState<{ status: string } | null>(null);
+  const { toast } = (require("@/hooks/use-toast") as typeof import("@/hooks/use-toast")).useToast();
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<null | { id: number; title: string; date: string; attendees: number; status?: string }>(null);
   const [showCreateJob, setShowCreateJob] = useState(false);
