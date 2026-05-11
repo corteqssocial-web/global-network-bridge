@@ -490,29 +490,7 @@ const ProfileConsultant = () => {
               </div>
             </div>
 
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-primary" /> Müşteri Kaynakları
-              </h2>
-              <div className="space-y-4">
-                {[
-                  { source: "Platform Araması", count: 142, pct: 52 },
-                  { source: "Profil Ziyareti", count: 68, pct: 25 },
-                  { source: "Etkinlik Katılımı", count: 38, pct: 14 },
-                  { source: "Yönlendirme", count: 24, pct: 9 },
-                ].map((s) => (
-                  <div key={s.source}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-foreground font-medium">{s.source}</span>
-                      <span className="text-muted-foreground">{s.count} ({s.pct}%)</span>
-                    </div>
-                    <div className="bg-muted rounded-full h-2">
-                      <div className="bg-primary rounded-full h-2" style={{ width: `${s.pct}%` }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <CategoryPerformance />
           </div>
         </TabsContent>
 
