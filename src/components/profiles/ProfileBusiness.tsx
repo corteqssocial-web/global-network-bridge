@@ -98,11 +98,16 @@ const ProfileBusiness = () => {
               </a>
             </div>
           </div>
-          <div className="bg-primary/10 rounded-xl p-4 text-center shrink-0 min-w-[140px]">
-            <CreditCard className="h-5 w-5 text-primary mx-auto mb-1" />
-            <p className="text-2xl font-bold text-foreground">€{business.balance.toFixed(2)}</p>
-            <p className="text-xs text-muted-foreground">İşletme Bakiyesi</p>
-          </div>
+          {(() => {
+            const hasExtraRevenue = (business.balance ?? 0) > 0; // Kupon/etkinlik gelirleri eklendiğinde "Toplam Gelir"
+            return (
+              <div className="bg-primary/10 rounded-xl p-4 text-center shrink-0 min-w-[140px]">
+                <CreditCard className="h-5 w-5 text-primary mx-auto mb-1" />
+                <p className="text-2xl font-bold text-foreground">€{business.balance.toFixed(2)}</p>
+                <p className="text-xs text-muted-foreground">{hasExtraRevenue ? "Toplam Gelir" : "Platform Geliri"}</p>
+              </div>
+            );
+          })()}
         </div>
       </div>
 
