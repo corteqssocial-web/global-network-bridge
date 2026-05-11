@@ -56,7 +56,10 @@ const formatTime = (iso: string) => {
 };
 
 const Feed = () => {
-  const { user, accountType } = useAuth();
+  const { user, accountType, onboardingCompleted } = useAuth();
+  const { cafeId } = useParams<{ cafeId?: string }>();
+  const navigate = useNavigate();
+  const { cafe, isMember, join: joinCafe } = useCafe(cafeId);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [selectedContinent, setSelectedContinent] = useState<string | null>(null);
@@ -67,6 +70,18 @@ const Feed = () => {
   const [hasMore, setHasMore] = useState(true);
   const [authorMap, setAuthorMap] = useState<Record<string, { full_name: string | null; avatar_url: string | null }>>({});
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
+  const { cafes: activeCafes, refresh: refreshCafes } = useActiveCafes({
+    countries: selectedCountries,
+    cities: selectedCities,
+  });
+  const inCafe = !!cafeId && !!cafe;
+  const cafeOpen = inCafe && new Date(cafe!.closes_at) > new Date();
+
+  const categoryAccountLink = !user
+    ? "/auth"
+    : !onboardingCompleted
+      ? "/onboarding"
+      : "/profile";
 
   const loadDemoData = useCallback(() => {
     setDemoMode(true);
