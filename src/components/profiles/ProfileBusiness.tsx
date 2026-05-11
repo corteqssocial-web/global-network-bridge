@@ -464,49 +464,26 @@ const ProfileBusiness = () => {
 
         {/* ANALYTICS */}
         <TabsContent value="analytics" className="mt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-primary" /> Haftalık Görüntülenme
-              </h2>
-              <div className="space-y-3">
-                {["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"].map((day, i) => {
-                  const val = [45, 62, 38, 71, 89, 54, 33][i];
-                  return (
-                    <div key={day} className="flex items-center gap-3">
-                      <span className="text-sm text-muted-foreground w-8">{day}</span>
-                      <div className="flex-1 bg-muted rounded-full h-3">
-                        <div className="bg-primary rounded-full h-3 transition-all" style={{ width: `${val}%` }} />
-                      </div>
-                      <span className="text-sm font-medium text-foreground w-8">{val}</span>
-                    </div>
-                  );
-                })}
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-card rounded-2xl border border-border p-6 shadow-card text-center">
+              <Eye className="h-6 w-6 text-primary mx-auto mb-2" />
+              <p className="text-3xl font-bold text-foreground">{stats.profileViews}</p>
+              <p className="text-xs text-muted-foreground mt-1">Toplam Profil Görüntülenme</p>
             </div>
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-turquoise" /> Başvuru Kaynakları
-              </h2>
-              <div className="space-y-4">
-                {[
-                  { source: "CorteQS Platform", count: 34, pct: 60 },
-                  { source: "WhatsApp Grupları", count: 12, pct: 21 },
-                  { source: "Doğrudan Link", count: 8, pct: 14 },
-                  { source: "Dernek Yönlendirme", count: 3, pct: 5 },
-                ].map((s) => (
-                  <div key={s.source}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-foreground font-medium">{s.source}</span>
-                      <span className="text-muted-foreground">{s.count} ({s.pct}%)</span>
-                    </div>
-                    <div className="bg-muted rounded-full h-2">
-                      <div className="bg-turquoise rounded-full h-2 transition-all" style={{ width: `${s.pct}%` }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="bg-card rounded-2xl border border-border p-6 shadow-card text-center">
+              <Package className="h-6 w-6 text-gold mx-auto mb-2" />
+              <p className="text-3xl font-bold text-foreground">{stats.totalListings}</p>
+              <p className="text-xs text-muted-foreground mt-1">Yayında Olan İlan / Etkinlik</p>
             </div>
+            <div className="bg-card rounded-2xl border border-border p-6 shadow-card text-center">
+              <Users className="h-6 w-6 text-turquoise mx-auto mb-2" />
+              <p className="text-3xl font-bold text-foreground">{stats.eventAttendees}</p>
+              <p className="text-xs text-muted-foreground mt-1">Etkinlik Toplam Kontenjan</p>
+            </div>
+          </div>
+          <div className="mt-6 bg-card rounded-2xl border border-border p-6 shadow-card text-center text-sm text-muted-foreground">
+            <BarChart3 className="h-8 w-8 mx-auto mb-2 opacity-40" />
+            Detaylı haftalık trend ve başvuru kaynağı raporları, ilk başvurular geldikçe burada görünecek.
           </div>
         </TabsContent>
 
