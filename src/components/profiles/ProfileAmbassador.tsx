@@ -145,7 +145,7 @@ const ProfileAmbassador = () => {
           <TabsTrigger value="performance" className="gap-1.5"><TrendingUp className="h-4 w-4" /> Performans</TabsTrigger>
           <TabsTrigger value="community" className="gap-1.5"><Globe className="h-4 w-4" /> Topluluk</TabsTrigger>
           <NotificationsTabTrigger />
-          <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Ayarlar</TabsTrigger>
+          <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Profil Ayarları</TabsTrigger>
         </TabsList>
 
         {/* TRANSACTIONS (Stripe) */}
