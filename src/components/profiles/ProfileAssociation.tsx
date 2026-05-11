@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EventManagePanel from "@/components/EventManagePanel";
+import AssociationSettingsForm, { loadAssociationProfile, type AssociationProfileData } from "@/components/profiles/AssociationSettingsForm";
+import { findOrgCategory, findOrgSubcategory } from "@/data/organizationCategories";
 import {
   Users, MapPin, Globe, Calendar, Heart, Megaphone,
   TrendingUp, Settings, Bell, Mail, MessageSquare,
