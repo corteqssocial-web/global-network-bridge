@@ -48,9 +48,12 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
   const [city, setCity] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [extra, setExtra] = useState("");
+  const [openEntry, setOpenEntry] = useState(true);
+  const [entryQuestion, setEntryQuestion] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const cities = country ? countryCities[country] || [] : [];
+  const capacity = duration >= 4 ? 300 : 100;
 
   const submit = async () => {
     if (!user) {
@@ -59,6 +62,10 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
     }
     if (!name.trim() || !linkedin.trim()) {
       toast({ title: "Cafe adı ve LinkedIn zorunlu", variant: "destructive" });
+      return;
+    }
+    if (!openEntry && !entryQuestion.trim()) {
+      toast({ title: "Onaylı giriş için bir soru gir", variant: "destructive" });
       return;
     }
     try {
@@ -83,6 +90,10 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
         opens_at: opens.toISOString(),
         closes_at: closes.toISOString(),
         duration_hours: duration,
+        kind: "community",
+        open_entry: openEntry,
+        entry_question: openEntry ? null : entryQuestion.trim(),
+        capacity,
       })
       .select("id")
       .single();
@@ -96,16 +107,17 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
       return;
     }
 
-    // Auto-join own cafe (subject to daily limit)
     const cafeId = (data as any).id as string;
-    await supabase.from("cafe_memberships" as any).insert({ cafe_id: cafeId, user_id: user.id });
+    await supabase.from("cafe_memberships" as any).insert({ cafe_id: cafeId, user_id: user.id, approved: true });
 
     setSubmitting(false);
     setOpen(false);
     setName("");
     setLinkedin("");
     setExtra("");
-    toast({ title: "Cafe açıldı ☕", description: `${duration} saat boyunca aktif.` });
+    setEntryQuestion("");
+    setOpenEntry(true);
+    toast({ title: "Cafe açıldı ☕", description: `${duration} saat · kapasite ${capacity}.` });
     onCreated?.();
     navigate(`/cadde/${cafeId}`);
   };
