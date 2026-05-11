@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import { Heart, MapPin, Loader2, Newspaper, Play, MessageCircle, Smile, Share2, Users, Briefcase, Building2, Calendar, Flag, PenLine, Sparkles, UserPlus, Plane, Star, Coffee, Lock, Code2, Stethoscope, GraduationCap } from "lucide-react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { Heart, MapPin, Loader2, Newspaper, Play, MessageCircle, Smile, Share2, Users, Briefcase, Building2, Calendar, Flag, PenLine, Sparkles, UserPlus, Plane, Star, Coffee, Lock, Code2, Stethoscope, GraduationCap, ArrowLeft, Clock, LogIn } from "lucide-react";
+import CreateCafeForm from "@/components/feed/CreateCafeForm";
+import { useActiveCafes, useCafe } from "@/hooks/useCafes";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
