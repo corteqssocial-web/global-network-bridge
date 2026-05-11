@@ -580,6 +580,11 @@ const ProfileBusiness = () => {
           <WhatsAppGroupsTab />
         </TabsContent>
 
+        {/* OPPORTUNITIES */}
+        <TabsContent value="opportunities" className="mt-6">
+          <BusinessOpportunitiesPanel />
+        </TabsContent>
+
         {/* NOTIFICATIONS */}
         <TabsContent value="notifications" className="mt-6">
           <NotificationsList />
