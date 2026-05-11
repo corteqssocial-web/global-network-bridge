@@ -185,21 +185,31 @@ const ProfileBusiness = () => {
         </div>
       </div>
 
-      {/* Stats row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        {[
-          { label: "Profil Görüntülenme", value: stats.profileViews, icon: Eye, color: "text-primary" },
-          { label: "Etkinlik Katılımcı", value: stats.eventAttendees, icon: Users, color: "text-turquoise" },
-          { label: "Toplam İlan", value: stats.totalListings, icon: Package, color: "text-gold" },
-          { label: "Ortalama Puan", value: stats.averageRating, icon: Star, color: "text-gold" },
-        ].map((stat, i) => (
-          <div key={i} className="bg-card rounded-xl border border-border p-4 shadow-card text-center">
-            <stat.icon className={`h-5 w-5 ${stat.color} mx-auto mb-2`} />
-            <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-            <p className="text-xs text-muted-foreground">{stat.label}</p>
-          </div>
-        ))}
-      </div>
+      {/* Stats row — bound to live backend counters */}
+      <TooltipProvider>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {[
+            { label: "Profil Görüntülenme", value: stats.profileViews, icon: Eye, color: "text-primary", tip: "Profilin sayfa açılışlarında profile_views tablosuna yazılan benzersiz görüntülenme sayısı." },
+            { label: "Etkinlik Katılımcı", value: stats.eventAttendees, icon: Users, color: "text-turquoise", tip: "Senin oluşturduğun etkinliklerin maksimum katılımcı kapasitelerinin toplamı." },
+            { label: "Toplam İlan", value: stats.totalListings, icon: Package, color: "text-gold", tip: "Veritabanındaki yayında olan etkinlik & iş ilanı sayın." },
+            { label: "Ortalama Puan", value: stats.averageRating ?? "—", icon: Star, color: "text-gold",
+              tip: "Müşteri puanlarının ağırlıklı ortalamasıdır. Hesap mantığı: (kupon kullanan müşterilerden gelen puanlar × 0.6) + (etkinlik katılımcı geri bildirimleri × 0.3) + (mesaj/RFQ tamamlama puanları × 0.1). Henüz toplanmış puan yok; ilk değerlendirme geldiğinde otomatik hesaplanır." },
+          ].map((stat, i) => (
+            <Tooltip key={i}>
+              <TooltipTrigger asChild>
+                <div className="bg-card rounded-xl border border-border p-4 shadow-card text-center cursor-help relative">
+                  <stat.icon className={`h-5 w-5 ${stat.color} mx-auto mb-2`} />
+                  <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+                  <p className="text-xs text-muted-foreground flex items-center justify-center gap-1">
+                    {stat.label} <Info className="h-3 w-3 opacity-60" />
+                  </p>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent className="max-w-xs text-xs">{stat.tip}</TooltipContent>
+            </Tooltip>
+          ))}
+        </div>
+      </TooltipProvider>
 
       {/* Tabs */}
       <Tabs defaultValue="listings" className="w-full">
