@@ -9,8 +9,9 @@ import {
   Users, MapPin, Globe, Calendar, Heart, Megaphone,
   TrendingUp, Settings, Star, Eye, BarChart3, CreditCard, Crown,
   Instagram, Video, Bot, MessageSquare, Phone, PenLine,
-  Edit3, Handshake, Play, Link2, Trash2, ExternalLink, Radio
+  Edit3, Handshake, Play, Link2, Trash2, ExternalLink, Radio, Lock
 } from "lucide-react";
+import BloggerAnalytics from "@/components/booking/BloggerAnalytics";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AppointmentManagePanel from "@/components/booking/AppointmentManagePanel";
