@@ -490,7 +490,7 @@ const ProfileBlogger = () => {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {[
-                { title: "Öne Çıkan Influencer", desc: "Ana sayfada ve arama sonuçlarında üst sıralarda görünün", price: "€29/hafta", icon: Star },
+                { title: "Öne Çıkan Influencer", desc: "Ana sayfada ve arama sonuçlarında üst sıralarda görünün", price: "€—/hafta", icon: Star },
                 { title: "WhatsApp Tanıtımı", desc: "CorteQS Kanalında Tanıtım", price: "€19/tanıtım", icon: Megaphone },
                 { title: "Reklam İşbirliği", desc: "Markalarla eşleşme ve sponsorlu içerik fırsatları", price: "Değişken", icon: Handshake },
               ].map((promo) => (
@@ -515,7 +515,7 @@ const ProfileBlogger = () => {
                   </div>
                   <div>
                     <h3 className="font-bold text-foreground text-sm">Sosyal Medya Paketi</h3>
-                    <p className="text-xs font-semibold text-primary">$25+/platform</p>
+                    <p className="text-xs font-semibold text-primary">$—/platform</p>
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground mb-3">Sosyal medya hesaplarınızda profesyonel kampanya yönetimi</p>
@@ -530,7 +530,7 @@ const ProfileBlogger = () => {
                   </div>
                   <div>
                     <h3 className="font-bold text-foreground text-sm">Kategori Vitrini</h3>
-                    <p className="text-xs font-semibold text-gold">€29+/hafta</p>
+                    <p className="text-xs font-semibold text-gold">€—/hafta</p>
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground mb-3">Kategorinizde ilk 6 sırada gösterilerek daha fazla müşteriye ulaşın</p>

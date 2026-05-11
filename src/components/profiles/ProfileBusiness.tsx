@@ -531,8 +531,8 @@ const ProfileBusiness = () => {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {[
-                { title: "Öne Çıkan İşletme", desc: "Ana sayfada ve arama sonuçlarında üst sıralarda görünün", price: "€29/hafta", icon: Star },
-                { title: "Etkinlik Boost", desc: "Etkinliklerinizi platforma ve mail listelerine tanıtın", price: "€49/etkinlik", icon: TrendingUp },
+                { title: "Öne Çıkan İşletme", desc: "Ana sayfada ve arama sonuçlarında üst sıralarda görünün", price: "€—/hafta", icon: Star },
+                { title: "Etkinlik Boost", desc: "Etkinliklerinizi platforma ve mail listelerine tanıtın", price: "€—/etkinlik", icon: TrendingUp },
               ].map((promo) => (
                 <div key={promo.title} className="relative border border-border rounded-xl p-4 hover:border-primary/30 hover:bg-primary/5 transition-colors">
                   <Badge variant="outline" className="absolute top-2 right-2 text-[10px] bg-gold/10 text-gold border-gold/30">Yakında</Badge>
@@ -564,7 +564,7 @@ const ProfileBusiness = () => {
                   </div>
                   <div>
                     <h3 className="font-bold text-foreground text-sm">Sosyal Medya Paketi</h3>
-                    <p className="text-xs font-semibold text-primary">$25+/platform</p>
+                    <p className="text-xs font-semibold text-primary">$—/platform</p>
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground mb-3">Sosyal medya hesaplarınızda profesyonel kampanya yönetimi</p>
