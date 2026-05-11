@@ -178,6 +178,8 @@ const ProfileBlogger = () => {
         ))}
       </div>
 
+      <div className="mb-6"><CorBotPromoBanner /></div>
+
       {/* Tabs */}
       <Tabs defaultValue="content" className="w-full">
         <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
