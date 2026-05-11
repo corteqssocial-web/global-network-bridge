@@ -34,16 +34,32 @@ export const CouponManager = ({ businessName }: { businessName: string }) => {
 
   const handleCreate = () => {
     if (!form.title || !form.code) return;
-    setCoupons(prev => [...prev, {
-      id: Date.now(), ...form, usedCount: 0, active: true, businessName, businessLogo: "",
-    }]);
+    if (pendingActivationId !== null) {
+      setCoupons(prev => prev.map(c => c.id === pendingActivationId ? { ...c, ...form, active: true } : c));
+      toast({ title: "Kupon aktifleştirildi! 🎉", description: `${form.code} profilde yayında ve satın alınabilir.` });
+      setPendingActivationId(null);
+    } else {
+      setCoupons(prev => [...prev, {
+        id: Date.now(), ...form, usedCount: 0, active: true, businessName, businessLogo: "",
+      }]);
+      toast({ title: "Kupon oluşturuldu! 🎉", description: `${form.code} kodu aktif edildi.` });
+    }
     setForm({ title: "", code: "", type: "percent", value: 0, description: "", expires: "", usageLimit: 100 });
     setShowForm(false);
-    toast({ title: "Kupon oluşturuldu! 🎉", description: `${form.code} kodu aktif edildi.` });
   };
 
   const toggleCoupon = (id: number) => {
-    setCoupons(prev => prev.map(c => c.id === id ? { ...c, active: !c.active } : c));
+    const c = coupons.find(x => x.id === id);
+    if (!c) return;
+    if (!c.active) {
+      // Activating: open prefilled form so business completes details (price/free, expiry, etc.)
+      setForm({ title: c.title, code: c.code, type: c.type, value: c.value, description: c.description, expires: c.expires, usageLimit: c.usageLimit });
+      setPendingActivationId(id);
+      setShowForm(true);
+      toast({ title: "Detayları tamamlayın", description: "Son kullanma tarihi ve diğer detayları girip aktifleştirin." });
+      return;
+    }
+    setCoupons(prev => prev.map(c => c.id === id ? { ...c, active: false } : c));
   };
 
   return (
