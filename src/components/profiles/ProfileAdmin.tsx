@@ -3,8 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   Users, Building2, Calendar, BarChart3, ShieldCheck,
   AlertTriangle, CheckCircle, Clock, Eye, TrendingUp,
-  Settings, Globe, Megaphone, CreditCard, Ban, UserCheck, Star
+  Settings, Globe, Megaphone, CreditCard, Ban, UserCheck, Star, Sparkles
 } from "lucide-react";
+import BrandSettings from "@/components/admin/BrandSettings";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -133,7 +134,12 @@ const ProfileAdmin = () => {
           <TabsTrigger value="users" className="gap-1.5"><Users className="h-4 w-4" /> Kullanıcılar</TabsTrigger>
           <TabsTrigger value="revenue" className="gap-1.5"><CreditCard className="h-4 w-4" /> Gelir</TabsTrigger>
           <TabsTrigger value="analytics" className="gap-1.5"><BarChart3 className="h-4 w-4" /> Analitik</TabsTrigger>
+          <TabsTrigger value="brand" className="gap-1.5"><Sparkles className="h-4 w-4" /> Marka</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="brand" className="mt-6">
+          <BrandSettings />
+        </TabsContent>
 
         {/* APPROVALS */}
         <TabsContent value="approvals" className="mt-6">

@@ -1057,6 +1057,33 @@ export type Database = {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: {
+          brand_name: string | null
+          email_header_html: string | null
+          favicon_url: string | null
+          id: number
+          logo_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          brand_name?: string | null
+          email_header_html?: string | null
+          favicon_url?: string | null
+          id?: number
+          logo_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          brand_name?: string | null
+          email_header_html?: string | null
+          favicon_url?: string | null
+          id?: number
+          logo_url?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_follows: {
         Row: {
           created_at: string
