@@ -126,11 +126,11 @@ const ProfileBusiness = () => {
     balance: 0,
   };
 
-  const listings = [
+  const [listings, setListings] = useState<Array<{ id: number; title: string; type: string; status: string; views: number; applications: number; package?: string; price?: number }>>([
     { id: 1, title: "Kıdemli Frontend Geliştirici", type: "İş İlanı", status: "Aktif", views: 342, applications: 18 },
     { id: 2, title: "Dijital Pazarlama Uzmanı", type: "İş İlanı", status: "Aktif", views: 156, applications: 7 },
     { id: 3, title: "Stajyer - Backend", type: "Staj", status: "Kapalı", views: 89, applications: 23 },
-  ];
+  ]);
 
   const events = [
     { id: 1, title: "Tech Meetup Berlin", date: "22 Mar 2026", attendees: 45, status: "Yaklaşan" },
