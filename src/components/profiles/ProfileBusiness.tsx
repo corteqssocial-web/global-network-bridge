@@ -64,8 +64,20 @@ const ProfileBusiness = () => {
     country: "",
     show_on_map: false,
     full_name: "",
+    avatar_url: "",
   });
   const [confirmHideMap, setConfirmHideMap] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+
+  const loadEvents = async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from("events")
+      .select("id, title, event_date, max_attendees, status")
+      .eq("user_id", user.id)
+      .order("event_date", { ascending: true });
+    setEvents((data || []) as any);
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -83,9 +95,9 @@ const ProfileBusiness = () => {
           country: p.country || "",
           show_on_map: !!(p as any).show_on_map,
           full_name: p.full_name || "",
+          avatar_url: (p as any).avatar_url || "",
         });
       }
-      // Real backend counters
       const [{ count: views }, { data: evs }, { count: listingsCount }] = await Promise.all([
         supabase.from("profile_views" as any).select("id", { count: "exact", head: true }).eq("profile_id", user.id),
         supabase.from("events").select("id, max_attendees").eq("user_id", user.id),
@@ -99,12 +111,32 @@ const ProfileBusiness = () => {
         averageRating: null,
         ratingCount: 0,
       });
+      loadEvents();
     })();
   }, [user]);
 
   const persistField = async (patch: Record<string, any>) => {
     if (!user) return;
     await (supabase.from("profiles") as any).update(patch).eq("id", user.id);
+  };
+
+  const handleAvatarUpload = async (file: File) => {
+    if (!user) return;
+    setUploadingAvatar(true);
+    try {
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `${user.id}/avatar-${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage.from("avatars").upload(path, file, { upsert: true });
+      if (upErr) throw upErr;
+      const { data: pub } = supabase.storage.from("avatars").getPublicUrl(path);
+      await persistField({ avatar_url: pub.publicUrl });
+      setBiz((b) => ({ ...b, avatar_url: pub.publicUrl }));
+      toast({ title: "Profil fotoğrafın güncellendi ✅" });
+    } catch (e: any) {
+      toast({ title: "Yükleme başarısız", description: e.message || "Tekrar deneyin.", variant: "destructive" });
+    } finally {
+      setUploadingAvatar(false);
+    }
   };
 
   const handleShowOnMapChange = async (checked: boolean) => {
@@ -122,25 +154,30 @@ const ProfileBusiness = () => {
     country: biz.country || "—",
     city: biz.city || "—",
     avatar: (biz.business_name || biz.full_name || "??").slice(0, 2).toUpperCase(),
-    employees: 12,
-    founded: 2019,
+    avatarUrl: biz.avatar_url,
     description: biz.business_description || "İşletme tanıtımınızı Ayarlar → İşletme Bilgileri'nden ekleyin.",
     balance: 0,
   };
 
-  const [listings, setListings] = useState<Array<{ id: number; title: string; type: string; status: string; views: number; applications: number; package?: string; price?: number }>>([
-    { id: 1, title: "Kıdemli Frontend Geliştirici", type: "İş İlanı", status: "Aktif", views: 342, applications: 18 },
-    { id: 2, title: "Dijital Pazarlama Uzmanı", type: "İş İlanı", status: "Aktif", views: 156, applications: 7 },
-    { id: 3, title: "Stajyer - Backend", type: "Staj", status: "Kapalı", views: 89, applications: 23 },
-  ]);
+  const [listings, setListings] = useState<Array<{ id: number; title: string; type: string; status: string; views: number; applications: number; package?: string; price?: number; country?: string; city?: string }>>([]);
 
-  const events = [
-    { id: 1, title: "Tech Meetup Berlin", date: "22 Mar 2026", attendees: 45, status: "Yaklaşan" },
-    { id: 2, title: "Startup Workshop", date: "05 Nis 2026", attendees: 30, status: "Yaklaşan" },
-  ];
+  // Listing filters
+  const [showFilters, setShowFilters] = useState(false);
+  const [filterCountry, setFilterCountry] = useState<string>("all");
+  const [filterCity, setFilterCity] = useState<string>("all");
+  const [filterSearch, setFilterSearch] = useState<string>("");
+  const filterCountryList = Object.keys(countryCities).sort();
+  const filterCityList = filterCountry !== "all" ? (countryCities[filterCountry] || []) : [];
+  const filteredListings = listings.filter((l) => {
+    if (filterCountry !== "all" && l.country && l.country !== filterCountry) return false;
+    if (filterCity !== "all" && l.city && l.city !== filterCity) return false;
+    if (filterSearch && !l.title.toLowerCase().includes(filterSearch.toLowerCase())) return false;
+    return true;
+  });
+
+  const [events, setEvents] = useState<Array<{ id: string; title: string; event_date: string; max_attendees: number | null; status: string }>>([]);
 
   const [stats, setStatsRaw] = useState({ profileViews: 0, eventAttendees: 0, totalListings: 0, averageRating: null as number | null, ratingCount: 0 });
-  // Wrapper to keep prior code working
   const setStats = setStatsRaw;
 
   return (
