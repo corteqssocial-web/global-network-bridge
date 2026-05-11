@@ -232,7 +232,7 @@ const ProfileConsultant = () => {
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center bg-background/40 backdrop-blur-[1px]">
                   <Badge className="bg-gold/15 text-gold border-gold/30 gap-1">
-                    <Lock className="h-3 w-3" /> Yakında — Ayarlar kilitli
+                    <Lock className="h-3 w-3" /> Yakında
                   </Badge>
                 </div>
               </div>
