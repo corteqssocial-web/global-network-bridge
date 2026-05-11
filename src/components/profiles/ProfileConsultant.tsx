@@ -504,7 +504,13 @@ const ProfileConsultant = () => {
 
             {/* Recent reviews */}
             <div className="space-y-3">
-              {reviews.map((review, i) => (
+              {reviews.length === 0 ? (
+                <EmptyDashboardState
+                  icon={Star}
+                  title="Henüz değerlendirme yok"
+                  description="Tamamlanan seansların ardından kullanıcılar profilini değerlendirebilir. Yıldız puanları ve yorumlar burada listelenir."
+                />
+              ) : reviews.map((review, i) => (
                 <div key={i} className="p-4 rounded-xl bg-muted/50">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
