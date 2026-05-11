@@ -102,7 +102,18 @@ const ProfileBusiness = () => {
           full_name: p.full_name || "",
           avatar_url: (p as any).avatar_url || "",
         });
+        setIsVerified(!!(p as any).is_verified);
+        setHiringMode(!!(p as any).hiring_mode);
       }
+      const { data: reqs } = await (supabase.from("approval_requests" as any) as any)
+        .select("request_type, status")
+        .eq("user_id", user.id)
+        .in("request_type", ["verified_business", "hiring_mode"])
+        .order("created_at", { ascending: false });
+      const v = (reqs || []).find((r: any) => r.request_type === "verified_business");
+      const h = (reqs || []).find((r: any) => r.request_type === "hiring_mode");
+      if (v) setVerifiedReq({ status: v.status });
+      if (h) setHiringReq({ status: h.status });
       const [{ count: views }, { data: evs }, { count: listingsCount }] = await Promise.all([
         supabase.from("profile_views" as any).select("id", { count: "exact", head: true }).eq("profile_id", user.id),
         supabase.from("events").select("id, max_attendees").eq("user_id", user.id),
