@@ -186,8 +186,10 @@ const ProfileBusiness = () => {
       {/* Business header */}
       <div className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-card mb-8">
         <div className="flex flex-col sm:flex-row sm:items-start gap-6">
-          <div className="w-20 h-20 rounded-2xl bg-secondary flex items-center justify-center text-secondary-foreground font-bold text-2xl shrink-0">
-            {business.avatar}
+          <div className="w-20 h-20 rounded-2xl bg-secondary flex items-center justify-center text-secondary-foreground font-bold text-2xl shrink-0 overflow-hidden">
+            {business.avatarUrl ? (
+              <img src={business.avatarUrl} alt={business.name} className="w-full h-full object-cover" />
+            ) : business.avatar}
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-3 flex-wrap">
