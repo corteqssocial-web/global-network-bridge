@@ -153,6 +153,7 @@ const App = () => (
                   <Route path="/founders-1000" element={<Founders1000 />} />
                   <Route path="/founding-1000" element={<Founders1000 />} />
                   <Route path="/kariyer" element={<Career />} />
+                  <Route path="/is-ilanlari" element={<JobBoard />} />
                   <Route path="/career" element={<Career />} />
                   <Route path="/internal-cq-dashboards-7f3a9b2e1d4c" element={<Dashboards />} />
                   <Route path="/ai-twin" element={<AITwin />} />
