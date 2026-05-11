@@ -11,6 +11,7 @@ import { toast } from "@/hooks/use-toast";
 import MultiCountryCityFilter from "@/components/feed/MultiCountryCityFilter";
 import CreatePostForm from "@/components/feed/CreatePostForm";
 import { mockPosts, mockAuthors } from "@/data/mockFeedPosts";
+import { useFeedSocial } from "@/hooks/useFeedSocial";
 
 const PAGE_SIZE = 20;
 
@@ -249,19 +250,7 @@ const Feed = () => {
     }
   };
 
-  const followingMock = [
-    { name: "Ayşe K.", role: "🤝 Berlin Elçisi", avatar: "https://i.pravatar.cc/40?img=47" },
-    { name: "Mehmet Y.", role: "💼 Vize Danışmanı", avatar: "https://i.pravatar.cc/40?img=12" },
-    { name: "Zeynep T.", role: "🏢 Amsterdam Cafe", avatar: "https://i.pravatar.cc/40?img=32" },
-    { name: "Can Ö.", role: "✨ Londra", avatar: "https://i.pravatar.cc/40?img=15" },
-    { name: "Elif D.", role: "🤝 Paris Elçisi", avatar: "https://i.pravatar.cc/40?img=44" },
-  ];
-
-  const friendSuggestions = [
-    { name: "Burak A.", city: "Münih", avatar: "https://i.pravatar.cc/40?img=8" },
-    { name: "Selin M.", city: "Brüksel", avatar: "https://i.pravatar.cc/40?img=49" },
-    { name: "Onur P.", city: "Viyana", avatar: "https://i.pravatar.cc/40?img=22" },
-  ];
+  const { following, suggestions, follow } = useFeedSocial();
 
   const renderPost = (p: FeedPost) => {
     const author = authorMap[p.user_id];
@@ -421,47 +410,79 @@ const Feed = () => {
                 </div>
               </section>
 
-              {/* Takip ettiklerin */}
-              <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-                <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
-                  <Heart className="h-4 w-4 text-rose-500" />
-                  Takip Ettiklerin
-                </h3>
-                <div className="space-y-2.5">
-                  {followingMock.map((u) => (
-                    <div key={u.name} className="flex items-center gap-2.5">
-                      <div className="p-[1.5px] rounded-full bg-gradient-to-br from-rose-400 via-amber-400 to-violet-500">
-                        <img src={u.avatar} alt="" className="h-8 w-8 rounded-full object-cover bg-card" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-xs font-semibold truncate">{u.name}</div>
-                        <div className="text-[10px] text-muted-foreground truncate">{u.role}</div>
-                      </div>
-                      <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              {/* Takip ettiklerin — gerçek veri */}
+              {user && (
+                <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+                  <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
+                    <Heart className="h-4 w-4 text-rose-500" />
+                    Takip Ettiklerin
+                  </h3>
+                  {following.length === 0 ? (
+                    <p className="text-[11px] text-muted-foreground leading-snug">
+                      Henüz kimseyi takip etmiyorsun. Aşağıdaki önerilerden başla.
+                    </p>
+                  ) : (
+                    <div className="space-y-2.5">
+                      {following.map((u) => (
+                        <Link key={u.id} to={`/profile/${u.id}`} className="flex items-center gap-2.5 group">
+                          <div className="p-[1.5px] rounded-full bg-gradient-to-br from-rose-400 via-amber-400 to-violet-500">
+                            {u.avatar_url ? (
+                              <img src={u.avatar_url} alt="" className="h-8 w-8 rounded-full object-cover bg-card" />
+                            ) : (
+                              <div className="h-8 w-8 rounded-full bg-card flex items-center justify-center text-xs font-bold">
+                                {(u.full_name || "?").slice(0, 1).toUpperCase()}
+                              </div>
+                            )}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="text-xs font-semibold truncate group-hover:text-primary">{u.full_name || "Anonim"}</div>
+                            <div className="text-[10px] text-muted-foreground truncate">
+                              {[u.city, u.country].filter(Boolean).join(" · ") || u.profession || "Diaspora"}
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </section>
+                  )}
+                </section>
+              )}
 
-              {/* Arkadaş önerileri */}
-              <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-                <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
-                  <UserPlus className="h-4 w-4 text-sky-500" />
-                  Tanıyor olabilirsin
-                </h3>
-                <div className="space-y-2.5">
-                  {friendSuggestions.map((u) => (
-                    <div key={u.name} className="flex items-center gap-2.5">
-                      <img src={u.avatar} alt="" className="h-8 w-8 rounded-full object-cover" />
-                      <div className="min-w-0 flex-1">
-                        <div className="text-xs font-semibold truncate">{u.name}</div>
-                        <div className="text-[10px] text-muted-foreground truncate">📍 {u.city}</div>
+              {/* Tanıyor olabilirsin — benzerlik algoritması (ülke/şehir/meslek/okul) */}
+              {user && suggestions.length > 0 && (
+                <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+                  <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
+                    <UserPlus className="h-4 w-4 text-sky-500" />
+                    Tanıyor olabilirsin
+                  </h3>
+                  <div className="space-y-2.5">
+                    {suggestions.map((u) => (
+                      <div key={u.id} className="flex items-center gap-2.5">
+                        {u.avatar_url ? (
+                          <img src={u.avatar_url} alt="" className="h-8 w-8 rounded-full object-cover" />
+                        ) : (
+                          <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-xs font-bold">
+                            {(u.full_name || "?").slice(0, 1).toUpperCase()}
+                          </div>
+                        )}
+                        <div className="min-w-0 flex-1">
+                          <div className="text-xs font-semibold truncate">{u.full_name || "Anonim"}</div>
+                          <div className="text-[10px] text-muted-foreground truncate">
+                            {u.reasons.slice(0, 2).join(" · ")}
+                          </div>
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 px-2 text-[10px]"
+                          onClick={() => follow(u.id)}
+                        >
+                          + Ekle
+                        </Button>
                       </div>
-                      <Button size="sm" variant="outline" className="h-7 px-2 text-[10px]">+ Ekle</Button>
-                    </div>
-                  ))}
-                </div>
-              </section>
+                    ))}
+                  </div>
+                </section>
+              )}
             </aside>
 
             {/* CENTER FEED */}
@@ -555,14 +576,16 @@ const Feed = () => {
 
             {/* RIGHT SIDEBAR — Sponsorlu */}
             <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto pl-1 hidden lg:block">
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold px-1">Sponsorlu</div>
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold px-1">
+                ÇIFIT <span className="text-muted-foreground/70 normal-case font-medium">(Sponsorlu)</span>
+              </div>
 
               {/* Sponsorlu Danışman */}
               <Link to="/consultants" className="block rounded-2xl overflow-hidden border border-border bg-card hover:shadow-card-hover transition-shadow">
-                <div className="h-20 bg-gradient-to-br from-violet-500 via-fuchsia-500 to-purple-600 relative">
-                  <Badge className="absolute top-2 right-2 bg-white/20 text-white border-0 text-[10px] backdrop-blur">Premium</Badge>
+                <div className="h-10 bg-gradient-to-br from-violet-500 via-fuchsia-500 to-purple-600 relative">
+                  <Badge className="absolute top-1 right-2 bg-white/20 text-white border-0 text-[10px] backdrop-blur">Premium</Badge>
                 </div>
-                <div className="p-3 -mt-8">
+                <div className="p-3 -mt-4">
                   <img src="https://i.pravatar.cc/80?img=68" alt="" className="h-14 w-14 rounded-full ring-4 ring-card object-cover mb-2" />
                   <h4 className="text-sm font-bold">Av. Selin Korkmaz</h4>
                   <p className="text-[11px] text-muted-foreground">💼 Almanya Vize & Oturum</p>
@@ -577,10 +600,10 @@ const Feed = () => {
 
               {/* Sponsorlu İşletme */}
               <Link to="/businesses" className="block rounded-2xl overflow-hidden border border-border bg-card hover:shadow-card-hover transition-shadow">
-                <div className="h-20 bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-600 relative">
-                  <Badge className="absolute top-2 right-2 bg-white/20 text-white border-0 text-[10px] backdrop-blur">Premium</Badge>
+                <div className="h-10 bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-600 relative">
+                  <Badge className="absolute top-1 right-2 bg-white/20 text-white border-0 text-[10px] backdrop-blur">Premium</Badge>
                 </div>
-                <div className="p-3 -mt-8">
+                <div className="p-3 -mt-4">
                   <div className="h-14 w-14 rounded-2xl ring-4 ring-card bg-card flex items-center justify-center mb-2">
                     <Building2 className="h-7 w-7 text-emerald-500" />
                   </div>
@@ -597,9 +620,9 @@ const Feed = () => {
 
               {/* Sponsorlu Etkinlik */}
               <Link to="/events" className="block rounded-2xl overflow-hidden border border-border bg-card hover:shadow-card-hover transition-shadow">
-                <div className="h-24 bg-gradient-to-br from-amber-400 via-orange-500 to-rose-500 relative flex items-end p-3">
-                  <Badge className="absolute top-2 right-2 bg-white/20 text-white border-0 text-[10px] backdrop-blur">Featured</Badge>
-                  <Calendar className="h-8 w-8 text-white/90" />
+                <div className="h-12 bg-gradient-to-br from-amber-400 via-orange-500 to-rose-500 relative flex items-end p-2">
+                  <Badge className="absolute top-1 right-2 bg-white/20 text-white border-0 text-[10px] backdrop-blur">Featured</Badge>
+                  <Calendar className="h-5 w-5 text-white/90" />
                 </div>
                 <div className="p-3">
                   <h4 className="text-sm font-bold leading-tight">Avrupa Türk Girişimciler Zirvesi</h4>
