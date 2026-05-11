@@ -28,37 +28,28 @@ const ProfileAssociation = () => {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<null | typeof upcomingEvents[0]>(null);
   const association = {
-    name: "Almanya Türk Toplumu Derneği",
+    name: "Derneğiniz",
     type: "Dernek",
-    email: "info@att-berlin.de",
-    website: "att-berlin.de",
-    country: "Almanya",
-    city: "Berlin",
-    avatar: "ATT",
-    members: 1250,
-    founded: 2008,
-    description: "Berlin ve çevresinde yaşayan Türk diasporasının sosyal, kültürel ve ekonomik entegrasyonuna katkıda bulunan sivil toplum kuruluşu.",
-    balance: 3400.00,
+    email: "",
+    website: "",
+    country: "",
+    city: "",
+    avatar: "D",
+    members: 0,
+    founded: new Date().getFullYear(),
+    description: "Dernek tanıtım metninizi profil ayarlarından ekleyin.",
+    balance: 0,
   };
 
-  const upcomingEvents = [
-    { id: 1, title: "Nevruz Kutlaması", date: "21 Mar 2026", attendees: 200, type: "Kültürel" },
-    { id: 2, title: "Networking Yemeği", date: "18 Mar 2026", attendees: 60, type: "Sosyal" },
-    { id: 3, title: "Vize Bilgilendirme Semineri", date: "25 Mar 2026", attendees: 85, type: "Eğitim" },
-  ];
+  const upcomingEvents: { id: number; title: string; date: string; attendees: number; type: string }[] = [];
 
-  const members = [
-    { name: "Emre Aydın", role: "Üye", since: "2023", active: true },
-    { name: "Elif Demir", role: "Yönetim Kurulu", since: "2019", active: true },
-    { name: "Can Özdemir", role: "Üye", since: "2021", active: true },
-    { name: "Zeynep Arslan", role: "Gönüllü", since: "2024", active: false },
-  ];
+  const members: { name: string; role: string; since: string; active: boolean }[] = [];
 
   const stats = {
-    totalMembers: 1250,
-    activeMembers: 890,
-    eventsThisYear: 24,
-    totalDonations: 12500,
+    totalMembers: 0,
+    activeMembers: 0,
+    eventsThisYear: 0,
+    totalDonations: 0,
   };
 
   return (
@@ -145,24 +136,32 @@ const ProfileAssociation = () => {
                 </h2>
                 <Button className="gap-2" onClick={() => setShowCreateEvent(true)}><Plus className="h-4 w-4" /> Yeni Etkinlik</Button>
               </div>
-              <div className="space-y-3">
-                {upcomingEvents.map((event) => (
-                  <div key={event.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                    <div className="text-center shrink-0 w-14">
-                      <div className="text-xl font-bold text-primary">{event.date.split(" ")[0]}</div>
-                      <div className="text-xs text-muted-foreground">{event.date.split(" ")[1]}</div>
+              {upcomingEvents.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-border bg-muted/30 p-8 text-center">
+                  <Calendar className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
+                  <p className="text-sm font-medium text-foreground">Henüz etkinlik yok</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">"Yeni Etkinlik" butonu ile ilk etkinliğinizi oluşturun.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {upcomingEvents.map((event) => (
+                    <div key={event.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
+                      <div className="text-center shrink-0 w-14">
+                        <div className="text-xl font-bold text-primary">{event.date.split(" ")[0]}</div>
+                        <div className="text-xs text-muted-foreground">{event.date.split(" ")[1]}</div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-foreground">{event.title}</h3>
+                        <p className="text-sm text-muted-foreground flex items-center gap-2">
+                          <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {event.attendees} katılımcı</span>
+                          <Badge variant="outline" className="text-xs">{event.type}</Badge>
+                        </p>
+                      </div>
+                      <Button variant="outline" size="sm" onClick={() => setManagingEvent(event)}>Yönet</Button>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-foreground">{event.title}</h3>
-                      <p className="text-sm text-muted-foreground flex items-center gap-2">
-                        <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {event.attendees} katılımcı</span>
-                        <Badge variant="outline" className="text-xs">{event.type}</Badge>
-                      </p>
-                    </div>
-                    <Button variant="outline" size="sm" onClick={() => setManagingEvent(event)}>Yönet</Button>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </TabsContent>
@@ -181,23 +180,31 @@ const ProfileAssociation = () => {
               </h2>
               <Button className="gap-2"><Plus className="h-4 w-4" /> Üye Ekle</Button>
             </div>
-            <div className="space-y-3">
-              {members.map((member, i) => (
-                <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm shrink-0">
-                    {member.name.split(" ").map(n => n[0]).join("")}
+            {members.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-border bg-muted/30 p-8 text-center">
+                <Users className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
+                <p className="text-sm font-medium text-foreground">Henüz üye yok</p>
+                <p className="text-xs text-muted-foreground mt-0.5">"Üye Ekle" ile derneğinize üye eklemeye başlayın.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {members.map((member, i) => (
+                  <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm shrink-0">
+                      {member.name.split(" ").map(n => n[0]).join("")}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-foreground">{member.name}</h3>
+                      <p className="text-sm text-muted-foreground">{member.role} · {member.since}'den beri</p>
+                    </div>
+                    <Badge variant={member.active ? "default" : "secondary"} className="text-xs">
+                      {member.active ? "Aktif" : "Pasif"}
+                    </Badge>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-foreground">{member.name}</h3>
-                    <p className="text-sm text-muted-foreground">{member.role} · {member.since}'den beri</p>
-                  </div>
-                  <Badge variant={member.active ? "default" : "secondary"} className="text-xs">
-                    {member.active ? "Aktif" : "Pasif"}
-                  </Badge>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </TabsContent>
 
@@ -209,17 +216,11 @@ const ProfileAssociation = () => {
                 <Mail className="h-5 w-5 text-primary" /> E-posta Kampanyaları
               </h2>
               <div className="space-y-3">
-                {[
-                  { title: "Nevruz Daveti", sent: 890, opened: 456, date: "10 Mar" },
-                  { title: "Aylık Bülten - Mart", sent: 1100, opened: 623, date: "01 Mar" },
-                ].map((campaign, i) => (
-                  <div key={i} className="p-4 rounded-xl bg-muted/50">
-                    <h3 className="font-semibold text-foreground">{campaign.title}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {campaign.sent} gönderildi · {campaign.opened} açıldı · {campaign.date}
-                    </p>
-                  </div>
-                ))}
+                <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6 text-center">
+                  <Mail className="h-5 w-5 text-muted-foreground mx-auto mb-1" />
+                  <p className="text-sm font-medium text-foreground">Henüz kampanya yok</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">İlk e-posta kampanyanızı oluşturun.</p>
+                </div>
                 <Button variant="outline" className="w-full gap-2"><Plus className="h-4 w-4" /> Yeni Kampanya</Button>
               </div>
             </div>
@@ -227,20 +228,10 @@ const ProfileAssociation = () => {
               <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
                 <MessageSquare className="h-5 w-5 text-turquoise" /> WhatsApp Grupları
               </h2>
-              <div className="space-y-3">
-                {[
-                  { name: "ATT Genel Grup", members: 320, messages: 45 },
-                  { name: "ATT Etkinlik Duyuruları", members: 890, messages: 12 },
-                  { name: "ATT Yönetim", members: 15, messages: 78 },
-                ].map((group, i) => (
-                  <div key={i} className="p-4 rounded-xl bg-muted/50 flex items-center justify-between">
-                    <div>
-                      <h3 className="font-semibold text-foreground">{group.name}</h3>
-                      <p className="text-sm text-muted-foreground">{group.members} üye · {group.messages} mesaj/hafta</p>
-                    </div>
-                    <Button variant="outline" size="sm">Yönet</Button>
-                  </div>
-                ))}
+              <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6 text-center">
+                <MessageSquare className="h-5 w-5 text-muted-foreground mx-auto mb-1" />
+                <p className="text-sm font-medium text-foreground">Henüz WhatsApp grubu yok</p>
+                <p className="text-xs text-muted-foreground mt-0.5">WhatsApp sekmesinden yeni grup ekleyebilirsiniz.</p>
               </div>
             </div>
           </div>
@@ -252,19 +243,10 @@ const ProfileAssociation = () => {
             <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
               <BarChart3 className="h-5 w-5 text-primary" /> Üyelik Büyümesi
             </h2>
-            <div className="space-y-3">
-              {["Oca", "Şub", "Mar", "Nis", "May", "Haz"].map((month, i) => {
-                const val = [18, 25, 32, 22, 28, 35][i];
-                return (
-                  <div key={month} className="flex items-center gap-3">
-                    <span className="text-sm text-muted-foreground w-8">{month}</span>
-                    <div className="flex-1 bg-muted rounded-full h-3">
-                      <div className="bg-turquoise rounded-full h-3 transition-all" style={{ width: `${val * 2.8}%` }} />
-                    </div>
-                    <span className="text-sm font-medium text-foreground w-12">+{val} üye</span>
-                  </div>
-                );
-              })}
+            <div className="rounded-xl border border-dashed border-border bg-muted/30 p-8 text-center">
+              <BarChart3 className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
+              <p className="text-sm font-medium text-foreground">Henüz veri yok</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Üye eklendikçe büyüme grafiğiniz burada görünecek.</p>
             </div>
           </div>
         </TabsContent>
