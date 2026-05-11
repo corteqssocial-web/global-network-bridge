@@ -5,9 +5,9 @@ import corteqsLogo from "@/assets/corteqs-logo.png";
 
 const Footer = () => {
   return (
-    <footer className="bg-secondary text-secondary-foreground py-16">
+    <footer className="bg-secondary text-secondary-foreground py-8">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-10">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-6 text-xs">
           <div>
             <div className="flex items-center gap-2 mb-4">
               <img src={corteqsLogo} alt="CorteQS" className="h-8 w-auto" />
