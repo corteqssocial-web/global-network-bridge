@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
+import CorBotPromoBanner from "@/components/CorBotPromoBanner";
 import MapAddressBanner from "@/components/MapAddressBanner";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 import NotificationsList from "@/components/NotificationsList";
