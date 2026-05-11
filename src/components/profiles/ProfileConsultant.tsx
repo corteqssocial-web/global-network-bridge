@@ -5,6 +5,7 @@ import EventManagePanel from "@/components/EventManagePanel";
 import CreateEventForm from "@/components/CreateEventForm";
 import SocialMediaCampaignDialog from "@/components/SocialMediaCampaignDialog";
 import CategoryShowcasePurchase from "@/components/CategoryShowcasePurchase";
+import CorBotPromoBanner from "@/components/CorBotPromoBanner";
 import {
   User, MapPin, Globe, Star, Calendar, Users, Clock, Eye,
   TrendingUp, Settings, BarChart3, CreditCard, Plus, ChevronRight, Crown,
@@ -169,6 +170,9 @@ const ProfileConsultant = () => {
         ))}
       </div>
 
+      {/* CorBot promo */}
+      <div className="mb-6"><CorBotPromoBanner /></div>
+
       {/* Tabs */}
       <Tabs defaultValue="sessions" className="w-full">
         <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
@@ -182,7 +186,7 @@ const ProfileConsultant = () => {
           <TabsTrigger value="whatsapp" className="gap-1.5"><MessageSquare className="h-4 w-4" /> WhatsApp</TabsTrigger>
           <TabsTrigger value="messages" className="gap-1.5"><InboxIcon className="h-4 w-4" /> Mesaj Kutusu</TabsTrigger>
           <NotificationsTabTrigger />
-          <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Profil Düzenle</TabsTrigger>
+          <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Profil Ayarları</TabsTrigger>
         </TabsList>
 
         {/* LIVE SESSIONS */}

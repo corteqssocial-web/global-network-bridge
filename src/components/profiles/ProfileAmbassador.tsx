@@ -18,6 +18,7 @@ import CreateEventForm from "@/components/CreateEventForm";
 import EventManagePanel from "@/components/EventManagePanel";
 import StripeTransactionsPanel, { type StripeTxn } from "@/components/StripeTransactionsPanel";
 import NotificationsList from "@/components/NotificationsList";
+import CorBotPromoBanner from "@/components/CorBotPromoBanner";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 
 type AmbassadorEvent = {
@@ -132,6 +133,8 @@ const ProfileAmbassador = () => {
         ))}
       </div>
 
+      <div className="mb-6"><CorBotPromoBanner /></div>
+
       {/* Tabs */}
       <Tabs defaultValue="transactions" className="w-full">
         <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
@@ -142,7 +145,7 @@ const ProfileAmbassador = () => {
           <TabsTrigger value="performance" className="gap-1.5"><TrendingUp className="h-4 w-4" /> Performans</TabsTrigger>
           <TabsTrigger value="community" className="gap-1.5"><Globe className="h-4 w-4" /> Topluluk</TabsTrigger>
           <NotificationsTabTrigger />
-          <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Ayarlar</TabsTrigger>
+          <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Profil Ayarları</TabsTrigger>
         </TabsList>
 
         {/* TRANSACTIONS (Stripe) */}
