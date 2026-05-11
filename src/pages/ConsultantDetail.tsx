@@ -16,6 +16,7 @@ import AppointmentBookingDialog from "@/components/booking/AppointmentBookingDia
 import DemoPageBanner from "@/components/DemoPageBanner";
 import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
 import PublicEventsList from "@/components/PublicEventsList";
+import { useConsultantFeatures } from "@/hooks/useProfileFeatures";
 
 const ConsultantDetail = () => {
   const { id } = useParams<{ id: string }>();
