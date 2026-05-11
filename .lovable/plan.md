@@ -1,70 +1,71 @@
-## 1. "Kategori hesabı aç" linkini auth'a bağla
+## Görseldeki madde ne anlama geliyor?
 
-`Feed.tsx` içindeki link `/onboarding` yerine: kullanıcı yoksa `/auth`, varsa ve onboarding tamamlanmadıysa `/onboarding`, tamamlandıysa `/profile` yönlendirsin.
+Evet — `enforce_daily_cafe_join` trigger'ı **günde 1 yeni cafe'ye katılma** hakkını zorunlu kılar (cafe açma değil; açma günlük sınırsız zaten ama isim unique). Bir kez katıldıktan sonra cafe açık olduğu sürece girip çıkabilirsin. Bunu netleştirip aşağıdaki kuralları ekleyeceğim.
 
-## 2. Veritabanı (migration)
+## Yapılacaklar
 
-Yeni tablolar:
+### 1. DB değişiklikleri (migration)
 
-- **`cafes`** — `id`, `name` (UNIQUE, lower-case kontrolü), `theme`, `country`, `city`, `linkedin_url`, `extra_links` (jsonb), `created_by` (uuid), `opens_at` (timestamptz), `closes_at` (timestamptz), `duration_hours` (int 2/4), `created_at`.
-  - RLS: herkese SELECT açık; INSERT sadece kendi kullanıcısı; UPDATE/DELETE sahibi.
-  - UNIQUE INDEX `lower(name)` üzerinde — aynı isimde cafe açılamaz.
+**`cafes` tablosuna yeni kolonlar:**
+- `kind text not null default 'community'` → `'community' | 'relocation' | 'expo'` (sistem cafelerini ayırt etmek için)
+- `open_entry boolean not null default true` → false ise sahibinin onayı gerekir
+- `entry_question text` → opsiyonel; doluysa katılım formu zorunlu, cevap üzerinden onay
+- `capacity integer` → 2h=100, 4h=300 (community); relocation/expo = NULL (sınırsız)
 
-- **`cafe_memberships`** — `id`, `cafe_id`, `user_id`, `joined_at`. Bir kullanıcının bir cafe'ye girişi kalıcı izindir; tekrar girip çıkabilir.
-  - UNIQUE (`cafe_id`, `user_id`).
-  - RLS: herkese SELECT; INSERT sadece kendi kullanıcısı (günlük 1 hak trigger ile).
-  - Trigger `enforce_daily_cafe_join`: aynı kullanıcının son 24 saat içinde başka cafe'ye katılım kaydı varsa INSERT reddedilir (raise exception). Mevcut üyelikte (zaten `cafe_memberships` satırı varsa) tekrar giriş için blok yok — sadece YENİ cafe katılımı günde 1.
+**`cafe_memberships`:**
+- `answer text` → entry_question varsa cevap
+- `approved boolean default true` → open_entry=false cafelerde false başlar
 
-- **`feed_posts.cafe_id`** kolonu eklenir (nullable). Cafe-içi postlar `cafe_id` ile etiketlenir; genel feed `cafe_id IS NULL` filtresi kullanır.
+**`profiles.phone_country_code text`** (varsa atla) — TR kontrolü için. Telefonun başında `+90` veya country code kolonu kullanılacak.
 
-## 3. Cafe oluşturma formu
+**Trigger güncellemeleri:**
+- `enforce_daily_cafe_join` → relocation/expo cafe'ler için sınırı bypass et (`kind in ('relocation','expo')` ise muaf)
+- Yeni trigger `enforce_cafe_capacity` → community cafelerde `capacity` dolduysa INSERT reddedilir (`raise exception 'cafe_full'`)
+- Yeni trigger `enforce_tr_phone_restriction` → kullanıcının telefonu TR (+90) ise ve cafe `kind='community'` ise INSERT reddedilir (`raise exception 'tr_phone_restricted'`)
 
-Yeni dosya `src/components/feed/CreateCafeForm.tsx` (Dialog):
-- Alanlar: Cafe adı, Tema (select: IT/Hekimler/Profesyoneller/İşletmeler/Kuruluşlar/Blogger + serbest), Ülke + Şehir (mevcut `CountryCitySelector` mantığıyla), LinkedIn URL (zorunlu, zod url validation), opsiyonel ek link.
-- Süre: free user → 2 saat, premium → 4 saat (`useIsPremium`). UI'de gösterilir.
-- Submit: `opens_at = now()`, `closes_at = now() + duration`. Aynı isim varsa Postgres unique hatasını yakalayıp toast.
-- Başarılıysa otomatik `cafe_memberships` insert + cafe sayfasına yönlendir.
+**Seed:**
+- Her popüler ülke için 2 sistem cafe: `Relocation Cafe – {Ülke}` ve `Expo Cafe – {Ülke}` (kind=relocation/expo, closes_at = '2099-01-01', open_entry=true, capacity=null, created_by=admin user). İlk migration'da TR, DE, NL, US, UK için seed yeterli; diğerleri sonra.
 
-## 4. Cafe listesi & filtreleme
+**Capacity helper:** `cafe_member_count` view veya `cafes.member_count` kolonu + trigger ile sayı tutulur. Tercih: trigger ile `cafes.member_count` kolonu güncellenir (her INSERT/DELETE'te).
 
-`Feed.tsx` sol panelindeki "Cafe'ler" bölümü mock yerine `cafes` tablosundan `closes_at > now()` olan aktif cafe'leri çeker. Üstte:
-- "+ Cafe Aç" butonu (CreateCafeForm dialog tetikleyici).
-- Mevcut konum filtresi (selectedCountries / selectedCities) cafe listesini de daraltır.
-- Her cafe satırı: ad, tema ikonu, şehir, kalan süre rozeti, click → `/cadde/:cafeId`.
+### 2. CreateCafeForm değişiklikleri
 
-## 5. Cafe sayfası (cafe-içi feed)
+- "Serbest giriş mi, soru ile mi?" toggle (default: serbest)
+- `entry_question` textarea (toggle açıksa)
+- Süre seçimi tablosu güncellenir: 2h → kapasite 100, 4h → kapasite 300 (UI'de gösterilir)
+- Sistem cafe (relocation/expo) açma butonu UI'de yok — sadece arka uçta seed/admin
 
-Aynı `Feed.tsx` route parametresi ile çalışacak: `/cadde/:cafeId?` ekleyelim.
-- `cafeId` varsa:
-  - Üstte "← Genel Cadde'ye dön" link (büyük, dikkat çekici).
-  - Cafe başlığı + açılış/kapanış saatleri (örn. "Açılış 14:30 · Kapanış 16:30 · Kalan 1s 47dk").
-  - `fetchPosts` query'si `eq("cafe_id", cafeId)`. CreatePostForm da `cafe_id` ekler.
-  - Giriş kontrolü: kullanıcı `cafe_memberships`'da yoksa, "Cafe'ye gir" butonu (günlük hak kontrolü trigger ile sunucuda). Hata `daily_cafe_limit` → toast.
-  - Cafe kapandıysa (`closes_at < now`): salt-okunur banner.
-- `cafeId` yoksa: mevcut genel feed (`cafe_id IS NULL`).
+### 3. Cafe listesi UI (Feed.tsx sol panel)
 
-## 6. CreatePostForm
+Sol kolondaki cafe satırı:
+- İsim · 👥 N/Cap (örn. `Berlin Devs · 👥 42/100`)
+- Sistem cafe ise `🌐 Sınırsız` rozeti
+- Serbest giriş cafe ise `🟢 Açık` küçük etiket; soru-onay cafe ise `🔒 Onaylı` etiketi
+- Üstte 2 sabit grup: "Sistem Cafeleri" (Relocation/Expo) ve "Topluluk Cafeleri"
 
-`cafeId` prop ekle; insert sırasında `cafe_id` doldur.
+### 4. Cafe sayfası (Feed.tsx cafeId mode)
 
-## Teknik notlar
+- Header'da `kind` badge + member count + kapasite
+- "Cafe'ye Gir" butonuna basınca:
+  - `open_entry=true` → direkt katıl
+  - `open_entry=false` → soru-cevap dialog açılır, cevap `cafe_memberships.answer`'a yazılır, `approved=false`. Sahibi onaylayana kadar feed read-only.
+- Hatalar: `cafe_full` → "Cafe dolu, başka bir cafe dene", `tr_phone_restricted` → "TR numaralı kullanıcılar yalnızca Relocation/Expo cafelerine katılabilir."
+- Sahibinin onay paneli (küçük): `approved=false` üyeleri listeleyip onayla/reddet (UPDATE/DELETE).
 
-- Trigger SQL:
-  ```sql
-  create function enforce_daily_cafe_join() returns trigger ...
-    if exists (select 1 from cafe_memberships
-               where user_id = NEW.user_id
-                 and joined_at > now() - interval '24 hours'
-                 and cafe_id <> NEW.cafe_id) then
-       raise exception 'daily_cafe_limit';
-    end if;
-  ```
-- Premium tespiti: mevcut `useIsPremium` hook (admin = premium).
-- Routing: `App.tsx`'de `/cadde/:cafeId` rotası eklenir (lazy Feed).
+### 5. useCafes.ts
+
+- `useActiveCafes` → `member_count`, `kind`, `open_entry`, `capacity` döner; sistem cafe'leri her zaman dahil (closes_at filtresi `kind in ('relocation','expo') OR closes_at > now()`)
+- `useCafe.join(answer?)` → answer parametre alır, error code'larını parse eder (cafe_full, tr_phone_restricted, daily_cafe_limit)
+
+### 6. CreatePostForm
+
+Cafe içindeysek ve kullanıcı `approved=false` ise paylaşım butonu disabled + "Onay bekliyor" mesajı.
 
 ## Dosya değişiklikleri
 
-- yeni: `src/components/feed/CreateCafeForm.tsx`
-- yeni: `src/hooks/useCafes.ts` (liste + üyelik helperları)
-- migration: cafes, cafe_memberships, feed_posts.cafe_id, trigger
-- düzenle: `src/pages/Feed.tsx`, `src/components/feed/CreatePostForm.tsx`, `src/App.tsx`
+- migration: kolonlar, trigger'lar, seed, member_count trigger
+- düzenle: `src/components/feed/CreateCafeForm.tsx` (open_entry toggle, kapasite UI)
+- düzenle: `src/hooks/useCafes.ts` (yeni alanlar, hata kodları)
+- düzenle: `src/pages/Feed.tsx` (badges, member count, gir-dialog, onay paneli)
+
+Onaylarsan migration'ı çalıştırıp UI tarafını implement ediyorum.

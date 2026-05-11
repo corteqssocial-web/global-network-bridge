@@ -16,6 +16,11 @@ export interface Cafe {
   closes_at: string;
   duration_hours: number;
   created_at: string;
+  kind: "community" | "relocation" | "expo";
+  open_entry: boolean;
+  entry_question: string | null;
+  capacity: number | null;
+  member_count: number;
 }
 
 export const useActiveCafes = (filters?: { countries?: string[]; cities?: string[] }) => {
@@ -27,7 +32,8 @@ export const useActiveCafes = (filters?: { countries?: string[]; cities?: string
     let q = supabase
       .from("cafes" as any)
       .select("*")
-      .gt("closes_at", new Date().toISOString())
+      .or(`closes_at.gt.${new Date().toISOString()},kind.in.(relocation,expo)`)
+      .order("kind", { ascending: true })
       .order("opens_at", { ascending: false });
     if (filters?.cities && filters.cities.length > 0) q = q.in("city", filters.cities);
     else if (filters?.countries && filters.countries.length > 0) q = q.in("country", filters.countries);
@@ -43,10 +49,21 @@ export const useActiveCafes = (filters?: { countries?: string[]; cities?: string
   return { cafes, loading, refresh };
 };
 
+const parseJoinError = (msg: string | undefined): string => {
+  if (!msg) return "Bilinmeyen hata.";
+  if (msg.includes("daily_cafe_limit"))
+    return "Bugün başka bir community cafe'ye katıldın. Yarın tekrar dene.";
+  if (msg.includes("cafe_full")) return "Cafe dolu. Başka bir cafe deneyin.";
+  if (msg.includes("tr_phone_restricted"))
+    return "TR (+90) numaralı kullanıcılar yalnızca Relocation ve Expo cafelerine katılabilir.";
+  return msg;
+};
+
 export const useCafe = (cafeId: string | undefined) => {
   const { user } = useAuth();
   const [cafe, setCafe] = useState<Cafe | null>(null);
   const [isMember, setIsMember] = useState(false);
+  const [approved, setApproved] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const refresh = useCallback(async () => {
@@ -57,11 +74,12 @@ export const useCafe = (cafeId: string | undefined) => {
     if (user) {
       const { data: m } = await supabase
         .from("cafe_memberships" as any)
-        .select("id")
+        .select("id, approved")
         .eq("cafe_id", cafeId)
         .eq("user_id", user.id)
         .maybeSingle();
       setIsMember(!!m);
+      setApproved(m ? (m as any).approved !== false : true);
     }
     setLoading(false);
   }, [cafeId, user]);
@@ -70,26 +88,36 @@ export const useCafe = (cafeId: string | undefined) => {
     refresh();
   }, [refresh]);
 
-  const join = async () => {
+  const join = async (answer?: string) => {
     if (!user) {
       toast({ title: "Giriş yapmalısın", variant: "destructive" });
       return false;
     }
-    if (!cafeId) return false;
-    const { error } = await supabase
-      .from("cafe_memberships" as any)
-      .insert({ cafe_id: cafeId, user_id: user.id });
+    if (!cafeId || !cafe) return false;
+    const needsApproval = !cafe.open_entry;
+    const { error } = await supabase.from("cafe_memberships" as any).insert({
+      cafe_id: cafeId,
+      user_id: user.id,
+      answer: answer || null,
+      approved: needsApproval ? false : true,
+    });
     if (error) {
-      const msg = error.message?.includes("daily_cafe_limit")
-        ? "Bugün başka bir cafe'ye katıldın. Yarın tekrar dene."
-        : error.message;
-      toast({ title: "Cafe'ye katılınamadı", description: msg, variant: "destructive" });
+      toast({
+        title: "Cafe'ye katılınamadı",
+        description: parseJoinError(error.message),
+        variant: "destructive",
+      });
       return false;
     }
     setIsMember(true);
-    toast({ title: "Cafe'ye katıldın 🎉" });
+    setApproved(!needsApproval);
+    toast({
+      title: needsApproval ? "Başvurun alındı" : "Cafe'ye katıldın 🎉",
+      description: needsApproval ? "Cafe sahibi onayını bekliyor." : undefined,
+    });
+    refresh();
     return true;
   };
 
-  return { cafe, isMember, loading, join, refresh };
+  return { cafe, isMember, approved, loading, join, refresh };
 };

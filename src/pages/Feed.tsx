@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { Heart, MapPin, Loader2, Newspaper, Play, MessageCircle, Smile, Share2, Users, Briefcase, Building2, Calendar, Flag, PenLine, Sparkles, UserPlus, Plane, Star, Coffee, Lock, Code2, Stethoscope, GraduationCap, ArrowLeft, Clock, LogIn } from "lucide-react";
+import { Heart, MapPin, Loader2, Newspaper, Play, MessageCircle, Smile, Share2, Users, Briefcase, Building2, Calendar, Flag, PenLine, Sparkles, UserPlus, Plane, Star, Coffee, Lock, Code2, Stethoscope, GraduationCap, ArrowLeft, Clock, LogIn, Check, X } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 import CreateCafeForm from "@/components/feed/CreateCafeForm";
 import { useActiveCafes, useCafe } from "@/hooks/useCafes";
 import Navbar from "@/components/Navbar";
@@ -59,7 +61,10 @@ const Feed = () => {
   const { user, onboardingCompleted } = useAuth();
   const { cafeId } = useParams<{ cafeId?: string }>();
   const navigate = useNavigate();
-  const { cafe, isMember, join: joinCafe } = useCafe(cafeId);
+  const { cafe, isMember, approved, join: joinCafe } = useCafe(cafeId);
+  const [joinDialogOpen, setJoinDialogOpen] = useState(false);
+  const [joinAnswer, setJoinAnswer] = useState("");
+  const [pendingMembers, setPendingMembers] = useState<Array<{ id: string; user_id: string; answer: string | null; full_name?: string | null }>>([]);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [selectedContinent, setSelectedContinent] = useState<string | null>(null);
@@ -203,6 +208,32 @@ const Feed = () => {
     if (page > 0) fetchPosts(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
+
+  // Load pending members when current user owns the cafe
+  useEffect(() => {
+    if (!cafe || !user || cafe.created_by !== user.id) {
+      setPendingMembers([]);
+      return;
+    }
+    (async () => {
+      const { data } = await supabase
+        .from("cafe_memberships" as any)
+        .select("id, user_id, answer")
+        .eq("cafe_id", cafe.id)
+        .eq("approved", false);
+      const rows = (data as any[]) || [];
+      if (rows.length === 0) {
+        setPendingMembers([]);
+        return;
+      }
+      const { data: profs } = await supabase
+        .from("profiles")
+        .select("id, full_name")
+        .in("id", rows.map((r) => r.user_id));
+      const nameMap = Object.fromEntries((profs || []).map((p: any) => [p.id, p.full_name]));
+      setPendingMembers(rows.map((r) => ({ ...r, full_name: nameMap[r.user_id] })));
+    })();
+  }, [cafe, user]);
 
   const toggleLike = async (post: FeedPost) => {
     if (!user && !demoMode) {
@@ -403,14 +434,25 @@ const Feed = () => {
                           <Icon className={`h-4 w-4 ${st.color}`} />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <div className="text-xs font-semibold truncate">{c.name}</div>
-                          <div className="text-[10px] text-muted-foreground truncate">
-                            {[c.city, c.country].filter(Boolean).join(" · ") || c.theme}
+                          <div className="text-xs font-semibold truncate flex items-center gap-1">
+                            {c.name}
+                            {c.kind === "relocation" && <span title="Relocation Cafe">🌍</span>}
+                            {c.kind === "expo" && <span title="Expo Cafe">🛍️</span>}
+                            {c.kind === "community" && c.open_entry && <span title="Serbest giriş" className="text-emerald-500">🟢</span>}
+                            {c.kind === "community" && !c.open_entry && <Lock className="h-2.5 w-2.5 text-muted-foreground" />}
+                          </div>
+                          <div className="text-[10px] text-muted-foreground truncate flex items-center gap-1.5">
+                            <span className="truncate">{[c.city, c.country].filter(Boolean).join(" · ") || c.theme}</span>
+                            <span className="shrink-0">· 👥 {c.member_count}{c.capacity ? `/${c.capacity}` : ""}</span>
                           </div>
                         </div>
-                        <Badge variant="outline" className="text-[9px] h-4 px-1 shrink-0">
-                          {formatRemaining(c.closes_at)}
-                        </Badge>
+                        {c.kind === "community" ? (
+                          <Badge variant="outline" className="text-[9px] h-4 px-1 shrink-0">
+                            {formatRemaining(c.closes_at)}
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary" className="text-[9px] h-4 px-1 shrink-0">∞</Badge>
+                        )}
                       </Link>
                     );
                   })}
@@ -538,33 +580,48 @@ const Feed = () => {
                         );
                       })()}
                       <div className="flex-1 min-w-0">
-                        <h1 className="text-xl font-extrabold truncate flex items-center gap-2">
+                        <h1 className="text-xl font-extrabold truncate flex items-center gap-2 flex-wrap">
                           ☕ {cafe!.name}
-                          {!cafeOpen && <Badge variant="destructive" className="text-[10px]">Kapalı</Badge>}
+                          {cafe!.kind === "relocation" && <Badge className="bg-sky-500/15 text-sky-600 border-0 text-[10px]">🌍 Relocation</Badge>}
+                          {cafe!.kind === "expo" && <Badge className="bg-amber-500/15 text-amber-600 border-0 text-[10px]">🛍️ Expo</Badge>}
+                          {cafe!.kind === "community" && cafe!.open_entry && <Badge className="bg-emerald-500/15 text-emerald-600 border-0 text-[10px]">🟢 Serbest</Badge>}
+                          {cafe!.kind === "community" && !cafe!.open_entry && <Badge variant="outline" className="text-[10px]"><Lock className="h-2.5 w-2.5 mr-1" />Onaylı</Badge>}
+                          {!cafeOpen && cafe!.kind === "community" && <Badge variant="destructive" className="text-[10px]">Kapalı</Badge>}
                         </h1>
                         <p className="text-xs text-muted-foreground mt-0.5">
-                          {cafe!.theme} · {[cafe!.city, cafe!.country].filter(Boolean).join(" · ") || "Global"}
+                          {cafe!.theme} · {[cafe!.city, cafe!.country].filter(Boolean).join(" · ") || "Global"} · 👥 {cafe!.member_count}{cafe!.capacity ? `/${cafe!.capacity}` : " (sınırsız)"}
                         </p>
-                        <div className="flex flex-wrap items-center gap-3 mt-2 text-[11px] text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <Clock className="h-3 w-3 text-emerald-500" />
-                            Açılış: {new Date(cafe!.opens_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="h-3 w-3 text-rose-500" />
-                            Kapanış: {new Date(cafe!.closes_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}
-                          </span>
-                          {cafeOpen && (
-                            <Badge variant="secondary" className="text-[10px]">Kalan: {formatRemaining(cafe!.closes_at)}</Badge>
-                          )}
-                        </div>
+                        {cafe!.kind === "community" && (
+                          <div className="flex flex-wrap items-center gap-3 mt-2 text-[11px] text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <Clock className="h-3 w-3 text-emerald-500" />
+                              Açılış: {new Date(cafe!.opens_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Clock className="h-3 w-3 text-rose-500" />
+                              Kapanış: {new Date(cafe!.closes_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}
+                            </span>
+                            {cafeOpen && (
+                              <Badge variant="secondary" className="text-[10px]">Kalan: {formatRemaining(cafe!.closes_at)}</Badge>
+                            )}
+                          </div>
+                        )}
                       </div>
                       {cafeOpen && !isMember && user && (
-                        <Button size="sm" onClick={joinCafe} className="gap-1.5">
-                          <LogIn className="h-3.5 w-3.5" /> Cafe'ye Gir
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            if (cafe!.open_entry) joinCafe();
+                            else setJoinDialogOpen(true);
+                          }}
+                          className="gap-1.5"
+                        >
+                          <LogIn className="h-3.5 w-3.5" />
+                          {cafe!.open_entry ? "Cafe'ye Gir" : "Başvur"}
                         </Button>
                       )}
-                      {isMember && <Badge className="bg-emerald-500/15 text-emerald-600 border-0">Üyesin</Badge>}
+                      {isMember && approved && <Badge className="bg-emerald-500/15 text-emerald-600 border-0">Üyesin</Badge>}
+                      {isMember && !approved && <Badge variant="secondary" className="text-[10px]">Onay Bekliyor</Badge>}
                     </div>
                   </header>
                 </>
@@ -580,14 +637,56 @@ const Feed = () => {
                 </header>
               )}
 
-              {(!inCafe || (cafeOpen && isMember)) && (
+              {(!inCafe || (cafeOpen && isMember && approved)) && (
                 <div className="mb-4">
                   <CreatePostForm cafeId={inCafe ? cafeId : undefined} onCreated={() => { setPage(0); fetchPosts(true); }} />
                 </div>
               )}
               {inCafe && cafeOpen && !isMember && user && (
                 <div className="mb-4 rounded-2xl border border-dashed border-border p-4 text-center text-xs text-muted-foreground">
-                  Paylaşım yapmak için önce cafe'ye gir. (Günde 1 cafe katılım hakkı)
+                  {cafe?.open_entry
+                    ? "Paylaşım yapmak için önce cafe'ye gir. (Günde 1 community cafe katılım hakkı)"
+                    : "Bu cafe onaylı giriş — başvur ve sahip onayını bekle."}
+                </div>
+              )}
+              {inCafe && isMember && !approved && (
+                <div className="mb-4 rounded-2xl border border-amber-200 bg-amber-50 dark:bg-amber-500/10 dark:border-amber-500/30 p-4 text-center text-xs">
+                  ⏳ Başvurun cafe sahibinin onayını bekliyor. Onaylanınca paylaşım yapabilirsin.
+                </div>
+              )}
+
+              {/* Cafe owner pending approvals */}
+              {inCafe && cafe && user && cafe.created_by === user.id && pendingMembers.length > 0 && (
+                <div className="mb-4 rounded-2xl border border-border bg-card p-4">
+                  <h3 className="text-sm font-bold mb-2 flex items-center gap-2">
+                    <Lock className="h-4 w-4 text-amber-500" /> Onay Bekleyen Üyeler ({pendingMembers.length})
+                  </h3>
+                  <div className="space-y-2">
+                    {pendingMembers.map((m) => (
+                      <div key={m.id} className="flex items-start gap-2 text-xs border-b border-border/50 pb-2 last:border-0">
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold truncate">{m.full_name || "Anonim"}</div>
+                          {m.answer && <div className="text-muted-foreground italic mt-0.5">"{m.answer}"</div>}
+                        </div>
+                        <Button size="sm" variant="outline" className="h-7 px-2 gap-1"
+                          onClick={async () => {
+                            await supabase.from("cafe_memberships" as any).update({ approved: true }).eq("id", m.id);
+                            setPendingMembers((prev) => prev.filter((x) => x.id !== m.id));
+                            toast({ title: "Onaylandı" });
+                          }}>
+                          <Check className="h-3 w-3" /> Onayla
+                        </Button>
+                        <Button size="sm" variant="ghost" className="h-7 px-2 gap-1 text-rose-500"
+                          onClick={async () => {
+                            await supabase.from("cafe_memberships" as any).delete().eq("id", m.id);
+                            setPendingMembers((prev) => prev.filter((x) => x.id !== m.id));
+                            toast({ title: "Reddedildi" });
+                          }}>
+                          <X className="h-3 w-3" /> Sil
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
@@ -738,6 +837,47 @@ const Feed = () => {
         </div>
       </main>
       <Footer />
+
+      {/* Join with question dialog */}
+      <Dialog open={joinDialogOpen} onOpenChange={setJoinDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Lock className="h-5 w-5 text-amber-500" /> Cafe'ye Başvur
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <p className="text-xs text-muted-foreground">
+              Bu cafe sahibinin onayı ile katılım kabul ediyor. Aşağıdaki soruyu cevapla:
+            </p>
+            <div className="rounded-lg bg-muted/50 p-3 text-sm font-medium">
+              {cafe?.entry_question || "Neden bu cafe'ye katılmak istiyorsun?"}
+            </div>
+            <Textarea
+              value={joinAnswer}
+              onChange={(e) => setJoinAnswer(e.target.value)}
+              placeholder="Cevabın..."
+              rows={4}
+              className="resize-none"
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setJoinDialogOpen(false)}>İptal</Button>
+            <Button
+              disabled={!joinAnswer.trim()}
+              onClick={async () => {
+                const ok = await joinCafe(joinAnswer.trim());
+                if (ok) {
+                  setJoinDialogOpen(false);
+                  setJoinAnswer("");
+                }
+              }}
+            >
+              Başvuruyu Gönder
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

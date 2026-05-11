@@ -16,18 +16,24 @@ export type Database = {
     Tables: {
       cafe_memberships: {
         Row: {
+          answer: string | null
+          approved: boolean
           cafe_id: string
           id: string
           joined_at: string
           user_id: string
         }
         Insert: {
+          answer?: string | null
+          approved?: boolean
           cafe_id: string
           id?: string
           joined_at?: string
           user_id: string
         }
         Update: {
+          answer?: string | null
+          approved?: boolean
           cafe_id?: string
           id?: string
           joined_at?: string
@@ -45,44 +51,59 @@ export type Database = {
       }
       cafes: {
         Row: {
+          capacity: number | null
           city: string | null
           closes_at: string
           country: string | null
           created_at: string
           created_by: string
           duration_hours: number
+          entry_question: string | null
           extra_links: Json | null
           id: string
+          kind: string
           linkedin_url: string
+          member_count: number
           name: string
+          open_entry: boolean
           opens_at: string
           theme: string
         }
         Insert: {
+          capacity?: number | null
           city?: string | null
           closes_at: string
           country?: string | null
           created_at?: string
           created_by: string
           duration_hours?: number
+          entry_question?: string | null
           extra_links?: Json | null
           id?: string
+          kind?: string
           linkedin_url: string
+          member_count?: number
           name: string
+          open_entry?: boolean
           opens_at?: string
           theme: string
         }
         Update: {
+          capacity?: number | null
           city?: string | null
           closes_at?: string
           country?: string | null
           created_at?: string
           created_by?: string
           duration_hours?: number
+          entry_question?: string | null
           extra_links?: Json | null
           id?: string
+          kind?: string
           linkedin_url?: string
+          member_count?: number
           name?: string
+          open_entry?: boolean
           opens_at?: string
           theme?: string
         }

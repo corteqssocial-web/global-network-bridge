@@ -5,6 +5,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -46,9 +48,12 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
   const [city, setCity] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [extra, setExtra] = useState("");
+  const [openEntry, setOpenEntry] = useState(true);
+  const [entryQuestion, setEntryQuestion] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const cities = country ? countryCities[country] || [] : [];
+  const capacity = duration >= 4 ? 300 : 100;
 
   const submit = async () => {
     if (!user) {
@@ -57,6 +62,10 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
     }
     if (!name.trim() || !linkedin.trim()) {
       toast({ title: "Cafe adı ve LinkedIn zorunlu", variant: "destructive" });
+      return;
+    }
+    if (!openEntry && !entryQuestion.trim()) {
+      toast({ title: "Onaylı giriş için bir soru gir", variant: "destructive" });
       return;
     }
     try {
@@ -81,6 +90,10 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
         opens_at: opens.toISOString(),
         closes_at: closes.toISOString(),
         duration_hours: duration,
+        kind: "community",
+        open_entry: openEntry,
+        entry_question: openEntry ? null : entryQuestion.trim(),
+        capacity,
       })
       .select("id")
       .single();
@@ -94,16 +107,17 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
       return;
     }
 
-    // Auto-join own cafe (subject to daily limit)
     const cafeId = (data as any).id as string;
-    await supabase.from("cafe_memberships" as any).insert({ cafe_id: cafeId, user_id: user.id });
+    await supabase.from("cafe_memberships" as any).insert({ cafe_id: cafeId, user_id: user.id, approved: true });
 
     setSubmitting(false);
     setOpen(false);
     setName("");
     setLinkedin("");
     setExtra("");
-    toast({ title: "Cafe açıldı ☕", description: `${duration} saat boyunca aktif.` });
+    setEntryQuestion("");
+    setOpenEntry(true);
+    toast({ title: "Cafe açıldı ☕", description: `${duration} saat · kapasite ${capacity}.` });
     onCreated?.();
     navigate(`/cadde/${cafeId}`);
   };
@@ -165,9 +179,31 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
             <Label className="text-xs">Ek Link (opsiyonel)</Label>
             <Input value={extra} onChange={(e) => setExtra(e.target.value)} placeholder="https://..." />
           </div>
+          <div className="rounded-lg border border-border p-2.5 space-y-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-xs flex flex-col">
+                <span className="font-semibold">Serbest Giriş</span>
+                <span className="text-[10px] text-muted-foreground font-normal">Açık ise herkes direkt katılabilir.</span>
+              </Label>
+              <Switch checked={openEntry} onCheckedChange={setOpenEntry} />
+            </div>
+            {!openEntry && (
+              <div>
+                <Label className="text-xs">Giriş Sorusu *</Label>
+                <Textarea
+                  value={entryQuestion}
+                  onChange={(e) => setEntryQuestion(e.target.value)}
+                  placeholder="Örn: Hangi şirkette çalışıyorsun? / LinkedIn linkini paylaşır mısın?"
+                  rows={2}
+                  className="resize-none"
+                />
+              </div>
+            )}
+          </div>
           <div className="rounded-lg bg-muted/50 p-2.5 text-xs text-muted-foreground">
-            Açılış süresi: <strong className="text-foreground">{duration} saat</strong>{" "}
-            {isPremium ? "(Premium)" : "(Premium: 4 saat)"}
+            Süre: <strong className="text-foreground">{duration} saat</strong> · Kapasite:{" "}
+            <strong className="text-foreground">{capacity} kişi</strong>{" "}
+            {!isPremium && "(Premium: 4 saat / 300 kişi)"}
           </div>
           <Button className="w-full" disabled={submitting} onClick={submit}>
             {submitting && <Loader2 className="h-4 w-4 animate-spin mr-2" />} Cafe'yi Aç
