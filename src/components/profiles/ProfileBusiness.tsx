@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EventManagePanel from "@/components/EventManagePanel";
 import CreateJobListingForm from "@/components/CreateJobListingForm";
 import { CouponManager } from "@/components/CouponManager";
@@ -6,7 +6,7 @@ import {
   Building2, MapPin, Globe, Phone, Mail, Calendar, Users,
   TrendingUp, Star, Package, Megaphone, Settings, BarChart3,
   CreditCard, Clock, Eye, Plus, ChevronRight, Tag, ArrowLeft, Edit, Crown,
-  ScanLine, Download, BarChart2, Inbox
+  ScanLine, Download, BarChart2, Inbox, Info
 } from "lucide-react";
 import ConsultantServiceRequests from "@/components/ConsultantServiceRequests";
 import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
@@ -21,33 +21,109 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import QRScannerMock from "@/components/QRScannerMock";
 import MapAddressBanner from "@/components/MapAddressBanner";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 import NotificationsList from "@/components/NotificationsList";
 import SocialMediaInputs from "@/components/SocialMediaInputs";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+
+// Phone country code helper — keeps the prefix and the local number aligned with the user's saved country.
+const COUNTRY_DIAL: Record<string, string> = {
+  Türkiye: "+90", Almanya: "+49", Hollanda: "+31", İngiltere: "+44", Fransa: "+33",
+  Belçika: "+32", Avusturya: "+43", İsviçre: "+41", "Amerika Birleşik Devletleri": "+1",
+  Kanada: "+1", İsveç: "+46", Norveç: "+47", Danimarka: "+45", İtalya: "+39",
+  İspanya: "+34", "Birleşik Arap Emirlikleri": "+971", Katar: "+974",
+};
+const dialFor = (country?: string | null) => (country && COUNTRY_DIAL[country]) || "";
 
 const ProfileBusiness = () => {
+  const { user } = useAuth();
   const [isVerified, setIsVerified] = useState(true);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<null | typeof events[0]>(null);
   const [showCreateJob, setShowCreateJob] = useState(false);
   const [editingJob, setEditingJob] = useState<null | typeof listings[0]>(null);
 
+  // DB-backed business profile
+  const [biz, setBiz] = useState({
+    business_name: "",
+    business_sector: "",
+    business_website: "",
+    business_description: "",
+    phone: "",
+    address: "",
+    city: "",
+    country: "",
+    show_on_map: false,
+    full_name: "",
+  });
+  const [confirmHideMap, setConfirmHideMap] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data: p } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+      if (p) {
+        setBiz({
+          business_name: (p as any).business_name || "",
+          business_sector: (p as any).business_sector || (p as any).profession || "",
+          business_website: (p as any).business_website || "",
+          business_description: (p as any).business_description || "",
+          phone: p.phone || "",
+          address: (p as any).address || "",
+          city: p.city || "",
+          country: p.country || "",
+          show_on_map: !!(p as any).show_on_map,
+          full_name: p.full_name || "",
+        });
+      }
+      // Real backend counters
+      const [{ count: views }, { data: evs }, { count: listingsCount }] = await Promise.all([
+        supabase.from("profile_views" as any).select("id", { count: "exact", head: true }).eq("profile_id", user.id),
+        supabase.from("events").select("id, attendees_count").eq("created_by", user.id),
+        supabase.from("events").select("id", { count: "exact", head: true }).eq("created_by", user.id),
+      ]);
+      const attendees = (evs || []).reduce((acc: number, e: any) => acc + (e.attendees_count || 0), 0);
+      setStats({
+        profileViews: views || 0,
+        eventAttendees: attendees,
+        totalListings: listingsCount || 0,
+        averageRating: null,
+        ratingCount: 0,
+      });
+    })();
+  }, [user]);
+
+  const persistField = async (patch: Record<string, any>) => {
+    if (!user) return;
+    await supabase.from("profiles").update(patch).eq("id", user.id);
+  };
+
+  const handleShowOnMapChange = async (checked: boolean) => {
+    if (!checked) { setConfirmHideMap(true); return; }
+    setBiz((b) => ({ ...b, show_on_map: true }));
+    await persistField({ show_on_map: true });
+    toast({ title: "Haritada görünüyorsun ✅", description: "İşletmen Diaspora Haritası'nda listelenecek." });
+  };
+
   const business = {
-    name: "Anatolian Tech GmbH",
-    type: "Yazılım & Danışmanlık",
-    email: "info@anatoliantech.de",
-    phone: "+49 30 1234567",
-    website: "anatoliantech.de",
-    country: "Almanya",
-    city: "Berlin",
-    avatar: "AT",
+    name: biz.business_name || biz.full_name || "İşletmem",
+    type: biz.business_sector || "—",
+    phone: biz.phone ? (biz.phone.startsWith("+") ? biz.phone : `${dialFor(biz.country)} ${biz.phone}`.trim()) : "—",
+    website: biz.business_website || "",
+    country: biz.country || "—",
+    city: biz.city || "—",
+    avatar: (biz.business_name || biz.full_name || "??").slice(0, 2).toUpperCase(),
     employees: 12,
     founded: 2019,
-    description: "Diaspora Türk girişimcilerine yönelik yazılım çözümleri ve dijital danışmanlık hizmetleri sunan teknoloji şirketi.",
-    balance: 1250.00,
+    description: biz.business_description || "İşletme tanıtımınızı Ayarlar → İşletme Bilgileri'nden ekleyin.",
+    balance: 0,
   };
 
   const listings = [
@@ -61,12 +137,9 @@ const ProfileBusiness = () => {
     { id: 2, title: "Startup Workshop", date: "05 Nis 2026", attendees: 30, status: "Yaklaşan" },
   ];
 
-  const stats = {
-    profileViews: 1240,
-    eventAttendees: 187,
-    totalListings: 5,
-    averageRating: 4.7,
-  };
+  const [stats, setStatsRaw] = useState({ profileViews: 0, eventAttendees: 0, totalListings: 0, averageRating: null as number | null, ratingCount: 0 });
+  // Wrapper to keep prior code working
+  const setStats = setStatsRaw;
 
   return (
     <>
