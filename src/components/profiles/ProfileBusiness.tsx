@@ -26,6 +26,7 @@ import MapAddressBanner from "@/components/MapAddressBanner";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 import NotificationsList from "@/components/NotificationsList";
 import SocialMediaInputs from "@/components/SocialMediaInputs";
+import { toast } from "@/hooks/use-toast";
 
 const ProfileBusiness = () => {
   const [isVerified, setIsVerified] = useState(true);
@@ -98,11 +99,16 @@ const ProfileBusiness = () => {
               </a>
             </div>
           </div>
-          <div className="bg-primary/10 rounded-xl p-4 text-center shrink-0 min-w-[140px]">
-            <CreditCard className="h-5 w-5 text-primary mx-auto mb-1" />
-            <p className="text-2xl font-bold text-foreground">€{business.balance.toFixed(2)}</p>
-            <p className="text-xs text-muted-foreground">İşletme Bakiyesi</p>
-          </div>
+          {(() => {
+            const hasExtraRevenue = (business.balance ?? 0) > 0; // Kupon/etkinlik gelirleri eklendiğinde "Toplam Gelir"
+            return (
+              <div className="bg-primary/10 rounded-xl p-4 text-center shrink-0 min-w-[140px]">
+                <CreditCard className="h-5 w-5 text-primary mx-auto mb-1" />
+                <p className="text-2xl font-bold text-foreground">€{business.balance.toFixed(2)}</p>
+                <p className="text-xs text-muted-foreground">{hasExtraRevenue ? "Toplam Gelir" : "Platform Geliri"}</p>
+              </div>
+            );
+          })()}
         </div>
       </div>
 
@@ -378,11 +384,10 @@ const ProfileBusiness = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {[
                 { title: "Öne Çıkan İşletme", desc: "Ana sayfada ve arama sonuçlarında üst sıralarda görünün", price: "€29/hafta", icon: Star },
-                { title: "WhatsApp Tanıtımı", desc: "CorteQS Kanalında Tanıtım", price: "€19/tanıtım", icon: Megaphone },
                 { title: "Etkinlik Boost", desc: "Etkinliklerinizi platforma ve mail listelerine tanıtın", price: "€49/etkinlik", icon: TrendingUp },
-                { title: "İlan Öne Çıkarma", desc: "İş ilanlarınızı üst sıralara taşıyın", price: "€15/ilan", icon: Package },
               ].map((promo) => (
-                <div key={promo.title} className="border border-border rounded-xl p-4 hover:border-primary/30 hover:bg-primary/5 transition-colors">
+                <div key={promo.title} className="relative border border-border rounded-xl p-4 hover:border-primary/30 hover:bg-primary/5 transition-colors">
+                  <Badge variant="outline" className="absolute top-2 right-2 text-[10px] bg-gold/10 text-gold border-gold/30">Yakında</Badge>
                   <div className="flex items-center gap-3 mb-2">
                     <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
                       <promo.icon className="h-4 w-4 text-primary" />
@@ -393,10 +398,18 @@ const ProfileBusiness = () => {
                     </div>
                   </div>
                   <p className="text-xs text-muted-foreground mb-3">{promo.desc}</p>
-                  <Button variant="outline" size="sm" className="w-full">Satın Al</Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => toast({ title: "Yakında 🚀", description: `${promo.title} açıldığında size bildirim ve e-posta göndereceğiz.` })}
+                  >
+                    Bana Haber Ver
+                  </Button>
                 </div>
               ))}
-              <div className="md:col-span-2 border border-primary/30 rounded-xl p-4 bg-primary/5">
+              <div className="md:col-span-2 relative border border-primary/30 rounded-xl p-4 bg-primary/5">
+                <Badge variant="outline" className="absolute top-2 right-2 text-[10px] bg-gold/10 text-gold border-gold/30">Yakında</Badge>
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Megaphone className="h-4 w-4 text-primary" />
@@ -408,21 +421,6 @@ const ProfileBusiness = () => {
                 </div>
                 <p className="text-xs text-muted-foreground mb-3">Sosyal medya hesaplarınızda profesyonel kampanya yönetimi</p>
                 <SocialMediaCampaignDialog entityName={business.name} entityType="business" />
-              </div>
-
-              {/* Category Showcase */}
-              <div className="bg-card rounded-2xl p-5 border border-gold/30">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="bg-gold/10 p-2.5 rounded-full">
-                    <Crown className="h-5 w-5 text-gold" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-foreground text-sm">Kategori Vitrini</h3>
-                    <p className="text-xs font-semibold text-gold">€29+/hafta</p>
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground mb-3">Kategorinizde ilk 6 sırada gösterilerek daha fazla müşteriye ulaşın</p>
-                <CategoryShowcasePurchase entityName={business.name} category={business.type} />
               </div>
             </div>
           </div>
