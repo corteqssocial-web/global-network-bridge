@@ -153,9 +153,16 @@ const ConsultantDetail = () => {
                 <Button variant="outline" className="gap-2 w-full">
                   <MessageSquare className="h-4 w-4" /> WhatsApp ile Görüş
                 </Button>
-                <Button variant="outline" className="gap-2 w-full">
+                <Button variant="outline" className="gap-2 w-full" onClick={() => setBookingOpen(true)}>
                   <Calendar className="h-4 w-4" /> Randevu Al
                 </Button>
+                <AppointmentBookingDialog
+                  open={bookingOpen}
+                  onOpenChange={setBookingOpen}
+                  providerId={consultant.id}
+                  providerName={consultant.name}
+                  providerKind="consultant"
+                />
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(consultant.name + ', ' + consultant.city + ', ' + consultant.country)}`}
                   target="_blank"
