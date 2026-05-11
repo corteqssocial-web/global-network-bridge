@@ -30,6 +30,8 @@ import MapAddressBanner from "@/components/MapAddressBanner";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 import NotificationsList from "@/components/NotificationsList";
 import SocialMediaInputs from "@/components/SocialMediaInputs";
+import ConsultantFeatureToggles from "@/components/profiles/ConsultantFeatureToggles";
+import { Sliders } from "lucide-react";
 
 const ProfileConsultant = () => {
   const { user } = useAuth();
