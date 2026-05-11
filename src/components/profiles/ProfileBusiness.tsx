@@ -689,28 +689,33 @@ const ProfileBusiness = () => {
                 </Button>
               </div>
             </div>
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
-                <Settings className="h-5 w-5 text-primary" /> Görünürlük
+            <div className="bg-card rounded-xl border border-border p-4 shadow-card">
+              <h2 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                <Settings className="h-4 w-4 text-primary" /> Görünürlük
               </h2>
-              <div className="space-y-6">
+              <div className="space-y-2">
                 {[
-                  { key: "verified_business" as const, title: "Onaylı İşletme Rozeti", desc: "Doğrulanmış işletme olarak görünün", on: isVerified, req: verifiedReq },
-                  { key: "hiring_mode" as const, title: "İşe Alım Modu", desc: "Aktif olarak eleman aradığınızı gösterin (24 saate kadar onaylanır)", on: hiringMode, req: hiringReq },
+                  { key: "verified_business" as const, title: "Onaylı İşletme Rozeti", desc: "Doğrulanmış işletme olarak görünün", on: isVerified, req: verifiedReq, badge: "1 yıl ücretsiz" },
+                  { key: "hiring_mode" as const, title: "İşe Alım Modu", desc: "Aktif olarak eleman aradığınızı gösterin (24 sa. içinde onaylanır)", on: hiringMode, req: hiringReq },
                 ].map((row) => (
-                  <div key={row.key} className="flex items-center justify-between gap-4">
+                  <div key={row.key} className="flex items-center justify-between gap-3 py-1.5">
                     <div className="min-w-0">
-                      <p className="font-medium text-foreground">{row.title}</p>
-                      <p className="text-sm text-muted-foreground">{row.desc}</p>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="text-sm font-medium text-foreground">{row.title}</p>
+                        {row.badge && (
+                          <Badge className="bg-emerald-500/10 text-emerald-600 border border-emerald-500/30 text-[10px] px-1.5 py-0">{row.badge}</Badge>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground">{row.desc}</p>
                     </div>
                     {row.on ? (
-                      <Badge className="bg-turquoise/10 text-turquoise border border-turquoise/30">Onaylı ✓</Badge>
+                      <Badge className="bg-turquoise/10 text-turquoise border border-turquoise/30 text-[10px]">Onaylı ✓</Badge>
                     ) : row.req?.status === "pending" ? (
-                      <Badge variant="outline" className="text-amber-600 border-amber-300">Onay bekliyor</Badge>
+                      <Badge variant="outline" className="text-amber-600 border-amber-300 text-[10px]">Onay bekliyor</Badge>
                     ) : row.req?.status === "rejected" ? (
-                      <Button size="sm" variant="outline" onClick={() => submitApproval(row.key)}>Tekrar Gönder</Button>
+                      <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => submitApproval(row.key)}>Tekrar Gönder</Button>
                     ) : (
-                      <Button size="sm" onClick={() => submitApproval(row.key)}>Onaya Gönder</Button>
+                      <Button size="sm" className="h-7 text-xs" onClick={() => submitApproval(row.key)}>Onaya Gönder</Button>
                     )}
                   </div>
                 ))}
