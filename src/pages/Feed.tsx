@@ -611,14 +611,56 @@ const Feed = () => {
                 </header>
               )}
 
-              {(!inCafe || (cafeOpen && isMember)) && (
+              {(!inCafe || (cafeOpen && isMember && approved)) && (
                 <div className="mb-4">
                   <CreatePostForm cafeId={inCafe ? cafeId : undefined} onCreated={() => { setPage(0); fetchPosts(true); }} />
                 </div>
               )}
               {inCafe && cafeOpen && !isMember && user && (
                 <div className="mb-4 rounded-2xl border border-dashed border-border p-4 text-center text-xs text-muted-foreground">
-                  Paylaşım yapmak için önce cafe'ye gir. (Günde 1 cafe katılım hakkı)
+                  {cafe?.open_entry
+                    ? "Paylaşım yapmak için önce cafe'ye gir. (Günde 1 community cafe katılım hakkı)"
+                    : "Bu cafe onaylı giriş — başvur ve sahip onayını bekle."}
+                </div>
+              )}
+              {inCafe && isMember && !approved && (
+                <div className="mb-4 rounded-2xl border border-amber-200 bg-amber-50 dark:bg-amber-500/10 dark:border-amber-500/30 p-4 text-center text-xs">
+                  ⏳ Başvurun cafe sahibinin onayını bekliyor. Onaylanınca paylaşım yapabilirsin.
+                </div>
+              )}
+
+              {/* Cafe owner pending approvals */}
+              {inCafe && cafe && user && cafe.created_by === user.id && pendingMembers.length > 0 && (
+                <div className="mb-4 rounded-2xl border border-border bg-card p-4">
+                  <h3 className="text-sm font-bold mb-2 flex items-center gap-2">
+                    <Lock className="h-4 w-4 text-amber-500" /> Onay Bekleyen Üyeler ({pendingMembers.length})
+                  </h3>
+                  <div className="space-y-2">
+                    {pendingMembers.map((m) => (
+                      <div key={m.id} className="flex items-start gap-2 text-xs border-b border-border/50 pb-2 last:border-0">
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold truncate">{m.full_name || "Anonim"}</div>
+                          {m.answer && <div className="text-muted-foreground italic mt-0.5">"{m.answer}"</div>}
+                        </div>
+                        <Button size="sm" variant="outline" className="h-7 px-2 gap-1"
+                          onClick={async () => {
+                            await supabase.from("cafe_memberships" as any).update({ approved: true }).eq("id", m.id);
+                            setPendingMembers((prev) => prev.filter((x) => x.id !== m.id));
+                            toast({ title: "Onaylandı" });
+                          }}>
+                          <Check className="h-3 w-3" /> Onayla
+                        </Button>
+                        <Button size="sm" variant="ghost" className="h-7 px-2 gap-1 text-rose-500"
+                          onClick={async () => {
+                            await supabase.from("cafe_memberships" as any).delete().eq("id", m.id);
+                            setPendingMembers((prev) => prev.filter((x) => x.id !== m.id));
+                            toast({ title: "Reddedildi" });
+                          }}>
+                          <X className="h-3 w-3" /> Sil
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
