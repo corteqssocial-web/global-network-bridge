@@ -188,7 +188,13 @@ const ProfileConsultant = () => {
             {/* Upcoming sessions */}
             <h3 className="font-semibold text-foreground mb-3 text-sm">Yaklaşan Seanslar</h3>
             <div className="space-y-2 mb-6">
-              {sessions.live.map((s) => (
+              {sessions.live.length === 0 ? (
+                <EmptyDashboardState
+                  icon={Video}
+                  title="Henüz canlı seans yok"
+                  description="Müşterilerin profilinden randevu aldığında onayladıkların burada görünür. Randevu kabulü Profil Ayarları → Seans Ayarları'ndan açıktır."
+                />
+              ) : sessions.live.map((s) => (
                 <div key={s.id} className="flex items-center gap-3 p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
                   <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                     <Video className="h-4 w-4 text-primary" />
