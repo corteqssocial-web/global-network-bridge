@@ -176,6 +176,83 @@ export type Database = {
         }
         Relationships: []
       }
+      feed_likes: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "feed_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_posts: {
+        Row: {
+          author_role: string | null
+          city: string | null
+          comment_count: number
+          content: string
+          country: string | null
+          created_at: string
+          id: string
+          image_url: string | null
+          like_count: number
+          status: string
+          tags: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          author_role?: string | null
+          city?: string | null
+          comment_count?: number
+          content: string
+          country?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          like_count?: number
+          status?: string
+          tags?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          author_role?: string | null
+          city?: string | null
+          comment_count?: number
+          content?: string
+          country?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          like_count?: number
+          status?: string
+          tags?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       generated_posts: {
         Row: {
           created_at: string
