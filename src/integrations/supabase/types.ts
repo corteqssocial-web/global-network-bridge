@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      approval_requests: {
+        Row: {
+          admin_note: string | null
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          id: string
+          payload: Json
+          request_type: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_note?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          id?: string
+          payload?: Json
+          request_type: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_note?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          id?: string
+          payload?: Json
+          request_type?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       cafe_memberships: {
         Row: {
           answer: string | null
@@ -713,7 +752,9 @@ export type Database = {
           cv_name: string | null
           cv_path: string | null
           full_name: string | null
+          hiring_mode: boolean
           id: string
+          is_verified: boolean
           onboarding_completed: boolean
           phone: string | null
           presentation_name: string | null
@@ -737,7 +778,9 @@ export type Database = {
           cv_name?: string | null
           cv_path?: string | null
           full_name?: string | null
+          hiring_mode?: boolean
           id: string
+          is_verified?: boolean
           onboarding_completed?: boolean
           phone?: string | null
           presentation_name?: string | null
@@ -761,7 +804,9 @@ export type Database = {
           cv_name?: string | null
           cv_path?: string | null
           full_name?: string | null
+          hiring_mode?: boolean
           id?: string
+          is_verified?: boolean
           onboarding_completed?: boolean
           phone?: string | null
           presentation_name?: string | null
