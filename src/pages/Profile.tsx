@@ -61,19 +61,49 @@ const Profile = () => {
     );
   }
 
+  const dashboardMeta: Record<string, { title: string; subtitle: string; icon: typeof User }> = {
+    individual: { title: "Bireysel Panelim", subtitle: "Diaspora yolculuğunuzu tek yerden yönetin", icon: User },
+    business: { title: "İşletme Paneli", subtitle: "İlanlarınızı, kuponlarınızı ve müşteri etkileşimlerinizi yönetin", icon: Building2 },
+    association: { title: "Kuruluş Paneli", subtitle: "Üyelerinizi ve etkinliklerinizi koordine edin", icon: Users },
+    consultant: { title: "Danışman Paneli", subtitle: "Hizmetlerinizi sunun, talepleri yönetin", icon: Briefcase },
+    admin: { title: "Yönetici Paneli", subtitle: "Platformu yönetin ve içerikleri denetleyin", icon: Shield },
+    blogger: { title: "Blogger / Vlogger Paneli", subtitle: "İçeriklerinizi ve iş birliklerinizi yönetin", icon: PenLine },
+    ambassador: { title: "Şehir Elçisi Paneli", subtitle: "Şehrinizdeki diasporayı büyütün", icon: Globe2 },
+  };
+
+  const activeView = isPreviewMode ? previewView! : (accountType || "individual");
+  const meta = dashboardMeta[activeView] || dashboardMeta.individual;
+  const Icon = meta.icon;
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
-          <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
+          <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors">
             <ArrowLeft className="h-4 w-4" /> Ana Sayfa
           </Link>
-          {isPreviewMode && (
-            <div className="mb-6 rounded-xl border border-primary/20 bg-primary/5 p-3 text-sm text-foreground">
-              Dashboard önizleme modu: <span className="font-semibold">{previewView}</span>
+
+          <div className="mb-6 rounded-2xl border bg-card p-5 sm:p-6 shadow-sm">
+            <div className="flex items-start justify-between gap-4 flex-wrap">
+              <div className="flex items-center gap-4 min-w-0">
+                <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                  <Icon className="h-6 w-6" />
+                </div>
+                <div className="min-w-0">
+                  <h1 className="text-xl sm:text-2xl font-bold text-foreground truncate">{meta.title}</h1>
+                  <p className="text-sm text-muted-foreground mt-0.5">{meta.subtitle}</p>
+                </div>
+              </div>
+              {isPreviewMode && (
+                <Badge variant="outline" className="gap-1.5 border-primary/30 bg-primary/5 text-primary">
+                  <Eye className="h-3.5 w-3.5" />
+                  Önizleme Modu
+                </Badge>
+              )}
             </div>
-          )}
+          </div>
+
           {renderProfile()}
         </div>
       </main>
