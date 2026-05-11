@@ -8,6 +8,7 @@ import CategoryShowcasePurchase from "@/components/CategoryShowcasePurchase";
 import CorBotPromoBanner from "@/components/CorBotPromoBanner";
 import EmptyDashboardState from "@/components/EmptyDashboardState";
 import AppointmentManagePanel from "@/components/booking/AppointmentManagePanel";
+import CategoryPerformance from "@/components/booking/CategoryPerformance";
 import { Lock } from "lucide-react";
 import {
   User, MapPin, Globe, Star, Calendar, Users, Clock, Eye,
