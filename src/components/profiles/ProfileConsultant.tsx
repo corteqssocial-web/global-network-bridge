@@ -361,7 +361,13 @@ const ProfileConsultant = () => {
                 <Clock className="h-5 w-5 text-muted-foreground" /> Son AI Twin Seansları
               </h3>
               <div className="space-y-2">
-                {sessions.aiTwin.map((s) => (
+                {sessions.aiTwin.length === 0 ? (
+                  <EmptyDashboardState
+                    icon={Bot}
+                    title="AI Twin seansı yok"
+                    description="AI Twin'i aktive ettikten sonra kullanıcılarla yapılan otomatik görüşmelerin transkript ve istatistikleri burada listelenir."
+                  />
+                ) : sessions.aiTwin.map((s) => (
                   <div key={s.id} className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
                     <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                       <Bot className="h-4 w-4 text-primary" />
