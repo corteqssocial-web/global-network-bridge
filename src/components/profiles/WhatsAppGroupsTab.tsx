@@ -106,6 +106,23 @@ const WhatsAppGroupsTab = () => {
         <p className="text-[11px] text-muted-foreground text-center">WhatsApp ile bağlanarak bildirimlerinizi, mesajlarınızı ve RFQ güncellemelerinizi anlık olarak alabilirsiniz.</p>
       </div>
 
+      {/* CorBot satın alma CTA */}
+      <div className="rounded-2xl border-2 border-primary/40 bg-gradient-to-r from-primary/10 via-primary/5 to-success/10 p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <div className="w-12 h-12 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
+          <Bot className="h-6 w-6 text-primary" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="font-bold text-foreground text-base">CorBot'u cebine al — ayda sadece 3 €</p>
+          <p className="text-xs text-muted-foreground">WhatsApp üzerinden bildirimler, RFQ uyarıları, AI destekli yanıtlar ve canlı destek tek bir abonelikte.</p>
+        </div>
+        <Button
+          className="shrink-0 gap-2 bg-primary hover:bg-primary/90"
+          onClick={() => toast({ title: "Çok yakında 🚀", description: "CorBot Premium açıldığında sana ilk haber verenlerden olacaksın." })}
+        >
+          Ayda Sadece 3 €'ya Cebinde
+        </Button>
+      </div>
+
       {/* Başvuru Gönderilen Gruplar */}
       <div className="flex items-center justify-between">
         <h3 className="font-bold text-foreground flex items-center gap-2 text-sm">

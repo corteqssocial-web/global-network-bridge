@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EventManagePanel from "@/components/EventManagePanel";
 import CreateJobListingForm from "@/components/CreateJobListingForm";
 import { CouponManager } from "@/components/CouponManager";
@@ -6,7 +6,7 @@ import {
   Building2, MapPin, Globe, Phone, Mail, Calendar, Users,
   TrendingUp, Star, Package, Megaphone, Settings, BarChart3,
   CreditCard, Clock, Eye, Plus, ChevronRight, Tag, ArrowLeft, Edit, Crown,
-  ScanLine, Download, BarChart2, Inbox
+  ScanLine, Download, BarChart2, Inbox, Info
 } from "lucide-react";
 import ConsultantServiceRequests from "@/components/ConsultantServiceRequests";
 import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
@@ -21,33 +21,109 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import QRScannerMock from "@/components/QRScannerMock";
 import MapAddressBanner from "@/components/MapAddressBanner";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 import NotificationsList from "@/components/NotificationsList";
 import SocialMediaInputs from "@/components/SocialMediaInputs";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+
+// Phone country code helper — keeps the prefix and the local number aligned with the user's saved country.
+const COUNTRY_DIAL: Record<string, string> = {
+  Türkiye: "+90", Almanya: "+49", Hollanda: "+31", İngiltere: "+44", Fransa: "+33",
+  Belçika: "+32", Avusturya: "+43", İsviçre: "+41", "Amerika Birleşik Devletleri": "+1",
+  Kanada: "+1", İsveç: "+46", Norveç: "+47", Danimarka: "+45", İtalya: "+39",
+  İspanya: "+34", "Birleşik Arap Emirlikleri": "+971", Katar: "+974",
+};
+const dialFor = (country?: string | null) => (country && COUNTRY_DIAL[country]) || "";
 
 const ProfileBusiness = () => {
+  const { user } = useAuth();
   const [isVerified, setIsVerified] = useState(true);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<null | typeof events[0]>(null);
   const [showCreateJob, setShowCreateJob] = useState(false);
   const [editingJob, setEditingJob] = useState<null | typeof listings[0]>(null);
 
+  // DB-backed business profile
+  const [biz, setBiz] = useState({
+    business_name: "",
+    business_sector: "",
+    business_website: "",
+    business_description: "",
+    phone: "",
+    address: "",
+    city: "",
+    country: "",
+    show_on_map: false,
+    full_name: "",
+  });
+  const [confirmHideMap, setConfirmHideMap] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data: p } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+      if (p) {
+        setBiz({
+          business_name: (p as any).business_name || "",
+          business_sector: (p as any).business_sector || (p as any).profession || "",
+          business_website: (p as any).business_website || "",
+          business_description: (p as any).business_description || "",
+          phone: p.phone || "",
+          address: (p as any).address || "",
+          city: p.city || "",
+          country: p.country || "",
+          show_on_map: !!(p as any).show_on_map,
+          full_name: p.full_name || "",
+        });
+      }
+      // Real backend counters
+      const [{ count: views }, { data: evs }, { count: listingsCount }] = await Promise.all([
+        supabase.from("profile_views" as any).select("id", { count: "exact", head: true }).eq("profile_id", user.id),
+        supabase.from("events").select("id, max_attendees").eq("user_id", user.id),
+        supabase.from("events").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      ]);
+      const attendees = (evs || []).reduce((acc: number, e: any) => acc + (e.max_attendees || 0), 0);
+      setStats({
+        profileViews: views || 0,
+        eventAttendees: attendees,
+        totalListings: listingsCount || 0,
+        averageRating: null,
+        ratingCount: 0,
+      });
+    })();
+  }, [user]);
+
+  const persistField = async (patch: Record<string, any>) => {
+    if (!user) return;
+    await (supabase.from("profiles") as any).update(patch).eq("id", user.id);
+  };
+
+  const handleShowOnMapChange = async (checked: boolean) => {
+    if (!checked) { setConfirmHideMap(true); return; }
+    setBiz((b) => ({ ...b, show_on_map: true }));
+    await persistField({ show_on_map: true });
+    toast({ title: "Haritada görünüyorsun ✅", description: "İşletmen Diaspora Haritası'nda listelenecek." });
+  };
+
   const business = {
-    name: "Anatolian Tech GmbH",
-    type: "Yazılım & Danışmanlık",
-    email: "info@anatoliantech.de",
-    phone: "+49 30 1234567",
-    website: "anatoliantech.de",
-    country: "Almanya",
-    city: "Berlin",
-    avatar: "AT",
+    name: biz.business_name || biz.full_name || "İşletmem",
+    type: biz.business_sector || "—",
+    phone: biz.phone ? (biz.phone.startsWith("+") ? biz.phone : `${dialFor(biz.country)} ${biz.phone}`.trim()) : "—",
+    website: biz.business_website || "",
+    country: biz.country || "—",
+    city: biz.city || "—",
+    avatar: (biz.business_name || biz.full_name || "??").slice(0, 2).toUpperCase(),
     employees: 12,
     founded: 2019,
-    description: "Diaspora Türk girişimcilerine yönelik yazılım çözümleri ve dijital danışmanlık hizmetleri sunan teknoloji şirketi.",
-    balance: 1250.00,
+    description: biz.business_description || "İşletme tanıtımınızı Ayarlar → İşletme Bilgileri'nden ekleyin.",
+    balance: 0,
   };
 
   const listings = [
@@ -61,12 +137,9 @@ const ProfileBusiness = () => {
     { id: 2, title: "Startup Workshop", date: "05 Nis 2026", attendees: 30, status: "Yaklaşan" },
   ];
 
-  const stats = {
-    profileViews: 1240,
-    eventAttendees: 187,
-    totalListings: 5,
-    averageRating: 4.7,
-  };
+  const [stats, setStatsRaw] = useState({ profileViews: 0, eventAttendees: 0, totalListings: 0, averageRating: null as number | null, ratingCount: 0 });
+  // Wrapper to keep prior code working
+  const setStats = setStatsRaw;
 
   return (
     <>
@@ -112,21 +185,31 @@ const ProfileBusiness = () => {
         </div>
       </div>
 
-      {/* Stats row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        {[
-          { label: "Profil Görüntülenme", value: stats.profileViews, icon: Eye, color: "text-primary" },
-          { label: "Etkinlik Katılımcı", value: stats.eventAttendees, icon: Users, color: "text-turquoise" },
-          { label: "Toplam İlan", value: stats.totalListings, icon: Package, color: "text-gold" },
-          { label: "Ortalama Puan", value: stats.averageRating, icon: Star, color: "text-gold" },
-        ].map((stat, i) => (
-          <div key={i} className="bg-card rounded-xl border border-border p-4 shadow-card text-center">
-            <stat.icon className={`h-5 w-5 ${stat.color} mx-auto mb-2`} />
-            <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-            <p className="text-xs text-muted-foreground">{stat.label}</p>
-          </div>
-        ))}
-      </div>
+      {/* Stats row — bound to live backend counters */}
+      <TooltipProvider>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {[
+            { label: "Profil Görüntülenme", value: stats.profileViews, icon: Eye, color: "text-primary", tip: "Profilin sayfa açılışlarında profile_views tablosuna yazılan benzersiz görüntülenme sayısı." },
+            { label: "Etkinlik Katılımcı", value: stats.eventAttendees, icon: Users, color: "text-turquoise", tip: "Senin oluşturduğun etkinliklerin maksimum katılımcı kapasitelerinin toplamı." },
+            { label: "Toplam İlan", value: stats.totalListings, icon: Package, color: "text-gold", tip: "Veritabanındaki yayında olan etkinlik & iş ilanı sayın." },
+            { label: "Ortalama Puan", value: stats.averageRating ?? "—", icon: Star, color: "text-gold",
+              tip: "Müşteri puanlarının ağırlıklı ortalamasıdır. Hesap mantığı: (kupon kullanan müşterilerden gelen puanlar × 0.6) + (etkinlik katılımcı geri bildirimleri × 0.3) + (mesaj/RFQ tamamlama puanları × 0.1). Henüz toplanmış puan yok; ilk değerlendirme geldiğinde otomatik hesaplanır." },
+          ].map((stat, i) => (
+            <Tooltip key={i}>
+              <TooltipTrigger asChild>
+                <div className="bg-card rounded-xl border border-border p-4 shadow-card text-center cursor-help relative">
+                  <stat.icon className={`h-5 w-5 ${stat.color} mx-auto mb-2`} />
+                  <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+                  <p className="text-xs text-muted-foreground flex items-center justify-center gap-1">
+                    {stat.label} <Info className="h-3 w-3 opacity-60" />
+                  </p>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent className="max-w-xs text-xs">{stat.tip}</TooltipContent>
+            </Tooltip>
+          ))}
+        </div>
+      </TooltipProvider>
 
       {/* Tabs */}
       <Tabs defaultValue="listings" className="w-full">
@@ -449,21 +532,72 @@ const ProfileBusiness = () => {
               <div className="space-y-4">
                 <div>
                   <Label>İşletme Adı</Label>
-                  <Input defaultValue={business.name} />
+                  <Input value={biz.business_name} onChange={(e) => setBiz({ ...biz, business_name: e.target.value })} placeholder="Örn. Anatolian Tech GmbH" />
                 </div>
                 <div>
                   <Label>Sektör</Label>
-                  <Input defaultValue={business.type} />
+                  <Input value={biz.business_sector} onChange={(e) => setBiz({ ...biz, business_sector: e.target.value })} placeholder="Yazılım, Restoran, Hukuk..." />
                 </div>
                 <div>
                   <Label>Web Sitesi</Label>
-                  <Input defaultValue={business.website} />
+                  <Input value={biz.business_website} onChange={(e) => setBiz({ ...biz, business_website: e.target.value })} placeholder="ornek.com" />
+                </div>
+                <div>
+                  <Label>Kısa Tanıtım</Label>
+                  <Textarea rows={3} value={biz.business_description} onChange={(e) => setBiz({ ...biz, business_description: e.target.value })} />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label>Ülke</Label>
+                    <Input value={biz.country} onChange={(e) => setBiz({ ...biz, country: e.target.value })} placeholder="Almanya" />
+                  </div>
+                  <div>
+                    <Label>Şehir</Label>
+                    <Input value={biz.city} onChange={(e) => setBiz({ ...biz, city: e.target.value })} placeholder="Berlin" />
+                  </div>
+                </div>
+                <div>
+                  <Label>Açık Adres</Label>
+                  <Input value={biz.address} onChange={(e) => setBiz({ ...biz, address: e.target.value })} placeholder="Sokak, no, posta kodu" />
+                  <div className="mt-2 flex items-center justify-between p-3 rounded-lg border border-border bg-muted/40">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Haritada işletmemi göster</p>
+                      <p className="text-xs text-muted-foreground">İşaretlenirse Diaspora Haritası'nda yer alırsın.</p>
+                    </div>
+                    <Switch checked={biz.show_on_map} onCheckedChange={handleShowOnMapChange} />
+                  </div>
                 </div>
                 <div>
                   <Label>Telefon</Label>
-                  <Input defaultValue={business.phone} />
+                  <div className="flex gap-2">
+                    <Input className="w-20 shrink-0 text-center" value={dialFor(biz.country) || "+"} readOnly title="Ülkenize göre otomatik" />
+                    <Input
+                      className="flex-1"
+                      value={biz.phone.replace(/^\+\d+\s*/, "")}
+                      onChange={(e) => setBiz({ ...biz, phone: `${dialFor(biz.country)}${e.target.value ? " " + e.target.value : ""}` })}
+                      placeholder="30 1234567"
+                    />
+                  </div>
+                  <p className="text-[11px] text-muted-foreground mt-1">Ülke kodu kayıtlı ülkenden otomatik gelir.</p>
                 </div>
-                <Button className="w-full mt-2">Kaydet</Button>
+                <Button
+                  className="w-full mt-2"
+                  onClick={async () => {
+                    await persistField({
+                      business_name: biz.business_name,
+                      business_sector: biz.business_sector,
+                      business_website: biz.business_website,
+                      business_description: biz.business_description,
+                      country: biz.country,
+                      city: biz.city,
+                      address: biz.address,
+                      phone: biz.phone,
+                    });
+                    toast({ title: "Kaydedildi ✅", description: "İşletme bilgilerin güncellendi." });
+                  }}
+                >
+                  Kaydet
+                </Button>
               </div>
             </div>
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
@@ -491,6 +625,27 @@ const ProfileBusiness = () => {
           <div className="mt-6">
             <SocialMediaInputs />
           </div>
+
+          {/* Confirm hide-from-map dialog */}
+          <AlertDialog open={confirmHideMap} onOpenChange={setConfirmHideMap}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Haritada yer almak istemiyor musunuz?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Diaspora Haritası, müşterilerin sizi en kolay bulduğu kanaldır. Devre dışı bırakırsanız işletmeniz haritada görünmez.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => setConfirmHideMap(false)}>Vazgeç, görünür kalsın</AlertDialogCancel>
+                <AlertDialogAction onClick={async () => {
+                  setBiz((b) => ({ ...b, show_on_map: false }));
+                  await persistField({ show_on_map: false });
+                  setConfirmHideMap(false);
+                  toast({ title: "Haritadan çıkarıldı", description: "Dilediğin zaman tekrar açabilirsin." });
+                }}>Evet, gizle</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </TabsContent>
       </Tabs>
     </>
