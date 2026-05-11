@@ -204,11 +204,11 @@ const ProfileBusiness = () => {
             <p className="text-muted-foreground mt-1">{business.description}</p>
             <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-muted-foreground">
               <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {business.city}, {business.country}</span>
-              <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {business.employees} çalışan</span>
-              <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {business.founded}'den beri</span>
-              <a href={`https://${business.website}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-primary hover:underline">
-                <Globe className="h-3 w-3" /> {business.website}
-              </a>
+              {business.website && (
+                <a href={`https://${business.website}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-primary hover:underline">
+                  <Globe className="h-3 w-3" /> {business.website}
+                </a>
+              )}
             </div>
           </div>
           {(() => {
