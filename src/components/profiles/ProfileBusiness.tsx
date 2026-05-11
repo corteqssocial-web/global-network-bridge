@@ -6,8 +6,10 @@ import {
   Building2, MapPin, Globe, Phone, Mail, Calendar, Users,
   TrendingUp, Star, Package, Megaphone, Settings, BarChart3,
   CreditCard, Clock, Eye, Plus, ChevronRight, Tag, ArrowLeft, Edit, Crown,
-  ScanLine, Download, BarChart2, Inbox, Info
+  ScanLine, Download, BarChart2, Inbox, Info, Search, Filter, Camera, ImageIcon
 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { countryCities } from "@/data/countryCities";
 import ConsultantServiceRequests from "@/components/ConsultantServiceRequests";
 import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
 import CreateEventForm from "@/components/CreateEventForm";
@@ -46,9 +48,9 @@ const ProfileBusiness = () => {
   const { user } = useAuth();
   const [isVerified, setIsVerified] = useState(true);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
-  const [managingEvent, setManagingEvent] = useState<null | typeof events[0]>(null);
+  const [managingEvent, setManagingEvent] = useState<null | { id: number; title: string; date: string; attendees: number; status?: string }>(null);
   const [showCreateJob, setShowCreateJob] = useState(false);
-  const [editingJob, setEditingJob] = useState<null | typeof listings[0]>(null);
+  const [editingJob, setEditingJob] = useState<null | { id: number; title: string; type: string; status: string; views: number; applications: number; package?: string; price?: number }>(null);
 
   // DB-backed business profile
   const [biz, setBiz] = useState({
@@ -62,8 +64,20 @@ const ProfileBusiness = () => {
     country: "",
     show_on_map: false,
     full_name: "",
+    avatar_url: "",
   });
   const [confirmHideMap, setConfirmHideMap] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+
+  const loadEvents = async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from("events")
+      .select("id, title, event_date, max_attendees, status")
+      .eq("user_id", user.id)
+      .order("event_date", { ascending: true });
+    setEvents((data || []) as any);
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -81,9 +95,9 @@ const ProfileBusiness = () => {
           country: p.country || "",
           show_on_map: !!(p as any).show_on_map,
           full_name: p.full_name || "",
+          avatar_url: (p as any).avatar_url || "",
         });
       }
-      // Real backend counters
       const [{ count: views }, { data: evs }, { count: listingsCount }] = await Promise.all([
         supabase.from("profile_views" as any).select("id", { count: "exact", head: true }).eq("profile_id", user.id),
         supabase.from("events").select("id, max_attendees").eq("user_id", user.id),
@@ -97,12 +111,32 @@ const ProfileBusiness = () => {
         averageRating: null,
         ratingCount: 0,
       });
+      loadEvents();
     })();
   }, [user]);
 
   const persistField = async (patch: Record<string, any>) => {
     if (!user) return;
     await (supabase.from("profiles") as any).update(patch).eq("id", user.id);
+  };
+
+  const handleAvatarUpload = async (file: File) => {
+    if (!user) return;
+    setUploadingAvatar(true);
+    try {
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `${user.id}/avatar-${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage.from("avatars").upload(path, file, { upsert: true });
+      if (upErr) throw upErr;
+      const { data: pub } = supabase.storage.from("avatars").getPublicUrl(path);
+      await persistField({ avatar_url: pub.publicUrl });
+      setBiz((b) => ({ ...b, avatar_url: pub.publicUrl }));
+      toast({ title: "Profil fotoğrafın güncellendi ✅" });
+    } catch (e: any) {
+      toast({ title: "Yükleme başarısız", description: e.message || "Tekrar deneyin.", variant: "destructive" });
+    } finally {
+      setUploadingAvatar(false);
+    }
   };
 
   const handleShowOnMapChange = async (checked: boolean) => {
@@ -120,25 +154,30 @@ const ProfileBusiness = () => {
     country: biz.country || "—",
     city: biz.city || "—",
     avatar: (biz.business_name || biz.full_name || "??").slice(0, 2).toUpperCase(),
-    employees: 12,
-    founded: 2019,
+    avatarUrl: biz.avatar_url,
     description: biz.business_description || "İşletme tanıtımınızı Ayarlar → İşletme Bilgileri'nden ekleyin.",
     balance: 0,
   };
 
-  const [listings, setListings] = useState<Array<{ id: number; title: string; type: string; status: string; views: number; applications: number; package?: string; price?: number }>>([
-    { id: 1, title: "Kıdemli Frontend Geliştirici", type: "İş İlanı", status: "Aktif", views: 342, applications: 18 },
-    { id: 2, title: "Dijital Pazarlama Uzmanı", type: "İş İlanı", status: "Aktif", views: 156, applications: 7 },
-    { id: 3, title: "Stajyer - Backend", type: "Staj", status: "Kapalı", views: 89, applications: 23 },
-  ]);
+  const [listings, setListings] = useState<Array<{ id: number; title: string; type: string; status: string; views: number; applications: number; package?: string; price?: number; country?: string; city?: string }>>([]);
 
-  const events = [
-    { id: 1, title: "Tech Meetup Berlin", date: "22 Mar 2026", attendees: 45, status: "Yaklaşan" },
-    { id: 2, title: "Startup Workshop", date: "05 Nis 2026", attendees: 30, status: "Yaklaşan" },
-  ];
+  // Listing filters
+  const [showFilters, setShowFilters] = useState(false);
+  const [filterCountry, setFilterCountry] = useState<string>("all");
+  const [filterCity, setFilterCity] = useState<string>("all");
+  const [filterSearch, setFilterSearch] = useState<string>("");
+  const filterCountryList = Object.keys(countryCities).sort();
+  const filterCityList = filterCountry !== "all" ? (countryCities[filterCountry] || []) : [];
+  const filteredListings = listings.filter((l) => {
+    if (filterCountry !== "all" && l.country && l.country !== filterCountry) return false;
+    if (filterCity !== "all" && l.city && l.city !== filterCity) return false;
+    if (filterSearch && !l.title.toLowerCase().includes(filterSearch.toLowerCase())) return false;
+    return true;
+  });
+
+  const [events, setEvents] = useState<Array<{ id: string; title: string; event_date: string; max_attendees: number | null; status: string }>>([]);
 
   const [stats, setStatsRaw] = useState({ profileViews: 0, eventAttendees: 0, totalListings: 0, averageRating: null as number | null, ratingCount: 0 });
-  // Wrapper to keep prior code working
   const setStats = setStatsRaw;
 
   return (
@@ -147,8 +186,10 @@ const ProfileBusiness = () => {
       {/* Business header */}
       <div className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-card mb-8">
         <div className="flex flex-col sm:flex-row sm:items-start gap-6">
-          <div className="w-20 h-20 rounded-2xl bg-secondary flex items-center justify-center text-secondary-foreground font-bold text-2xl shrink-0">
-            {business.avatar}
+          <div className="w-20 h-20 rounded-2xl bg-secondary flex items-center justify-center text-secondary-foreground font-bold text-2xl shrink-0 overflow-hidden">
+            {business.avatarUrl ? (
+              <img src={business.avatarUrl} alt={business.name} className="w-full h-full object-cover" />
+            ) : business.avatar}
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-3 flex-wrap">
@@ -165,11 +206,11 @@ const ProfileBusiness = () => {
             <p className="text-muted-foreground mt-1">{business.description}</p>
             <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-muted-foreground">
               <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {business.city}, {business.country}</span>
-              <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {business.employees} çalışan</span>
-              <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {business.founded}'den beri</span>
-              <a href={`https://${business.website}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-primary hover:underline">
-                <Globe className="h-3 w-3" /> {business.website}
-              </a>
+              {business.website && (
+                <a href={`https://${business.website}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-primary hover:underline">
+                  <Globe className="h-3 w-3" /> {business.website}
+                </a>
+              )}
             </div>
           </div>
           {(() => {
@@ -269,40 +310,76 @@ const ProfileBusiness = () => {
             </div>
           ) : (
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-between mb-6 gap-2 flex-wrap">
                 <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                   <Package className="h-5 w-5 text-primary" /> İş İlanları & Listeler
                 </h2>
-                <Button className="gap-2" onClick={() => setShowCreateJob(true)}><Plus className="h-4 w-4" /> Yeni İlan</Button>
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setShowFilters((v) => !v)}>
+                    <Filter className="h-3.5 w-3.5" /> {showFilters ? "Gizle" : "Daha fazla"}
+                  </Button>
+                  <Button className="gap-2" onClick={() => setShowCreateJob(true)}><Plus className="h-4 w-4" /> Yeni İlan</Button>
+                </div>
               </div>
-              <div className="space-y-3">
-                {listings.map((listing) => (
-                  <div key={listing.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-semibold text-foreground">{listing.title}</h3>
-                        <Badge variant={listing.status === "Aktif" ? "default" : "secondary"} className="text-xs">
-                          {listing.status}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground flex items-center gap-3 flex-wrap">
-                        <span className="flex items-center gap-1"><Tag className="h-3 w-3" /> {listing.type}</span>
-                        <span className="flex items-center gap-1"><Eye className="h-3 w-3" /> {listing.views} görüntülenme</span>
-                        <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {listing.applications} başvuru</span>
-                        {listing.package && (
-                          <Badge variant="outline" className="text-[10px] gap-1 border-primary/30 text-primary">
-                            <Star className="h-3 w-3" /> {listing.package}{listing.price ? ` · €${listing.price}` : ""}
-                          </Badge>
-                        )}
-                      </p>
-                    </div>
-                    <Button variant="outline" size="sm" className="gap-1" onClick={() => setEditingJob(listing)}>
-                      <Edit className="h-3 w-3" /> Düzenle
-                    </Button>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+
+              {showFilters && (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5 p-4 rounded-xl bg-muted/40 border border-border">
+                  <Select value={filterCountry} onValueChange={(v) => { setFilterCountry(v); setFilterCity("all"); }}>
+                    <SelectTrigger><SelectValue placeholder="Ülke" /></SelectTrigger>
+                    <SelectContent className="bg-card z-50 max-h-72">
+                      <SelectItem value="all">Tüm Ülkeler</SelectItem>
+                      {filterCountryList.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                  <Select value={filterCity} onValueChange={setFilterCity} disabled={filterCountry === "all"}>
+                    <SelectTrigger><SelectValue placeholder={filterCountry === "all" ? "Önce ülke seç" : `Tüm Şehirler - ${filterCountry}`} /></SelectTrigger>
+                    <SelectContent className="bg-card z-50 max-h-72">
+                      <SelectItem value="all">Tüm Şehirler{filterCountry !== "all" ? ` - ${filterCountry}` : ""}</SelectItem>
+                      {filterCityList.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input className="pl-9" placeholder="İlan başlığında ara..." value={filterSearch} onChange={(e) => setFilterSearch(e.target.value)} />
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
+
+              {filteredListings.length === 0 ? (
+                <div className="text-center py-12 text-muted-foreground">
+                  <Package className="h-10 w-10 mx-auto mb-3 opacity-40" />
+                  <p className="text-sm">{listings.length === 0 ? "Henüz ilanın yok. İlk ilanını oluştur." : "Filtrelere uyan ilan bulunamadı."}</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {filteredListings.map((listing) => (
+                    <div key={listing.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-semibold text-foreground">{listing.title}</h3>
+                          <Badge variant={listing.status === "Aktif" ? "default" : "secondary"} className="text-xs">
+                            {listing.status}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground flex items-center gap-3 flex-wrap">
+                          <span className="flex items-center gap-1"><Tag className="h-3 w-3" /> {listing.type}</span>
+                          <span className="flex items-center gap-1"><Eye className="h-3 w-3" /> {listing.views} görüntülenme</span>
+                          <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {listing.applications} başvuru</span>
+                          {listing.package && (
+                            <Badge variant="outline" className="text-[10px] gap-1 border-primary/30 text-primary">
+                              <Star className="h-3 w-3" /> {listing.package}{listing.price ? ` · €${listing.price}` : ""}
+                            </Badge>
+                          )}
+                        </p>
+                      </div>
+                      <Button variant="outline" size="sm" className="gap-1" onClick={() => setEditingJob(listing)}>
+                        <Edit className="h-3 w-3" /> Düzenle
+                      </Button>
+                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </TabsContent>
@@ -314,82 +391,36 @@ const ProfileBusiness = () => {
 
         {/* LOYALTY */}
         <TabsContent value="loyalty" className="mt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Scanner */}
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <ScanLine className="h-5 w-5 text-primary" /> Kupon Okuyucu
-              </h2>
-              <p className="text-sm text-muted-foreground mb-6">Müşterinin kuponunu tarayarak indirimi uygulayın.</p>
-              <QRScannerMock />
+          <div className="bg-card rounded-2xl border border-border p-10 shadow-card text-center">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
+              <ScanLine className="h-7 w-7 text-primary" />
             </div>
-
-            {/* Discount report */}
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                  <BarChart2 className="h-5 w-5 text-turquoise" /> İndirim Raporu
-                </h2>
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <Download className="h-4 w-4" /> Dışa Aktar
-                </Button>
-              </div>
-              <div className="space-y-3 mb-6">
-                {[
-                  { code: "HOSGELDIN15", title: "Hoşgeldin İndirimi", downloaded: 342, processed: 89, revenue: "€4,450" },
-                  { code: "YAZ25", title: "Yaz Kampanyası %25", downloaded: 215, processed: 56, revenue: "€2,800" },
-                  { code: "SADIK10", title: "Sadık Müşteri %10", downloaded: 128, processed: 112, revenue: "€8,960" },
-                ].map((r, i) => (
-                  <div key={i} className="p-4 rounded-xl bg-muted/50">
-                    <div className="flex items-center justify-between mb-2">
-                      <div>
-                        <p className="font-semibold text-foreground text-sm">{r.title}</p>
-                        <code className="text-xs text-primary">{r.code}</code>
-                      </div>
-                      <p className="text-sm font-bold text-success">{r.revenue}</p>
-                    </div>
-                    <div className="flex gap-4 text-xs text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <Download className="h-3 w-3" /> {r.downloaded} indirme
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <ScanLine className="h-3 w-3" /> {r.processed} kullanım
-                      </span>
-                      <span className="text-turquoise font-semibold">
-                        %{Math.round((r.processed / r.downloaded) * 100)} dönüşüm
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="grid grid-cols-3 gap-3 p-4 rounded-xl bg-primary/5 border border-primary/10">
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-foreground">685</p>
-                  <p className="text-[11px] text-muted-foreground">Toplam İndirme</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-turquoise">257</p>
-                  <p className="text-[11px] text-muted-foreground">Toplam Kullanım</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-success">€16,210</p>
-                  <p className="text-[11px] text-muted-foreground">Kuponlu Gelir</p>
-                </div>
-              </div>
-            </div>
+            <Badge variant="outline" className="bg-gold/10 text-gold border-gold/30 mb-3">Yakında</Badge>
+            <h2 className="text-xl font-bold text-foreground mb-2">Loyalty & Kupon Okuyucu</h2>
+            <p className="text-sm text-muted-foreground max-w-md mx-auto">
+              Müşteri kuponlarını tarayıp indirim uygulayabileceğin sadakat sistemini hazırlıyoruz. Açıldığında bildirim ve e-posta göndereceğiz.
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-5"
+              onClick={() => toast({ title: "Listeye eklendin 🚀", description: "Loyalty açıldığında haber vereceğiz." })}
+            >
+              Bana Haber Ver
+            </Button>
           </div>
         </TabsContent>
 
         {/* EVENTS */}
         <TabsContent value="events" className="mt-6">
           {managingEvent ? (
-            <EventManagePanel event={managingEvent} onBack={() => setManagingEvent(null)} />
+            <EventManagePanel event={managingEvent} onBack={() => { setManagingEvent(null); loadEvents(); }} />
           ) : showCreateEvent ? (
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <Button variant="ghost" size="sm" className="gap-1 mb-4" onClick={() => setShowCreateEvent(false)}>
+              <Button variant="ghost" size="sm" className="gap-1 mb-4" onClick={() => { setShowCreateEvent(false); loadEvents(); }}>
                 <ArrowLeft className="h-4 w-4" /> Etkinliklere Dön
               </Button>
-              <CreateEventForm onClose={() => setShowCreateEvent(false)} />
+              <CreateEventForm onClose={() => { setShowCreateEvent(false); loadEvents(); }} />
             </div>
           ) : (
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
@@ -399,73 +430,62 @@ const ProfileBusiness = () => {
                 </h2>
                 <Button className="gap-2" onClick={() => setShowCreateEvent(true)}><Plus className="h-4 w-4" /> Etkinlik Oluştur</Button>
               </div>
-              <div className="space-y-3">
-                {events.map((event) => (
-                  <div key={event.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                    <div className="text-center shrink-0 w-14">
-                      <div className="text-xl font-bold text-primary">{event.date.split(" ")[0]}</div>
-                      <div className="text-xs text-muted-foreground">{event.date.split(" ")[1]}</div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-foreground">{event.title}</h3>
-                      <p className="text-sm text-muted-foreground flex items-center gap-2">
-                        <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {event.attendees} katılımcı</span>
-                        <Badge variant="outline" className="text-xs">{event.status}</Badge>
-                      </p>
-                    </div>
-                    <Button variant="outline" size="sm" onClick={() => setManagingEvent(event)}>Yönet</Button>
-                  </div>
-                ))}
-              </div>
+              {events.length === 0 ? (
+                <div className="text-center py-12 text-muted-foreground">
+                  <Calendar className="h-10 w-10 mx-auto mb-3 opacity-40" />
+                  <p className="text-sm">Henüz etkinliğin yok. İlk etkinliğini oluştur.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {events.map((event) => {
+                    const d = new Date(event.event_date);
+                    const day = d.getDate();
+                    const month = d.toLocaleDateString("tr-TR", { month: "short" });
+                    return (
+                      <div key={event.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
+                        <div className="text-center shrink-0 w-14">
+                          <div className="text-xl font-bold text-primary">{day}</div>
+                          <div className="text-xs text-muted-foreground">{month}</div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-foreground">{event.title}</h3>
+                          <p className="text-sm text-muted-foreground flex items-center gap-2">
+                            <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {event.max_attendees ?? 0} kontenjan</span>
+                            <Badge variant="outline" className="text-xs">{event.status}</Badge>
+                          </p>
+                        </div>
+                        <Button variant="outline" size="sm" onClick={() => setManagingEvent({ id: Number(event.id) || 0, title: event.title, date: `${day} ${month}`, attendees: event.max_attendees ?? 0, status: event.status } as any)}>Yönet</Button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
         </TabsContent>
 
         {/* ANALYTICS */}
         <TabsContent value="analytics" className="mt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-primary" /> Haftalık Görüntülenme
-              </h2>
-              <div className="space-y-3">
-                {["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"].map((day, i) => {
-                  const val = [45, 62, 38, 71, 89, 54, 33][i];
-                  return (
-                    <div key={day} className="flex items-center gap-3">
-                      <span className="text-sm text-muted-foreground w-8">{day}</span>
-                      <div className="flex-1 bg-muted rounded-full h-3">
-                        <div className="bg-primary rounded-full h-3 transition-all" style={{ width: `${val}%` }} />
-                      </div>
-                      <span className="text-sm font-medium text-foreground w-8">{val}</span>
-                    </div>
-                  );
-                })}
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-card rounded-2xl border border-border p-6 shadow-card text-center">
+              <Eye className="h-6 w-6 text-primary mx-auto mb-2" />
+              <p className="text-3xl font-bold text-foreground">{stats.profileViews}</p>
+              <p className="text-xs text-muted-foreground mt-1">Toplam Profil Görüntülenme</p>
             </div>
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-turquoise" /> Başvuru Kaynakları
-              </h2>
-              <div className="space-y-4">
-                {[
-                  { source: "CorteQS Platform", count: 34, pct: 60 },
-                  { source: "WhatsApp Grupları", count: 12, pct: 21 },
-                  { source: "Doğrudan Link", count: 8, pct: 14 },
-                  { source: "Dernek Yönlendirme", count: 3, pct: 5 },
-                ].map((s) => (
-                  <div key={s.source}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-foreground font-medium">{s.source}</span>
-                      <span className="text-muted-foreground">{s.count} ({s.pct}%)</span>
-                    </div>
-                    <div className="bg-muted rounded-full h-2">
-                      <div className="bg-turquoise rounded-full h-2 transition-all" style={{ width: `${s.pct}%` }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="bg-card rounded-2xl border border-border p-6 shadow-card text-center">
+              <Package className="h-6 w-6 text-gold mx-auto mb-2" />
+              <p className="text-3xl font-bold text-foreground">{stats.totalListings}</p>
+              <p className="text-xs text-muted-foreground mt-1">Yayında Olan İlan / Etkinlik</p>
             </div>
+            <div className="bg-card rounded-2xl border border-border p-6 shadow-card text-center">
+              <Users className="h-6 w-6 text-turquoise mx-auto mb-2" />
+              <p className="text-3xl font-bold text-foreground">{stats.eventAttendees}</p>
+              <p className="text-xs text-muted-foreground mt-1">Etkinlik Toplam Kontenjan</p>
+            </div>
+          </div>
+          <div className="mt-6 bg-card rounded-2xl border border-border p-6 shadow-card text-center text-sm text-muted-foreground">
+            <BarChart3 className="h-8 w-8 mx-auto mb-2 opacity-40" />
+            Detaylı haftalık trend ve başvuru kaynağı raporları, ilk başvurular geldikçe burada görünecek.
           </div>
         </TabsContent>
 
@@ -541,6 +561,30 @@ const ProfileBusiness = () => {
                 <Building2 className="h-5 w-5 text-primary" /> İşletme Bilgileri
               </h2>
               <div className="space-y-4">
+                <div>
+                  <Label>Profil Fotoğrafı</Label>
+                  <div className="flex items-center gap-4 mt-1.5">
+                    <div className="w-16 h-16 rounded-xl bg-muted flex items-center justify-center overflow-hidden border border-border">
+                      {biz.avatar_url
+                        ? <img src={biz.avatar_url} alt="avatar" className="w-full h-full object-cover" />
+                        : <ImageIcon className="h-6 w-6 text-muted-foreground" />}
+                    </div>
+                    <label className="cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const f = e.target.files?.[0];
+                          if (f) handleAvatarUpload(f);
+                        }}
+                      />
+                      <span className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-border bg-card hover:bg-muted text-sm">
+                        <Camera className="h-4 w-4" /> {uploadingAvatar ? "Yükleniyor..." : (biz.avatar_url ? "Değiştir" : "Yükle")}
+                      </span>
+                    </label>
+                  </div>
+                </div>
                 <div>
                   <Label>İşletme Adı</Label>
                   <Input value={biz.business_name} onChange={(e) => setBiz({ ...biz, business_name: e.target.value })} placeholder="Örn. Anatolian Tech GmbH" />
