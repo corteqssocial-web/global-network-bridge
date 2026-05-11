@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EventManagePanel from "@/components/EventManagePanel";
+import AssociationSettingsForm, { loadAssociationProfile, type AssociationProfileData } from "@/components/profiles/AssociationSettingsForm";
+import { findOrgCategory, findOrgSubcategory } from "@/data/organizationCategories";
 import {
   Users, MapPin, Globe, Calendar, Heart, Megaphone,
   TrendingUp, Settings, Bell, Mail, MessageSquare,
@@ -27,17 +29,27 @@ import SocialMediaInputs from "@/components/SocialMediaInputs";
 const ProfileAssociation = () => {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<null | typeof upcomingEvents[0]>(null);
+  const [profileData, setProfileData] = useState<AssociationProfileData>(loadAssociationProfile());
+
+  useEffect(() => {
+    const refresh = () => setProfileData(loadAssociationProfile());
+    window.addEventListener("association-profile-updated", refresh);
+    return () => window.removeEventListener("association-profile-updated", refresh);
+  }, []);
+
+  const cat = findOrgCategory(profileData.categoryKey);
+  const sub = findOrgSubcategory(profileData.categoryKey, profileData.subcategoryKey);
   const association = {
-    name: "Derneğiniz",
-    type: "Dernek",
-    email: "",
-    website: "",
-    country: "",
-    city: "",
-    avatar: "D",
+    name: profileData.name || "Kuruluşunuz",
+    type: sub?.label || cat?.label || "Tür seçilmedi",
+    email: profileData.email,
+    website: profileData.website,
+    country: profileData.country,
+    city: profileData.city,
+    avatar: (profileData.name || "K").trim().charAt(0).toUpperCase(),
     members: 0,
-    founded: new Date().getFullYear(),
-    description: "Dernek tanıtım metninizi profil ayarlarından ekleyin.",
+    founded: profileData.founded ? Number(profileData.founded) : new Date().getFullYear(),
+    description: profileData.description || "Tanıtım metninizi profil ayarlarından ekleyin.",
     balance: 0,
   };
 
@@ -323,53 +335,32 @@ const ProfileAssociation = () => {
           <MessagesInbox />
         </TabsContent>
 
-        <TabsContent value="settings" className="mt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
-                <FileText className="h-5 w-5 text-primary" /> Dernek Bilgileri
-              </h2>
-              <div className="space-y-4">
+        <TabsContent value="settings" className="mt-6 space-y-6">
+          <AssociationSettingsForm onSaved={(d) => setProfileData(d)} />
+
+          <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+            <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
+              <Settings className="h-5 w-5 text-primary" /> Tercihler
+            </h2>
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
                 <div>
-                  <Label>Dernek Adı</Label>
-                  <Input defaultValue={association.name} />
+                  <p className="font-medium text-foreground">Bağış Kabul Et</p>
+                  <p className="text-sm text-muted-foreground">Online bağış alın</p>
                 </div>
-                <div>
-                  <Label>Tür</Label>
-                  <Input defaultValue={association.type} />
-                </div>
-                <div>
-                  <Label>Web Sitesi</Label>
-                  <Input defaultValue={association.website} />
-                </div>
-                <Button className="w-full mt-2">Kaydet</Button>
+                <Switch defaultChecked />
               </div>
-            </div>
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
-                <Settings className="h-5 w-5 text-primary" /> Tercihler
-              </h2>
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-foreground">Bağış Kabul Et</p>
-                    <p className="text-sm text-muted-foreground">Online bağış alın</p>
-                  </div>
-                  <Switch defaultChecked />
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-foreground">Üyelik Başvurusu</p>
+                  <p className="text-sm text-muted-foreground">Yeni üyeliklere açık</p>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-foreground">Üyelik Başvurusu</p>
-                    <p className="text-sm text-muted-foreground">Yeni üyeliklere açık</p>
-                  </div>
-                  <Switch defaultChecked />
-                </div>
+                <Switch defaultChecked />
               </div>
             </div>
           </div>
-          <div className="mt-6">
-            <SocialMediaInputs />
-          </div>
+
+          <SocialMediaInputs />
         </TabsContent>
       </Tabs>
     </>
