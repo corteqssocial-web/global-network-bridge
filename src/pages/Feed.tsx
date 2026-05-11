@@ -244,32 +244,25 @@ const Feed = () => {
     { to: "/whatsapp-groups", icon: MessageCircle, label: "Gruplar", color: "text-teal-500", bg: "bg-teal-500/10" },
   ];
 
-  // Cafe'ler — dikey topluluklar. End user (account_type === 'user') giriş için ilgili kategoride kayıt olmalı.
-  const cafes = [
-    { key: "it", label: "IT Cafe", icon: Code2, color: "text-cyan-500", bg: "bg-cyan-500/10", roles: ["consultant", "business"] },
-    { key: "hekim", label: "Hekimler Cafe", icon: Stethoscope, color: "text-emerald-500", bg: "bg-emerald-500/10", roles: ["consultant", "business"] },
-    { key: "pro", label: "Profesyoneller Cafe", icon: GraduationCap, color: "text-violet-500", bg: "bg-violet-500/10", roles: ["consultant"] },
-    { key: "biz", label: "İşletmeler Cafe", icon: Building2, color: "text-amber-500", bg: "bg-amber-500/10", roles: ["business"] },
-    { key: "org", label: "Kuruluşlar Cafe", icon: Flag, color: "text-sky-500", bg: "bg-sky-500/10", roles: ["association"] },
-    { key: "blog", label: "Blogger/Vlogger Cafe", icon: PenLine, color: "text-rose-500", bg: "bg-rose-500/10", roles: ["blogger"] },
-  ];
-
-  const canEnterCafe = (allowed: string[]) => {
-    if (!accountType) return false;
-    if (accountType === "user") return false;
-    return allowed.includes(accountType) || accountType === "admin" || accountType === "ambassador";
+  // Theme → icon/renk mapping (cafes tablosundan gelen theme alanı)
+  const themeStyle = (theme: string) => {
+    switch (theme) {
+      case "IT": return { icon: Code2, color: "text-cyan-500", bg: "bg-cyan-500/10" };
+      case "Hekimler": return { icon: Stethoscope, color: "text-emerald-500", bg: "bg-emerald-500/10" };
+      case "Profesyoneller": return { icon: GraduationCap, color: "text-violet-500", bg: "bg-violet-500/10" };
+      case "İşletmeler": return { icon: Building2, color: "text-amber-500", bg: "bg-amber-500/10" };
+      case "Kuruluşlar": return { icon: Flag, color: "text-sky-500", bg: "bg-sky-500/10" };
+      case "Blogger/Vlogger": return { icon: PenLine, color: "text-rose-500", bg: "bg-rose-500/10" };
+      default: return { icon: Coffee, color: "text-amber-600", bg: "bg-amber-500/10" };
+    }
   };
 
-  const handleCafeClick = (cafe: typeof cafes[number]) => {
-    if (canEnterCafe(cafe.roles)) {
-      toast({ title: `${cafe.label}'ye giriliyor`, description: "Topluluk yakında açılacak." });
-    } else {
-      toast({
-        title: "🔒 Üyelere özel Cafe",
-        description: `${cafe.label} sadece ${cafe.roles.join(", ")} hesap türlerine açıktır. Kategori kaydını tamamla, içeri buyur.`,
-        variant: "destructive",
-      });
-    }
+  const formatRemaining = (closesAt: string) => {
+    const ms = new Date(closesAt).getTime() - Date.now();
+    if (ms <= 0) return "kapandı";
+    const h = Math.floor(ms / 3600000);
+    const m = Math.floor((ms % 3600000) / 60000);
+    return h > 0 ? `${h}s ${m}dk` : `${m}dk`;
   };
 
   const { following, suggestions, follow } = useFeedSocial();
