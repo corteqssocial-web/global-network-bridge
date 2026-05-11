@@ -48,9 +48,9 @@ const ProfileBusiness = () => {
   const { user } = useAuth();
   const [isVerified, setIsVerified] = useState(true);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
-  const [managingEvent, setManagingEvent] = useState<null | typeof events[0]>(null);
+  const [managingEvent, setManagingEvent] = useState<null | { id: number; title: string; date: string; attendees: number; status?: string }>(null);
   const [showCreateJob, setShowCreateJob] = useState(false);
-  const [editingJob, setEditingJob] = useState<null | typeof listings[0]>(null);
+  const [editingJob, setEditingJob] = useState<null | { id: number; title: string; type: string; status: string; views: number; applications: number; package?: string; price?: number }>(null);
 
   // DB-backed business profile
   const [biz, setBiz] = useState({
