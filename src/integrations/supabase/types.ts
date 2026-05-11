@@ -14,6 +14,80 @@ export type Database = {
   }
   public: {
     Tables: {
+      cafe_memberships: {
+        Row: {
+          cafe_id: string
+          id: string
+          joined_at: string
+          user_id: string
+        }
+        Insert: {
+          cafe_id: string
+          id?: string
+          joined_at?: string
+          user_id: string
+        }
+        Update: {
+          cafe_id?: string
+          id?: string
+          joined_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cafe_memberships_cafe_id_fkey"
+            columns: ["cafe_id"]
+            isOneToOne: false
+            referencedRelation: "cafes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cafes: {
+        Row: {
+          city: string | null
+          closes_at: string
+          country: string | null
+          created_at: string
+          created_by: string
+          duration_hours: number
+          extra_links: Json | null
+          id: string
+          linkedin_url: string
+          name: string
+          opens_at: string
+          theme: string
+        }
+        Insert: {
+          city?: string | null
+          closes_at: string
+          country?: string | null
+          created_at?: string
+          created_by: string
+          duration_hours?: number
+          extra_links?: Json | null
+          id?: string
+          linkedin_url: string
+          name: string
+          opens_at?: string
+          theme: string
+        }
+        Update: {
+          city?: string | null
+          closes_at?: string
+          country?: string | null
+          created_at?: string
+          created_by?: string
+          duration_hours?: number
+          extra_links?: Json | null
+          id?: string
+          linkedin_url?: string
+          name?: string
+          opens_at?: string
+          theme?: string
+        }
+        Relationships: []
+      }
       city_ambassador_applications: {
         Row: {
           city: string
@@ -208,6 +282,7 @@ export type Database = {
       feed_posts: {
         Row: {
           author_role: string | null
+          cafe_id: string | null
           city: string | null
           comment_count: number
           content: string
@@ -223,6 +298,7 @@ export type Database = {
         }
         Insert: {
           author_role?: string | null
+          cafe_id?: string | null
           city?: string | null
           comment_count?: number
           content: string
@@ -238,6 +314,7 @@ export type Database = {
         }
         Update: {
           author_role?: string | null
+          cafe_id?: string | null
           city?: string | null
           comment_count?: number
           content?: string
@@ -251,7 +328,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "feed_posts_cafe_id_fkey"
+            columns: ["cafe_id"]
+            isOneToOne: false
+            referencedRelation: "cafes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       generated_posts: {
         Row: {
