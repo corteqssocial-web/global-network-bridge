@@ -278,7 +278,7 @@ const ProfileAssociation = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {[
                 { title: "Öne Çıkan Kuruluş", desc: "Ana sayfada ve arama sonuçlarında üst sıralarda görünün", price: "€—/hafta", icon: Star },
-                { title: "WhatsApp Tanıtımı", desc: "CorteQS Kanalında Tanıtım", price: "€19/tanıtım", icon: Megaphone },
+                { title: "WhatsApp Tanıtımı", desc: "CorteQS Kanalında Tanıtım", price: "€—/tanıtım", icon: Megaphone },
                 { title: "Etkinlik Boost", desc: "Etkinliklerinizi platforma ve mail listelerine tanıtın", price: "€—/etkinlik", icon: TrendingUp },
               ].map((promo) => (
                 <div key={promo.title} className="border border-border rounded-xl p-4 hover:border-primary/30 hover:bg-primary/5 transition-colors">

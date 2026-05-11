@@ -503,7 +503,7 @@ const ProfileConsultant = () => {
               {[
                 { title: "Öne Çıkan Danışman", desc: "Ana sayfada ve arama sonuçlarında üst sıralarda görünün", price: "€—/hafta", icon: Star },
                 { title: "Etkinlik Boost", desc: "Etkinliklerinizi platforma ve mail listelerine tanıtın", price: "€—/etkinlik", icon: TrendingUp },
-                { title: "Sosyal Medya Paketi", desc: "Sosyal medya hesaplarınızda profesyonel kampanya yönetimi", price: "$—/platform", icon: Megaphone },
+                { title: "Sosyal Medya Paketi", desc: "Sosyal medya hesaplarınızda profesyonel kampanya yönetimi", price: "€—/platform", icon: Megaphone },
                 { title: "Kategori Vitrini", desc: "Kategorinizde ilk 6 sırada gösterilerek daha fazla müşteriye ulaşın", price: "€—/hafta", icon: Crown },
               ].map((promo) => (
                 <div key={promo.title} className="relative border border-border rounded-xl p-4 overflow-hidden">
