@@ -26,6 +26,7 @@ import MapAddressBanner from "@/components/MapAddressBanner";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 import NotificationsList from "@/components/NotificationsList";
 import SocialMediaInputs from "@/components/SocialMediaInputs";
+import { toast } from "@/hooks/use-toast";
 
 const ProfileBusiness = () => {
   const [isVerified, setIsVerified] = useState(true);
