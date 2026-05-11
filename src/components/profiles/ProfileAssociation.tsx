@@ -335,53 +335,32 @@ const ProfileAssociation = () => {
           <MessagesInbox />
         </TabsContent>
 
-        <TabsContent value="settings" className="mt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
-                <FileText className="h-5 w-5 text-primary" /> Dernek Bilgileri
-              </h2>
-              <div className="space-y-4">
+        <TabsContent value="settings" className="mt-6 space-y-6">
+          <AssociationSettingsForm onSaved={(d) => setProfileData(d)} />
+
+          <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+            <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
+              <Settings className="h-5 w-5 text-primary" /> Tercihler
+            </h2>
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
                 <div>
-                  <Label>Dernek Adı</Label>
-                  <Input defaultValue={association.name} />
+                  <p className="font-medium text-foreground">Bağış Kabul Et</p>
+                  <p className="text-sm text-muted-foreground">Online bağış alın</p>
                 </div>
-                <div>
-                  <Label>Tür</Label>
-                  <Input defaultValue={association.type} />
-                </div>
-                <div>
-                  <Label>Web Sitesi</Label>
-                  <Input defaultValue={association.website} />
-                </div>
-                <Button className="w-full mt-2">Kaydet</Button>
+                <Switch defaultChecked />
               </div>
-            </div>
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
-                <Settings className="h-5 w-5 text-primary" /> Tercihler
-              </h2>
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-foreground">Bağış Kabul Et</p>
-                    <p className="text-sm text-muted-foreground">Online bağış alın</p>
-                  </div>
-                  <Switch defaultChecked />
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-foreground">Üyelik Başvurusu</p>
+                  <p className="text-sm text-muted-foreground">Yeni üyeliklere açık</p>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-foreground">Üyelik Başvurusu</p>
-                    <p className="text-sm text-muted-foreground">Yeni üyeliklere açık</p>
-                  </div>
-                  <Switch defaultChecked />
-                </div>
+                <Switch defaultChecked />
               </div>
             </div>
           </div>
-          <div className="mt-6">
-            <SocialMediaInputs />
-          </div>
+
+          <SocialMediaInputs />
         </TabsContent>
       </Tabs>
     </>
