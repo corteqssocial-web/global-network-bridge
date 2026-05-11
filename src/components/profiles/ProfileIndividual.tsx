@@ -86,22 +86,62 @@ const ProfileIndividual = () => {
   const { user: authUser } = useAuth();
   const { toast } = useToast();
 
-  // Load existing documents from profile
+  // Load existing documents + mentor settings from profile
   useEffect(() => {
     if (!authUser?.id) return;
     let cancelled = false;
     (async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("cv_path, cv_name, presentation_path, presentation_name")
+        .select("cv_path, cv_name, presentation_path, presentation_name, is_volunteer_mentor, mentor_topics, mentor_weekly_hours")
         .eq("id", authUser.id)
         .maybeSingle();
       if (cancelled || !data) return;
       if (data.cv_path) setCvDoc({ path: data.cv_path, name: data.cv_name || "CV" });
       if (data.presentation_path) setPptDoc({ path: data.presentation_path, name: data.presentation_name || "Sunum" });
+      setIsVolunteerMentor(!!data.is_volunteer_mentor);
+      setMentorTopics(data.mentor_topics || "");
+      setMentorWeeklyHours(data.mentor_weekly_hours || "");
     })();
     return () => { cancelled = true; };
   }, [authUser?.id]);
+
+  const saveMentorSettings = async () => {
+    if (!authUser?.id) {
+      toast({ title: "Giriş yapın", description: "Mentör ayarlarını kaydetmek için oturum açın.", variant: "destructive" });
+      return;
+    }
+    if (isVolunteerMentor && !mentorTopics.trim()) {
+      toast({ title: "Konu gerekli", description: "Mentörlük yapmak istediğin konuları yaz.", variant: "destructive" });
+      return;
+    }
+    setSavingMentor(true);
+    try {
+      const { error } = await supabase.from("profiles").update({
+        is_volunteer_mentor: isVolunteerMentor,
+        mentor_topics: mentorTopics.trim() || null,
+        mentor_weekly_hours: mentorWeeklyHours.trim() || null,
+      }).eq("id", authUser.id);
+      if (error) throw error;
+      toast({
+        title: isVolunteerMentor ? "Mentör kartın oluşturuldu" : "Mentör kaydın güncellendi",
+        description: isVolunteerMentor
+          ? "Danışmanlar → Gönüllüler altında listeleneceksin."
+          : "Mentör listesinden çıkarıldın.",
+      });
+    } catch (err: any) {
+      toast({ title: "Kaydedilemedi", description: err?.message || "Tekrar deneyin", variant: "destructive" });
+    } finally {
+      setSavingMentor(false);
+    }
+  };
+
+  const goToMentorSettings = () => {
+    setActiveTab("settings");
+    setTimeout(() => {
+      document.getElementById("mentor-settings")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  };
 
   const handleDocUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
