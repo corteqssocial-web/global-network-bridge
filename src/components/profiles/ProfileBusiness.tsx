@@ -6,8 +6,10 @@ import {
   Building2, MapPin, Globe, Phone, Mail, Calendar, Users,
   TrendingUp, Star, Package, Megaphone, Settings, BarChart3,
   CreditCard, Clock, Eye, Plus, ChevronRight, Tag, ArrowLeft, Edit, Crown,
-  ScanLine, Download, BarChart2, Inbox, Info
+  ScanLine, Download, BarChart2, Inbox, Info, Search, Filter, Camera, ImageIcon
 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { countryCities } from "@/data/countryCities";
 import ConsultantServiceRequests from "@/components/ConsultantServiceRequests";
 import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
 import CreateEventForm from "@/components/CreateEventForm";
