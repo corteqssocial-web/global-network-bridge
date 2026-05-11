@@ -422,13 +422,13 @@ const ProfileBusiness = () => {
         {/* EVENTS */}
         <TabsContent value="events" className="mt-6">
           {managingEvent ? (
-            <EventManagePanel event={managingEvent} onBack={() => setManagingEvent(null)} />
+            <EventManagePanel event={managingEvent} onBack={() => { setManagingEvent(null); loadEvents(); }} />
           ) : showCreateEvent ? (
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <Button variant="ghost" size="sm" className="gap-1 mb-4" onClick={() => setShowCreateEvent(false)}>
+              <Button variant="ghost" size="sm" className="gap-1 mb-4" onClick={() => { setShowCreateEvent(false); loadEvents(); }}>
                 <ArrowLeft className="h-4 w-4" /> Etkinliklere Dön
               </Button>
-              <CreateEventForm onClose={() => setShowCreateEvent(false)} />
+              <CreateEventForm onClose={() => { setShowCreateEvent(false); loadEvents(); }} />
             </div>
           ) : (
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
@@ -438,24 +438,36 @@ const ProfileBusiness = () => {
                 </h2>
                 <Button className="gap-2" onClick={() => setShowCreateEvent(true)}><Plus className="h-4 w-4" /> Etkinlik Oluştur</Button>
               </div>
-              <div className="space-y-3">
-                {events.map((event) => (
-                  <div key={event.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                    <div className="text-center shrink-0 w-14">
-                      <div className="text-xl font-bold text-primary">{event.date.split(" ")[0]}</div>
-                      <div className="text-xs text-muted-foreground">{event.date.split(" ")[1]}</div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-foreground">{event.title}</h3>
-                      <p className="text-sm text-muted-foreground flex items-center gap-2">
-                        <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {event.attendees} katılımcı</span>
-                        <Badge variant="outline" className="text-xs">{event.status}</Badge>
-                      </p>
-                    </div>
-                    <Button variant="outline" size="sm" onClick={() => setManagingEvent(event)}>Yönet</Button>
-                  </div>
-                ))}
-              </div>
+              {events.length === 0 ? (
+                <div className="text-center py-12 text-muted-foreground">
+                  <Calendar className="h-10 w-10 mx-auto mb-3 opacity-40" />
+                  <p className="text-sm">Henüz etkinliğin yok. İlk etkinliğini oluştur.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {events.map((event) => {
+                    const d = new Date(event.event_date);
+                    const day = d.getDate();
+                    const month = d.toLocaleDateString("tr-TR", { month: "short" });
+                    return (
+                      <div key={event.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
+                        <div className="text-center shrink-0 w-14">
+                          <div className="text-xl font-bold text-primary">{day}</div>
+                          <div className="text-xs text-muted-foreground">{month}</div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-foreground">{event.title}</h3>
+                          <p className="text-sm text-muted-foreground flex items-center gap-2">
+                            <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {event.max_attendees ?? 0} kontenjan</span>
+                            <Badge variant="outline" className="text-xs">{event.status}</Badge>
+                          </p>
+                        </div>
+                        <Button variant="outline" size="sm" onClick={() => setManagingEvent({ id: Number(event.id) || 0, title: event.title, date: `${day} ${month}`, attendees: event.max_attendees ?? 0, status: event.status } as any)}>Yönet</Button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
         </TabsContent>
