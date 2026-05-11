@@ -179,9 +179,31 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
             <Label className="text-xs">Ek Link (opsiyonel)</Label>
             <Input value={extra} onChange={(e) => setExtra(e.target.value)} placeholder="https://..." />
           </div>
+          <div className="rounded-lg border border-border p-2.5 space-y-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-xs flex flex-col">
+                <span className="font-semibold">Serbest Giriş</span>
+                <span className="text-[10px] text-muted-foreground font-normal">Açık ise herkes direkt katılabilir.</span>
+              </Label>
+              <Switch checked={openEntry} onCheckedChange={setOpenEntry} />
+            </div>
+            {!openEntry && (
+              <div>
+                <Label className="text-xs">Giriş Sorusu *</Label>
+                <Textarea
+                  value={entryQuestion}
+                  onChange={(e) => setEntryQuestion(e.target.value)}
+                  placeholder="Örn: Hangi şirkette çalışıyorsun? / LinkedIn linkini paylaşır mısın?"
+                  rows={2}
+                  className="resize-none"
+                />
+              </div>
+            )}
+          </div>
           <div className="rounded-lg bg-muted/50 p-2.5 text-xs text-muted-foreground">
-            Açılış süresi: <strong className="text-foreground">{duration} saat</strong>{" "}
-            {isPremium ? "(Premium)" : "(Premium: 4 saat)"}
+            Süre: <strong className="text-foreground">{duration} saat</strong> · Kapasite:{" "}
+            <strong className="text-foreground">{capacity} kişi</strong>{" "}
+            {!isPremium && "(Premium: 4 saat / 300 kişi)"}
           </div>
           <Button className="w-full" disabled={submitting} onClick={submit}>
             {submitting && <Loader2 className="h-4 w-4 animate-spin mr-2" />} Cafe'yi Aç
