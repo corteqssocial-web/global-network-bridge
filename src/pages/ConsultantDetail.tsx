@@ -24,6 +24,7 @@ const ConsultantDetail = () => {
   const consultant = consultants.find((c) => c.id === id);
   const { isFollowed, toggle } = useFollow();
   const isFollowing = consultant ? isFollowed("consultant", consultant.id) : false;
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   // Check if logged-in user is the consultant (mock: match by email or id)
   const isOwner = !!user && !!consultant;
