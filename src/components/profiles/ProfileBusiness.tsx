@@ -285,10 +285,15 @@ const ProfileBusiness = () => {
                           {listing.status}
                         </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground flex items-center gap-3">
+                      <p className="text-sm text-muted-foreground flex items-center gap-3 flex-wrap">
                         <span className="flex items-center gap-1"><Tag className="h-3 w-3" /> {listing.type}</span>
                         <span className="flex items-center gap-1"><Eye className="h-3 w-3" /> {listing.views} görüntülenme</span>
                         <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {listing.applications} başvuru</span>
+                        {listing.package && (
+                          <Badge variant="outline" className="text-[10px] gap-1 border-primary/30 text-primary">
+                            <Star className="h-3 w-3" /> {listing.package}{listing.price ? ` · €${listing.price}` : ""}
+                          </Badge>
+                        )}
                       </p>
                     </div>
                     <Button variant="outline" size="sm" className="gap-1" onClick={() => setEditingJob(listing)}>
