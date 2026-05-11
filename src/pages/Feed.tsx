@@ -410,47 +410,79 @@ const Feed = () => {
                 </div>
               </section>
 
-              {/* Takip ettiklerin */}
-              <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-                <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
-                  <Heart className="h-4 w-4 text-rose-500" />
-                  Takip Ettiklerin
-                </h3>
-                <div className="space-y-2.5">
-                  {followingMock.map((u) => (
-                    <div key={u.name} className="flex items-center gap-2.5">
-                      <div className="p-[1.5px] rounded-full bg-gradient-to-br from-rose-400 via-amber-400 to-violet-500">
-                        <img src={u.avatar} alt="" className="h-8 w-8 rounded-full object-cover bg-card" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-xs font-semibold truncate">{u.name}</div>
-                        <div className="text-[10px] text-muted-foreground truncate">{u.role}</div>
-                      </div>
-                      <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              {/* Takip ettiklerin — gerçek veri */}
+              {user && (
+                <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+                  <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
+                    <Heart className="h-4 w-4 text-rose-500" />
+                    Takip Ettiklerin
+                  </h3>
+                  {following.length === 0 ? (
+                    <p className="text-[11px] text-muted-foreground leading-snug">
+                      Henüz kimseyi takip etmiyorsun. Aşağıdaki önerilerden başla.
+                    </p>
+                  ) : (
+                    <div className="space-y-2.5">
+                      {following.map((u) => (
+                        <Link key={u.id} to={`/profile/${u.id}`} className="flex items-center gap-2.5 group">
+                          <div className="p-[1.5px] rounded-full bg-gradient-to-br from-rose-400 via-amber-400 to-violet-500">
+                            {u.avatar_url ? (
+                              <img src={u.avatar_url} alt="" className="h-8 w-8 rounded-full object-cover bg-card" />
+                            ) : (
+                              <div className="h-8 w-8 rounded-full bg-card flex items-center justify-center text-xs font-bold">
+                                {(u.full_name || "?").slice(0, 1).toUpperCase()}
+                              </div>
+                            )}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="text-xs font-semibold truncate group-hover:text-primary">{u.full_name || "Anonim"}</div>
+                            <div className="text-[10px] text-muted-foreground truncate">
+                              {[u.city, u.country].filter(Boolean).join(" · ") || u.profession || "Diaspora"}
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </section>
+                  )}
+                </section>
+              )}
 
-              {/* Arkadaş önerileri */}
-              <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-                <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
-                  <UserPlus className="h-4 w-4 text-sky-500" />
-                  Tanıyor olabilirsin
-                </h3>
-                <div className="space-y-2.5">
-                  {friendSuggestions.map((u) => (
-                    <div key={u.name} className="flex items-center gap-2.5">
-                      <img src={u.avatar} alt="" className="h-8 w-8 rounded-full object-cover" />
-                      <div className="min-w-0 flex-1">
-                        <div className="text-xs font-semibold truncate">{u.name}</div>
-                        <div className="text-[10px] text-muted-foreground truncate">📍 {u.city}</div>
+              {/* Tanıyor olabilirsin — benzerlik algoritması (ülke/şehir/meslek/okul) */}
+              {user && suggestions.length > 0 && (
+                <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+                  <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
+                    <UserPlus className="h-4 w-4 text-sky-500" />
+                    Tanıyor olabilirsin
+                  </h3>
+                  <div className="space-y-2.5">
+                    {suggestions.map((u) => (
+                      <div key={u.id} className="flex items-center gap-2.5">
+                        {u.avatar_url ? (
+                          <img src={u.avatar_url} alt="" className="h-8 w-8 rounded-full object-cover" />
+                        ) : (
+                          <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-xs font-bold">
+                            {(u.full_name || "?").slice(0, 1).toUpperCase()}
+                          </div>
+                        )}
+                        <div className="min-w-0 flex-1">
+                          <div className="text-xs font-semibold truncate">{u.full_name || "Anonim"}</div>
+                          <div className="text-[10px] text-muted-foreground truncate">
+                            {u.reasons.slice(0, 2).join(" · ")}
+                          </div>
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 px-2 text-[10px]"
+                          onClick={() => follow(u.id)}
+                        >
+                          + Ekle
+                        </Button>
                       </div>
-                      <Button size="sm" variant="outline" className="h-7 px-2 text-[10px]">+ Ekle</Button>
-                    </div>
-                  ))}
-                </div>
-              </section>
+                    ))}
+                  </div>
+                </section>
+              )}
             </aside>
 
             {/* CENTER FEED */}
