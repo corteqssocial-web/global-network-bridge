@@ -79,12 +79,20 @@ const Onboarding = () => {
       }
 
       // Update profile with account_type and mark onboarding as completed
+      const profilePatch: Record<string, any> = {
+        account_type: selected,
+        onboarding_completed: true,
+      };
+      // Auth-tan gelen bilgilerle işletme profilini ön-doldur
+      if (selected === "business") {
+        const meta = (user.user_metadata || {}) as Record<string, any>;
+        const fallbackName = meta.full_name || meta.name || "";
+        if (fallbackName) profilePatch.business_name = fallbackName;
+        profilePatch.business_sector = meta.business_sector || meta.sector || "İşletme";
+      }
       const { error: profileError } = await supabase
         .from("profiles")
-        .update({
-          account_type: selected,
-          onboarding_completed: true,
-        })
+        .update(profilePatch)
         .eq("id", user.id);
 
       if (profileError) throw profileError;
