@@ -406,14 +406,25 @@ const Feed = () => {
                           <Icon className={`h-4 w-4 ${st.color}`} />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <div className="text-xs font-semibold truncate">{c.name}</div>
-                          <div className="text-[10px] text-muted-foreground truncate">
-                            {[c.city, c.country].filter(Boolean).join(" · ") || c.theme}
+                          <div className="text-xs font-semibold truncate flex items-center gap-1">
+                            {c.name}
+                            {c.kind === "relocation" && <span title="Relocation Cafe">🌍</span>}
+                            {c.kind === "expo" && <span title="Expo Cafe">🛍️</span>}
+                            {c.kind === "community" && c.open_entry && <span title="Serbest giriş" className="text-emerald-500">🟢</span>}
+                            {c.kind === "community" && !c.open_entry && <Lock className="h-2.5 w-2.5 text-muted-foreground" />}
+                          </div>
+                          <div className="text-[10px] text-muted-foreground truncate flex items-center gap-1.5">
+                            <span className="truncate">{[c.city, c.country].filter(Boolean).join(" · ") || c.theme}</span>
+                            <span className="shrink-0">· 👥 {c.member_count}{c.capacity ? `/${c.capacity}` : ""}</span>
                           </div>
                         </div>
-                        <Badge variant="outline" className="text-[9px] h-4 px-1 shrink-0">
-                          {formatRemaining(c.closes_at)}
-                        </Badge>
+                        {c.kind === "community" ? (
+                          <Badge variant="outline" className="text-[9px] h-4 px-1 shrink-0">
+                            {formatRemaining(c.closes_at)}
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary" className="text-[9px] h-4 px-1 shrink-0">∞</Badge>
+                        )}
                       </Link>
                     );
                   })}
