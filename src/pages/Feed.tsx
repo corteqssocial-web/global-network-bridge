@@ -563,11 +563,20 @@ const Feed = () => {
                         </div>
                       </div>
                       {cafeOpen && !isMember && user && (
-                        <Button size="sm" onClick={joinCafe} className="gap-1.5">
-                          <LogIn className="h-3.5 w-3.5" /> Cafe'ye Gir
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            if (cafe!.open_entry) joinCafe();
+                            else setJoinDialogOpen(true);
+                          }}
+                          className="gap-1.5"
+                        >
+                          <LogIn className="h-3.5 w-3.5" />
+                          {cafe!.open_entry ? "Cafe'ye Gir" : "Başvur"}
                         </Button>
                       )}
-                      {isMember && <Badge className="bg-emerald-500/15 text-emerald-600 border-0">Üyesin</Badge>}
+                      {isMember && approved && <Badge className="bg-emerald-500/15 text-emerald-600 border-0">Üyesin</Badge>}
+                      {isMember && !approved && <Badge variant="secondary" className="text-[10px]">Onay Bekliyor</Badge>}
                     </div>
                   </header>
                 </>
