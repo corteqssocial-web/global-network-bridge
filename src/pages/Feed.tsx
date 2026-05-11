@@ -521,19 +521,75 @@ const Feed = () => {
 
             {/* CENTER FEED */}
             <div className="min-w-0">
-              <header className="mb-4">
-                <div className="flex items-center gap-2 mb-1.5">
-                  <Newspaper className="h-6 w-6 text-primary" />
-                  <h1 className="text-2xl font-extrabold text-gradient-primary">Diaspora Cadde</h1>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Sol panelden kıta, ülke veya şehir seç. Akışın anında daralır.
-                </p>
-              </header>
+              {inCafe ? (
+                <>
+                  <Link to="/cadde" className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline mb-2">
+                    <ArrowLeft className="h-3.5 w-3.5" /> Genel Cadde'ye Dön
+                  </Link>
+                  <header className="mb-4 rounded-2xl border border-border bg-card p-4">
+                    <div className="flex items-start gap-3">
+                      {(() => {
+                        const st = themeStyle(cafe!.theme);
+                        const Icon = st.icon;
+                        return (
+                          <div className={`h-12 w-12 rounded-2xl ${st.bg} flex items-center justify-center shrink-0`}>
+                            <Icon className={`h-6 w-6 ${st.color}`} />
+                          </div>
+                        );
+                      })()}
+                      <div className="flex-1 min-w-0">
+                        <h1 className="text-xl font-extrabold truncate flex items-center gap-2">
+                          ☕ {cafe!.name}
+                          {!cafeOpen && <Badge variant="destructive" className="text-[10px]">Kapalı</Badge>}
+                        </h1>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          {cafe!.theme} · {[cafe!.city, cafe!.country].filter(Boolean).join(" · ") || "Global"}
+                        </p>
+                        <div className="flex flex-wrap items-center gap-3 mt-2 text-[11px] text-muted-foreground">
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3 w-3 text-emerald-500" />
+                            Açılış: {new Date(cafe!.opens_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3 w-3 text-rose-500" />
+                            Kapanış: {new Date(cafe!.closes_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}
+                          </span>
+                          {cafeOpen && (
+                            <Badge variant="secondary" className="text-[10px]">Kalan: {formatRemaining(cafe!.closes_at)}</Badge>
+                          )}
+                        </div>
+                      </div>
+                      {cafeOpen && !isMember && user && (
+                        <Button size="sm" onClick={joinCafe} className="gap-1.5">
+                          <LogIn className="h-3.5 w-3.5" /> Cafe'ye Gir
+                        </Button>
+                      )}
+                      {isMember && <Badge className="bg-emerald-500/15 text-emerald-600 border-0">Üyesin</Badge>}
+                    </div>
+                  </header>
+                </>
+              ) : (
+                <header className="mb-4">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <Newspaper className="h-6 w-6 text-primary" />
+                    <h1 className="text-2xl font-extrabold text-gradient-primary">Diaspora Cadde</h1>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Sol panelden kıta, ülke veya şehir seç. Akışın anında daralır.
+                  </p>
+                </header>
+              )}
 
-              <div className="mb-4">
-                <CreatePostForm onCreated={() => { setPage(0); fetchPosts(true); }} />
-              </div>
+              {(!inCafe || (cafeOpen && isMember)) && (
+                <div className="mb-4">
+                  <CreatePostForm cafeId={inCafe ? cafeId : undefined} onCreated={() => { setPage(0); fetchPosts(true); }} />
+                </div>
+              )}
+              {inCafe && cafeOpen && !isMember && user && (
+                <div className="mb-4 rounded-2xl border border-dashed border-border p-4 text-center text-xs text-muted-foreground">
+                  Paylaşım yapmak için önce cafe'ye gir. (Günde 1 cafe katılım hakkı)
+                </div>
+              )}
 
               <div className="rounded-2xl border border-border bg-card px-5">
                 {posts.length === 0 && !loading && (
