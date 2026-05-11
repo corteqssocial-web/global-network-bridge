@@ -127,6 +127,15 @@ const Navbar = () => {
                     <MapPin className="h-3.5 w-3.5 text-primary" />{t.nav.map}
                   </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="flex items-center justify-between gap-2 cursor-pointer opacity-90"
+                  onSelect={(e) => { e.preventDefault(); }}
+                >
+                  <span className="flex items-center gap-2">
+                    <Shield className="h-3.5 w-3.5 text-primary" /> AI Twin
+                  </span>
+                  <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-gold/10 text-gold border border-gold/30">Yakında</span>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
