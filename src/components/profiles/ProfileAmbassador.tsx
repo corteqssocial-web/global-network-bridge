@@ -242,15 +242,7 @@ const ProfileAmbassador = () => {
               { id: "90d", label: "Son 90 gün" },
               { id: "all", label: "Tüm zamanlar" },
             ];
-            const detailedOnboarded = [
-              { name: "Ahmet Y.", type: "Bireysel", date: "27 Mar", status: "active", revenue: 0, commission: 5 },
-              { name: "Selin K.", type: "Danışman", date: "25 Mar", status: "active", revenue: 480, commission: 48 },
-              { name: "Oğuz T. (Anatolia Restaurant)", type: "İşletme", date: "22 Mar", status: "active", revenue: 1850, commission: 92.5 },
-              { name: "Deniz A.", type: "Bireysel", date: "20 Mar", status: "pending", revenue: 0, commission: 0 },
-              { name: "Fatma B.", type: "V/Blogger", date: "18 Mar", status: "active", revenue: 220, commission: 22 },
-              { name: "Kerem S. (KS Consulting)", type: "İşletme", date: "15 Mar", status: "active", revenue: 3200, commission: 160 },
-              { name: "Murat T.", type: "Danışman", date: "12 Mar", status: "active", revenue: 360, commission: 36 },
-            ];
+            const detailedOnboarded: Array<{ name: string; type: string; date: string; status: string; revenue: number; commission: number }> = [];
             const totalRevenue = detailedOnboarded.reduce((s, u) => s + u.revenue, 0);
             const totalCommission = detailedOnboarded.reduce((s, u) => s + u.commission, 0);
             const businessRevenue = detailedOnboarded.filter(u => u.type === "İşletme").reduce((s, u) => s + u.revenue, 0);
