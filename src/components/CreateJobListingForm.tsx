@@ -34,7 +34,7 @@ const listingPackages = [
   { id: "featured", name: "Spotlight İlan", price: 59, duration: "60 gün", comingSoon: false, features: ["Ana sayfada görünür", "60 gün yayında", "AI eşleşmeli aday bildirimi", "Sosyal medya tanıtımı", "Detaylı başvuru raporu"] },
 ];
 
-const CreateJobListingForm = ({ onClose, editData }: CreateJobListingFormProps) => {
+const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListingFormProps) => {
   const { toast } = useToast();
   const isEditing = !!editData;
 
