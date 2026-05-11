@@ -26,6 +26,7 @@ const BloggerDetail = () => {
   const { isFollowed, toggle } = useFollow();
   const isFollowing = blogger ? isFollowed("blogger", blogger.id) : false;
   const [collabOpen, setCollabOpen] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
   const [collabForm, setCollabForm] = useState({
     name: "",
     company: "",
