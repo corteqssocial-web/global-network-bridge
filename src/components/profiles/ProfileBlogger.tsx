@@ -146,10 +146,10 @@ const ProfileBlogger = () => {
       {/* Stats row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
         {[
-          { label: "Aylık Görüntülenme", value: `${(stats.monthlyViews / 1000).toFixed(0)}K`, icon: Eye, color: "text-primary" },
-          { label: "Etkileşim Oranı", value: stats.monthlyEngagement, icon: Heart, color: "text-pink-500" },
-          { label: "Aylık Gelir", value: `€${stats.monthlyRevenue}`, icon: CreditCard, color: "text-success" },
-          { label: "Yeni Takipçi", value: `+${stats.newFollowers}`, icon: Users, color: "text-turquoise" },
+          { label: "Aylık Görüntülenme", value: "—", icon: Eye, color: "text-primary" },
+          { label: "Etkileşim Oranı", value: "—", icon: Heart, color: "text-pink-500" },
+          { label: "Aylık Gelir", value: "€—", icon: CreditCard, color: "text-success" },
+          { label: "Yeni Takipçi", value: "—", icon: Users, color: "text-turquoise" },
         ].map((stat, i) => (
           <div key={i} className="bg-card rounded-xl border border-border p-3 shadow-card text-center">
             <stat.icon className={`h-4 w-4 ${stat.color} mx-auto mb-1`} />
