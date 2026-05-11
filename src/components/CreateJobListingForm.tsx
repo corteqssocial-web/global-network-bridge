@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 
 interface CreateJobListingFormProps {
   onClose: () => void;
+  onCreated?: (listing: { title: string; type: string; package: string; price: number }) => void;
   editData?: {
     id: number;
     title: string;
@@ -28,9 +29,9 @@ interface CreateJobListingFormProps {
 }
 
 const listingPackages = [
-  { id: "basic", name: "Standart İlan", price: 0, duration: "30 gün", features: ["Arama sonuçlarında görünür", "30 gün yayında kalır"] },
-  { id: "premium", name: "Premium İlan", price: 29, duration: "45 gün", features: ["Üst sıralarda görünür", "45 gün yayında", "Öne çıkan rozeti", "WhatsApp gruplarına duyuru"] },
-  { id: "featured", name: "Spotlight İlan", price: 59, duration: "60 gün", features: ["Ana sayfada görünür", "60 gün yayında", "AI eşleşmeli aday bildirimi", "Sosyal medya tanıtımı", "Detaylı başvuru raporu"] },
+  { id: "basic", name: "Standart İlan", price: 0, duration: "30 gün", comingSoon: false, features: ["Arama sonuçlarında görünür", "30 gün yayında kalır"] },
+  { id: "premium", name: "Premium İlan", price: 27, duration: "45 gün", comingSoon: true, features: ["🔍 Ülke aramasında öne çıkar (+€15 değerinde)", "📧 AI eşleşmeli e-posta bildirimi (+€12 değerinde)", "45 gün yayında", "Öne çıkan rozeti"] },
+  { id: "featured", name: "Spotlight İlan", price: 59, duration: "60 gün", comingSoon: false, features: ["Ana sayfada görünür", "60 gün yayında", "AI eşleşmeli aday bildirimi", "Sosyal medya tanıtımı", "Detaylı başvuru raporu"] },
 ];
 
 const CreateJobListingForm = ({ onClose, editData }: CreateJobListingFormProps) => {
