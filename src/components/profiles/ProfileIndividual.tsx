@@ -340,15 +340,13 @@ const ProfileIndividual = () => {
             Gönüllü Mentörler Danışmanlar sayfasında <strong>"Gönüllüler"</strong> alt kategorisi altında <strong>Gönüllü Mentör</strong> rozetiyle listelenir.
           </p>
         </div>
-        <Link to="/consultants?filter=gonullu" className="shrink-0">
-          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
-            <Users className="h-4 w-4" /> Gönüllü Mentör Ol
-          </Button>
-        </Link>
+        <Button onClick={goToMentorSettings} className="shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
+          <Users className="h-4 w-4" /> Gönüllü Mentör Ol
+        </Button>
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue={initialTab} className="w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
           <TabsTrigger value="service-requests" className="gap-1.5"><ClipboardList className="h-4 w-4" /> Hizmet Talepleri</TabsTrigger>
           <TabsTrigger value="relocations" className="gap-1.5"><Globe className="h-4 w-4" /> Taşınma Yönetimi</TabsTrigger>
