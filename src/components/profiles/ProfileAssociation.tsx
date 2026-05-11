@@ -29,17 +29,27 @@ import SocialMediaInputs from "@/components/SocialMediaInputs";
 const ProfileAssociation = () => {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<null | typeof upcomingEvents[0]>(null);
+  const [profileData, setProfileData] = useState<AssociationProfileData>(loadAssociationProfile());
+
+  useEffect(() => {
+    const refresh = () => setProfileData(loadAssociationProfile());
+    window.addEventListener("association-profile-updated", refresh);
+    return () => window.removeEventListener("association-profile-updated", refresh);
+  }, []);
+
+  const cat = findOrgCategory(profileData.categoryKey);
+  const sub = findOrgSubcategory(profileData.categoryKey, profileData.subcategoryKey);
   const association = {
-    name: "Derneğiniz",
-    type: "Dernek",
-    email: "",
-    website: "",
-    country: "",
-    city: "",
-    avatar: "D",
+    name: profileData.name || "Kuruluşunuz",
+    type: sub?.label || cat?.label || "Tür seçilmedi",
+    email: profileData.email,
+    website: profileData.website,
+    country: profileData.country,
+    city: profileData.city,
+    avatar: (profileData.name || "K").trim().charAt(0).toUpperCase(),
     members: 0,
-    founded: new Date().getFullYear(),
-    description: "Dernek tanıtım metninizi profil ayarlarından ekleyin.",
+    founded: profileData.founded ? Number(profileData.founded) : new Date().getFullYear(),
+    description: profileData.description || "Tanıtım metninizi profil ayarlarından ekleyin.",
     balance: 0,
   };
 
