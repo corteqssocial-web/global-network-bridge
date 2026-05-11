@@ -11,6 +11,7 @@ import { toast } from "@/hooks/use-toast";
 import MultiCountryCityFilter from "@/components/feed/MultiCountryCityFilter";
 import CreatePostForm from "@/components/feed/CreatePostForm";
 import { mockPosts, mockAuthors } from "@/data/mockFeedPosts";
+import { useFeedSocial } from "@/hooks/useFeedSocial";
 
 const PAGE_SIZE = 20;
 
