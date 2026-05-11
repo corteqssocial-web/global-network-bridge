@@ -361,17 +361,19 @@ const Consultants = () => {
                       <Link
                         to={linkTo}
                         key={c.id}
-                        className="group relative bg-card rounded-2xl p-6 pt-9 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 block overflow-hidden border border-border"
+                        className={`group relative bg-card rounded-2xl shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 block overflow-hidden border ${isVolunteer ? "border-emerald-500/50 ring-1 ring-emerald-500/20" : "border-border"}`}
                       >
                         <DemoBadge variant="card" />
                         {isVolunteer && (
-                          <Badge className="absolute top-2 right-2 z-10 gap-1 bg-emerald-500/15 text-emerald-700 border border-emerald-500/40 hover:bg-emerald-500/20">
-                            <HandHeart className="h-3 w-3" /> Gönüllü Mentör
-                          </Badge>
+                          <div className="mt-7 flex items-center gap-1.5 bg-emerald-600 text-white text-[11px] font-semibold px-3 py-1.5">
+                            <HandHeart className="h-3.5 w-3.5" />
+                            <span>Gönüllü Mentör · Ücretsiz Dayanışma</span>
+                          </div>
                         )}
+                        <div className={`p-6 ${isVolunteer ? "pt-4" : "pt-9"}`}>
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-3 min-w-0">
-                            <img src={c.photo} alt={c.name} className="w-14 h-14 rounded-full object-cover shrink-0" />
+                            <img src={c.photo} alt={c.name} className={`w-14 h-14 rounded-full object-cover shrink-0 ${isVolunteer ? "ring-2 ring-emerald-500/40" : ""}`} />
                             <div className="min-w-0">
                               <h3 className="font-bold text-foreground truncate">{c.name}</h3>
                               <p className="text-xs text-muted-foreground font-body truncate flex items-center gap-1">
@@ -398,7 +400,6 @@ const Consultants = () => {
 
                         {isVolunteer ? (
                           <>
-                            <p className="text-[10px] text-emerald-600 font-semibold mb-2">🤝 Ücretsiz gönüllü mentörlük</p>
                             <div className="flex gap-1.5" onClick={(e) => e.preventDefault()}>
                               <Button
                                 variant="default"
@@ -441,6 +442,7 @@ const Consultants = () => {
                             </div>
                           </>
                         )}
+                        </div>
                       </Link>
                     );
                   };
