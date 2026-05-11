@@ -693,20 +693,26 @@ const ProfileBusiness = () => {
                 <Settings className="h-5 w-5 text-primary" /> Görünürlük
               </h2>
               <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-foreground">Onaylı İşletme Rozeti</p>
-                    <p className="text-sm text-muted-foreground">Doğrulanmış işletme olarak görünün</p>
+                {[
+                  { key: "verified_business" as const, title: "Onaylı İşletme Rozeti", desc: "Doğrulanmış işletme olarak görünün", on: isVerified, req: verifiedReq },
+                  { key: "hiring_mode" as const, title: "İşe Alım Modu", desc: "Aktif olarak eleman aradığınızı gösterin (24 saate kadar onaylanır)", on: hiringMode, req: hiringReq },
+                ].map((row) => (
+                  <div key={row.key} className="flex items-center justify-between gap-4">
+                    <div className="min-w-0">
+                      <p className="font-medium text-foreground">{row.title}</p>
+                      <p className="text-sm text-muted-foreground">{row.desc}</p>
+                    </div>
+                    {row.on ? (
+                      <Badge className="bg-turquoise/10 text-turquoise border border-turquoise/30">Onaylı ✓</Badge>
+                    ) : row.req?.status === "pending" ? (
+                      <Badge variant="outline" className="text-amber-600 border-amber-300">Onay bekliyor</Badge>
+                    ) : row.req?.status === "rejected" ? (
+                      <Button size="sm" variant="outline" onClick={() => submitApproval(row.key)}>Tekrar Gönder</Button>
+                    ) : (
+                      <Button size="sm" onClick={() => submitApproval(row.key)}>Onaya Gönder</Button>
+                    )}
                   </div>
-                  <Switch checked={isVerified} onCheckedChange={setIsVerified} />
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-foreground">İşe Alım Modu</p>
-                    <p className="text-sm text-muted-foreground">Aktif olarak eleman aradığınızı gösterin</p>
-                  </div>
-                  <Switch defaultChecked />
-                </div>
+                ))}
               </div>
             </div>
           </div>
