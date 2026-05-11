@@ -188,7 +188,13 @@ const ProfileAmbassador = () => {
                 </Button>
               </div>
               <div className="space-y-4">
-                {events.map((ev) => (
+                {events.length === 0 ? (
+                  <EmptyDashboardState
+                    icon={Calendar}
+                    title="Henüz etkinlik yok"
+                    description="'Yeni Etkinlik' ile şehir buluşması veya networking etkinliği oluşturun. Açtıklarınız ve katılımcı sayıları burada listelenir."
+                  />
+                ) : events.map((ev) => (
                   <Card key={ev.id} className="border-border">
                     <CardContent className="p-5">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
