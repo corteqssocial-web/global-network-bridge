@@ -1,4 +1,5 @@
 import { useState } from "react";
+import AppointmentBookingDialog from "@/components/booking/AppointmentBookingDialog";
 import { useParams, Link } from "react-router-dom";
 import PlatformMessageButton from "@/components/messaging/PlatformMessageButton";
 import { Star, PenLine, Video, Instagram, Globe as GlobeIcon, ArrowLeft, ExternalLink, UserPlus, UserCheck, Eye, Heart, MessageSquare, Calendar, Handshake, Play, Users, Phone, Bot, MessageCircle, Mail, Building2, Send } from "lucide-react";
