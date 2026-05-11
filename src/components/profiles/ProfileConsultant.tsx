@@ -3,8 +3,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import EventManagePanel from "@/components/EventManagePanel";
 import CreateEventForm from "@/components/CreateEventForm";
-import SocialMediaCampaignDialog from "@/components/SocialMediaCampaignDialog";
-import CategoryShowcasePurchase from "@/components/CategoryShowcasePurchase";
 import CorBotPromoBanner from "@/components/CorBotPromoBanner";
 import EmptyDashboardState from "@/components/EmptyDashboardState";
 import AppointmentManagePanel from "@/components/booking/AppointmentManagePanel";
