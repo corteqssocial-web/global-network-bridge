@@ -159,11 +159,9 @@ const ProfileConsultant = () => {
       <div className="mb-6"><CorBotPromoBanner /></div>
 
       {/* Tabs */}
-      <Tabs defaultValue="sessions" className="w-full">
+      <Tabs defaultValue="incoming-requests" className="w-full">
         <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
-          <TabsTrigger value="sessions" className="gap-1.5"><Video className="h-4 w-4" /> Seanslar</TabsTrigger>
           <TabsTrigger value="incoming-requests" className="gap-1.5"><ClipboardList className="h-4 w-4" /> Gelen Talepler</TabsTrigger>
-          <TabsTrigger value="ai-twin" className="gap-1.5"><Bot className="h-4 w-4" /> AI Twin</TabsTrigger>
           <TabsTrigger value="events" className="gap-1.5"><Calendar className="h-4 w-4" /> Takvim/Etkinlikler</TabsTrigger>
           <TabsTrigger value="reviews" className="gap-1.5"><Star className="h-4 w-4" /> Değerlendirmeler</TabsTrigger>
           <TabsTrigger value="analytics" className="gap-1.5"><BarChart3 className="h-4 w-4" /> Analitik</TabsTrigger>
@@ -172,24 +170,8 @@ const ProfileConsultant = () => {
           <TabsTrigger value="messages" className="gap-1.5"><InboxIcon className="h-4 w-4" /> Mesaj Kutusu</TabsTrigger>
           <NotificationsTabTrigger />
           <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Profil Ayarları</TabsTrigger>
+          <TabsTrigger value="ai-twin" className="gap-1.5"><Bot className="h-4 w-4" /> AI Twin</TabsTrigger>
         </TabsList>
-
-        {/* LIVE SESSIONS */}
-        <TabsContent value="sessions" className="mt-6">
-          <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <Video className="h-5 w-5 text-primary" /> Canlı Görüşmeler
-              </h2>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Clock className="h-4 w-4" /> <span className="select-none blur-sm">30dk = €30 · İlk 10dk ücretsiz</span>
-              </div>
-            </div>
-
-            <h3 className="font-semibold text-foreground mb-3 text-sm">Randevu Talepleri & Yaklaşan Seanslar</h3>
-            <AppointmentManagePanel />
-          </div>
-        </TabsContent>
 
         {/* AI TWIN */}
         <TabsContent value="ai-twin" className="mt-6">
