@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 
 interface CreateJobListingFormProps {
   onClose: () => void;
+  onCreated?: (listing: { title: string; type: string; package: string; price: number }) => void;
   editData?: {
     id: number;
     title: string;
@@ -28,12 +29,12 @@ interface CreateJobListingFormProps {
 }
 
 const listingPackages = [
-  { id: "basic", name: "Standart İlan", price: 0, duration: "30 gün", features: ["Arama sonuçlarında görünür", "30 gün yayında kalır"] },
-  { id: "premium", name: "Premium İlan", price: 29, duration: "45 gün", features: ["Üst sıralarda görünür", "45 gün yayında", "Öne çıkan rozeti", "WhatsApp gruplarına duyuru"] },
-  { id: "featured", name: "Spotlight İlan", price: 59, duration: "60 gün", features: ["Ana sayfada görünür", "60 gün yayında", "AI eşleşmeli aday bildirimi", "Sosyal medya tanıtımı", "Detaylı başvuru raporu"] },
+  { id: "basic", name: "Standart İlan", price: 0, duration: "30 gün", comingSoon: false, features: ["Arama sonuçlarında görünür", "30 gün yayında kalır"] },
+  { id: "premium", name: "Premium İlan", price: 27, duration: "45 gün", comingSoon: true, features: ["🔍 Ülke aramasında öne çıkar (+€15 değerinde)", "📧 AI eşleşmeli e-posta bildirimi (+€12 değerinde)", "45 gün yayında", "Öne çıkan rozeti"] },
+  { id: "featured", name: "Spotlight İlan", price: 59, duration: "60 gün", comingSoon: false, features: ["Ana sayfada görünür", "60 gün yayında", "AI eşleşmeli aday bildirimi", "Sosyal medya tanıtımı", "Detaylı başvuru raporu"] },
 ];
 
-const CreateJobListingForm = ({ onClose, editData }: CreateJobListingFormProps) => {
+const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListingFormProps) => {
   const { toast } = useToast();
   const isEditing = !!editData;
 
@@ -64,6 +65,15 @@ const CreateJobListingForm = ({ onClose, editData }: CreateJobListingFormProps) 
     + (boostEmailNotify ? boostCosts.emailNotify : 0);
 
   const handleSubmit = () => {
+    if (!isEditing) {
+      const pkg = listingPackages.find((p) => p.id === selectedPackage);
+      onCreated?.({
+        title: formData.title || "Adsız İlan",
+        type: formData.type,
+        package: pkg?.name || "Standart İlan",
+        price: totalPrice,
+      });
+    }
     toast({
       title: isEditing ? "İlan güncellendi ✅" : "İlan oluşturuldu! 🎉",
       description: isEditing
@@ -205,15 +215,20 @@ const CreateJobListingForm = ({ onClose, editData }: CreateJobListingFormProps) 
               <button
                 key={pkg.id}
                 onClick={() => setSelectedPackage(pkg.id)}
-                className={`text-left p-5 rounded-xl border-2 transition-all ${
+                className={`relative text-left p-5 rounded-xl border-2 transition-all ${
                   selectedPackage === pkg.id
                     ? "border-primary bg-primary/5"
                     : "border-border hover:border-primary/30"
                 }`}
               >
+                {pkg.comingSoon && (
+                  <Badge variant="outline" className="absolute top-2 right-2 text-[10px] bg-gold/10 text-gold border-gold/30">
+                    Yakında
+                  </Badge>
+                )}
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-bold text-foreground">{pkg.name}</h4>
-                  {selectedPackage === pkg.id && (
+                  {selectedPackage === pkg.id && !pkg.comingSoon && (
                     <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
                       <Check className="h-3 w-3 text-primary-foreground" />
                     </div>

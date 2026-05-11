@@ -126,11 +126,11 @@ const ProfileBusiness = () => {
     balance: 0,
   };
 
-  const listings = [
+  const [listings, setListings] = useState<Array<{ id: number; title: string; type: string; status: string; views: number; applications: number; package?: string; price?: number }>>([
     { id: 1, title: "Kıdemli Frontend Geliştirici", type: "İş İlanı", status: "Aktif", views: 342, applications: 18 },
     { id: 2, title: "Dijital Pazarlama Uzmanı", type: "İş İlanı", status: "Aktif", views: 156, applications: 7 },
     { id: 3, title: "Stajyer - Backend", type: "Staj", status: "Kapalı", views: 89, applications: 23 },
-  ];
+  ]);
 
   const events = [
     { id: 1, title: "Tech Meetup Berlin", date: "22 Mar 2026", attendees: 45, status: "Yaklaşan" },
@@ -248,6 +248,12 @@ const ProfileBusiness = () => {
               </Button>
               <CreateJobListingForm
                 onClose={() => { setShowCreateJob(false); setEditingJob(null); }}
+                onCreated={(l) => {
+                  setListings((prev) => [
+                    { id: Date.now(), title: l.title, type: l.type, status: "Aktif", views: 0, applications: 0, package: l.package, price: l.price },
+                    ...prev,
+                  ]);
+                }}
                 editData={editingJob ? {
                   id: editingJob.id,
                   title: editingJob.title,
@@ -279,10 +285,15 @@ const ProfileBusiness = () => {
                           {listing.status}
                         </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground flex items-center gap-3">
+                      <p className="text-sm text-muted-foreground flex items-center gap-3 flex-wrap">
                         <span className="flex items-center gap-1"><Tag className="h-3 w-3" /> {listing.type}</span>
                         <span className="flex items-center gap-1"><Eye className="h-3 w-3" /> {listing.views} görüntülenme</span>
                         <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {listing.applications} başvuru</span>
+                        {listing.package && (
+                          <Badge variant="outline" className="text-[10px] gap-1 border-primary/30 text-primary">
+                            <Star className="h-3 w-3" /> {listing.package}{listing.price ? ` · €${listing.price}` : ""}
+                          </Badge>
+                        )}
                       </p>
                     </div>
                     <Button variant="outline" size="sm" className="gap-1" onClick={() => setEditingJob(listing)}>
