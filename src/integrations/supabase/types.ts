@@ -554,6 +554,78 @@ export type Database = {
         }
         Relationships: []
       }
+      job_listings: {
+        Row: {
+          business_name: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          currency: string
+          department: string | null
+          description: string | null
+          employment_type: string
+          expires_at: string | null
+          id: string
+          location: string | null
+          location_type: string
+          package: string
+          requirements: string | null
+          salary_max: number | null
+          salary_min: number | null
+          status: string
+          title: string
+          total_price: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          business_name?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          currency?: string
+          department?: string | null
+          description?: string | null
+          employment_type?: string
+          expires_at?: string | null
+          id?: string
+          location?: string | null
+          location_type?: string
+          package?: string
+          requirements?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          status?: string
+          title: string
+          total_price?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          business_name?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          currency?: string
+          department?: string | null
+          description?: string | null
+          employment_type?: string
+          expires_at?: string | null
+          id?: string
+          location?: string | null
+          location_type?: string
+          package?: string
+          requirements?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          status?: string
+          title?: string
+          total_price?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       may19_submissions: {
         Row: {
           attachment_urls: string[] | null

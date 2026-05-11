@@ -123,7 +123,7 @@ const Navbar = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/kariyer" className="flex items-center gap-2 cursor-pointer">
+                  <Link to="/is-ilanlari" className="flex items-center gap-2 cursor-pointer">
                     <Briefcase className="h-3.5 w-3.5 text-primary" />İş İlanları
                   </Link>
                 </DropdownMenuItem>

@@ -64,25 +64,58 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
     + (boostToCountrySearch ? boostCosts.countrySearch : 0)
     + (boostEmailNotify ? boostCosts.emailNotify : 0);
 
-  const handleSubmit = () => {
-    if (!isEditing) {
-      const pkg = listingPackages.find((p) => p.id === selectedPackage);
-      onCreated?.({
+  const handleSubmit = async () => {
+    const pkg = listingPackages.find((p) => p.id === selectedPackage);
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data: auth } = await supabase.auth.getUser();
+      if (!auth?.user) {
+        toast({ title: "Giriş gerekli", description: "İlan oluşturmak için giriş yapın." });
+        return;
+      }
+      const { data: prof } = await supabase.from("profiles").select("business_name, country, city").eq("id", auth.user.id).maybeSingle();
+      const payload = {
+        user_id: auth.user.id,
+        business_name: (prof as any)?.business_name || null,
         title: formData.title || "Adsız İlan",
+        department: formData.department || null,
+        employment_type: formData.type,
+        location_type: formData.locationType,
+        country: (prof as any)?.country || null,
+        city: (prof as any)?.city || null,
+        location: formData.location || null,
+        salary_min: formData.salaryMin ? Number(formData.salaryMin) : null,
+        salary_max: formData.salaryMax ? Number(formData.salaryMax) : null,
+        description: formData.description || null,
+        requirements: formData.requirements || null,
+        package: selectedPackage,
+        total_price: totalPrice,
+        status: "published" as const,
+        expires_at: new Date(Date.now() + (selectedPackage === "featured" ? 60 : selectedPackage === "premium" ? 45 : 30) * 86400000).toISOString(),
+      };
+      if (isEditing && editData?.id) {
+        await supabase.from("job_listings").update(payload).eq("id", String(editData.id));
+      } else {
+        await supabase.from("job_listings").insert(payload);
+      }
+      onCreated?.({
+        title: payload.title,
         type: formData.type,
         package: pkg?.name || "Standart İlan",
         price: totalPrice,
       });
+      toast({
+        title: isEditing ? "İlan güncellendi ✅" : "İlan oluşturuldu! 🎉",
+        description: isEditing
+          ? "Değişiklikler kaydedildi."
+          : totalPrice > 0
+            ? `€${totalPrice} ödeme sonrası ilanınız yayınlanacaktır.`
+            : "İlanınız yayına alındı ve İş İlanları sayfasında listelendi.",
+      });
+      onClose();
+    } catch (e: any) {
+      toast({ title: "Hata", description: e?.message || "İlan kaydedilemedi", variant: "destructive" });
     }
-    toast({
-      title: isEditing ? "İlan güncellendi ✅" : "İlan oluşturuldu! 🎉",
-      description: isEditing
-        ? "Değişiklikler kaydedildi."
-        : totalPrice > 0
-          ? `€${totalPrice} ödeme sonrası ilanınız yayınlanacaktır.`
-          : "İlanınız yayına alındı.",
-    });
-    onClose();
   };
 
   return (
