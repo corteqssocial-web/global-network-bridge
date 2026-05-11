@@ -49,7 +49,7 @@ export const CouponManager = ({ businessName }: { businessName: string }) => {
       }]);
       toast({ title: "Kupon oluşturuldu! 🎉", description: `${form.code} kodu aktif edildi.` });
     }
-    setForm({ title: "", code: "", type: "percent", value: 0, description: "", expires: "", usageLimit: 100 });
+    setForm({ title: "", code: "", type: "percent", value: 0, description: "", expires: "", usageLimit: 100, isFree: true, price: 0 });
     setShowForm(false);
   };
 
