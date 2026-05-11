@@ -17,43 +17,20 @@ const KEY = "corteqs:diaspora-blog-links";
 function read(): DiasporaBlogLink[] {
   try {
     const raw = localStorage.getItem(KEY);
-    if (!raw) return seed();
+    if (!raw) return [];
     const parsed = JSON.parse(raw) as DiasporaBlogLink[];
-    return Array.isArray(parsed) ? parsed : seed();
+    if (!Array.isArray(parsed)) return [];
+    // Purge legacy seed entries from older versions
+    const cleaned = parsed.filter((b) => !b.id?.startsWith("seed-"));
+    if (cleaned.length !== parsed.length) write(cleaned);
+    return cleaned;
   } catch {
-    return seed();
+    return [];
   }
 }
 
 function write(items: DiasporaBlogLink[]) {
   localStorage.setItem(KEY, JSON.stringify(items));
-}
-
-function seed(): DiasporaBlogLink[] {
-  const initial: DiasporaBlogLink[] = [
-    {
-      id: "seed-1",
-      url: "https://example.com/amsterdam-turk-mahalleleri",
-      title: "Amsterdam'da Türk Mahalleleri",
-      author: "Selin Akış",
-      city: "Amsterdam",
-      country: "Hollanda",
-      description: "Hollanda'daki Türk diasporasının yoğun olduğu mahalleleri keşfedin.",
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: "seed-2",
-      url: "https://example.com/berlin-diaspora-yemek",
-      title: "Berlin Diaspora Mutfağı",
-      author: "Mehmet Yıldız",
-      city: "Berlin",
-      country: "Almanya",
-      description: "Berlin'deki en otantik Türk lezzetleri.",
-      createdAt: new Date().toISOString(),
-    },
-  ];
-  write(initial);
-  return initial;
 }
 
 export function getDiasporaBlogLinks(city?: string, country?: string): DiasporaBlogLink[] {
