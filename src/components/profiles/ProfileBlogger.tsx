@@ -398,7 +398,18 @@ const ProfileBlogger = () => {
                 </div>
                 <div>
                   <Label>Bio / Hakkında</Label>
-                  <Textarea defaultValue={blogger.description} rows={3} />
+                  <Textarea
+                    defaultValue={blogger.description}
+                    rows={8}
+                    maxLength={3000}
+                    onChange={(e) => {
+                      const el = e.currentTarget.parentElement?.querySelector("[data-bio-count]") as HTMLElement | null;
+                      if (el) el.textContent = `${e.currentTarget.value.length} / 3000`;
+                    }}
+                  />
+                  <p data-bio-count className="text-[11px] text-muted-foreground mt-1 text-right">
+                    {blogger.description.length} / 3000
+                  </p>
                 </div>
                 <div>
                   <Label>Gustolar (virgülle ayırın)</Label>
