@@ -8,16 +8,16 @@ const Footer = () => {
     <footer className="bg-secondary text-secondary-foreground py-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-6 text-xs">
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <img src={corteqsLogo} alt="CorteQS" className="h-8 w-auto" />
+          <div className="col-span-2 md:col-span-1">
+            <div className="flex items-center gap-2 mb-2">
+              <img src={corteqsLogo} alt="CorteQS" className="h-6 w-auto" />
             </div>
-            <p className="text-sm text-secondary-foreground/60 font-body">
+            <p className="text-xs text-secondary-foreground/60 font-body leading-snug">
               Türk diasporasını birleştiren global platform.
             </p>
-            <div className="flex gap-2 mt-4">
+            <div className="flex gap-1.5 mt-2">
               {diasporaOptions.map((opt) => (
-                <span key={opt.key} className="text-lg" title={opt.label}>{opt.flag}</span>
+                <span key={opt.key} className="text-sm" title={opt.label}>{opt.flag}</span>
               ))}
             </div>
           </div>
