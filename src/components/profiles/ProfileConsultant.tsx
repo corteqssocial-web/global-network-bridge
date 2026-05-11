@@ -7,6 +7,8 @@ import SocialMediaCampaignDialog from "@/components/SocialMediaCampaignDialog";
 import CategoryShowcasePurchase from "@/components/CategoryShowcasePurchase";
 import CorBotPromoBanner from "@/components/CorBotPromoBanner";
 import EmptyDashboardState from "@/components/EmptyDashboardState";
+import AppointmentManagePanel from "@/components/booking/AppointmentManagePanel";
+import { Lock } from "lucide-react";
 import {
   User, MapPin, Globe, Star, Calendar, Users, Clock, Eye,
   TrendingUp, Settings, BarChart3, CreditCard, Plus, ChevronRight, Crown,
