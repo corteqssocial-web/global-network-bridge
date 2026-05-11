@@ -476,8 +476,8 @@ const ProfileBlogger = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {[
                 { title: "Öne Çıkan Influencer", desc: "Ana sayfada ve arama sonuçlarında üst sıralarda görünün", price: "€—/hafta", icon: Star },
-                { title: "WhatsApp Tanıtımı", desc: "CorteQS Kanalında Tanıtım", price: "€19/tanıtım", icon: Megaphone },
-                { title: "Reklam İşbirliği", desc: "Markalarla eşleşme ve sponsorlu içerik fırsatları", price: "Değişken", icon: Handshake },
+                { title: "WhatsApp Tanıtımı", desc: "CorteQS Kanalında Tanıtım", price: "€—/tanıtım", icon: Megaphone },
+                { title: "Reklam İşbirliği", desc: "Markalarla eşleşme ve sponsorlu içerik fırsatları", price: "€—", icon: Handshake },
               ].map((promo) => (
                 <div key={promo.title} className="border border-border rounded-xl p-4 hover:border-primary/30 hover:bg-primary/5 transition-colors">
                   <div className="flex items-center gap-3 mb-2">
