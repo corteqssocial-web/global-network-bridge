@@ -180,6 +180,7 @@ export const CouponManager = ({ businessName }: { businessName: string }) => {
 export const UserCoupons = ({ coupons }: { coupons: Coupon[] }) => {
   const { toast } = useToast();
   const [copiedId, setCopiedId] = useState<number | null>(null);
+  const [buyCoupon, setBuyCoupon] = useState<Coupon | null>(null);
 
   const copyCode = (id: number, code: string) => {
     navigator.clipboard.writeText(code);
@@ -190,26 +191,36 @@ export const UserCoupons = ({ coupons }: { coupons: Coupon[] }) => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {coupons.map(c => (
-        <div key={c.id} className="relative border border-dashed border-gold/30 rounded-xl p-5 bg-gold/5 hover:bg-gold/10 transition-colors">
-          <div className="flex items-center gap-2 mb-3">
-            {c.type === "gift" ? <Gift className="h-4 w-4 text-gold" /> : <Tag className="h-4 w-4 text-gold" />}
-            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${c.type === "gift" ? "bg-turquoise/10 text-turquoise" : "bg-gold/10 text-gold"}`}>
-              {c.type === "gift" ? "Hediye" : c.type === "percent" ? `%${c.value} İndirim` : `€${c.value} İndirim`}
-            </span>
+      {coupons.map(c => {
+        const isFree = c.isFree ?? (Number(c.price ?? 0) === 0);
+        return (
+          <div key={c.id} className="relative border border-dashed border-gold/30 rounded-xl p-5 bg-gold/5 hover:bg-gold/10 transition-colors flex flex-col">
+            <div className="flex items-center gap-2 mb-3">
+              {c.type === "gift" ? <Gift className="h-4 w-4 text-gold" /> : <Tag className="h-4 w-4 text-gold" />}
+              <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${c.type === "gift" ? "bg-turquoise/10 text-turquoise" : "bg-gold/10 text-gold"}`}>
+                {c.type === "gift" ? "Hediye" : c.type === "percent" ? `%${c.value} İndirim` : `€${c.value} İndirim`}
+              </span>
+              <Badge variant="outline" className="text-[10px] ml-auto">{isFree ? "Ücretsiz" : `€${(c.price ?? 0).toFixed(2)}`}</Badge>
+            </div>
+            <h3 className="font-bold text-foreground mb-1">{c.title}</h3>
+            <p className="text-xs text-muted-foreground mb-1">{c.businessName}</p>
+            {c.expires && <p className="text-xs text-muted-foreground mb-3">Son: {c.expires}</p>}
+            <div className="mt-auto space-y-2">
+              <Button onClick={() => setBuyCoupon(c)} className="w-full gap-1.5 bg-gold hover:bg-gold/90 text-primary-foreground">
+                <ShoppingCart className="h-3.5 w-3.5" /> {isFree ? "Kuponu Al" : "Satın Al"}
+              </Button>
+              <button
+                onClick={() => copyCode(c.id, c.code)}
+                className="w-full bg-card rounded-lg px-3 py-2 text-center border border-border hover:border-gold/30 transition-colors flex items-center justify-center gap-2"
+              >
+                <code className="text-sm font-bold text-primary tracking-wider">{c.code}</code>
+                {copiedId === c.id ? <Check className="h-3 w-3 text-turquoise" /> : <Copy className="h-3 w-3 text-muted-foreground" />}
+              </button>
+            </div>
           </div>
-          <h3 className="font-bold text-foreground mb-1">{c.title}</h3>
-          <p className="text-xs text-muted-foreground mb-1">{c.businessName}</p>
-          <p className="text-xs text-muted-foreground mb-3">Son: {c.expires}</p>
-          <button
-            onClick={() => copyCode(c.id, c.code)}
-            className="w-full bg-card rounded-lg px-3 py-2 text-center border border-border hover:border-gold/30 transition-colors flex items-center justify-center gap-2"
-          >
-            <code className="text-sm font-bold text-primary tracking-wider">{c.code}</code>
-            {copiedId === c.id ? <Check className="h-3 w-3 text-turquoise" /> : <Copy className="h-3 w-3 text-muted-foreground" />}
-          </button>
-        </div>
-      ))}
+        );
+      })}
+      <CouponCheckoutDialog coupon={buyCoupon} open={!!buyCoupon} onOpenChange={(o) => !o && setBuyCoupon(null)} />
     </div>
   );
 };
