@@ -185,10 +185,10 @@ const Feed = () => {
         }
       }
     },
-    [page, selectedCountries, selectedCities, selectedContinent, user, authorMap, demoMode],
+    [page, selectedCountries, selectedCities, selectedContinent, user, authorMap, demoMode, cafeId],
   );
 
-  // Reset & refetch when filters change
+  // Reset & refetch when filters or cafe change
   useEffect(() => {
     setPage(0);
     setPosts([]);
@@ -196,7 +196,7 @@ const Feed = () => {
     setDemoMode(false);
     fetchPosts(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCountries, selectedCities, selectedContinent]);
+  }, [selectedCountries, selectedCities, selectedContinent, cafeId]);
 
   // Load more pages
   useEffect(() => {
