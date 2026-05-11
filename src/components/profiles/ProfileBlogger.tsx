@@ -122,8 +122,8 @@ const ProfileBlogger = () => {
             <p className="text-sm text-muted-foreground mt-1">{blogger.description}</p>
             <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-muted-foreground">
               <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {blogger.city}, {blogger.country}</span>
-              <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {(blogger.followers / 1000).toFixed(1)}K takipçi</span>
-              <span className="flex items-center gap-1"><Star className="h-3 w-3 text-gold" /> {blogger.rating} ({blogger.reviewCount})</span>
+              <span className="flex items-center gap-1"><Users className="h-3 w-3" /> — takipçi</span>
+              <span className="flex items-center gap-1"><Star className="h-3 w-3 text-gold" /> — (—)</span>
               <span className="flex items-center gap-1"><Instagram className="h-3 w-3" /> {blogger.instagram}</span>
               <a href={`https://${blogger.website}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-primary hover:underline">
                 <Globe className="h-3 w-3" /> {blogger.website}
