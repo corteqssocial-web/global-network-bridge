@@ -90,8 +90,8 @@ const Onboarding = () => {
         if (fallbackName) profilePatch.business_name = fallbackName;
         profilePatch.business_sector = meta.business_sector || meta.sector || "İşletme";
       }
-      const { error: profileError } = await supabase
-        .from("profiles")
+      const { error: profileError } = await (supabase
+        .from("profiles") as any)
         .update(profilePatch)
         .eq("id", user.id);
 
