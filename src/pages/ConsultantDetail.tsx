@@ -78,16 +78,20 @@ const ConsultantDetail = () => {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3 flex-wrap">
                   <h1 className="text-2xl md:text-3xl font-bold text-foreground">{consultant.name}</h1>
-                  <PlatformMessageButton recipientKind="consultant" recipientSlug={consultant.id} recipientName={consultant.name} fullWidth />
-                <Button
-                    variant={isFollowing ? "secondary" : "outline"}
-                    size="sm"
-                    className="gap-1"
-                    onClick={toggleFollow}
-                  >
-                    {isFollowing ? <UserCheck className="h-3.5 w-3.5" /> : <UserPlus className="h-3.5 w-3.5" />}
-                    {isFollowing ? "Takipte" : "Takip Et"}
-                  </Button>
+                  {isEnabled("message") && (
+                    <PlatformMessageButton recipientKind="consultant" recipientSlug={consultant.id} recipientName={consultant.name} fullWidth />
+                  )}
+                  {isEnabled("follow") && (
+                    <Button
+                      variant={isFollowing ? "secondary" : "outline"}
+                      size="sm"
+                      className="gap-1"
+                      onClick={toggleFollow}
+                    >
+                      {isFollowing ? <UserCheck className="h-3.5 w-3.5" /> : <UserPlus className="h-3.5 w-3.5" />}
+                      {isFollowing ? "Takipte" : "Takip Et"}
+                    </Button>
+                  )}
                 </div>
                 <p className="text-muted-foreground font-body mt-1">{consultant.role}</p>
                 <p className="text-sm text-muted-foreground font-body mt-1">📍 {consultant.city}, {consultant.country}</p>
