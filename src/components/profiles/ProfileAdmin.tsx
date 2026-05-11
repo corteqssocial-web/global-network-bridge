@@ -134,7 +134,12 @@ const ProfileAdmin = () => {
           <TabsTrigger value="users" className="gap-1.5"><Users className="h-4 w-4" /> Kullanıcılar</TabsTrigger>
           <TabsTrigger value="revenue" className="gap-1.5"><CreditCard className="h-4 w-4" /> Gelir</TabsTrigger>
           <TabsTrigger value="analytics" className="gap-1.5"><BarChart3 className="h-4 w-4" /> Analitik</TabsTrigger>
+          <TabsTrigger value="brand" className="gap-1.5"><Sparkles className="h-4 w-4" /> Marka</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="brand" className="mt-6">
+          <BrandSettings />
+        </TabsContent>
 
         {/* APPROVALS */}
         <TabsContent value="approvals" className="mt-6">
