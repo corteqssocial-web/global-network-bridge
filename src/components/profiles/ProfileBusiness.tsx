@@ -308,40 +308,76 @@ const ProfileBusiness = () => {
             </div>
           ) : (
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-between mb-6 gap-2 flex-wrap">
                 <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                   <Package className="h-5 w-5 text-primary" /> İş İlanları & Listeler
                 </h2>
-                <Button className="gap-2" onClick={() => setShowCreateJob(true)}><Plus className="h-4 w-4" /> Yeni İlan</Button>
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setShowFilters((v) => !v)}>
+                    <Filter className="h-3.5 w-3.5" /> {showFilters ? "Gizle" : "Daha fazla"}
+                  </Button>
+                  <Button className="gap-2" onClick={() => setShowCreateJob(true)}><Plus className="h-4 w-4" /> Yeni İlan</Button>
+                </div>
               </div>
-              <div className="space-y-3">
-                {listings.map((listing) => (
-                  <div key={listing.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-semibold text-foreground">{listing.title}</h3>
-                        <Badge variant={listing.status === "Aktif" ? "default" : "secondary"} className="text-xs">
-                          {listing.status}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground flex items-center gap-3 flex-wrap">
-                        <span className="flex items-center gap-1"><Tag className="h-3 w-3" /> {listing.type}</span>
-                        <span className="flex items-center gap-1"><Eye className="h-3 w-3" /> {listing.views} görüntülenme</span>
-                        <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {listing.applications} başvuru</span>
-                        {listing.package && (
-                          <Badge variant="outline" className="text-[10px] gap-1 border-primary/30 text-primary">
-                            <Star className="h-3 w-3" /> {listing.package}{listing.price ? ` · €${listing.price}` : ""}
-                          </Badge>
-                        )}
-                      </p>
-                    </div>
-                    <Button variant="outline" size="sm" className="gap-1" onClick={() => setEditingJob(listing)}>
-                      <Edit className="h-3 w-3" /> Düzenle
-                    </Button>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+
+              {showFilters && (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5 p-4 rounded-xl bg-muted/40 border border-border">
+                  <Select value={filterCountry} onValueChange={(v) => { setFilterCountry(v); setFilterCity("all"); }}>
+                    <SelectTrigger><SelectValue placeholder="Ülke" /></SelectTrigger>
+                    <SelectContent className="bg-card z-50 max-h-72">
+                      <SelectItem value="all">Tüm Ülkeler</SelectItem>
+                      {filterCountryList.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                  <Select value={filterCity} onValueChange={setFilterCity} disabled={filterCountry === "all"}>
+                    <SelectTrigger><SelectValue placeholder={filterCountry === "all" ? "Önce ülke seç" : `Tüm Şehirler - ${filterCountry}`} /></SelectTrigger>
+                    <SelectContent className="bg-card z-50 max-h-72">
+                      <SelectItem value="all">Tüm Şehirler{filterCountry !== "all" ? ` - ${filterCountry}` : ""}</SelectItem>
+                      {filterCityList.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input className="pl-9" placeholder="İlan başlığında ara..." value={filterSearch} onChange={(e) => setFilterSearch(e.target.value)} />
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
+
+              {filteredListings.length === 0 ? (
+                <div className="text-center py-12 text-muted-foreground">
+                  <Package className="h-10 w-10 mx-auto mb-3 opacity-40" />
+                  <p className="text-sm">{listings.length === 0 ? "Henüz ilanın yok. İlk ilanını oluştur." : "Filtrelere uyan ilan bulunamadı."}</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {filteredListings.map((listing) => (
+                    <div key={listing.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-semibold text-foreground">{listing.title}</h3>
+                          <Badge variant={listing.status === "Aktif" ? "default" : "secondary"} className="text-xs">
+                            {listing.status}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground flex items-center gap-3 flex-wrap">
+                          <span className="flex items-center gap-1"><Tag className="h-3 w-3" /> {listing.type}</span>
+                          <span className="flex items-center gap-1"><Eye className="h-3 w-3" /> {listing.views} görüntülenme</span>
+                          <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {listing.applications} başvuru</span>
+                          {listing.package && (
+                            <Badge variant="outline" className="text-[10px] gap-1 border-primary/30 text-primary">
+                              <Star className="h-3 w-3" /> {listing.package}{listing.price ? ` · €${listing.price}` : ""}
+                            </Badge>
+                          )}
+                        </p>
+                      </div>
+                      <Button variant="outline" size="sm" className="gap-1" onClick={() => setEditingJob(listing)}>
+                        <Edit className="h-3 w-3" /> Düzenle
+                      </Button>
+                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </TabsContent>
