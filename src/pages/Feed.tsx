@@ -370,38 +370,57 @@ const Feed = () => {
                 />
               </section>
 
-              {/* Cafe'ler — kategori toplulukları */}
+              {/* Cafe'ler — aktif topluluklar (DB) */}
               <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-                <h3 className="text-sm font-bold mb-1 flex items-center gap-2">
-                  <Coffee className="h-4 w-4 text-amber-600" />
-                  Cafe'ler
-                </h3>
+                <div className="flex items-center justify-between mb-1">
+                  <h3 className="text-sm font-bold flex items-center gap-2">
+                    <Coffee className="h-4 w-4 text-amber-600" />
+                    Cafe'ler
+                  </h3>
+                  <Badge variant="secondary" className="text-[10px]">{activeCafes.length}</Badge>
+                </div>
                 <p className="text-[10px] text-muted-foreground mb-3 leading-snug">
-                  Kategori topluluklarına yalnız ilgili hesap türleri girebilir.
+                  Aktif cafe'ler — açılış 2 saat, Premium 4 saat. Günde 1 katılım.
                 </p>
-                <div className="space-y-1">
-                  {cafes.map((c) => {
-                    const allowed = canEnterCafe(c.roles);
+                <div className="space-y-1 max-h-72 overflow-y-auto pr-1">
+                  {activeCafes.length === 0 && (
+                    <p className="text-[11px] text-muted-foreground py-2 text-center">
+                      Şu an aktif cafe yok. İlkini sen aç ☕
+                    </p>
+                  )}
+                  {activeCafes.map((c) => {
+                    const st = themeStyle(c.theme);
+                    const Icon = st.icon;
                     return (
-                      <button
-                        key={c.key}
-                        type="button"
-                        onClick={() => handleCafeClick(c)}
-                        className={`w-full flex items-center gap-3 px-2 py-2 rounded-lg transition-colors text-left ${
-                          allowed ? "hover:bg-muted/60" : "hover:bg-muted/30 opacity-80"
+                      <Link
+                        key={c.id}
+                        to={`/cadde/${c.id}`}
+                        className={`w-full flex items-center gap-3 px-2 py-2 rounded-lg transition-colors ${
+                          cafeId === c.id ? "bg-muted/80" : "hover:bg-muted/60"
                         }`}
                       >
-                        <div className={`h-8 w-8 rounded-full ${c.bg} flex items-center justify-center shrink-0`}>
-                          <c.icon className={`h-4 w-4 ${c.color}`} />
+                        <div className={`h-8 w-8 rounded-full ${st.bg} flex items-center justify-center shrink-0`}>
+                          <Icon className={`h-4 w-4 ${st.color}`} />
                         </div>
-                        <span className="text-sm font-medium flex-1 truncate">{c.label}</span>
-                        {!allowed && <Lock className="h-3.5 w-3.5 text-muted-foreground shrink-0" />}
-                      </button>
+                        <div className="min-w-0 flex-1">
+                          <div className="text-xs font-semibold truncate">{c.name}</div>
+                          <div className="text-[10px] text-muted-foreground truncate">
+                            {[c.city, c.country].filter(Boolean).join(" · ") || c.theme}
+                          </div>
+                        </div>
+                        <Badge variant="outline" className="text-[9px] h-4 px-1 shrink-0">
+                          {formatRemaining(c.closes_at)}
+                        </Badge>
+                      </Link>
                     );
                   })}
                 </div>
-                {(!accountType || accountType === "user") && (
-                  <Link to="/onboarding" className="mt-3 block text-[10px] text-primary font-semibold hover:underline">
+                {user ? (
+                  <div className="mt-3">
+                    <CreateCafeForm onCreated={refreshCafes} />
+                  </div>
+                ) : (
+                  <Link to={categoryAccountLink} className="mt-3 block text-[10px] text-primary font-semibold hover:underline">
                     Kategori hesabı aç →
                   </Link>
                 )}
