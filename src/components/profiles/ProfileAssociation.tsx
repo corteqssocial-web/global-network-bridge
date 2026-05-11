@@ -243,19 +243,10 @@ const ProfileAssociation = () => {
             <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
               <BarChart3 className="h-5 w-5 text-primary" /> Üyelik Büyümesi
             </h2>
-            <div className="space-y-3">
-              {["Oca", "Şub", "Mar", "Nis", "May", "Haz"].map((month, i) => {
-                const val = [18, 25, 32, 22, 28, 35][i];
-                return (
-                  <div key={month} className="flex items-center gap-3">
-                    <span className="text-sm text-muted-foreground w-8">{month}</span>
-                    <div className="flex-1 bg-muted rounded-full h-3">
-                      <div className="bg-turquoise rounded-full h-3 transition-all" style={{ width: `${val * 2.8}%` }} />
-                    </div>
-                    <span className="text-sm font-medium text-foreground w-12">+{val} üye</span>
-                  </div>
-                );
-              })}
+            <div className="rounded-xl border border-dashed border-border bg-muted/30 p-8 text-center">
+              <BarChart3 className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
+              <p className="text-sm font-medium text-foreground">Henüz veri yok</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Üye eklendikçe büyüme grafiğiniz burada görünecek.</p>
             </div>
           </div>
         </TabsContent>
