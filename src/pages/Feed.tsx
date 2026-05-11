@@ -126,13 +126,18 @@ const Feed = () => {
         .order("created_at", { ascending: false })
         .range(from, to);
 
-      if (selectedCities.length > 0) {
-        query = query.in("city", selectedCities);
-      } else if (selectedContinent) {
-        const { continents } = await import("@/data/continents");
-        query = query.in("country", continents[selectedContinent] || []);
-      } else if (selectedCountries.length > 0) {
-        query = query.in("country", selectedCountries);
+      if (cafeId) {
+        query = query.eq("cafe_id" as any, cafeId);
+      } else {
+        query = query.is("cafe_id" as any, null);
+        if (selectedCities.length > 0) {
+          query = query.in("city", selectedCities);
+        } else if (selectedContinent) {
+          const { continents } = await import("@/data/continents");
+          query = query.in("country", continents[selectedContinent] || []);
+        } else if (selectedCountries.length > 0) {
+          query = query.in("country", selectedCountries);
+        }
       }
 
       const { data, error } = await query;
