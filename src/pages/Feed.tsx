@@ -59,7 +59,10 @@ const Feed = () => {
   const { user, onboardingCompleted } = useAuth();
   const { cafeId } = useParams<{ cafeId?: string }>();
   const navigate = useNavigate();
-  const { cafe, isMember, join: joinCafe } = useCafe(cafeId);
+  const { cafe, isMember, approved, join: joinCafe } = useCafe(cafeId);
+  const [joinDialogOpen, setJoinDialogOpen] = useState(false);
+  const [joinAnswer, setJoinAnswer] = useState("");
+  const [pendingMembers, setPendingMembers] = useState<Array<{ id: string; user_id: string; answer: string | null; full_name?: string | null }>>([]);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [selectedContinent, setSelectedContinent] = useState<string | null>(null);
