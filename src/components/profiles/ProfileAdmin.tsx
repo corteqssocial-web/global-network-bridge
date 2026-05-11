@@ -14,9 +14,11 @@ const ProfileAdmin = () => {
   const { toast } = useToast();
   const [ambassadorApps, setAmbassadorApps] = useState<any[]>([]);
   const [appsLoading, setAppsLoading] = useState(false);
+  const [pendingApprovals, setPendingApprovals] = useState<any[]>([]);
 
   useEffect(() => {
     fetchAmbassadorApps();
+    fetchApprovals();
   }, []);
 
   const fetchAmbassadorApps = async () => {
@@ -24,6 +26,28 @@ const ProfileAdmin = () => {
     const { data } = await supabase.from("city_ambassador_applications" as any).select("*").order("created_at", { ascending: false });
     setAmbassadorApps((data as any[]) || []);
     setAppsLoading(false);
+  };
+
+  const fetchApprovals = async () => {
+    const { data } = await (supabase.from("approval_requests" as any) as any)
+      .select("*")
+      .eq("status", "pending")
+      .order("created_at", { ascending: false });
+    setPendingApprovals((data as any[]) || []);
+  };
+
+  const decideApproval = async (item: any, approve: boolean) => {
+    const status = approve ? "approved" : "rejected";
+    const { error } = await (supabase.from("approval_requests" as any) as any)
+      .update({ status, decided_at: new Date().toISOString() })
+      .eq("id", item.id);
+    if (error) { toast({ title: "Hata", description: error.message, variant: "destructive" }); return; }
+    if (approve) {
+      const patch = item.request_type === "verified_business" ? { is_verified: true } : item.request_type === "hiring_mode" ? { hiring_mode: true } : null;
+      if (patch) await (supabase.from("profiles") as any).update(patch).eq("id", item.user_id);
+    }
+    toast({ title: approve ? "Onaylandı ✓" : "Reddedildi", description: item.request_type });
+    fetchApprovals();
   };
 
   const updateAppStatus = async (id: string, status: string) => {
@@ -37,22 +61,15 @@ const ProfileAdmin = () => {
   };
 
   const platformStats = {
-    totalUsers: 4520,
-    activeUsers: 2180,
-    totalBusinesses: 312,
-    totalAssociations: 87,
-    totalEvents: 156,
-    revenue: 28400,
-    pendingApprovals: 14,
-    reports: 3,
+    totalUsers: 0,
+    activeUsers: 0,
+    totalBusinesses: 0,
+    totalAssociations: 0,
+    totalEvents: 0,
+    revenue: 0,
+    pendingApprovals: pendingApprovals.length,
+    reports: 0,
   };
-
-  const pendingApprovals = [
-    { id: 1, name: "Berlin Türk İşadamları Derneği", type: "Dernek", date: "07 Mar 2026" },
-    { id: 2, name: "Doner Kings GmbH", type: "İşletme", date: "06 Mar 2026" },
-    { id: 3, name: "Istanbul Consulting", type: "İşletme", date: "05 Mar 2026" },
-    { id: 4, name: "Hollanda Türk Kadınlar Birliği", type: "Dernek", date: "04 Mar 2026" },
-  ];
 
   const recentReports = [
     { id: 1, reporter: "Elif D.", target: "Spam Etkinlik", reason: "Sahte etkinlik ilanı", status: "Beklemede" },
