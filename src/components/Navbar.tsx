@@ -97,6 +97,7 @@ const Navbar = () => {
             <Link to="/associations" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t.nav.organizations}</Link>
             <Link to="/bloggers" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t.nav.vblogger}</Link>
             <Link to="/events" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t.nav.events}</Link>
+            <Link to="/cadde" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Cadde</Link>
 
             {/* More Dropdown */}
             <DropdownMenu>
@@ -189,6 +190,7 @@ const Navbar = () => {
               <Link to="/bloggers" className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1" onClick={() => setIsOpen(false)}><PenLine className="h-3 w-3" />{t.nav.vblogger}</Link>
               <Link to="/whatsapp-groups" className="text-sm font-medium text-muted-foreground hover:text-foreground" onClick={() => setIsOpen(false)}>{t.nav.groups}</Link>
               <Link to="/events" className="text-sm font-medium text-muted-foreground hover:text-foreground" onClick={() => setIsOpen(false)}>{t.nav.events}</Link>
+              <Link to="/cadde" className="text-sm font-medium text-muted-foreground hover:text-foreground" onClick={() => setIsOpen(false)}>Cadde</Link>
               <Link to="/city-news" className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1" onClick={() => setIsOpen(false)}><Newspaper className="h-3 w-3" />{t.nav.media}</Link>
               
               <Link to="/map" className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1" onClick={() => setIsOpen(false)}><MapPin className="h-3 w-3" />{t.nav.map}</Link>
