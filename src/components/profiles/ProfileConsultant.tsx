@@ -419,36 +419,20 @@ const ProfileConsultant = () => {
               <Star className="h-5 w-5 text-gold" /> Değerlendirmeler ({consultant.reviewCount})
             </h2>
 
-            {/* Rating summary */}
-            <div className="flex items-center gap-6 p-4 rounded-xl bg-muted/50 mb-6">
-              <div className="text-center">
-                <p className="text-4xl font-bold text-foreground">{consultant.rating}</p>
-                <div className="flex items-center gap-0.5 mt-1">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <Star key={s} className={`h-4 w-4 ${s <= Math.round(consultant.rating) ? "text-gold fill-gold" : "text-muted-foreground"}`} />
-                  ))}
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">{consultant.reviewCount} değerlendirme</p>
-              </div>
-              <div className="flex-1 space-y-1.5">
-                {[
-                  { stars: 5, pct: 82 },
-                  { stars: 4, pct: 12 },
-                  { stars: 3, pct: 4 },
-                  { stars: 2, pct: 1 },
-                  { stars: 1, pct: 1 },
-                ].map((r) => (
-                  <div key={r.stars} className="flex items-center gap-2">
-                    <span className="text-xs text-muted-foreground w-3">{r.stars}</span>
-                    <Star className="h-3 w-3 text-gold" />
-                    <div className="flex-1 bg-muted rounded-full h-2">
-                      <div className="bg-gold rounded-full h-2" style={{ width: `${r.pct}%` }} />
-                    </div>
-                    <span className="text-xs text-muted-foreground w-8 text-right">{r.pct}%</span>
+            {/* Rating summary — only shows when real reviews exist */}
+            {consultant.reviewCount > 0 && (
+              <div className="flex items-center gap-6 p-4 rounded-xl bg-muted/50 mb-6">
+                <div className="text-center">
+                  <p className="text-4xl font-bold text-foreground">{consultant.rating}</p>
+                  <div className="flex items-center gap-0.5 mt-1">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star key={s} className={`h-4 w-4 ${s <= Math.round(consultant.rating) ? "text-gold fill-gold" : "text-muted-foreground"}`} />
+                    ))}
                   </div>
-                ))}
+                  <p className="text-xs text-muted-foreground mt-1">{consultant.reviewCount} değerlendirme</p>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Recent reviews */}
             <div className="space-y-3">
