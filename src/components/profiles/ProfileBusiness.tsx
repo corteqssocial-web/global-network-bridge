@@ -6,7 +6,8 @@ import {
   Building2, MapPin, Globe, Phone, Mail, Calendar, Users,
   TrendingUp, Star, Package, Megaphone, Settings, BarChart3,
   CreditCard, Clock, Eye, Plus, ChevronRight, Tag, ArrowLeft, Edit, Crown,
-  ScanLine, Download, BarChart2, Inbox, Info, Search, Filter, Camera, ImageIcon
+  ScanLine, Download, BarChart2, Inbox, Info, Search, Filter, Camera, ImageIcon,
+  Handshake, Trash2
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { countryCities } from "@/data/countryCities";
