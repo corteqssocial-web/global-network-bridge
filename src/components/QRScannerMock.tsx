@@ -42,6 +42,9 @@ const QRScannerMock = ({ onScan, couponCode }: QRScannerMockProps) => {
     <div className="flex flex-col items-center">
       {/* Scanner viewport */}
       <div className="relative w-64 h-64 rounded-2xl overflow-hidden bg-secondary mb-4">
+        <span className="absolute top-2 right-2 z-10 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-warning/20 text-warning border border-warning/40">
+          Yakında
+        </span>
         {!scanning && !scanned && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
             <QrCode className="h-16 w-16 text-muted-foreground/30" />
