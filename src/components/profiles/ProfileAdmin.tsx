@@ -14,9 +14,11 @@ const ProfileAdmin = () => {
   const { toast } = useToast();
   const [ambassadorApps, setAmbassadorApps] = useState<any[]>([]);
   const [appsLoading, setAppsLoading] = useState(false);
+  const [pendingApprovals, setPendingApprovals] = useState<any[]>([]);
 
   useEffect(() => {
     fetchAmbassadorApps();
+    fetchApprovals();
   }, []);
 
   const fetchAmbassadorApps = async () => {
@@ -24,6 +26,28 @@ const ProfileAdmin = () => {
     const { data } = await supabase.from("city_ambassador_applications" as any).select("*").order("created_at", { ascending: false });
     setAmbassadorApps((data as any[]) || []);
     setAppsLoading(false);
+  };
+
+  const fetchApprovals = async () => {
+    const { data } = await (supabase.from("approval_requests" as any) as any)
+      .select("*")
+      .eq("status", "pending")
+      .order("created_at", { ascending: false });
+    setPendingApprovals((data as any[]) || []);
+  };
+
+  const decideApproval = async (item: any, approve: boolean) => {
+    const status = approve ? "approved" : "rejected";
+    const { error } = await (supabase.from("approval_requests" as any) as any)
+      .update({ status, decided_at: new Date().toISOString() })
+      .eq("id", item.id);
+    if (error) { toast({ title: "Hata", description: error.message, variant: "destructive" }); return; }
+    if (approve) {
+      const patch = item.request_type === "verified_business" ? { is_verified: true } : item.request_type === "hiring_mode" ? { hiring_mode: true } : null;
+      if (patch) await (supabase.from("profiles") as any).update(patch).eq("id", item.user_id);
+    }
+    toast({ title: approve ? "Onaylandı ✓" : "Reddedildi", description: item.request_type });
+    fetchApprovals();
   };
 
   const updateAppStatus = async (id: string, status: string) => {
@@ -37,22 +61,15 @@ const ProfileAdmin = () => {
   };
 
   const platformStats = {
-    totalUsers: 4520,
-    activeUsers: 2180,
-    totalBusinesses: 312,
-    totalAssociations: 87,
-    totalEvents: 156,
-    revenue: 28400,
-    pendingApprovals: 14,
-    reports: 3,
+    totalUsers: 0,
+    activeUsers: 0,
+    totalBusinesses: 0,
+    totalAssociations: 0,
+    totalEvents: 0,
+    revenue: 0,
+    pendingApprovals: pendingApprovals.length,
+    reports: 0,
   };
-
-  const pendingApprovals = [
-    { id: 1, name: "Berlin Türk İşadamları Derneği", type: "Dernek", date: "07 Mar 2026" },
-    { id: 2, name: "Doner Kings GmbH", type: "İşletme", date: "06 Mar 2026" },
-    { id: 3, name: "Istanbul Consulting", type: "İşletme", date: "05 Mar 2026" },
-    { id: 4, name: "Hollanda Türk Kadınlar Birliği", type: "Dernek", date: "04 Mar 2026" },
-  ];
 
   const recentReports = [
     { id: 1, reporter: "Elif D.", target: "Spam Etkinlik", reason: "Sahte etkinlik ilanı", status: "Beklemede" },
@@ -125,21 +142,32 @@ const ProfileAdmin = () => {
               <Clock className="h-5 w-5 text-gold" /> Onay Bekleyen Hesaplar
             </h2>
             <div className="space-y-3">
-              {pendingApprovals.map((item) => (
-                <div key={item.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                    {item.type === "Dernek" ? <Users className="h-5 w-5 text-primary" /> : <Building2 className="h-5 w-5 text-primary" />}
+              {pendingApprovals.length === 0 && (
+                <p className="text-sm text-muted-foreground text-center py-8">Onay bekleyen talep yok.</p>
+              )}
+              {pendingApprovals.map((item) => {
+                const label = item.request_type === "verified_business" ? "Onaylı İşletme Rozeti"
+                  : item.request_type === "hiring_mode" ? "İşe Alım Modu" : item.request_type;
+                const name = item.payload?.business_name || item.user_id?.slice(0, 8);
+                return (
+                  <div key={item.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                      <Building2 className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-foreground">{name}</h3>
+                      <p className="text-sm text-muted-foreground">{label} · {new Date(item.created_at).toLocaleDateString("tr-TR")}</p>
+                      {(item.payload?.country || item.payload?.city) && (
+                        <p className="text-xs text-muted-foreground">{item.payload?.city}{item.payload?.city && item.payload?.country ? ", " : ""}{item.payload?.country}</p>
+                      )}
+                    </div>
+                    <div className="flex gap-2 shrink-0">
+                      <Button size="sm" className="gap-1" onClick={() => decideApproval(item, true)}><CheckCircle className="h-3 w-3" /> Onayla</Button>
+                      <Button variant="outline" size="sm" className="gap-1 text-destructive hover:text-destructive" onClick={() => decideApproval(item, false)}><Ban className="h-3 w-3" /> Reddet</Button>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-foreground">{item.name}</h3>
-                    <p className="text-sm text-muted-foreground">{item.type} · Başvuru: {item.date}</p>
-                  </div>
-                  <div className="flex gap-2 shrink-0">
-                    <Button size="sm" className="gap-1"><CheckCircle className="h-3 w-3" /> Onayla</Button>
-                    <Button variant="outline" size="sm" className="gap-1 text-destructive hover:text-destructive"><Ban className="h-3 w-3" /> Reddet</Button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </TabsContent>

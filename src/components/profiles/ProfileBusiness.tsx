@@ -23,6 +23,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
@@ -46,7 +47,11 @@ const dialFor = (country?: string | null) => (country && COUNTRY_DIAL[country]) 
 
 const ProfileBusiness = () => {
   const { user } = useAuth();
-  const [isVerified, setIsVerified] = useState(true);
+  const [isVerified, setIsVerified] = useState(false);
+  const [hiringMode, setHiringMode] = useState(false);
+  const [verifiedReq, setVerifiedReq] = useState<{ status: string } | null>(null);
+  const [hiringReq, setHiringReq] = useState<{ status: string } | null>(null);
+  const { toast } = useToast();
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<null | { id: number; title: string; date: string; attendees: number; status?: string }>(null);
   const [showCreateJob, setShowCreateJob] = useState(false);
@@ -97,7 +102,18 @@ const ProfileBusiness = () => {
           full_name: p.full_name || "",
           avatar_url: (p as any).avatar_url || "",
         });
+        setIsVerified(!!(p as any).is_verified);
+        setHiringMode(!!(p as any).hiring_mode);
       }
+      const { data: reqs } = await (supabase.from("approval_requests" as any) as any)
+        .select("request_type, status")
+        .eq("user_id", user.id)
+        .in("request_type", ["verified_business", "hiring_mode"])
+        .order("created_at", { ascending: false });
+      const v = (reqs || []).find((r: any) => r.request_type === "verified_business");
+      const h = (reqs || []).find((r: any) => r.request_type === "hiring_mode");
+      if (v) setVerifiedReq({ status: v.status });
+      if (h) setHiringReq({ status: h.status });
       const [{ count: views }, { data: evs }, { count: listingsCount }] = await Promise.all([
         supabase.from("profile_views" as any).select("id", { count: "exact", head: true }).eq("profile_id", user.id),
         supabase.from("events").select("id, max_attendees").eq("user_id", user.id),
@@ -118,6 +134,23 @@ const ProfileBusiness = () => {
   const persistField = async (patch: Record<string, any>) => {
     if (!user) return;
     await (supabase.from("profiles") as any).update(patch).eq("id", user.id);
+  };
+
+  const submitApproval = async (request_type: "verified_business" | "hiring_mode") => {
+    if (!user) return;
+    const { error } = await (supabase.from("approval_requests" as any) as any).insert({
+      user_id: user.id,
+      request_type,
+      payload: { business_name: biz.business_name, sector: biz.business_sector, country: biz.country, city: biz.city },
+      status: "pending",
+    });
+    if (error) {
+      toast({ title: "Hata", description: error.message, variant: "destructive" });
+      return;
+    }
+    if (request_type === "verified_business") setVerifiedReq({ status: "pending" });
+    else setHiringReq({ status: "pending" });
+    toast({ title: "Onaya gönderildi ✅", description: "Yönetici incelemesi sonrası aktifleşecek (24 saate kadar)." });
   };
 
   const handleAvatarUpload = async (file: File) => {
@@ -360,6 +393,7 @@ const ProfileBusiness = () => {
                           <Badge variant={listing.status === "Aktif" ? "default" : "secondary"} className="text-xs">
                             {listing.status}
                           </Badge>
+                          <Badge variant="outline" className="text-[10px] border-amber-300 text-amber-600">⏱ 24 saate kadar onayda aktif</Badge>
                         </div>
                         <p className="text-sm text-muted-foreground flex items-center gap-3 flex-wrap">
                           <span className="flex items-center gap-1"><Tag className="h-3 w-3" /> {listing.type}</span>
@@ -660,20 +694,26 @@ const ProfileBusiness = () => {
                 <Settings className="h-5 w-5 text-primary" /> Görünürlük
               </h2>
               <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-foreground">Onaylı İşletme Rozeti</p>
-                    <p className="text-sm text-muted-foreground">Doğrulanmış işletme olarak görünün</p>
+                {[
+                  { key: "verified_business" as const, title: "Onaylı İşletme Rozeti", desc: "Doğrulanmış işletme olarak görünün", on: isVerified, req: verifiedReq },
+                  { key: "hiring_mode" as const, title: "İşe Alım Modu", desc: "Aktif olarak eleman aradığınızı gösterin (24 saate kadar onaylanır)", on: hiringMode, req: hiringReq },
+                ].map((row) => (
+                  <div key={row.key} className="flex items-center justify-between gap-4">
+                    <div className="min-w-0">
+                      <p className="font-medium text-foreground">{row.title}</p>
+                      <p className="text-sm text-muted-foreground">{row.desc}</p>
+                    </div>
+                    {row.on ? (
+                      <Badge className="bg-turquoise/10 text-turquoise border border-turquoise/30">Onaylı ✓</Badge>
+                    ) : row.req?.status === "pending" ? (
+                      <Badge variant="outline" className="text-amber-600 border-amber-300">Onay bekliyor</Badge>
+                    ) : row.req?.status === "rejected" ? (
+                      <Button size="sm" variant="outline" onClick={() => submitApproval(row.key)}>Tekrar Gönder</Button>
+                    ) : (
+                      <Button size="sm" onClick={() => submitApproval(row.key)}>Onaya Gönder</Button>
+                    )}
                   </div>
-                  <Switch checked={isVerified} onCheckedChange={setIsVerified} />
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-foreground">İşe Alım Modu</p>
-                    <p className="text-sm text-muted-foreground">Aktif olarak eleman aradığınızı gösterin</p>
-                  </div>
-                  <Switch defaultChecked />
-                </div>
+                ))}
               </div>
             </div>
           </div>

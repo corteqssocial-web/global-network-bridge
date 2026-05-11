@@ -123,6 +123,11 @@ const Navbar = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  <Link to="/kariyer" className="flex items-center gap-2 cursor-pointer">
+                    <Briefcase className="h-3.5 w-3.5 text-primary" />İş İlanları
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link to="/map" className="flex items-center gap-2 cursor-pointer">
                     <MapPin className="h-3.5 w-3.5 text-primary" />{t.nav.map}
                   </Link>
