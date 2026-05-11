@@ -35,19 +35,19 @@ const ProfileBlogger = () => {
     country: "Hollanda",
     city: "Amsterdam",
     avatar: "SA",
-    followers: 24500,
-    totalViews: 1200000,
-    posts: 186,
-    rating: 4.8,
-    reviewCount: 64,
+    followers: 0,
+    totalViews: 0,
+    posts: 0,
+    rating: 0,
+    reviewCount: 0,
     languages: ["Türkçe", "İngilizce", "Hollandaca"],
-    description: "Hollanda'da yaşam, seyahat ve diaspora kültürü üzerine içerik üreten influencer. YouTube ve Instagram'da aktif.",
-    balance: 3200.00,
+    description: "Hollanda'da yaşam, seyahat ve diaspora kültürü üzerine içerik üreten influencer.",
+    balance: 0,
     instagram: "@selinakis",
     youtube: "SelinAkışVlog",
     website: "selinakis.com",
     gustos: ["Seyahat", "Yaşam", "Kültür", "Yemek"],
-    aiTwinEnabled: true,
+    aiTwinEnabled: false,
   };
 
   // Diaspora blog link uploader state (links published to Medya page → Türk Diaspora Medyası filter)
@@ -87,35 +87,15 @@ const ProfileBlogger = () => {
     setMyBlogLinks(getDiasporaBlogLinksByAuthor(blogger.name));
   };
 
-  const sessions = {
-    aiTwin: [
-      { id: 1, client: "Emre Aydın", date: "09 Mar 2026", time: "14:20", duration: "22dk", amount: 0 },
-      { id: 2, client: "Fatma Kaya", date: "08 Mar 2026", time: "10:15", duration: "30dk", amount: 10 },
-      { id: 3, client: "Can Özdemir", date: "07 Mar 2026", time: "19:45", duration: "18dk", amount: 0 },
-    ],
-    live: [
-      { id: 10, client: "Zeynep Arslan", date: "12 Mar 2026", time: "15:00", duration: "30dk", status: "Onaylı", amount: 20 },
-      { id: 11, client: "Ali Öztürk", date: "14 Mar 2026", time: "11:00", duration: "30dk", status: "Beklemede", amount: 20 },
-    ],
-  };
-
-  const collaborations = [
-    { brand: "Turkish Airlines", type: "Sponsorlu İçerik", status: "Aktif", fee: "€500" },
-    { brand: "Booking.com", type: "Affiliate", status: "Aktif", fee: "Komisyon" },
-    { brand: "CorteQS", type: "Marka Elçisi", status: "Aktif", fee: "€200/ay" },
-  ];
-
-  const blogPosts = [
-    { title: "Amsterdam'da Türk Mahalleleri", views: 12400, likes: 890, date: "05 Mar" },
-    { title: "Hollanda Oturma İzni Rehberi", views: 28500, likes: 2100, date: "28 Şub" },
-    { title: "Diaspora Mutfağı: En İyi 10 Tarif", views: 8900, likes: 650, date: "20 Şub" },
-  ];
+  const sessions = { aiTwin: [] as any[], live: [] as any[] };
+  const collaborations: { brand: string; type: string; status: string; fee: string }[] = [];
+  const blogPosts: { title: string; views: number; likes: number; date: string }[] = [];
 
   const stats = {
-    monthlyViews: 85000,
-    monthlyEngagement: "4.2%",
-    monthlyRevenue: 1850,
-    newFollowers: 1200,
+    monthlyViews: 0,
+    monthlyEngagement: "—",
+    monthlyRevenue: 0,
+    newFollowers: 0,
   };
 
   return (
