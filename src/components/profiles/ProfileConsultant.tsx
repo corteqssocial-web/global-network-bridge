@@ -30,6 +30,8 @@ import MapAddressBanner from "@/components/MapAddressBanner";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 import NotificationsList from "@/components/NotificationsList";
 import SocialMediaInputs from "@/components/SocialMediaInputs";
+import ConsultantFeatureToggles from "@/components/profiles/ConsultantFeatureToggles";
+import { Sliders } from "lucide-react";
 
 const ProfileConsultant = () => {
   const { user } = useAuth();
@@ -532,6 +534,17 @@ const ProfileConsultant = () => {
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6">
+          {/* Profile Feature Toggles */}
+          <div className="bg-card rounded-2xl border border-border p-6 shadow-card mb-6">
+            <h2 className="text-xl font-bold text-foreground mb-1 flex items-center gap-2">
+              <Sliders className="h-5 w-5 text-primary" /> Profil Özellikleri
+            </h2>
+            <p className="text-sm text-muted-foreground mb-4">
+              Profilinizdeki her bloğu (mesaj, randevu, canlı görüşme, konum vb.) buradan yönetin. Pasif olanlar gizlenir, "Yakında" olanlar aktif edildiğinde otomatik çalışır.
+            </p>
+            <ConsultantFeatureToggles consultantId="__demo__" />
+          </div>
+
           {/* Calendar / Appointment Management */}
           <div className="bg-card rounded-2xl border border-border p-6 shadow-card mb-6">
             <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">

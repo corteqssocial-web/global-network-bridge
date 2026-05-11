@@ -16,6 +16,7 @@ import AppointmentBookingDialog from "@/components/booking/AppointmentBookingDia
 import DemoPageBanner from "@/components/DemoPageBanner";
 import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
 import PublicEventsList from "@/components/PublicEventsList";
+import { useConsultantFeatures } from "@/hooks/useProfileFeatures";
 
 const ConsultantDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,6 +26,7 @@ const ConsultantDetail = () => {
   const { isFollowed, toggle } = useFollow();
   const isFollowing = consultant ? isFollowed("consultant", consultant.id) : false;
   const [bookingOpen, setBookingOpen] = useState(false);
+  const { isEnabled, isComingSoon } = useConsultantFeatures("__demo__");
 
   // Check if logged-in user is the consultant (mock: match by email or id)
   const isOwner = !!user && !!consultant;
@@ -76,16 +78,20 @@ const ConsultantDetail = () => {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3 flex-wrap">
                   <h1 className="text-2xl md:text-3xl font-bold text-foreground">{consultant.name}</h1>
-                  <PlatformMessageButton recipientKind="consultant" recipientSlug={consultant.id} recipientName={consultant.name} fullWidth />
-                <Button
-                    variant={isFollowing ? "secondary" : "outline"}
-                    size="sm"
-                    className="gap-1"
-                    onClick={toggleFollow}
-                  >
-                    {isFollowing ? <UserCheck className="h-3.5 w-3.5" /> : <UserPlus className="h-3.5 w-3.5" />}
-                    {isFollowing ? "Takipte" : "Takip Et"}
-                  </Button>
+                  {isEnabled("message") && (
+                    <PlatformMessageButton recipientKind="consultant" recipientSlug={consultant.id} recipientName={consultant.name} fullWidth />
+                  )}
+                  {isEnabled("follow") && (
+                    <Button
+                      variant={isFollowing ? "secondary" : "outline"}
+                      size="sm"
+                      className="gap-1"
+                      onClick={toggleFollow}
+                    >
+                      {isFollowing ? <UserCheck className="h-3.5 w-3.5" /> : <UserPlus className="h-3.5 w-3.5" />}
+                      {isFollowing ? "Takipte" : "Takip Et"}
+                    </Button>
+                  )}
                 </div>
                 <p className="text-muted-foreground font-body mt-1">{consultant.role}</p>
                 <p className="text-sm text-muted-foreground font-body mt-1">📍 {consultant.city}, {consultant.country}</p>
@@ -110,106 +116,138 @@ const ConsultantDetail = () => {
 
               {/* CTAs with pricing */}
               <div className="flex flex-col gap-2 shrink-0 w-full md:w-auto">
-                <div className="bg-muted/50 rounded-xl p-3 mb-1">
-                  <p className="text-xs text-muted-foreground font-body text-center mb-2">Görüşme Ücretleri</p>
-                  <div className="flex gap-4 justify-center text-center">
-                    <div>
-                      <p className="text-lg font-bold text-foreground">€</p>
-                      <p className="text-[10px] text-muted-foreground">Canlı / 30dk</p>
-                    </div>
-                    <div className="w-px bg-border" />
-                    <div>
-                      <p className="text-lg font-bold text-success">Ücretsiz</p>
-                      <p className="text-[10px] text-muted-foreground">AI Twin / 15dk</p>
+                {(isEnabled("live_call") || isEnabled("ai_twin")) && (
+                  <div className="bg-muted/50 rounded-xl p-3 mb-1">
+                    <p className="text-xs text-muted-foreground font-body text-center mb-2">Görüşme Ücretleri</p>
+                    <div className="flex gap-4 justify-center text-center">
+                      {isEnabled("live_call") && (
+                        <div>
+                          <p className="text-lg font-bold text-foreground">€</p>
+                          <p className="text-[10px] text-muted-foreground">Canlı / 30dk</p>
+                        </div>
+                      )}
+                      {isEnabled("live_call") && isEnabled("ai_twin") && <div className="w-px bg-border" />}
+                      {isEnabled("ai_twin") && (
+                        <div>
+                          <p className="text-lg font-bold text-success">Ücretsiz</p>
+                          <p className="text-[10px] text-muted-foreground">AI Twin / 15dk</p>
+                        </div>
+                      )}
                     </div>
                   </div>
-                </div>
+                )}
                 {/* CTAs with availability badges */}
                 <TooltipProvider>
-                  <Button variant="default" className="gap-2 w-full relative">
-                    <span className="absolute -top-2 -right-2 bg-[hsl(var(--success))] text-primary-foreground text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
-                      <Clock className="h-3 w-3" /> Şu an müsait
-                    </span>
-                    <Video className="h-4 w-4" /> Canlı Görüşme — € / 30dk
-                  </Button>
-                  
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button disabled variant="outline" className="gap-2 w-full relative opacity-80">
-                        <span className="absolute -top-2 -right-2 bg-accent text-accent-foreground rounded-full p-0.5">
-                          <Info className="h-3 w-3" />
-                        </span>
-                        <Bot className="h-4 w-4" /> AI Twin Seans — Ücretsiz / 15dk
-                        <Badge className="ml-1 bg-gold text-foreground hover:bg-gold">Yakında</Badge>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom" className="max-w-[250px] text-center">
-                      <p className="font-semibold mb-1">🤖 24 Saat Danışman Klonu</p>
-                      <p className="text-xs text-muted-foreground">Yapay zeka teknolojisiyle danışmanın dijital ikizi ile 7/24 görüşme fırsatı!</p>
-                    </TooltipContent>
-                  </Tooltip>
+                  {isEnabled("live_call") && (
+                    <Button variant="default" className="gap-2 w-full relative">
+                      <span className="absolute -top-2 -right-2 bg-[hsl(var(--success))] text-primary-foreground text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <Clock className="h-3 w-3" /> Şu an müsait
+                      </span>
+                      <Video className="h-4 w-4" /> Canlı Görüşme — € / 30dk
+                    </Button>
+                  )}
+
+                  {isEnabled("ai_twin") && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          disabled={isComingSoon("ai_twin")}
+                          variant="outline"
+                          className={`gap-2 w-full relative ${isComingSoon("ai_twin") ? "opacity-80" : ""}`}
+                        >
+                          <span className="absolute -top-2 -right-2 bg-accent text-accent-foreground rounded-full p-0.5">
+                            <Info className="h-3 w-3" />
+                          </span>
+                          <Bot className="h-4 w-4" /> AI Twin Seans — Ücretsiz / 15dk
+                          {isComingSoon("ai_twin") && (
+                            <Badge className="ml-1 bg-gold text-foreground hover:bg-gold">Yakında</Badge>
+                          )}
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" className="max-w-[250px] text-center">
+                        <p className="font-semibold mb-1">🤖 24 Saat Danışman Klonu</p>
+                        <p className="text-xs text-muted-foreground">Yapay zeka teknolojisiyle danışmanın dijital ikizi ile 7/24 görüşme fırsatı!</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
                 </TooltipProvider>
 
-                <Button variant="outline" className="gap-2 w-full">
-                  <MessageSquare className="h-4 w-4" /> WhatsApp ile Görüş
-                </Button>
-                <Button variant="outline" className="gap-2 w-full" onClick={() => setBookingOpen(true)}>
-                  <Calendar className="h-4 w-4" /> Randevu Al
-                </Button>
-                <AppointmentBookingDialog
-                  open={bookingOpen}
-                  onOpenChange={setBookingOpen}
-                  providerId={consultant.id}
-                  providerName={consultant.name}
-                  providerKind="consultant"
-                />
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(consultant.name + ', ' + consultant.city + ', ' + consultant.country)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                {isEnabled("whatsapp") && (
                   <Button variant="outline" className="gap-2 w-full">
-                    <MapPin className="h-4 w-4" /> Konum
+                    <MessageSquare className="h-4 w-4" /> WhatsApp ile Görüş
                   </Button>
-                </a>
-                <a
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(consultant.name + ', ' + consultant.city + ', ' + consultant.country)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="outline" className="gap-2 w-full">
-                    <Navigation className="h-4 w-4" /> Yol Tarifi
-                  </Button>
-                </a>
+                )}
+                {isEnabled("appointments") && (
+                  <>
+                    <Button variant="outline" className="gap-2 w-full" onClick={() => setBookingOpen(true)}>
+                      <Calendar className="h-4 w-4" /> Randevu Al
+                    </Button>
+                    <AppointmentBookingDialog
+                      open={bookingOpen}
+                      onOpenChange={setBookingOpen}
+                      providerId={consultant.id}
+                      providerName={consultant.name}
+                      providerKind="consultant"
+                    />
+                  </>
+                )}
+                {isEnabled("location") && (
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(consultant.name + ', ' + consultant.city + ', ' + consultant.country)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" className="gap-2 w-full">
+                      <MapPin className="h-4 w-4" /> Konum
+                    </Button>
+                  </a>
+                )}
+                {isEnabled("directions") && (
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(consultant.name + ', ' + consultant.city + ', ' + consultant.country)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" className="gap-2 w-full">
+                      <Navigation className="h-4 w-4" /> Yol Tarifi
+                    </Button>
+                  </a>
+                )}
               </div>
             </div>
           </div>
 
-          {/* Tabs */}
-          <Tabs defaultValue="bio" className="w-full">
-            <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto">
-              <TabsTrigger value="bio">Hakkında</TabsTrigger>
-              <TabsTrigger value="specialties">Uzmanlık Alanları</TabsTrigger>
-              <TabsTrigger value="events">Etkinlik Takvimi</TabsTrigger>
-              <TabsTrigger value="contact">İletişim</TabsTrigger>
-            </TabsList>
+          {(isEnabled("bio_tab") || isEnabled("specialties_tab") || isEnabled("events_tab") || isEnabled("contact_tab")) && (
+            <Tabs defaultValue={isEnabled("bio_tab") ? "bio" : isEnabled("specialties_tab") ? "specialties" : isEnabled("events_tab") ? "events" : "contact"} className="w-full">
+              <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto">
+                {isEnabled("bio_tab") && <TabsTrigger value="bio">Hakkında</TabsTrigger>}
+                {isEnabled("specialties_tab") && <TabsTrigger value="specialties">Uzmanlık Alanları</TabsTrigger>}
+                {isEnabled("events_tab") && <TabsTrigger value="events">Etkinlik Takvimi</TabsTrigger>}
+                {isEnabled("contact_tab") && <TabsTrigger value="contact">İletişim</TabsTrigger>}
+              </TabsList>
 
-            <TabsContent value="bio" className="mt-6">
-              <DemoTabPlaceholder label="Biyografi — Demo" />
-            </TabsContent>
-
-            <TabsContent value="specialties" className="mt-6">
-              <DemoTabPlaceholder label="Uzmanlık Alanları — Demo" />
-            </TabsContent>
-
-            <TabsContent value="events" className="mt-6">
-              <PublicEventsList emptyLabel="Bu danışmanın yaklaşan etkinliği yok." />
-            </TabsContent>
-
-            <TabsContent value="contact" className="mt-6">
-              <DemoTabPlaceholder label="İletişim — Demo" />
-            </TabsContent>
-          </Tabs>
+              {isEnabled("bio_tab") && (
+                <TabsContent value="bio" className="mt-6">
+                  <DemoTabPlaceholder label="Biyografi — Demo" />
+                </TabsContent>
+              )}
+              {isEnabled("specialties_tab") && (
+                <TabsContent value="specialties" className="mt-6">
+                  <DemoTabPlaceholder label="Uzmanlık Alanları — Demo" />
+                </TabsContent>
+              )}
+              {isEnabled("events_tab") && (
+                <TabsContent value="events" className="mt-6">
+                  <PublicEventsList emptyLabel="Bu danışmanın yaklaşan etkinliği yok." />
+                </TabsContent>
+              )}
+              {isEnabled("contact_tab") && (
+                <TabsContent value="contact" className="mt-6">
+                  <DemoTabPlaceholder label="İletişim — Demo" />
+                </TabsContent>
+              )}
+            </Tabs>
+          )}
 
           {/* Gayrimenkul İlanları — only visible to logged-in consultant (owner) */}
           {consultant.category === "Gayrimenkul" && isOwner && (
