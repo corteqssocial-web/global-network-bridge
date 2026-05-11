@@ -6,6 +6,7 @@ import CreateEventForm from "@/components/CreateEventForm";
 import SocialMediaCampaignDialog from "@/components/SocialMediaCampaignDialog";
 import CategoryShowcasePurchase from "@/components/CategoryShowcasePurchase";
 import CorBotPromoBanner from "@/components/CorBotPromoBanner";
+import EmptyDashboardState from "@/components/EmptyDashboardState";
 import {
   User, MapPin, Globe, Star, Calendar, Users, Clock, Eye,
   TrendingUp, Settings, BarChart3, CreditCard, Plus, ChevronRight, Crown,
@@ -32,8 +33,9 @@ import SocialMediaInputs from "@/components/SocialMediaInputs";
 const ProfileConsultant = () => {
   const { user } = useAuth();
   const [showCreateEvent, setShowCreateEvent] = useState(false);
-  const [managingEvent, setManagingEvent] = useState<null | typeof events[0]>(null);
+  const [profile, setProfile] = useState<any>(null);
   const [myEvents, setMyEvents] = useState<Array<{ id: string; title: string; event_date: string; max_attendees: number | null; status: string }>>([]);
+  const [managingEvent, setManagingEvent] = useState<null | (typeof myEvents)[0]>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -43,75 +45,57 @@ const ProfileConsultant = () => {
       .eq("user_id", user.id)
       .order("event_date", { ascending: true })
       .then(({ data }) => setMyEvents(data || []));
+    supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .single()
+      .then(({ data }) => setProfile(data));
   }, [user]);
 
+  // Profile values come from Supabase; fall back to safe defaults until data loads
   const consultant = {
-    name: "Dr. Ayşe Kara",
-    title: "Göçmenlik & Vize Danışmanı",
-    category: "Vize / Göçmenlik",
-    email: "ayse.kara@corteqs.com",
-    phone: "+49 176 1234567",
-    website: "aysekara.de",
-    country: "Almanya",
-    city: "München",
-    avatar: "AK",
-    rating: 4.9,
-    reviewCount: 128,
-    followers: 342,
-    experience: "12 yıl",
-    languages: ["Türkçe", "Almanca", "İngilizce"],
-    description: "Almanya, Hollanda ve Avusturya'da vize, oturma izni ve vatandaşlık süreçleri konusunda uzmanlaşmış göçmenlik danışmanı. Aile birleşimi, çalışma vizesi ve Mavi Kart başvurularında rehberlik.",
-    balance: 4850.00,
-    aiTwinEnabled: true,
+    name: profile?.full_name || "Danışman",
+    title: profile?.profession || "Danışman",
+    category: profile?.business_sector || "—",
+    email: user?.email || "",
+    phone: profile?.phone || "",
+    website: profile?.business_website || "",
+    country: profile?.country || "",
+    city: profile?.city || "",
+    avatar: (profile?.full_name || "D").split(" ").map((n: string) => n[0]).slice(0, 2).join("").toUpperCase(),
+    rating: 0,
+    reviewCount: 0,
+    followers: 0,
+    experience: "—",
+    languages: [] as string[],
+    description: profile?.business_description || "Hakkında bilginizi Profil Ayarları'ndan ekleyebilirsiniz.",
+    balance: 0,
+    aiTwinEnabled: false,
   };
 
-  const sessions = {
-    live: [
-      { id: 1, client: "Emre Aydın", date: "10 Mar 2026", time: "14:00", duration: "30dk", status: "Onaylı", type: "Canlı", amount: 30 },
-      { id: 2, client: "Fatma Kaya", date: "10 Mar 2026", time: "16:30", duration: "30dk", status: "Onaylı", type: "Canlı", amount: 30 },
-      { id: 3, client: "Zeynep Arslan", date: "11 Mar 2026", time: "10:00", duration: "30dk", status: "Beklemede", type: "Canlı", amount: 30 },
-      { id: 4, client: "Can Özdemir", date: "12 Mar 2026", time: "11:00", duration: "30dk", status: "Onaylı", type: "Canlı", amount: 30 },
-    ],
-    aiTwin: [
-      { id: 101, client: "Mehmet Demir", date: "08 Mar 2026", time: "09:15", duration: "28dk", status: "Tamamlandı", type: "AI Twin", amount: 10 },
-      { id: 102, client: "Elif Yıldız", date: "08 Mar 2026", time: "13:42", duration: "30dk", status: "Tamamlandı", type: "AI Twin", amount: 10 },
-      { id: 103, client: "Burak Çelik", date: "07 Mar 2026", time: "20:10", duration: "18dk", status: "Tamamlandı", type: "AI Twin", amount: 10 },
-      { id: 104, client: "Seda Korkmaz", date: "07 Mar 2026", time: "15:30", duration: "30dk", status: "Tamamlandı", type: "AI Twin", amount: 10 },
-      { id: 105, client: "Ali Öztürk", date: "06 Mar 2026", time: "11:00", duration: "25dk", status: "Tamamlandı", type: "AI Twin", amount: 10 },
-    ],
-  };
-
-  const events = [
-    { id: 1, title: "Mavi Kart Bilgilendirme Webinarı", date: "20 Mar 2026", attendees: 85, status: "Yaklaşan" },
-    { id: 2, title: "Aile Birleşimi Soru-Cevap", date: "28 Mar 2026", attendees: 42, status: "Yaklaşan" },
-  ];
-
+  // Real session/review/earnings data will be wired to Supabase tables
+  // (live_sessions, ai_twin_sessions, reviews, payouts) when those tables ship.
+  const sessions = { live: [] as any[], aiTwin: [] as any[] };
   const stats = {
-    totalSessions: 384,
-    thisMonthSessions: 28,
-    thisMonthRevenue: 1240,
-    aiTwinSessions: 156,
-    avgRating: 4.9,
-    repeatClients: 67,
+    totalSessions: 0,
+    thisMonthSessions: 0,
+    thisMonthRevenue: 0,
+    aiTwinSessions: 0,
+    avgRating: 0,
+    repeatClients: 0,
   };
-
-  const reviews = [
-    { name: "Emre A.", rating: 5, text: "Çok profesyonel ve bilgili. Mavi Kart sürecimi sorunsuz tamamladık.", date: "06 Mar" },
-    { name: "Fatma K.", rating: 5, text: "AI Twin özelliği ile gece geç saatte bile sorularıma yanıt alabildim, harika!", date: "05 Mar" },
-    { name: "Can Ö.", rating: 4, text: "Detaylı bilgilendirme yaptı. Tavsiye ederim.", date: "03 Mar" },
-  ];
-
+  const reviews: Array<{ name: string; rating: number; text: string; date: string }> = [];
   const weeklyEarnings = [
-    { day: "Pzt", live: 90, ai: 30 },
-    { day: "Sal", live: 60, ai: 50 },
-    { day: "Çar", live: 120, ai: 40 },
-    { day: "Per", live: 90, ai: 20 },
-    { day: "Cum", live: 60, ai: 60 },
-    { day: "Cmt", live: 30, ai: 40 },
-    { day: "Paz", live: 0, ai: 30 },
+    { day: "Pzt", live: 0, ai: 0 },
+    { day: "Sal", live: 0, ai: 0 },
+    { day: "Çar", live: 0, ai: 0 },
+    { day: "Per", live: 0, ai: 0 },
+    { day: "Cum", live: 0, ai: 0 },
+    { day: "Cmt", live: 0, ai: 0 },
+    { day: "Paz", live: 0, ai: 0 },
   ];
-
-  const maxEarning = Math.max(...weeklyEarnings.map(d => d.live + d.ai));
+  const maxEarning = Math.max(1, ...weeklyEarnings.map(d => d.live + d.ai));
 
   return (
     <>
@@ -204,7 +188,13 @@ const ProfileConsultant = () => {
             {/* Upcoming sessions */}
             <h3 className="font-semibold text-foreground mb-3 text-sm">Yaklaşan Seanslar</h3>
             <div className="space-y-2 mb-6">
-              {sessions.live.map((s) => (
+              {sessions.live.length === 0 ? (
+                <EmptyDashboardState
+                  icon={Video}
+                  title="Henüz canlı seans yok"
+                  description="Müşterilerin profilinden randevu aldığında onayladıkların burada görünür. Randevu kabulü Profil Ayarları → Seans Ayarları'ndan açıktır."
+                />
+              ) : sessions.live.map((s) => (
                 <div key={s.id} className="flex items-center gap-3 p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
                   <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                     <Video className="h-4 w-4 text-primary" />
@@ -371,7 +361,13 @@ const ProfileConsultant = () => {
                 <Clock className="h-5 w-5 text-muted-foreground" /> Son AI Twin Seansları
               </h3>
               <div className="space-y-2">
-                {sessions.aiTwin.map((s) => (
+                {sessions.aiTwin.length === 0 ? (
+                  <EmptyDashboardState
+                    icon={Bot}
+                    title="AI Twin seansı yok"
+                    description="AI Twin'i aktive ettikten sonra kullanıcılarla yapılan otomatik görüşmelerin transkript ve istatistikleri burada listelenir."
+                  />
+                ) : sessions.aiTwin.map((s) => (
                   <div key={s.id} className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
                     <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                       <Bot className="h-4 w-4 text-primary" />
@@ -393,7 +389,7 @@ const ProfileConsultant = () => {
         {/* EVENTS */}
         <TabsContent value="events" className="mt-6">
           {managingEvent ? (
-            <EventManagePanel event={managingEvent} onBack={() => setManagingEvent(null)} />
+            <EventManagePanel event={{ id: 0, title: managingEvent.title, date: managingEvent.event_date, attendees: managingEvent.max_attendees ?? 0, status: managingEvent.status }} onBack={() => setManagingEvent(null)} />
           ) : showCreateEvent ? (
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
               <Button variant="ghost" size="sm" className="gap-1 mb-4" onClick={() => setShowCreateEvent(false)}>
@@ -508,7 +504,13 @@ const ProfileConsultant = () => {
 
             {/* Recent reviews */}
             <div className="space-y-3">
-              {reviews.map((review, i) => (
+              {reviews.length === 0 ? (
+                <EmptyDashboardState
+                  icon={Star}
+                  title="Henüz değerlendirme yok"
+                  description="Tamamlanan seansların ardından kullanıcılar profilini değerlendirebilir. Yıldız puanları ve yorumlar burada listelenir."
+                />
+              ) : reviews.map((review, i) => (
                 <div key={i} className="p-4 rounded-xl bg-muted/50">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
