@@ -785,6 +785,53 @@ const ProfileIndividual = () => {
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6">
+          {/* Volunteer Mentor settings */}
+          <div id="mentor-settings" className="bg-card rounded-2xl border border-emerald-500/30 p-6 shadow-card mb-6">
+            <div className="flex items-start justify-between gap-4 flex-wrap mb-4">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-emerald-500/15 text-emerald-600">
+                  <Users className="h-5 w-5" />
+                </span>
+                <div>
+                  <h2 className="text-xl font-bold text-foreground">Gönüllü Mentörlük</h2>
+                  <p className="text-sm text-muted-foreground">Açtığında profilinden otomatik bir Gönüllü Mentör kartı oluşturulur.</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">Mentör olmak istiyorum</span>
+                <Switch checked={isVolunteerMentor} onCheckedChange={setIsVolunteerMentor} />
+              </div>
+            </div>
+            {isVolunteerMentor && (
+              <div className="space-y-4">
+                <div>
+                  <Label>Mentörlük yapacağınız konular</Label>
+                  <textarea
+                    value={mentorTopics}
+                    onChange={(e) => setMentorTopics(e.target.value)}
+                    placeholder="Örn: Almanya'da iş başvurusu, vize süreci, yazılım kariyeri…"
+                    rows={3}
+                    className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">Şehir, dil ve uzmanlık bilgilerin profilinden otomatik kullanılır.</p>
+                </div>
+                <div>
+                  <Label>Haftalık ayırabileceğin saat (opsiyonel)</Label>
+                  <Input
+                    value={mentorWeeklyHours}
+                    onChange={(e) => setMentorWeeklyHours(e.target.value)}
+                    placeholder="Örn: 2-3 saat"
+                  />
+                </div>
+              </div>
+            )}
+            <div className="flex justify-end mt-4">
+              <Button onClick={saveMentorSettings} disabled={savingMentor} className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
+                {savingMentor ? <Loader2 className="h-4 w-4 animate-spin" /> : <Users className="h-4 w-4" />}
+                {isVolunteerMentor ? "Kaydet & Kartı Oluştur" : "Kaydet"}
+              </Button>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
               <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
