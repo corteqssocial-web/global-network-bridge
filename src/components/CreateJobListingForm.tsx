@@ -65,6 +65,15 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
     + (boostEmailNotify ? boostCosts.emailNotify : 0);
 
   const handleSubmit = () => {
+    if (!isEditing) {
+      const pkg = listingPackages.find((p) => p.id === selectedPackage);
+      onCreated?.({
+        title: formData.title || "Adsız İlan",
+        type: formData.type,
+        package: pkg?.name || "Standart İlan",
+        price: totalPrice,
+      });
+    }
     toast({
       title: isEditing ? "İlan güncellendi ✅" : "İlan oluşturuldu! 🎉",
       description: isEditing
