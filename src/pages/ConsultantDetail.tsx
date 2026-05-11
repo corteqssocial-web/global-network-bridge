@@ -116,77 +116,103 @@ const ConsultantDetail = () => {
 
               {/* CTAs with pricing */}
               <div className="flex flex-col gap-2 shrink-0 w-full md:w-auto">
-                <div className="bg-muted/50 rounded-xl p-3 mb-1">
-                  <p className="text-xs text-muted-foreground font-body text-center mb-2">Görüşme Ücretleri</p>
-                  <div className="flex gap-4 justify-center text-center">
-                    <div>
-                      <p className="text-lg font-bold text-foreground">€</p>
-                      <p className="text-[10px] text-muted-foreground">Canlı / 30dk</p>
-                    </div>
-                    <div className="w-px bg-border" />
-                    <div>
-                      <p className="text-lg font-bold text-success">Ücretsiz</p>
-                      <p className="text-[10px] text-muted-foreground">AI Twin / 15dk</p>
+                {(isEnabled("live_call") || isEnabled("ai_twin")) && (
+                  <div className="bg-muted/50 rounded-xl p-3 mb-1">
+                    <p className="text-xs text-muted-foreground font-body text-center mb-2">Görüşme Ücretleri</p>
+                    <div className="flex gap-4 justify-center text-center">
+                      {isEnabled("live_call") && (
+                        <div>
+                          <p className="text-lg font-bold text-foreground">€</p>
+                          <p className="text-[10px] text-muted-foreground">Canlı / 30dk</p>
+                        </div>
+                      )}
+                      {isEnabled("live_call") && isEnabled("ai_twin") && <div className="w-px bg-border" />}
+                      {isEnabled("ai_twin") && (
+                        <div>
+                          <p className="text-lg font-bold text-success">Ücretsiz</p>
+                          <p className="text-[10px] text-muted-foreground">AI Twin / 15dk</p>
+                        </div>
+                      )}
                     </div>
                   </div>
-                </div>
+                )}
                 {/* CTAs with availability badges */}
                 <TooltipProvider>
-                  <Button variant="default" className="gap-2 w-full relative">
-                    <span className="absolute -top-2 -right-2 bg-[hsl(var(--success))] text-primary-foreground text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
-                      <Clock className="h-3 w-3" /> Şu an müsait
-                    </span>
-                    <Video className="h-4 w-4" /> Canlı Görüşme — € / 30dk
-                  </Button>
-                  
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button disabled variant="outline" className="gap-2 w-full relative opacity-80">
-                        <span className="absolute -top-2 -right-2 bg-accent text-accent-foreground rounded-full p-0.5">
-                          <Info className="h-3 w-3" />
-                        </span>
-                        <Bot className="h-4 w-4" /> AI Twin Seans — Ücretsiz / 15dk
-                        <Badge className="ml-1 bg-gold text-foreground hover:bg-gold">Yakında</Badge>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom" className="max-w-[250px] text-center">
-                      <p className="font-semibold mb-1">🤖 24 Saat Danışman Klonu</p>
-                      <p className="text-xs text-muted-foreground">Yapay zeka teknolojisiyle danışmanın dijital ikizi ile 7/24 görüşme fırsatı!</p>
-                    </TooltipContent>
-                  </Tooltip>
+                  {isEnabled("live_call") && (
+                    <Button variant="default" className="gap-2 w-full relative">
+                      <span className="absolute -top-2 -right-2 bg-[hsl(var(--success))] text-primary-foreground text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <Clock className="h-3 w-3" /> Şu an müsait
+                      </span>
+                      <Video className="h-4 w-4" /> Canlı Görüşme — € / 30dk
+                    </Button>
+                  )}
+
+                  {isEnabled("ai_twin") && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          disabled={isComingSoon("ai_twin")}
+                          variant="outline"
+                          className={`gap-2 w-full relative ${isComingSoon("ai_twin") ? "opacity-80" : ""}`}
+                        >
+                          <span className="absolute -top-2 -right-2 bg-accent text-accent-foreground rounded-full p-0.5">
+                            <Info className="h-3 w-3" />
+                          </span>
+                          <Bot className="h-4 w-4" /> AI Twin Seans — Ücretsiz / 15dk
+                          {isComingSoon("ai_twin") && (
+                            <Badge className="ml-1 bg-gold text-foreground hover:bg-gold">Yakında</Badge>
+                          )}
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" className="max-w-[250px] text-center">
+                        <p className="font-semibold mb-1">🤖 24 Saat Danışman Klonu</p>
+                        <p className="text-xs text-muted-foreground">Yapay zeka teknolojisiyle danışmanın dijital ikizi ile 7/24 görüşme fırsatı!</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
                 </TooltipProvider>
 
-                <Button variant="outline" className="gap-2 w-full">
-                  <MessageSquare className="h-4 w-4" /> WhatsApp ile Görüş
-                </Button>
-                <Button variant="outline" className="gap-2 w-full" onClick={() => setBookingOpen(true)}>
-                  <Calendar className="h-4 w-4" /> Randevu Al
-                </Button>
-                <AppointmentBookingDialog
-                  open={bookingOpen}
-                  onOpenChange={setBookingOpen}
-                  providerId={consultant.id}
-                  providerName={consultant.name}
-                  providerKind="consultant"
-                />
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(consultant.name + ', ' + consultant.city + ', ' + consultant.country)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                {isEnabled("whatsapp") && (
                   <Button variant="outline" className="gap-2 w-full">
-                    <MapPin className="h-4 w-4" /> Konum
+                    <MessageSquare className="h-4 w-4" /> WhatsApp ile Görüş
                   </Button>
-                </a>
-                <a
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(consultant.name + ', ' + consultant.city + ', ' + consultant.country)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="outline" className="gap-2 w-full">
-                    <Navigation className="h-4 w-4" /> Yol Tarifi
-                  </Button>
-                </a>
+                )}
+                {isEnabled("appointments") && (
+                  <>
+                    <Button variant="outline" className="gap-2 w-full" onClick={() => setBookingOpen(true)}>
+                      <Calendar className="h-4 w-4" /> Randevu Al
+                    </Button>
+                    <AppointmentBookingDialog
+                      open={bookingOpen}
+                      onOpenChange={setBookingOpen}
+                      providerId={consultant.id}
+                      providerName={consultant.name}
+                      providerKind="consultant"
+                    />
+                  </>
+                )}
+                {isEnabled("location") && (
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(consultant.name + ', ' + consultant.city + ', ' + consultant.country)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" className="gap-2 w-full">
+                      <MapPin className="h-4 w-4" /> Konum
+                    </Button>
+                  </a>
+                )}
+                {isEnabled("directions") && (
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(consultant.name + ', ' + consultant.city + ', ' + consultant.country)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" className="gap-2 w-full">
+                      <Navigation className="h-4 w-4" /> Yol Tarifi
+                    </Button>
+                  </a>
+                )}
               </div>
             </div>
           </div>
