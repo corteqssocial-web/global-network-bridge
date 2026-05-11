@@ -190,6 +190,57 @@ export type Database = {
         }
         Relationships: []
       }
+      coupon_purchases: {
+        Row: {
+          business_name: string | null
+          business_user_id: string | null
+          buyer_email: string | null
+          buyer_id: string
+          buyer_name: string | null
+          coupon_code: string
+          coupon_title: string | null
+          created_at: string
+          currency: string
+          id: string
+          price: number
+          status: string
+          stripe_session_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          business_name?: string | null
+          business_user_id?: string | null
+          buyer_email?: string | null
+          buyer_id: string
+          buyer_name?: string | null
+          coupon_code: string
+          coupon_title?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          price?: number
+          status?: string
+          stripe_session_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          business_name?: string | null
+          business_user_id?: string | null
+          buyer_email?: string | null
+          buyer_id?: string
+          buyer_name?: string | null
+          coupon_code?: string
+          coupon_title?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          price?: number
+          status?: string
+          stripe_session_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       events: {
         Row: {
           category: string
