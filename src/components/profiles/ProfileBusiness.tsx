@@ -86,10 +86,10 @@ const ProfileBusiness = () => {
       // Real backend counters
       const [{ count: views }, { data: evs }, { count: listingsCount }] = await Promise.all([
         supabase.from("profile_views" as any).select("id", { count: "exact", head: true }).eq("profile_id", user.id),
-        supabase.from("events").select("id, attendees_count").eq("created_by", user.id),
-        supabase.from("events").select("id", { count: "exact", head: true }).eq("created_by", user.id),
+        supabase.from("events").select("id, max_attendees").eq("user_id", user.id),
+        supabase.from("events").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       ]);
-      const attendees = (evs || []).reduce((acc: number, e: any) => acc + (e.attendees_count || 0), 0);
+      const attendees = (evs || []).reduce((acc: number, e: any) => acc + (e.max_attendees || 0), 0);
       setStats({
         profileViews: views || 0,
         eventAttendees: attendees,
