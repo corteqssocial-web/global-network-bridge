@@ -837,6 +837,47 @@ const Feed = () => {
         </div>
       </main>
       <Footer />
+
+      {/* Join with question dialog */}
+      <Dialog open={joinDialogOpen} onOpenChange={setJoinDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Lock className="h-5 w-5 text-amber-500" /> Cafe'ye Başvur
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <p className="text-xs text-muted-foreground">
+              Bu cafe sahibinin onayı ile katılım kabul ediyor. Aşağıdaki soruyu cevapla:
+            </p>
+            <div className="rounded-lg bg-muted/50 p-3 text-sm font-medium">
+              {cafe?.entry_question || "Neden bu cafe'ye katılmak istiyorsun?"}
+            </div>
+            <Textarea
+              value={joinAnswer}
+              onChange={(e) => setJoinAnswer(e.target.value)}
+              placeholder="Cevabın..."
+              rows={4}
+              className="resize-none"
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setJoinDialogOpen(false)}>İptal</Button>
+            <Button
+              disabled={!joinAnswer.trim()}
+              onClick={async () => {
+                const ok = await joinCafe(joinAnswer.trim());
+                if (ok) {
+                  setJoinDialogOpen(false);
+                  setJoinAnswer("");
+                }
+              }}
+            >
+              Başvuruyu Gönder
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
