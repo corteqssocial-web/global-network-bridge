@@ -14,6 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
+      appointments: {
+        Row: {
+          client_email: string | null
+          client_id: string
+          client_name: string | null
+          client_timezone: string
+          created_at: string
+          duration_minutes: number
+          id: string
+          meeting_url: string | null
+          notes: string | null
+          provider_id: string
+          provider_kind: string
+          scheduled_at: string
+          status: string
+          topic: string | null
+          updated_at: string
+        }
+        Insert: {
+          client_email?: string | null
+          client_id: string
+          client_name?: string | null
+          client_timezone: string
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          meeting_url?: string | null
+          notes?: string | null
+          provider_id: string
+          provider_kind?: string
+          scheduled_at: string
+          status?: string
+          topic?: string | null
+          updated_at?: string
+        }
+        Update: {
+          client_email?: string | null
+          client_id?: string
+          client_name?: string | null
+          client_timezone?: string
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          meeting_url?: string | null
+          notes?: string | null
+          provider_id?: string
+          provider_kind?: string
+          scheduled_at?: string
+          status?: string
+          topic?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       approval_requests: {
         Row: {
           admin_note: string | null
