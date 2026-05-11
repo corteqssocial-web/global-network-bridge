@@ -532,6 +532,17 @@ const ProfileConsultant = () => {
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6">
+          {/* Calendar / Appointment Management */}
+          <div className="bg-card rounded-2xl border border-border p-6 shadow-card mb-6">
+            <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-turquoise" /> Takvim Yönetimi
+            </h2>
+            <p className="text-sm text-muted-foreground mb-4">
+              Müsait saatlerinizi belirleyin, gelen randevu taleplerini onaylayın veya reddedin.
+            </p>
+            <AppointmentManagePanel />
+          </div>
+
           {/* Category Manager */}
           <div className="bg-card rounded-2xl border border-border p-6 shadow-card mb-6">
             <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
