@@ -187,63 +187,8 @@ const ProfileConsultant = () => {
               </div>
             </div>
 
-            {/* Upcoming sessions */}
-            <h3 className="font-semibold text-foreground mb-3 text-sm">Yaklaşan Seanslar</h3>
-            <div className="space-y-2 mb-6">
-              {sessions.live.length === 0 ? (
-                <EmptyDashboardState
-                  icon={Video}
-                  title="Henüz canlı seans yok"
-                  description="Müşterilerin profilinden randevu aldığında onayladıkların burada görünür. Randevu kabulü Profil Ayarları → Seans Ayarları'ndan açıktır."
-                />
-              ) : sessions.live.map((s) => (
-                <div key={s.id} className="flex items-center gap-3 p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                    <Video className="h-4 w-4 text-primary" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-foreground text-sm">{s.client}</p>
-                    <p className="text-xs text-muted-foreground">{s.date} · {s.time} · {s.duration}</p>
-                  </div>
-                  <Badge
-                    className={`text-[10px] shrink-0 ${
-                      s.status === "Onaylı" ? "bg-turquoise/15 text-turquoise border-turquoise/30" :
-                      "bg-gold/15 text-gold border-gold/30"
-                    }`}
-                  >
-                    {s.status}
-                  </Badge>
-                  <span className="text-sm font-semibold text-foreground">€{s.amount}</span>
-                  {s.status === "Beklemede" && (
-                    <div className="flex gap-1.5">
-                      <Button size="sm" className="h-7 text-xs gap-1"><CheckCircle className="h-3 w-3" /> Onayla</Button>
-                      <Button size="sm" variant="outline" className="h-7 text-xs text-destructive">Reddet</Button>
-                    </div>
-                  )}
-                  {s.status === "Onaylı" && (
-                    <Button size="sm" variant="outline" className="h-7 text-xs gap-1">
-                      <Video className="h-3 w-3" /> Başlat
-                    </Button>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Session summary */}
-            <div className="grid grid-cols-3 gap-3 p-4 rounded-xl bg-muted/30 border border-border">
-              <div className="text-center">
-                <p className="text-lg font-bold text-foreground">{sessions.live.filter(s => s.status === "Onaylı").length}</p>
-                <p className="text-[11px] text-muted-foreground">Onaylı</p>
-              </div>
-              <div className="text-center">
-                <p className="text-lg font-bold text-gold">{sessions.live.filter(s => s.status === "Beklemede").length}</p>
-                <p className="text-[11px] text-muted-foreground">Beklemede</p>
-              </div>
-              <div className="text-center">
-                <p className="text-lg font-bold text-success">€{sessions.live.filter(s => s.status === "Onaylı").reduce((sum, s) => sum + s.amount, 0)}</p>
-                <p className="text-[11px] text-muted-foreground">Planlanan Gelir</p>
-              </div>
-            </div>
+            <h3 className="font-semibold text-foreground mb-3 text-sm">Randevu Talepleri & Yaklaşan Seanslar</h3>
+            <AppointmentManagePanel />
           </div>
         </TabsContent>
 
