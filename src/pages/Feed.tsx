@@ -250,19 +250,7 @@ const Feed = () => {
     }
   };
 
-  const followingMock = [
-    { name: "Ayşe K.", role: "🤝 Berlin Elçisi", avatar: "https://i.pravatar.cc/40?img=47" },
-    { name: "Mehmet Y.", role: "💼 Vize Danışmanı", avatar: "https://i.pravatar.cc/40?img=12" },
-    { name: "Zeynep T.", role: "🏢 Amsterdam Cafe", avatar: "https://i.pravatar.cc/40?img=32" },
-    { name: "Can Ö.", role: "✨ Londra", avatar: "https://i.pravatar.cc/40?img=15" },
-    { name: "Elif D.", role: "🤝 Paris Elçisi", avatar: "https://i.pravatar.cc/40?img=44" },
-  ];
-
-  const friendSuggestions = [
-    { name: "Burak A.", city: "Münih", avatar: "https://i.pravatar.cc/40?img=8" },
-    { name: "Selin M.", city: "Brüksel", avatar: "https://i.pravatar.cc/40?img=49" },
-    { name: "Onur P.", city: "Viyana", avatar: "https://i.pravatar.cc/40?img=22" },
-  ];
+  const { following, suggestions, follow } = useFeedSocial();
 
   const renderPost = (p: FeedPost) => {
     const author = authorMap[p.user_id];
