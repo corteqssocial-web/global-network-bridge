@@ -532,21 +532,72 @@ const ProfileBusiness = () => {
               <div className="space-y-4">
                 <div>
                   <Label>İşletme Adı</Label>
-                  <Input defaultValue={business.name} />
+                  <Input value={biz.business_name} onChange={(e) => setBiz({ ...biz, business_name: e.target.value })} placeholder="Örn. Anatolian Tech GmbH" />
                 </div>
                 <div>
                   <Label>Sektör</Label>
-                  <Input defaultValue={business.type} />
+                  <Input value={biz.business_sector} onChange={(e) => setBiz({ ...biz, business_sector: e.target.value })} placeholder="Yazılım, Restoran, Hukuk..." />
                 </div>
                 <div>
                   <Label>Web Sitesi</Label>
-                  <Input defaultValue={business.website} />
+                  <Input value={biz.business_website} onChange={(e) => setBiz({ ...biz, business_website: e.target.value })} placeholder="ornek.com" />
+                </div>
+                <div>
+                  <Label>Kısa Tanıtım</Label>
+                  <Textarea rows={3} value={biz.business_description} onChange={(e) => setBiz({ ...biz, business_description: e.target.value })} />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label>Ülke</Label>
+                    <Input value={biz.country} onChange={(e) => setBiz({ ...biz, country: e.target.value })} placeholder="Almanya" />
+                  </div>
+                  <div>
+                    <Label>Şehir</Label>
+                    <Input value={biz.city} onChange={(e) => setBiz({ ...biz, city: e.target.value })} placeholder="Berlin" />
+                  </div>
+                </div>
+                <div>
+                  <Label>Açık Adres</Label>
+                  <Input value={biz.address} onChange={(e) => setBiz({ ...biz, address: e.target.value })} placeholder="Sokak, no, posta kodu" />
+                  <div className="mt-2 flex items-center justify-between p-3 rounded-lg border border-border bg-muted/40">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Haritada işletmemi göster</p>
+                      <p className="text-xs text-muted-foreground">İşaretlenirse Diaspora Haritası'nda yer alırsın.</p>
+                    </div>
+                    <Switch checked={biz.show_on_map} onCheckedChange={handleShowOnMapChange} />
+                  </div>
                 </div>
                 <div>
                   <Label>Telefon</Label>
-                  <Input defaultValue={business.phone} />
+                  <div className="flex gap-2">
+                    <Input className="w-20 shrink-0 text-center" value={dialFor(biz.country) || "+"} readOnly title="Ülkenize göre otomatik" />
+                    <Input
+                      className="flex-1"
+                      value={biz.phone.replace(/^\+\d+\s*/, "")}
+                      onChange={(e) => setBiz({ ...biz, phone: `${dialFor(biz.country)}${e.target.value ? " " + e.target.value : ""}` })}
+                      placeholder="30 1234567"
+                    />
+                  </div>
+                  <p className="text-[11px] text-muted-foreground mt-1">Ülke kodu kayıtlı ülkenden otomatik gelir.</p>
                 </div>
-                <Button className="w-full mt-2">Kaydet</Button>
+                <Button
+                  className="w-full mt-2"
+                  onClick={async () => {
+                    await persistField({
+                      business_name: biz.business_name,
+                      business_sector: biz.business_sector,
+                      business_website: biz.business_website,
+                      business_description: biz.business_description,
+                      country: biz.country,
+                      city: biz.city,
+                      address: biz.address,
+                      phone: biz.phone,
+                    });
+                    toast({ title: "Kaydedildi ✅", description: "İşletme bilgilerin güncellendi." });
+                  }}
+                >
+                  Kaydet
+                </Button>
               </div>
             </div>
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
@@ -574,6 +625,27 @@ const ProfileBusiness = () => {
           <div className="mt-6">
             <SocialMediaInputs />
           </div>
+
+          {/* Confirm hide-from-map dialog */}
+          <AlertDialog open={confirmHideMap} onOpenChange={setConfirmHideMap}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Haritada yer almak istemiyor musunuz?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Diaspora Haritası, müşterilerin sizi en kolay bulduğu kanaldır. Devre dışı bırakırsanız işletmeniz haritada görünmez.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => setConfirmHideMap(false)}>Vazgeç, görünür kalsın</AlertDialogCancel>
+                <AlertDialogAction onClick={async () => {
+                  setBiz((b) => ({ ...b, show_on_map: false }));
+                  await persistField({ show_on_map: false });
+                  setConfirmHideMap(false);
+                  toast({ title: "Haritadan çıkarıldı", description: "Dilediğin zaman tekrar açabilirsin." });
+                }}>Evet, gizle</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </TabsContent>
       </Tabs>
     </>
