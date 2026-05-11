@@ -393,6 +393,7 @@ const ProfileBusiness = () => {
                           <Badge variant={listing.status === "Aktif" ? "default" : "secondary"} className="text-xs">
                             {listing.status}
                           </Badge>
+                          <Badge variant="outline" className="text-[10px] border-amber-300 text-amber-600">⏱ 24 saate kadar onayda aktif</Badge>
                         </div>
                         <p className="text-sm text-muted-foreground flex items-center gap-3 flex-wrap">
                           <span className="flex items-center gap-1"><Tag className="h-3 w-3" /> {listing.type}</span>
