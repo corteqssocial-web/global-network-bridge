@@ -28,37 +28,28 @@ const ProfileAssociation = () => {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<null | typeof upcomingEvents[0]>(null);
   const association = {
-    name: "Almanya Türk Toplumu Derneği",
+    name: "Derneğiniz",
     type: "Dernek",
-    email: "info@att-berlin.de",
-    website: "att-berlin.de",
-    country: "Almanya",
-    city: "Berlin",
-    avatar: "ATT",
-    members: 1250,
-    founded: 2008,
-    description: "Berlin ve çevresinde yaşayan Türk diasporasının sosyal, kültürel ve ekonomik entegrasyonuna katkıda bulunan sivil toplum kuruluşu.",
-    balance: 3400.00,
+    email: "",
+    website: "",
+    country: "",
+    city: "",
+    avatar: "D",
+    members: 0,
+    founded: new Date().getFullYear(),
+    description: "Dernek tanıtım metninizi profil ayarlarından ekleyin.",
+    balance: 0,
   };
 
-  const upcomingEvents = [
-    { id: 1, title: "Nevruz Kutlaması", date: "21 Mar 2026", attendees: 200, type: "Kültürel" },
-    { id: 2, title: "Networking Yemeği", date: "18 Mar 2026", attendees: 60, type: "Sosyal" },
-    { id: 3, title: "Vize Bilgilendirme Semineri", date: "25 Mar 2026", attendees: 85, type: "Eğitim" },
-  ];
+  const upcomingEvents: { id: number; title: string; date: string; attendees: number; type: string }[] = [];
 
-  const members = [
-    { name: "Emre Aydın", role: "Üye", since: "2023", active: true },
-    { name: "Elif Demir", role: "Yönetim Kurulu", since: "2019", active: true },
-    { name: "Can Özdemir", role: "Üye", since: "2021", active: true },
-    { name: "Zeynep Arslan", role: "Gönüllü", since: "2024", active: false },
-  ];
+  const members: { name: string; role: string; since: string; active: boolean }[] = [];
 
   const stats = {
-    totalMembers: 1250,
-    activeMembers: 890,
-    eventsThisYear: 24,
-    totalDonations: 12500,
+    totalMembers: 0,
+    activeMembers: 0,
+    eventsThisYear: 0,
+    totalDonations: 0,
   };
 
   return (
