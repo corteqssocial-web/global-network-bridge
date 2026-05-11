@@ -16,9 +16,10 @@ import { toast } from "@/hooks/use-toast";
 
 interface Props {
   onCreated: () => void;
+  cafeId?: string;
 }
 
-const CreatePostForm = ({ onCreated }: Props) => {
+const CreatePostForm = ({ onCreated, cafeId }: Props) => {
   const { user, accountType } = useAuth();
   const [content, setContent] = useState("");
   const [country, setCountry] = useState<string>("");
@@ -41,7 +42,8 @@ const CreatePostForm = ({ onCreated }: Props) => {
       country: country || null,
       city: city || null,
       author_role: accountType || "user",
-    });
+      ...(cafeId ? { cafe_id: cafeId } : {}),
+    } as any);
     setSubmitting(false);
 
     if (error) {

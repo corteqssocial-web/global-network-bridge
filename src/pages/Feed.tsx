@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import { Heart, MapPin, Loader2, Newspaper, Play, MessageCircle, Smile, Share2, Users, Briefcase, Building2, Calendar, Flag, PenLine, Sparkles, UserPlus, Plane, Star, Coffee, Lock, Code2, Stethoscope, GraduationCap } from "lucide-react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { Heart, MapPin, Loader2, Newspaper, Play, MessageCircle, Smile, Share2, Users, Briefcase, Building2, Calendar, Flag, PenLine, Sparkles, UserPlus, Plane, Star, Coffee, Lock, Code2, Stethoscope, GraduationCap, ArrowLeft, Clock, LogIn } from "lucide-react";
+import CreateCafeForm from "@/components/feed/CreateCafeForm";
+import { useActiveCafes, useCafe } from "@/hooks/useCafes";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -54,7 +56,10 @@ const formatTime = (iso: string) => {
 };
 
 const Feed = () => {
-  const { user, accountType } = useAuth();
+  const { user, onboardingCompleted } = useAuth();
+  const { cafeId } = useParams<{ cafeId?: string }>();
+  const navigate = useNavigate();
+  const { cafe, isMember, join: joinCafe } = useCafe(cafeId);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [selectedContinent, setSelectedContinent] = useState<string | null>(null);
@@ -65,6 +70,18 @@ const Feed = () => {
   const [hasMore, setHasMore] = useState(true);
   const [authorMap, setAuthorMap] = useState<Record<string, { full_name: string | null; avatar_url: string | null }>>({});
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
+  const { cafes: activeCafes, refresh: refreshCafes } = useActiveCafes({
+    countries: selectedCountries,
+    cities: selectedCities,
+  });
+  const inCafe = !!cafeId && !!cafe;
+  const cafeOpen = inCafe && new Date(cafe!.closes_at) > new Date();
+
+  const categoryAccountLink = !user
+    ? "/auth"
+    : !onboardingCompleted
+      ? "/onboarding"
+      : "/profile";
 
   const loadDemoData = useCallback(() => {
     setDemoMode(true);
@@ -102,20 +119,25 @@ const Feed = () => {
       const from = reset ? 0 : page * PAGE_SIZE;
       const to = from + PAGE_SIZE - 1;
 
-      let query = supabase
+      let query: any = supabase
         .from("feed_posts")
         .select("*")
         .eq("status", "published")
         .order("created_at", { ascending: false })
         .range(from, to);
 
-      if (selectedCities.length > 0) {
-        query = query.in("city", selectedCities);
-      } else if (selectedContinent) {
-        const { continents } = await import("@/data/continents");
-        query = query.in("country", continents[selectedContinent] || []);
-      } else if (selectedCountries.length > 0) {
-        query = query.in("country", selectedCountries);
+      if (cafeId) {
+        query = query.eq("cafe_id", cafeId);
+      } else {
+        query = query.is("cafe_id", null);
+        if (selectedCities.length > 0) {
+          query = query.in("city", selectedCities);
+        } else if (selectedContinent) {
+          const { continents } = await import("@/data/continents");
+          query = query.in("country", continents[selectedContinent] || []);
+        } else if (selectedCountries.length > 0) {
+          query = query.in("country", selectedCountries);
+        }
       }
 
       const { data, error } = await query;
@@ -163,10 +185,10 @@ const Feed = () => {
         }
       }
     },
-    [page, selectedCountries, selectedCities, selectedContinent, user, authorMap, demoMode],
+    [page, selectedCountries, selectedCities, selectedContinent, user, authorMap, demoMode, cafeId],
   );
 
-  // Reset & refetch when filters change
+  // Reset & refetch when filters or cafe change
   useEffect(() => {
     setPage(0);
     setPosts([]);
@@ -174,7 +196,7 @@ const Feed = () => {
     setDemoMode(false);
     fetchPosts(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCountries, selectedCities, selectedContinent]);
+  }, [selectedCountries, selectedCities, selectedContinent, cafeId]);
 
   // Load more pages
   useEffect(() => {
@@ -222,32 +244,25 @@ const Feed = () => {
     { to: "/whatsapp-groups", icon: MessageCircle, label: "Gruplar", color: "text-teal-500", bg: "bg-teal-500/10" },
   ];
 
-  // Cafe'ler — dikey topluluklar. End user (account_type === 'user') giriş için ilgili kategoride kayıt olmalı.
-  const cafes = [
-    { key: "it", label: "IT Cafe", icon: Code2, color: "text-cyan-500", bg: "bg-cyan-500/10", roles: ["consultant", "business"] },
-    { key: "hekim", label: "Hekimler Cafe", icon: Stethoscope, color: "text-emerald-500", bg: "bg-emerald-500/10", roles: ["consultant", "business"] },
-    { key: "pro", label: "Profesyoneller Cafe", icon: GraduationCap, color: "text-violet-500", bg: "bg-violet-500/10", roles: ["consultant"] },
-    { key: "biz", label: "İşletmeler Cafe", icon: Building2, color: "text-amber-500", bg: "bg-amber-500/10", roles: ["business"] },
-    { key: "org", label: "Kuruluşlar Cafe", icon: Flag, color: "text-sky-500", bg: "bg-sky-500/10", roles: ["association"] },
-    { key: "blog", label: "Blogger/Vlogger Cafe", icon: PenLine, color: "text-rose-500", bg: "bg-rose-500/10", roles: ["blogger"] },
-  ];
-
-  const canEnterCafe = (allowed: string[]) => {
-    if (!accountType) return false;
-    if (accountType === "user") return false;
-    return allowed.includes(accountType) || accountType === "admin" || accountType === "ambassador";
+  // Theme → icon/renk mapping (cafes tablosundan gelen theme alanı)
+  const themeStyle = (theme: string) => {
+    switch (theme) {
+      case "IT": return { icon: Code2, color: "text-cyan-500", bg: "bg-cyan-500/10" };
+      case "Hekimler": return { icon: Stethoscope, color: "text-emerald-500", bg: "bg-emerald-500/10" };
+      case "Profesyoneller": return { icon: GraduationCap, color: "text-violet-500", bg: "bg-violet-500/10" };
+      case "İşletmeler": return { icon: Building2, color: "text-amber-500", bg: "bg-amber-500/10" };
+      case "Kuruluşlar": return { icon: Flag, color: "text-sky-500", bg: "bg-sky-500/10" };
+      case "Blogger/Vlogger": return { icon: PenLine, color: "text-rose-500", bg: "bg-rose-500/10" };
+      default: return { icon: Coffee, color: "text-amber-600", bg: "bg-amber-500/10" };
+    }
   };
 
-  const handleCafeClick = (cafe: typeof cafes[number]) => {
-    if (canEnterCafe(cafe.roles)) {
-      toast({ title: `${cafe.label}'ye giriliyor`, description: "Topluluk yakında açılacak." });
-    } else {
-      toast({
-        title: "🔒 Üyelere özel Cafe",
-        description: `${cafe.label} sadece ${cafe.roles.join(", ")} hesap türlerine açıktır. Kategori kaydını tamamla, içeri buyur.`,
-        variant: "destructive",
-      });
-    }
+  const formatRemaining = (closesAt: string) => {
+    const ms = new Date(closesAt).getTime() - Date.now();
+    if (ms <= 0) return "kapandı";
+    const h = Math.floor(ms / 3600000);
+    const m = Math.floor((ms % 3600000) / 60000);
+    return h > 0 ? `${h}s ${m}dk` : `${m}dk`;
   };
 
   const { following, suggestions, follow } = useFeedSocial();
@@ -355,38 +370,57 @@ const Feed = () => {
                 />
               </section>
 
-              {/* Cafe'ler — kategori toplulukları */}
+              {/* Cafe'ler — aktif topluluklar (DB) */}
               <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-                <h3 className="text-sm font-bold mb-1 flex items-center gap-2">
-                  <Coffee className="h-4 w-4 text-amber-600" />
-                  Cafe'ler
-                </h3>
+                <div className="flex items-center justify-between mb-1">
+                  <h3 className="text-sm font-bold flex items-center gap-2">
+                    <Coffee className="h-4 w-4 text-amber-600" />
+                    Cafe'ler
+                  </h3>
+                  <Badge variant="secondary" className="text-[10px]">{activeCafes.length}</Badge>
+                </div>
                 <p className="text-[10px] text-muted-foreground mb-3 leading-snug">
-                  Kategori topluluklarına yalnız ilgili hesap türleri girebilir.
+                  Aktif cafe'ler — açılış 2 saat, Premium 4 saat. Günde 1 katılım.
                 </p>
-                <div className="space-y-1">
-                  {cafes.map((c) => {
-                    const allowed = canEnterCafe(c.roles);
+                <div className="space-y-1 max-h-72 overflow-y-auto pr-1">
+                  {activeCafes.length === 0 && (
+                    <p className="text-[11px] text-muted-foreground py-2 text-center">
+                      Şu an aktif cafe yok. İlkini sen aç ☕
+                    </p>
+                  )}
+                  {activeCafes.map((c) => {
+                    const st = themeStyle(c.theme);
+                    const Icon = st.icon;
                     return (
-                      <button
-                        key={c.key}
-                        type="button"
-                        onClick={() => handleCafeClick(c)}
-                        className={`w-full flex items-center gap-3 px-2 py-2 rounded-lg transition-colors text-left ${
-                          allowed ? "hover:bg-muted/60" : "hover:bg-muted/30 opacity-80"
+                      <Link
+                        key={c.id}
+                        to={`/cadde/${c.id}`}
+                        className={`w-full flex items-center gap-3 px-2 py-2 rounded-lg transition-colors ${
+                          cafeId === c.id ? "bg-muted/80" : "hover:bg-muted/60"
                         }`}
                       >
-                        <div className={`h-8 w-8 rounded-full ${c.bg} flex items-center justify-center shrink-0`}>
-                          <c.icon className={`h-4 w-4 ${c.color}`} />
+                        <div className={`h-8 w-8 rounded-full ${st.bg} flex items-center justify-center shrink-0`}>
+                          <Icon className={`h-4 w-4 ${st.color}`} />
                         </div>
-                        <span className="text-sm font-medium flex-1 truncate">{c.label}</span>
-                        {!allowed && <Lock className="h-3.5 w-3.5 text-muted-foreground shrink-0" />}
-                      </button>
+                        <div className="min-w-0 flex-1">
+                          <div className="text-xs font-semibold truncate">{c.name}</div>
+                          <div className="text-[10px] text-muted-foreground truncate">
+                            {[c.city, c.country].filter(Boolean).join(" · ") || c.theme}
+                          </div>
+                        </div>
+                        <Badge variant="outline" className="text-[9px] h-4 px-1 shrink-0">
+                          {formatRemaining(c.closes_at)}
+                        </Badge>
+                      </Link>
                     );
                   })}
                 </div>
-                {(!accountType || accountType === "user") && (
-                  <Link to="/onboarding" className="mt-3 block text-[10px] text-primary font-semibold hover:underline">
+                {user ? (
+                  <div className="mt-3">
+                    <CreateCafeForm onCreated={refreshCafes} />
+                  </div>
+                ) : (
+                  <Link to={categoryAccountLink} className="mt-3 block text-[10px] text-primary font-semibold hover:underline">
                     Kategori hesabı aç →
                   </Link>
                 )}
@@ -487,19 +521,75 @@ const Feed = () => {
 
             {/* CENTER FEED */}
             <div className="min-w-0">
-              <header className="mb-4">
-                <div className="flex items-center gap-2 mb-1.5">
-                  <Newspaper className="h-6 w-6 text-primary" />
-                  <h1 className="text-2xl font-extrabold text-gradient-primary">Diaspora Cadde</h1>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Sol panelden kıta, ülke veya şehir seç. Akışın anında daralır.
-                </p>
-              </header>
+              {inCafe ? (
+                <>
+                  <Link to="/cadde" className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline mb-2">
+                    <ArrowLeft className="h-3.5 w-3.5" /> Genel Cadde'ye Dön
+                  </Link>
+                  <header className="mb-4 rounded-2xl border border-border bg-card p-4">
+                    <div className="flex items-start gap-3">
+                      {(() => {
+                        const st = themeStyle(cafe!.theme);
+                        const Icon = st.icon;
+                        return (
+                          <div className={`h-12 w-12 rounded-2xl ${st.bg} flex items-center justify-center shrink-0`}>
+                            <Icon className={`h-6 w-6 ${st.color}`} />
+                          </div>
+                        );
+                      })()}
+                      <div className="flex-1 min-w-0">
+                        <h1 className="text-xl font-extrabold truncate flex items-center gap-2">
+                          ☕ {cafe!.name}
+                          {!cafeOpen && <Badge variant="destructive" className="text-[10px]">Kapalı</Badge>}
+                        </h1>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          {cafe!.theme} · {[cafe!.city, cafe!.country].filter(Boolean).join(" · ") || "Global"}
+                        </p>
+                        <div className="flex flex-wrap items-center gap-3 mt-2 text-[11px] text-muted-foreground">
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3 w-3 text-emerald-500" />
+                            Açılış: {new Date(cafe!.opens_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3 w-3 text-rose-500" />
+                            Kapanış: {new Date(cafe!.closes_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}
+                          </span>
+                          {cafeOpen && (
+                            <Badge variant="secondary" className="text-[10px]">Kalan: {formatRemaining(cafe!.closes_at)}</Badge>
+                          )}
+                        </div>
+                      </div>
+                      {cafeOpen && !isMember && user && (
+                        <Button size="sm" onClick={joinCafe} className="gap-1.5">
+                          <LogIn className="h-3.5 w-3.5" /> Cafe'ye Gir
+                        </Button>
+                      )}
+                      {isMember && <Badge className="bg-emerald-500/15 text-emerald-600 border-0">Üyesin</Badge>}
+                    </div>
+                  </header>
+                </>
+              ) : (
+                <header className="mb-4">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <Newspaper className="h-6 w-6 text-primary" />
+                    <h1 className="text-2xl font-extrabold text-gradient-primary">Diaspora Cadde</h1>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Sol panelden kıta, ülke veya şehir seç. Akışın anında daralır.
+                  </p>
+                </header>
+              )}
 
-              <div className="mb-4">
-                <CreatePostForm onCreated={() => { setPage(0); fetchPosts(true); }} />
-              </div>
+              {(!inCafe || (cafeOpen && isMember)) && (
+                <div className="mb-4">
+                  <CreatePostForm cafeId={inCafe ? cafeId : undefined} onCreated={() => { setPage(0); fetchPosts(true); }} />
+                </div>
+              )}
+              {inCafe && cafeOpen && !isMember && user && (
+                <div className="mb-4 rounded-2xl border border-dashed border-border p-4 text-center text-xs text-muted-foreground">
+                  Paylaşım yapmak için önce cafe'ye gir. (Günde 1 cafe katılım hakkı)
+                </div>
+              )}
 
               <div className="rounded-2xl border border-border bg-card px-5">
                 {posts.length === 0 && !loading && (
