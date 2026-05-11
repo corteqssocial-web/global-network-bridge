@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DiasporaProvider } from "@/contexts/DiasporaContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import AppErrorBoundary from "@/components/AppErrorBoundary";
+import BrandLoader from "@/components/BrandLoader";
 import { recoverFromWhiteScreen } from "@/lib/recoveryReload";
 
 const Index = lazy(() => import("./pages/Index"));
@@ -117,6 +118,7 @@ const App = () => (
           <DiasporaProvider>
             <Toaster />
             <Sonner />
+            <BrandLoader />
             <BrowserRouter>
               <Suspense fallback={<RouteLoadingFallback />}>
                 <Routes>
