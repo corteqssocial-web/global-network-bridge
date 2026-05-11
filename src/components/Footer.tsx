@@ -23,8 +23,8 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold mb-4 text-sm uppercase tracking-wider">Platform</h4>
-            <ul className="space-y-2 text-sm text-secondary-foreground/60 font-body">
+            <h4 className="font-bold mb-2 text-[11px] uppercase tracking-wider">Platform</h4>
+            <ul className="space-y-1 text-xs text-secondary-foreground/60 font-body">
               <li><Link to="/consultants" className="hover:text-primary transition-colors">Danışmanlar</Link></li>
               <li><Link to="/associations" className="hover:text-primary transition-colors">Kuruluşlar</Link></li>
               <li><Link to="/businesses" className="hover:text-primary transition-colors">İşletmeler</Link></li>
@@ -34,8 +34,8 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold mb-4 text-sm uppercase tracking-wider">Topluluk</h4>
-            <ul className="space-y-2 text-sm text-secondary-foreground/60 font-body">
+            <h4 className="font-bold mb-2 text-[11px] uppercase tracking-wider">Topluluk</h4>
+            <ul className="space-y-1 text-xs text-secondary-foreground/60 font-body">
               <li>
                 <Link to="/city-ambassadors" className="hover:text-primary transition-colors flex items-center gap-1.5">
                   <Flag className="h-3.5 w-3.5" />Şehir Elçisi Ol
@@ -48,8 +48,8 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold mb-4 text-sm uppercase tracking-wider">Kurumsal</h4>
-            <ul className="space-y-2 text-sm text-secondary-foreground/60 font-body">
+            <h4 className="font-bold mb-2 text-[11px] uppercase tracking-wider">Kurumsal</h4>
+            <ul className="space-y-1 text-xs text-secondary-foreground/60 font-body">
               <li><a href="#" className="hover:text-primary transition-colors">Hakkımızda</a></li>
               <li><Link to="/pricing" className="hover:text-primary transition-colors">Fiyatlandırma</Link></li>
               <li><Link to="/founders-1000" className="hover:text-primary transition-colors">Founding 1000</Link></li>
@@ -59,8 +59,8 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold mb-4 text-sm uppercase tracking-wider">Yasal</h4>
-            <ul className="space-y-2 text-sm text-secondary-foreground/60 font-body">
+            <h4 className="font-bold mb-2 text-[11px] uppercase tracking-wider">Yasal</h4>
+            <ul className="space-y-1 text-xs text-secondary-foreground/60 font-body">
               <li><Link to="/legal/privacy" className="hover:text-primary transition-colors">Gizlilik Politikası</Link></li>
               <li><Link to="/legal/terms" className="hover:text-primary transition-colors">Kullanım Şartları</Link></li>
               <li><Link to="/legal/kvkk" className="hover:text-primary transition-colors">KVKK / GDPR / CCPA</Link></li>
@@ -69,7 +69,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-secondary-foreground/10 mt-12 pt-8 text-center text-sm text-secondary-foreground/40 font-body">
+        <div className="border-t border-secondary-foreground/10 mt-6 pt-4 text-center text-sm text-secondary-foreground/40 font-body">
           © 2026 CorteQS. Tüm hakları saklıdır.
         </div>
       </div>
