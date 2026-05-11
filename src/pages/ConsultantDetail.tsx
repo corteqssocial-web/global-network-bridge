@@ -11,6 +11,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { consultants } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import AppointmentBookingDialog from "@/components/booking/AppointmentBookingDialog";
 import DemoPageBanner from "@/components/DemoPageBanner";
 import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
 import PublicEventsList from "@/components/PublicEventsList";
