@@ -16,6 +16,7 @@ import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
 import CreateEventForm from "@/components/CreateEventForm";
 import SocialMediaCampaignDialog from "@/components/SocialMediaCampaignDialog";
 import CategoryShowcasePurchase from "@/components/CategoryShowcasePurchase";
+import BusinessOpportunitiesPanel from "@/components/business/BusinessOpportunitiesPanel";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MessagesInbox from "@/components/messaging/MessagesInbox";
