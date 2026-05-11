@@ -119,7 +119,7 @@ const Feed = () => {
       const from = reset ? 0 : page * PAGE_SIZE;
       const to = from + PAGE_SIZE - 1;
 
-      let query = supabase
+      let query: any = supabase
         .from("feed_posts")
         .select("*")
         .eq("status", "published")
@@ -127,9 +127,9 @@ const Feed = () => {
         .range(from, to);
 
       if (cafeId) {
-        query = query.eq("cafe_id" as any, cafeId);
+        query = query.eq("cafe_id", cafeId);
       } else {
-        query = query.is("cafe_id" as any, null);
+        query = query.is("cafe_id", null);
         if (selectedCities.length > 0) {
           query = query.in("city", selectedCities);
         } else if (selectedContinent) {
