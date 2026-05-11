@@ -102,7 +102,7 @@ const ProfileBusiness = () => {
 
   const persistField = async (patch: Record<string, any>) => {
     if (!user) return;
-    await supabase.from("profiles").update(patch).eq("id", user.id);
+    await (supabase.from("profiles") as any).update(patch).eq("id", user.id);
   };
 
   const handleShowOnMapChange = async (checked: boolean) => {
