@@ -217,31 +217,37 @@ const ConsultantDetail = () => {
             </div>
           </div>
 
-          {/* Tabs */}
-          <Tabs defaultValue="bio" className="w-full">
-            <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto">
-              <TabsTrigger value="bio">Hakkında</TabsTrigger>
-              <TabsTrigger value="specialties">Uzmanlık Alanları</TabsTrigger>
-              <TabsTrigger value="events">Etkinlik Takvimi</TabsTrigger>
-              <TabsTrigger value="contact">İletişim</TabsTrigger>
-            </TabsList>
+          {(isEnabled("bio_tab") || isEnabled("specialties_tab") || isEnabled("events_tab") || isEnabled("contact_tab")) && (
+            <Tabs defaultValue={isEnabled("bio_tab") ? "bio" : isEnabled("specialties_tab") ? "specialties" : isEnabled("events_tab") ? "events" : "contact"} className="w-full">
+              <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto">
+                {isEnabled("bio_tab") && <TabsTrigger value="bio">Hakkında</TabsTrigger>}
+                {isEnabled("specialties_tab") && <TabsTrigger value="specialties">Uzmanlık Alanları</TabsTrigger>}
+                {isEnabled("events_tab") && <TabsTrigger value="events">Etkinlik Takvimi</TabsTrigger>}
+                {isEnabled("contact_tab") && <TabsTrigger value="contact">İletişim</TabsTrigger>}
+              </TabsList>
 
-            <TabsContent value="bio" className="mt-6">
-              <DemoTabPlaceholder label="Biyografi — Demo" />
-            </TabsContent>
-
-            <TabsContent value="specialties" className="mt-6">
-              <DemoTabPlaceholder label="Uzmanlık Alanları — Demo" />
-            </TabsContent>
-
-            <TabsContent value="events" className="mt-6">
-              <PublicEventsList emptyLabel="Bu danışmanın yaklaşan etkinliği yok." />
-            </TabsContent>
-
-            <TabsContent value="contact" className="mt-6">
-              <DemoTabPlaceholder label="İletişim — Demo" />
-            </TabsContent>
-          </Tabs>
+              {isEnabled("bio_tab") && (
+                <TabsContent value="bio" className="mt-6">
+                  <DemoTabPlaceholder label="Biyografi — Demo" />
+                </TabsContent>
+              )}
+              {isEnabled("specialties_tab") && (
+                <TabsContent value="specialties" className="mt-6">
+                  <DemoTabPlaceholder label="Uzmanlık Alanları — Demo" />
+                </TabsContent>
+              )}
+              {isEnabled("events_tab") && (
+                <TabsContent value="events" className="mt-6">
+                  <PublicEventsList emptyLabel="Bu danışmanın yaklaşan etkinliği yok." />
+                </TabsContent>
+              )}
+              {isEnabled("contact_tab") && (
+                <TabsContent value="contact" className="mt-6">
+                  <DemoTabPlaceholder label="İletişim — Demo" />
+                </TabsContent>
+              )}
+            </Tabs>
+          )}
 
           {/* Gayrimenkul İlanları — only visible to logged-in consultant (owner) */}
           {consultant.category === "Gayrimenkul" && isOwner && (
