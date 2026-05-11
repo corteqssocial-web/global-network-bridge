@@ -216,17 +216,11 @@ const ProfileAssociation = () => {
                 <Mail className="h-5 w-5 text-primary" /> E-posta Kampanyaları
               </h2>
               <div className="space-y-3">
-                {[
-                  { title: "Nevruz Daveti", sent: 890, opened: 456, date: "10 Mar" },
-                  { title: "Aylık Bülten - Mart", sent: 1100, opened: 623, date: "01 Mar" },
-                ].map((campaign, i) => (
-                  <div key={i} className="p-4 rounded-xl bg-muted/50">
-                    <h3 className="font-semibold text-foreground">{campaign.title}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {campaign.sent} gönderildi · {campaign.opened} açıldı · {campaign.date}
-                    </p>
-                  </div>
-                ))}
+                <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6 text-center">
+                  <Mail className="h-5 w-5 text-muted-foreground mx-auto mb-1" />
+                  <p className="text-sm font-medium text-foreground">Henüz kampanya yok</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">İlk e-posta kampanyanızı oluşturun.</p>
+                </div>
                 <Button variant="outline" className="w-full gap-2"><Plus className="h-4 w-4" /> Yeni Kampanya</Button>
               </div>
             </div>
@@ -234,20 +228,10 @@ const ProfileAssociation = () => {
               <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
                 <MessageSquare className="h-5 w-5 text-turquoise" /> WhatsApp Grupları
               </h2>
-              <div className="space-y-3">
-                {[
-                  { name: "ATT Genel Grup", members: 320, messages: 45 },
-                  { name: "ATT Etkinlik Duyuruları", members: 890, messages: 12 },
-                  { name: "ATT Yönetim", members: 15, messages: 78 },
-                ].map((group, i) => (
-                  <div key={i} className="p-4 rounded-xl bg-muted/50 flex items-center justify-between">
-                    <div>
-                      <h3 className="font-semibold text-foreground">{group.name}</h3>
-                      <p className="text-sm text-muted-foreground">{group.members} üye · {group.messages} mesaj/hafta</p>
-                    </div>
-                    <Button variant="outline" size="sm">Yönet</Button>
-                  </div>
-                ))}
+              <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6 text-center">
+                <MessageSquare className="h-5 w-5 text-muted-foreground mx-auto mb-1" />
+                <p className="text-sm font-medium text-foreground">Henüz WhatsApp grubu yok</p>
+                <p className="text-xs text-muted-foreground mt-0.5">WhatsApp sekmesinden yeni grup ekleyebilirsiniz.</p>
               </div>
             </div>
           </div>
