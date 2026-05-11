@@ -125,7 +125,17 @@ export const CouponManager = ({ businessName }: { businessName: string }) => {
             <Label>Son Kullanma Tarihi</Label>
             <Input value={form.expires} onChange={e => setForm(p => ({ ...p, expires: e.target.value }))} placeholder="Ör: 30 Nis 2026" />
           </div>
-          <Button onClick={handleCreate} className="w-full bg-gold hover:bg-gold/90 text-primary-foreground">Kupon Oluştur</Button>
+          <div>
+            <Label>Fiyatlandırma</Label>
+            <div className="flex gap-2 mt-2">
+              <Button type="button" size="sm" variant={form.isFree ? "default" : "outline"} onClick={() => setForm(p => ({ ...p, isFree: true, price: 0 }))}>Ücretsiz</Button>
+              <Button type="button" size="sm" variant={!form.isFree ? "default" : "outline"} onClick={() => setForm(p => ({ ...p, isFree: false }))}>Ücretli (€)</Button>
+            </div>
+            {!form.isFree && (
+              <Input type="number" min={0} step="0.5" value={form.price} onChange={e => setForm(p => ({ ...p, price: Number(e.target.value) }))} placeholder="Kupon satış fiyatı (€)" className="mt-2" />
+            )}
+          </div>
+          <Button onClick={handleCreate} className="w-full bg-gold hover:bg-gold/90 text-primary-foreground">{pendingActivationId !== null ? "Aktifleştir & Yayınla" : "Kupon Oluştur"}</Button>
         </div>
       )}
 
