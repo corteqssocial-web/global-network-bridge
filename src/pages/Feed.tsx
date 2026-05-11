@@ -576,14 +576,16 @@ const Feed = () => {
 
             {/* RIGHT SIDEBAR — Sponsorlu */}
             <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto pl-1 hidden lg:block">
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold px-1">Sponsorlu</div>
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold px-1">
+                ÇIFIT <span className="text-muted-foreground/70 normal-case font-medium">(Sponsorlu)</span>
+              </div>
 
               {/* Sponsorlu Danışman */}
               <Link to="/consultants" className="block rounded-2xl overflow-hidden border border-border bg-card hover:shadow-card-hover transition-shadow">
-                <div className="h-20 bg-gradient-to-br from-violet-500 via-fuchsia-500 to-purple-600 relative">
-                  <Badge className="absolute top-2 right-2 bg-white/20 text-white border-0 text-[10px] backdrop-blur">Premium</Badge>
+                <div className="h-10 bg-gradient-to-br from-violet-500 via-fuchsia-500 to-purple-600 relative">
+                  <Badge className="absolute top-1 right-2 bg-white/20 text-white border-0 text-[10px] backdrop-blur">Premium</Badge>
                 </div>
-                <div className="p-3 -mt-8">
+                <div className="p-3 -mt-4">
                   <img src="https://i.pravatar.cc/80?img=68" alt="" className="h-14 w-14 rounded-full ring-4 ring-card object-cover mb-2" />
                   <h4 className="text-sm font-bold">Av. Selin Korkmaz</h4>
                   <p className="text-[11px] text-muted-foreground">💼 Almanya Vize & Oturum</p>
@@ -598,10 +600,10 @@ const Feed = () => {
 
               {/* Sponsorlu İşletme */}
               <Link to="/businesses" className="block rounded-2xl overflow-hidden border border-border bg-card hover:shadow-card-hover transition-shadow">
-                <div className="h-20 bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-600 relative">
-                  <Badge className="absolute top-2 right-2 bg-white/20 text-white border-0 text-[10px] backdrop-blur">Premium</Badge>
+                <div className="h-10 bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-600 relative">
+                  <Badge className="absolute top-1 right-2 bg-white/20 text-white border-0 text-[10px] backdrop-blur">Premium</Badge>
                 </div>
-                <div className="p-3 -mt-8">
+                <div className="p-3 -mt-4">
                   <div className="h-14 w-14 rounded-2xl ring-4 ring-card bg-card flex items-center justify-center mb-2">
                     <Building2 className="h-7 w-7 text-emerald-500" />
                   </div>
@@ -618,9 +620,9 @@ const Feed = () => {
 
               {/* Sponsorlu Etkinlik */}
               <Link to="/events" className="block rounded-2xl overflow-hidden border border-border bg-card hover:shadow-card-hover transition-shadow">
-                <div className="h-24 bg-gradient-to-br from-amber-400 via-orange-500 to-rose-500 relative flex items-end p-3">
-                  <Badge className="absolute top-2 right-2 bg-white/20 text-white border-0 text-[10px] backdrop-blur">Featured</Badge>
-                  <Calendar className="h-8 w-8 text-white/90" />
+                <div className="h-12 bg-gradient-to-br from-amber-400 via-orange-500 to-rose-500 relative flex items-end p-2">
+                  <Badge className="absolute top-1 right-2 bg-white/20 text-white border-0 text-[10px] backdrop-blur">Featured</Badge>
+                  <Calendar className="h-5 w-5 text-white/90" />
                 </div>
                 <div className="p-3">
                   <h4 className="text-sm font-bold leading-tight">Avrupa Türk Girişimciler Zirvesi</h4>
