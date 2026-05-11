@@ -215,15 +215,20 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
               <button
                 key={pkg.id}
                 onClick={() => setSelectedPackage(pkg.id)}
-                className={`text-left p-5 rounded-xl border-2 transition-all ${
+                className={`relative text-left p-5 rounded-xl border-2 transition-all ${
                   selectedPackage === pkg.id
                     ? "border-primary bg-primary/5"
                     : "border-border hover:border-primary/30"
                 }`}
               >
+                {pkg.comingSoon && (
+                  <Badge variant="outline" className="absolute top-2 right-2 text-[10px] bg-gold/10 text-gold border-gold/30">
+                    Yakında
+                  </Badge>
+                )}
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-bold text-foreground">{pkg.name}</h4>
-                  {selectedPackage === pkg.id && (
+                  {selectedPackage === pkg.id && !pkg.comingSoon && (
                     <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
                       <Check className="h-3 w-3 text-primary-foreground" />
                     </div>
