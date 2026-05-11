@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Tag, Plus, X, Copy, Check, Percent, Gift } from "lucide-react";
+import { Tag, Plus, X, Copy, Check, Percent, Gift, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { CouponCheckoutDialog } from "@/components/CouponCheckoutDialog";
 
 export interface Coupon {
   id: number;
@@ -20,6 +21,9 @@ export interface Coupon {
   active: boolean;
   businessName: string;
   businessLogo: string;
+  price?: number;
+  isFree?: boolean;
+  businessUserId?: string;
 }
 
 // Business-side coupon manager
