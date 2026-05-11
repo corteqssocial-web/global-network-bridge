@@ -248,6 +248,12 @@ const ProfileBusiness = () => {
               </Button>
               <CreateJobListingForm
                 onClose={() => { setShowCreateJob(false); setEditingJob(null); }}
+                onCreated={(l) => {
+                  setListings((prev) => [
+                    { id: Date.now(), title: l.title, type: l.type, status: "Aktif", views: 0, applications: 0, package: l.package, price: l.price },
+                    ...prev,
+                  ]);
+                }}
                 editData={editingJob ? {
                   id: editingJob.id,
                   title: editingJob.title,
