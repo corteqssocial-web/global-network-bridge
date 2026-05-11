@@ -249,22 +249,9 @@ const ProfileBlogger = () => {
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                 <PenLine className="h-5 w-5 text-primary" /> Blog Yazıları & İçerikler
               </h2>
-              <Button className="gap-2"><PenLine className="h-4 w-4" /> Yeni İçerik</Button>
             </div>
-            <div className="space-y-3">
-              {blogPosts.map((post, i) => (
-                <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-foreground">{post.title}</h3>
-                    <p className="text-sm text-muted-foreground flex items-center gap-3">
-                      <span className="flex items-center gap-1"><Eye className="h-3 w-3" /> {(post.views / 1000).toFixed(1)}K görüntülenme</span>
-                      <span className="flex items-center gap-1"><Heart className="h-3 w-3" /> {post.likes} beğeni</span>
-                      <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {post.date}</span>
-                    </p>
-                  </div>
-                  <Button variant="outline" size="sm">Düzenle</Button>
-                </div>
-              ))}
+            <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
+              Yayınladığın blog yazıları yukarıdaki "Blog Linkleri Yükle" alanından eklenir ve burada listelenir.
             </div>
           </div>
         </TabsContent>
@@ -277,22 +264,10 @@ const ProfileBlogger = () => {
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                 <Bot className="h-5 w-5 text-primary" /> AI Twin Sohbetleri
               </h2>
-              <div className="text-sm text-muted-foreground">Ücretsiz · İlk 10dk</div>
+              <Badge variant="outline" className="text-xs">Yakında</Badge>
             </div>
-            <div className="space-y-2">
-              {sessions.aiTwin.map((s) => (
-                <div key={s.id} className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
-                  <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                    <Bot className="h-4 w-4 text-primary" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-foreground text-sm">{s.client}</p>
-                    <p className="text-xs text-muted-foreground">{s.date} · {s.time} · {s.duration}</p>
-                  </div>
-                  <Badge className="bg-turquoise/15 text-turquoise border-turquoise/30 text-[10px]">Tamamlandı</Badge>
-                  <span className="text-sm font-semibold text-foreground">{s.amount > 0 ? `€${s.amount}` : "Ücretsiz"}</span>
-                </div>
-              ))}
+            <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
+              AI Twin aktive edildikten sonra takipçilerinle yapılan sohbetler burada görünecek.
             </div>
           </div>
 
@@ -315,136 +290,17 @@ const ProfileBlogger = () => {
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                 <Handshake className="h-5 w-5 text-primary" /> Marka İşbirlikleri
               </h2>
-              <Button variant="outline" className="gap-2"><Handshake className="h-4 w-4" /> Yeni İşbirliği</Button>
+              <Badge variant="outline" className="text-xs">Yakında</Badge>
             </div>
-            <div className="space-y-3">
-              {collaborations.map((c, i) => (
-                <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold text-sm shrink-0">
-                    {c.brand.substring(0, 2)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-foreground">{c.brand}</h3>
-                    <p className="text-sm text-muted-foreground">{c.type}</p>
-                  </div>
-                  <Badge className="bg-turquoise/15 text-turquoise border-turquoise/30 text-xs">{c.status}</Badge>
-                  <span className="text-sm font-semibold text-foreground">{c.fee}</span>
-                </div>
-              ))}
+            <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
+              Markalar ile yapılan işbirlikleri ve sponsorlu içerikler burada görünecek.
             </div>
           </div>
         </TabsContent>
 
         {/* ANALYTICS */}
         <TabsContent value="analytics" className="mt-6 space-y-6">
-          {/* KPI Summary */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {[
-              { label: "Bu Ay İçerik", value: "24", prev: "18", icon: PenLine, color: "text-primary" },
-              { label: "Ort. Etkileşim", value: "4.2%", prev: "3.8%", icon: Heart, color: "text-pink-500" },
-              { label: "Toplam Görüntülenme", value: "85K", prev: "72K", icon: Eye, color: "text-chart-3" },
-              { label: "Bu Ay Gelir", value: `€${stats.monthlyRevenue}`, prev: "€1,620", icon: CreditCard, color: "text-success" },
-            ].map((kpi, i) => (
-              <div key={i} className="bg-card rounded-xl border border-border p-4 shadow-card">
-                <div className="flex items-center justify-between mb-2">
-                  <kpi.icon className={`h-4 w-4 ${kpi.color}`} />
-                  <span className="text-[10px] text-muted-foreground">Önceki: {kpi.prev}</span>
-                </div>
-                <p className="text-xl font-bold text-foreground">{kpi.value}</p>
-                <p className="text-[11px] text-muted-foreground">{kpi.label}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Monthly Content & Engagement Chart */}
-          <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-primary" /> Aylık İçerik & Etkileşim
-              </h2>
-            </div>
-            <div className="space-y-3">
-              {[
-                { month: "Ocak", content: 18, engagement: 3.5, views: 62000 },
-                { month: "Şubat", content: 20, engagement: 3.8, views: 68000 },
-                { month: "Mart", content: 22, engagement: 4.0, views: 75000 },
-                { month: "Nisan", content: 19, engagement: 3.9, views: 71000 },
-                { month: "Mayıs", content: 24, engagement: 4.1, views: 82000 },
-                { month: "Haziran", content: 24, engagement: 4.2, views: 85000 },
-              ].map((m) => (
-                <div key={m.month} className="flex items-center gap-3">
-                  <span className="text-xs text-muted-foreground w-14 shrink-0">{m.month}</span>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="flex-1 bg-muted rounded-full h-2.5">
-                        <div className="bg-primary rounded-full h-2.5 transition-all" style={{ width: `${(m.content / 30) * 100}%` }} />
-                      </div>
-                      <span className="text-[10px] font-semibold text-foreground w-8">{m.content}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 bg-muted rounded-full h-2">
-                        <div className="bg-pink-500 rounded-full h-2 transition-all" style={{ width: `${(m.engagement / 6) * 100}%` }} />
-                      </div>
-                      <span className="text-[10px] font-medium text-muted-foreground w-8">%{m.engagement}</span>
-                    </div>
-                  </div>
-                  <span className="text-[10px] text-muted-foreground w-12 text-right">{(m.views / 1000).toFixed(0)}K</span>
-                </div>
-              ))}
-            </div>
-            <div className="flex items-center gap-4 mt-4 text-[10px] text-muted-foreground">
-              <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-primary inline-block" /> İçerik Sayısı</span>
-              <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-pink-500 inline-block" /> Etkileşim %</span>
-              <span>Görüntülenme (sağ)</span>
-            </div>
-          </div>
-
-          {/* Platform Breakdown */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-primary" /> Platform Performansı
-              </h2>
-              <div className="space-y-4">
-                {[
-                  { source: "Blog Yazıları", count: 48500, pct: 45 },
-                  { source: "Instagram Reels", count: 32000, pct: 30 },
-                  { source: "YouTube", count: 18000, pct: 17 },
-                  { source: "TikTok", count: 8500, pct: 8 },
-                ].map((s) => (
-                  <div key={s.source}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-foreground font-medium">{s.source}</span>
-                      <span className="text-muted-foreground">{(s.count / 1000).toFixed(1)}K ({s.pct}%)</span>
-                    </div>
-                    <div className="bg-muted rounded-full h-2">
-                      <div className="bg-primary rounded-full h-2" style={{ width: `${s.pct}%` }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-                <Eye className="h-5 w-5 text-chart-3" /> Haftalık Görüntülenme
-              </h2>
-              <div className="space-y-2">
-                {["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"].map((day, i) => {
-                  const val = [65, 78, 52, 91, 85, 70, 45][i];
-                  return (
-                    <div key={day} className="flex items-center gap-3">
-                      <span className="text-xs text-muted-foreground w-8">{day}</span>
-                      <div className="flex-1 bg-muted rounded-full h-3">
-                        <div className="bg-primary rounded-full h-3" style={{ width: `${val}%` }} />
-                      </div>
-                      <span className="text-xs font-medium text-foreground w-10 text-right">{(val * 120).toLocaleString()}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
+          <BloggerAnalytics authorName={blogger.name} />
         </TabsContent>
 
         {/* PROMOTIONS */}
@@ -456,51 +312,28 @@ const ProfileBlogger = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {[
                 { title: "Öne Çıkan Influencer", desc: "Ana sayfada ve arama sonuçlarında üst sıralarda görünün", price: "€—/hafta", icon: Star },
-                { title: "WhatsApp Tanıtımı", desc: "CorteQS Kanalında Tanıtım", price: "€—/tanıtım", icon: Megaphone },
                 { title: "Reklam İşbirliği", desc: "Markalarla eşleşme ve sponsorlu içerik fırsatları", price: "€—", icon: Handshake },
+                { title: "Sosyal Medya Paketi", desc: "Sosyal medya hesaplarınızda profesyonel kampanya yönetimi", price: "€—/platform", icon: Megaphone },
+                { title: "Kategori Vitrini", desc: "Kategorinizde ilk 6 sırada gösterilerek daha fazla müşteriye ulaşın", price: "€—/hafta", icon: Crown },
               ].map((promo) => (
-                <div key={promo.title} className="border border-border rounded-xl p-4 hover:border-primary/30 hover:bg-primary/5 transition-colors">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <promo.icon className="h-4 w-4 text-primary" />
+                <div key={promo.title} className="relative border border-border rounded-xl p-4 overflow-hidden">
+                  <div className="opacity-60">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <promo.icon className="h-4 w-4 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-foreground text-sm">{promo.title}</h3>
+                        <p className="text-xs font-semibold text-primary">{promo.price}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-bold text-foreground text-sm">{promo.title}</h3>
-                      <p className="text-xs font-semibold text-primary">{promo.price}</p>
-                    </div>
+                    <p className="text-xs text-muted-foreground mb-3">{promo.desc}</p>
                   </div>
-                  <p className="text-xs text-muted-foreground mb-3">{promo.desc}</p>
-                  <Button variant="outline" size="sm" className="w-full">Satın Al</Button>
+                  <Button variant="outline" size="sm" className="w-full gap-1.5" disabled>
+                    <Lock className="h-3.5 w-3.5" /> Yakında
+                  </Button>
                 </div>
               ))}
-              <div className="border border-primary/30 rounded-xl p-4 bg-primary/5">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Megaphone className="h-4 w-4 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-foreground text-sm">Sosyal Medya Paketi</h3>
-                    <p className="text-xs font-semibold text-primary">$—/platform</p>
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground mb-3">Sosyal medya hesaplarınızda profesyonel kampanya yönetimi</p>
-                <SocialMediaCampaignDialog entityName={blogger.name} entityType="blogger" />
-              </div>
-
-              {/* Category Showcase */}
-              <div className="bg-card rounded-2xl p-5 border border-gold/30">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="bg-gold/10 p-2.5 rounded-full">
-                    <Crown className="h-5 w-5 text-gold" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-foreground text-sm">Kategori Vitrini</h3>
-                    <p className="text-xs font-semibold text-gold">€—/hafta</p>
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground mb-3">Kategorinizde ilk 6 sırada gösterilerek daha fazla müşteriye ulaşın</p>
-                <CategoryShowcasePurchase entityName={blogger.name} category="V/Blogger" />
-              </div>
             </div>
           </div>
         </TabsContent>
