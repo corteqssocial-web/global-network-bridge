@@ -552,26 +552,32 @@ const Feed = () => {
                         );
                       })()}
                       <div className="flex-1 min-w-0">
-                        <h1 className="text-xl font-extrabold truncate flex items-center gap-2">
+                        <h1 className="text-xl font-extrabold truncate flex items-center gap-2 flex-wrap">
                           ☕ {cafe!.name}
-                          {!cafeOpen && <Badge variant="destructive" className="text-[10px]">Kapalı</Badge>}
+                          {cafe!.kind === "relocation" && <Badge className="bg-sky-500/15 text-sky-600 border-0 text-[10px]">🌍 Relocation</Badge>}
+                          {cafe!.kind === "expo" && <Badge className="bg-amber-500/15 text-amber-600 border-0 text-[10px]">🛍️ Expo</Badge>}
+                          {cafe!.kind === "community" && cafe!.open_entry && <Badge className="bg-emerald-500/15 text-emerald-600 border-0 text-[10px]">🟢 Serbest</Badge>}
+                          {cafe!.kind === "community" && !cafe!.open_entry && <Badge variant="outline" className="text-[10px]"><Lock className="h-2.5 w-2.5 mr-1" />Onaylı</Badge>}
+                          {!cafeOpen && cafe!.kind === "community" && <Badge variant="destructive" className="text-[10px]">Kapalı</Badge>}
                         </h1>
                         <p className="text-xs text-muted-foreground mt-0.5">
-                          {cafe!.theme} · {[cafe!.city, cafe!.country].filter(Boolean).join(" · ") || "Global"}
+                          {cafe!.theme} · {[cafe!.city, cafe!.country].filter(Boolean).join(" · ") || "Global"} · 👥 {cafe!.member_count}{cafe!.capacity ? `/${cafe!.capacity}` : " (sınırsız)"}
                         </p>
-                        <div className="flex flex-wrap items-center gap-3 mt-2 text-[11px] text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <Clock className="h-3 w-3 text-emerald-500" />
-                            Açılış: {new Date(cafe!.opens_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="h-3 w-3 text-rose-500" />
-                            Kapanış: {new Date(cafe!.closes_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}
-                          </span>
-                          {cafeOpen && (
-                            <Badge variant="secondary" className="text-[10px]">Kalan: {formatRemaining(cafe!.closes_at)}</Badge>
-                          )}
-                        </div>
+                        {cafe!.kind === "community" && (
+                          <div className="flex flex-wrap items-center gap-3 mt-2 text-[11px] text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <Clock className="h-3 w-3 text-emerald-500" />
+                              Açılış: {new Date(cafe!.opens_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Clock className="h-3 w-3 text-rose-500" />
+                              Kapanış: {new Date(cafe!.closes_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}
+                            </span>
+                            {cafeOpen && (
+                              <Badge variant="secondary" className="text-[10px]">Kalan: {formatRemaining(cafe!.closes_at)}</Badge>
+                            )}
+                          </div>
+                        )}
                       </div>
                       {cafeOpen && !isMember && user && (
                         <Button
