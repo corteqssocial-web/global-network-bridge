@@ -562,6 +562,30 @@ const ProfileBusiness = () => {
               </h2>
               <div className="space-y-4">
                 <div>
+                  <Label>Profil Fotoğrafı</Label>
+                  <div className="flex items-center gap-4 mt-1.5">
+                    <div className="w-16 h-16 rounded-xl bg-muted flex items-center justify-center overflow-hidden border border-border">
+                      {biz.avatar_url
+                        ? <img src={biz.avatar_url} alt="avatar" className="w-full h-full object-cover" />
+                        : <ImageIcon className="h-6 w-6 text-muted-foreground" />}
+                    </div>
+                    <label className="cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const f = e.target.files?.[0];
+                          if (f) handleAvatarUpload(f);
+                        }}
+                      />
+                      <span className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-border bg-card hover:bg-muted text-sm">
+                        <Camera className="h-4 w-4" /> {uploadingAvatar ? "Yükleniyor..." : (biz.avatar_url ? "Değiştir" : "Yükle")}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+                <div>
                   <Label>İşletme Adı</Label>
                   <Input value={biz.business_name} onChange={(e) => setBiz({ ...biz, business_name: e.target.value })} placeholder="Örn. Anatolian Tech GmbH" />
                 </div>
