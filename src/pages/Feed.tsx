@@ -56,7 +56,7 @@ const formatTime = (iso: string) => {
 };
 
 const Feed = () => {
-  const { user, accountType, onboardingCompleted } = useAuth();
+  const { user, onboardingCompleted } = useAuth();
   const { cafeId } = useParams<{ cafeId?: string }>();
   const navigate = useNavigate();
   const { cafe, isMember, join: joinCafe } = useCafe(cafeId);
