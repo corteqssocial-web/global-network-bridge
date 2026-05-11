@@ -3,11 +3,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import EventManagePanel from "@/components/EventManagePanel";
 import CreateEventForm from "@/components/CreateEventForm";
-import SocialMediaCampaignDialog from "@/components/SocialMediaCampaignDialog";
-import CategoryShowcasePurchase from "@/components/CategoryShowcasePurchase";
 import CorBotPromoBanner from "@/components/CorBotPromoBanner";
 import EmptyDashboardState from "@/components/EmptyDashboardState";
 import AppointmentManagePanel from "@/components/booking/AppointmentManagePanel";
+import CategoryPerformance from "@/components/booking/CategoryPerformance";
 import { Lock } from "lucide-react";
 import {
   User, MapPin, Globe, Star, Calendar, Users, Clock, Eye,
@@ -490,29 +489,7 @@ const ProfileConsultant = () => {
               </div>
             </div>
 
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-primary" /> Müşteri Kaynakları
-              </h2>
-              <div className="space-y-4">
-                {[
-                  { source: "Platform Araması", count: 142, pct: 52 },
-                  { source: "Profil Ziyareti", count: 68, pct: 25 },
-                  { source: "Etkinlik Katılımı", count: 38, pct: 14 },
-                  { source: "Yönlendirme", count: 24, pct: 9 },
-                ].map((s) => (
-                  <div key={s.source}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-foreground font-medium">{s.source}</span>
-                      <span className="text-muted-foreground">{s.count} ({s.pct}%)</span>
-                    </div>
-                    <div className="bg-muted rounded-full h-2">
-                      <div className="bg-primary rounded-full h-2" style={{ width: `${s.pct}%` }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <CategoryPerformance />
           </div>
         </TabsContent>
 
@@ -525,51 +502,28 @@ const ProfileConsultant = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {[
                 { title: "Öne Çıkan Danışman", desc: "Ana sayfada ve arama sonuçlarında üst sıralarda görünün", price: "€—/hafta", icon: Star },
-                { title: "WhatsApp Tanıtımı", desc: "CorteQS Kanalında Tanıtım", price: "€19/tanıtım", icon: Megaphone },
                 { title: "Etkinlik Boost", desc: "Etkinliklerinizi platforma ve mail listelerine tanıtın", price: "€—/etkinlik", icon: TrendingUp },
+                { title: "Sosyal Medya Paketi", desc: "Sosyal medya hesaplarınızda profesyonel kampanya yönetimi", price: "$—/platform", icon: Megaphone },
+                { title: "Kategori Vitrini", desc: "Kategorinizde ilk 6 sırada gösterilerek daha fazla müşteriye ulaşın", price: "€—/hafta", icon: Crown },
               ].map((promo) => (
-                <div key={promo.title} className="border border-border rounded-xl p-4 hover:border-primary/30 hover:bg-primary/5 transition-colors">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <promo.icon className="h-4 w-4 text-primary" />
+                <div key={promo.title} className="relative border border-border rounded-xl p-4 overflow-hidden">
+                  <div className="opacity-60">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <promo.icon className="h-4 w-4 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-foreground text-sm">{promo.title}</h3>
+                        <p className="text-xs font-semibold text-primary">{promo.price}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-bold text-foreground text-sm">{promo.title}</h3>
-                      <p className="text-xs font-semibold text-primary">{promo.price}</p>
-                    </div>
+                    <p className="text-xs text-muted-foreground mb-3">{promo.desc}</p>
                   </div>
-                  <p className="text-xs text-muted-foreground mb-3">{promo.desc}</p>
-                  <Button variant="outline" size="sm" className="w-full">Satın Al</Button>
+                  <Button variant="outline" size="sm" className="w-full gap-1.5" disabled>
+                    <Lock className="h-3.5 w-3.5" /> Yakında
+                  </Button>
                 </div>
               ))}
-              <div className="border border-primary/30 rounded-xl p-4 bg-primary/5">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Megaphone className="h-4 w-4 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-foreground text-sm">Sosyal Medya Paketi</h3>
-                    <p className="text-xs font-semibold text-primary">$—/platform</p>
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground mb-3">Sosyal medya hesaplarınızda profesyonel kampanya yönetimi</p>
-                <SocialMediaCampaignDialog entityName={consultant.name} entityType="consultant" />
-              </div>
-
-              {/* Category Showcase */}
-              <div className="bg-card rounded-2xl p-5 border border-gold/30">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="bg-gold/10 p-2.5 rounded-full">
-                    <Crown className="h-5 w-5 text-gold" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-foreground text-sm">Kategori Vitrini</h3>
-                    <p className="text-xs font-semibold text-gold">€—/hafta</p>
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground mb-3">Kategorinizde ilk 6 sırada gösterilerek daha fazla müşteriye ulaşın</p>
-                <CategoryShowcasePurchase entityName={consultant.name} category={consultant.category} />
-              </div>
             </div>
           </div>
         </TabsContent>
