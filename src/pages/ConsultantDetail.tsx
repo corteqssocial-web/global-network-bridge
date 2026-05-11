@@ -114,7 +114,7 @@ const ConsultantDetail = () => {
                   <p className="text-xs text-muted-foreground font-body text-center mb-2">Görüşme Ücretleri</p>
                   <div className="flex gap-4 justify-center text-center">
                     <div>
-                      <p className="text-lg font-bold text-foreground">€30</p>
+                      <p className="text-lg font-bold text-foreground">€</p>
                       <p className="text-[10px] text-muted-foreground">Canlı / 30dk</p>
                     </div>
                     <div className="w-px bg-border" />
