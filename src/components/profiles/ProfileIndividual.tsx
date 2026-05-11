@@ -49,6 +49,11 @@ const ProfileIndividual = () => {
   const [uploadingKind, setUploadingKind] = useState<null | "cv" | "presentation">(null);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<any | null>(null);
+  const [activeTab, setActiveTab] = useState(initialTab);
+  const [isVolunteerMentor, setIsVolunteerMentor] = useState(false);
+  const [mentorTopics, setMentorTopics] = useState("");
+  const [mentorWeeklyHours, setMentorWeeklyHours] = useState("");
+  const [savingMentor, setSavingMentor] = useState(false);
 
   const user = {
     name: "Emre Aydın",
