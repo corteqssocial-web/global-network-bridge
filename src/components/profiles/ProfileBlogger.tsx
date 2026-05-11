@@ -448,27 +448,22 @@ const ProfileBlogger = () => {
                   <Settings className="h-5 w-5 text-primary" /> Tercihler
                 </h2>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium text-foreground text-sm">AI Twin Aktif</p>
-                      <p className="text-xs text-muted-foreground">Takipçileriniz AI Twin ile sohbet edebilsin</p>
+                  {[
+                    { title: "AI Twin Aktif", desc: "Takipçileriniz AI Twin ile sohbet edebilsin" },
+                    { title: "Canlı Görüşme Kabul Et", desc: "Randevu talepleri alın" },
+                    { title: "İşbirliği Teklifleri", desc: "Markalardan teklif almaya açık" },
+                  ].map((p) => (
+                    <div key={p.title} className="flex items-center justify-between opacity-70">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium text-foreground text-sm">{p.title}</p>
+                          <Badge variant="secondary" className="text-[10px] bg-gold/20 text-gold-foreground border-gold/30">Yakında</Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground">{p.desc}</p>
+                      </div>
+                      <Switch disabled />
                     </div>
-                    <Switch defaultChecked />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium text-foreground text-sm">Canlı Görüşme Kabul Et</p>
-                      <p className="text-xs text-muted-foreground">Randevu talepleri alın</p>
-                    </div>
-                    <Switch defaultChecked />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium text-foreground text-sm">İşbirliği Teklifleri</p>
-                      <p className="text-xs text-muted-foreground">Markalardan teklif almaya açık</p>
-                    </div>
-                    <Switch defaultChecked />
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>

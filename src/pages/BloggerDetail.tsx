@@ -128,12 +128,7 @@ const BloggerDetail = () => {
                 {/* Pricing */}
                 <div className="bg-muted/50 rounded-xl p-3 mb-1">
                   <p className="text-xs text-muted-foreground font-body text-center mb-2">Görüşme Ücretleri</p>
-                  <div className="flex gap-4 justify-center text-center">
-                    <div>
-                      <p className="text-lg font-bold text-foreground">€20</p>
-                      <p className="text-[10px] text-muted-foreground">Canlı / 30dk</p>
-                    </div>
-                    <div className="w-px bg-border" />
+                  <div className="flex justify-center text-center">
                     <div>
                       <p className="text-lg font-bold text-success">Ücretsiz</p>
                       <p className="text-[10px] text-muted-foreground">AI Twin / 10dk</p>
