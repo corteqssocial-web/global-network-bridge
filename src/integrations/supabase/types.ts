@@ -535,6 +535,8 @@ export type Database = {
           phone: string | null
           presentation_name: string | null
           presentation_path: string | null
+          profession: string | null
+          school: string | null
           updated_at: string
         }
         Insert: {
@@ -551,6 +553,8 @@ export type Database = {
           phone?: string | null
           presentation_name?: string | null
           presentation_path?: string | null
+          profession?: string | null
+          school?: string | null
           updated_at?: string
         }
         Update: {
@@ -567,6 +571,8 @@ export type Database = {
           phone?: string | null
           presentation_name?: string | null
           presentation_path?: string | null
+          profession?: string | null
+          school?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -672,6 +678,27 @@ export type Database = {
           updated_at?: string
           urgency?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_follows: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+          id?: string
         }
         Relationships: []
       }
