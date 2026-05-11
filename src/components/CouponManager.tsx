@@ -151,18 +151,27 @@ export const CouponManager = ({ businessName }: { businessName: string }) => {
                 <Badge variant={c.active ? "default" : "secondary"} className="text-xs">{c.active ? "Aktif" : "Pasif"}</Badge>
               </div>
               <p className="text-sm text-muted-foreground">{c.description}</p>
-              <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+              <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground flex-wrap">
                 <code className="bg-card px-2 py-0.5 rounded border border-border font-bold text-primary">{c.code}</code>
                 <span>Kullanım: {c.usedCount}/{c.usageLimit}</span>
-                <span>Son: {c.expires}</span>
+                {c.expires && <span>Son: {c.expires}</span>}
+                <Badge variant="outline" className="text-[10px]">{c.isFree ?? true ? "Ücretsiz" : `€${(c.price ?? 0).toFixed(2)}`}</Badge>
               </div>
             </div>
-            <Button variant="outline" size="sm" onClick={() => toggleCoupon(c.id)}>
-              {c.active ? "Durdur" : "Aktifleştir"}
-            </Button>
+            <div className="flex flex-col gap-1.5">
+              {c.active && (
+                <Button variant="outline" size="sm" className="gap-1" onClick={() => setPreviewCoupon(c)}>
+                  <ShoppingCart className="h-3.5 w-3.5" /> Satın Al (Önizle)
+                </Button>
+              )}
+              <Button variant="outline" size="sm" onClick={() => toggleCoupon(c.id)}>
+                {c.active ? "Durdur" : "Aktifleştir"}
+              </Button>
+            </div>
           </div>
         ))}
       </div>
+      <CouponCheckoutDialog coupon={previewCoupon} open={!!previewCoupon} onOpenChange={(o) => !o && setPreviewCoupon(null)} />
     </div>
   );
 };
