@@ -209,6 +209,32 @@ const Feed = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
+  // Load pending members when current user owns the cafe
+  useEffect(() => {
+    if (!cafe || !user || cafe.created_by !== user.id) {
+      setPendingMembers([]);
+      return;
+    }
+    (async () => {
+      const { data } = await supabase
+        .from("cafe_memberships" as any)
+        .select("id, user_id, answer")
+        .eq("cafe_id", cafe.id)
+        .eq("approved", false);
+      const rows = (data as any[]) || [];
+      if (rows.length === 0) {
+        setPendingMembers([]);
+        return;
+      }
+      const { data: profs } = await supabase
+        .from("profiles")
+        .select("id, full_name")
+        .in("id", rows.map((r) => r.user_id));
+      const nameMap = Object.fromEntries((profs || []).map((p: any) => [p.id, p.full_name]));
+      setPendingMembers(rows.map((r) => ({ ...r, full_name: nameMap[r.user_id] })));
+    })();
+  }, [cafe, user]);
+
   const toggleLike = async (post: FeedPost) => {
     if (!user && !demoMode) {
       toast({ title: "Beğenmek için giriş yapın", variant: "destructive" });
