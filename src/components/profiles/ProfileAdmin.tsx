@@ -3,8 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   Users, Building2, Calendar, BarChart3, ShieldCheck,
   AlertTriangle, CheckCircle, Clock, Eye, TrendingUp,
-  Settings, Globe, Megaphone, CreditCard, Ban, UserCheck, Star
+  Settings, Globe, Megaphone, CreditCard, Ban, UserCheck, Star, Sparkles
 } from "lucide-react";
+import BrandSettings from "@/components/admin/BrandSettings";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
