@@ -15,6 +15,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
 import DemoPageBanner from "@/components/DemoPageBanner";
+import DetailAuthLock from "@/components/DetailAuthLock";
 import PublicEventsList from "@/components/PublicEventsList";
 import { bloggers } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
