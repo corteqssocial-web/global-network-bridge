@@ -6,7 +6,7 @@ import { findOrgCategory, findOrgSubcategory } from "@/data/organizationCategori
 import {
   Users, MapPin, Globe, Calendar, Heart, Megaphone,
   TrendingUp, Settings, Bell, Mail, MessageSquare, Briefcase,
-  Plus, Star, Eye, BarChart3, FileText, ArrowLeft, Crown
+  Plus, Star, BarChart3, ArrowLeft, Crown
 } from "lucide-react";
 import JobListingsManager from "@/components/JobListingsManager";
 import SocialMediaCampaignDialog from "@/components/SocialMediaCampaignDialog";
