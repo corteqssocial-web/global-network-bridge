@@ -30,6 +30,8 @@ import NotificationsList from "@/components/NotificationsList";
 import SocialMediaInputs from "@/components/SocialMediaInputs";
 
 const ProfileAssociation = () => {
+  const { locked: gateLocked } = useProfileGate();
+  const [activeTab, setActiveTab] = useState<string>("events");
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<null | typeof upcomingEvents[0]>(null);
   const [profileData, setProfileData] = useState<AssociationProfileData>(loadAssociationProfile());
