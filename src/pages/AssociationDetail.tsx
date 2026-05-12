@@ -188,27 +188,31 @@ const AssociationDetail = () => {
                     </Button>
                   </>
                 )}
-                <Button variant="outline" className="gap-2 w-full">
-                  <Share2 className="h-4 w-4" /> Paylaş
-                </Button>
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(assoc.name + ', ' + assoc.city + ', ' + assoc.country)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="outline" className="gap-2 w-full">
-                    <MapPin className="h-4 w-4" /> Konum
-                  </Button>
-                </a>
-                <a
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(assoc.name + ', ' + assoc.city + ', ' + assoc.country)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="outline" className="gap-2 w-full">
-                    <Navigation className="h-4 w-4" /> Yol Tarifi
-                  </Button>
-                </a>
+                {user && (
+                  <>
+                    <Button variant="outline" className="gap-2 w-full">
+                      <Share2 className="h-4 w-4" /> Paylaş
+                    </Button>
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(assoc.name + ', ' + assoc.city + ', ' + assoc.country)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant="outline" className="gap-2 w-full">
+                        <MapPin className="h-4 w-4" /> Konum
+                      </Button>
+                    </a>
+                    <a
+                      href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(assoc.name + ', ' + assoc.city + ', ' + assoc.country)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant="outline" className="gap-2 w-full">
+                        <Navigation className="h-4 w-4" /> Yol Tarifi
+                      </Button>
+                    </a>
+                  </>
+                )}
               </div>
             </div>
           </div>
