@@ -175,6 +175,56 @@ const Onboarding = () => {
             ))}
           </div>
 
+          {selected && selected !== "user" && (
+            <Card className="mt-6 border-2 border-amber-400/60 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-amber-950/20 dark:via-orange-950/20 dark:to-rose-950/20 shadow-lg overflow-hidden">
+              <CardContent className="p-5">
+                <div className="flex items-start gap-3 mb-3">
+                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-sm">
+                    <Crown className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <h3 className="font-extrabold text-foreground">Founding 1000 — Kurucu Üye</h3>
+                      <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0">Sınırlı</Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Platformun ilk 1000 kurucu üyesinden biri ol. <strong className="text-foreground">Global tanınma</strong>, profilinde kalıcı kurucu rozeti ve özel kurucu indirimi:
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 mb-4 pl-1">
+                  <Badge variant="outline" className="gap-1 border-amber-400/60 bg-white/60 dark:bg-background/60">
+                    <Sparkles className="h-3 w-3 text-amber-500" /> 1 Yıl · 99 €
+                  </Badge>
+                  <Badge variant="outline" className="gap-1 border-amber-400/60 bg-white/60 dark:bg-background/60">
+                    🌍 Global tanınma
+                  </Badge>
+                  <Badge variant="outline" className="gap-1 border-amber-400/60 bg-white/60 dark:bg-background/60">
+                    👑 Kurucu rozeti
+                  </Badge>
+                </div>
+                <Button
+                  type="button"
+                  size="lg"
+                  disabled={foundingLoading || foundingDone}
+                  onClick={handleFoundingSignup}
+                  className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white border-0 shadow-md"
+                >
+                  {foundingDone ? (
+                    <><Check className="h-4 w-4 mr-2" /> Founding 1000 başvurun alındı</>
+                  ) : foundingLoading ? (
+                    "Kaydediliyor..."
+                  ) : (
+                    <><Crown className="h-4 w-4 mr-2" /> Beni Kaydet — Founding 1000</>
+                  )}
+                </Button>
+                <p className="text-[11px] text-muted-foreground mt-2 text-center">
+                  Başvurun platform yöneticisine iletilir, ödeme & onay sonrasında aktifleşir.
+                </p>
+              </CardContent>
+            </Card>
+          )}
+
           <Button
             className="w-full mt-6"
             size="lg"
