@@ -54,6 +54,8 @@ const dialFor = (country?: string | null) => (country && COUNTRY_DIAL[country]) 
 
 const ProfileBusiness = () => {
   const { user } = useAuth();
+  const { locked: gateLocked } = useProfileGate();
+  const [activeTab, setActiveTab] = useState<string>("listings");
   const [isVerified, setIsVerified] = useState(false);
   const [hiringMode, setHiringMode] = useState(false);
   const [verifiedReq, setVerifiedReq] = useState<{ status: string } | null>(null);
