@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PlatformMessageDialog from "@/components/messaging/PlatformMessageDialog";
+import DetailAuthLock from "@/components/DetailAuthLock";
 
 import { consultants } from "@/data/mock";
 import { useFollow } from "@/hooks/useFollow";
