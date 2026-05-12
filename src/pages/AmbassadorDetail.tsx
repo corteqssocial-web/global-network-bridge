@@ -99,7 +99,7 @@ const AmbassadorDetail = () => {
               <div className="flex flex-col gap-2 w-full sm:w-auto shrink-0">
                 <PlatformMessageButton recipientKind="ambassador" recipientSlug={ambassador.id} recipientName={ambassador.name} fullWidth />
                 <Button asChild className="bg-gold hover:bg-gold/90 text-primary-foreground gap-1.5">
-                  <a href="https://wa.me/491234567890" target="_blank" rel="noreferrer">
+                  <a href={`https://wa.me/${(ambassador.whatsapp || "").replace(/[^0-9]/g, "")}`} target="_blank" rel="noreferrer">
                     <MessageCircle className="h-4 w-4" /> WhatsApp'la Görüş
                   </a>
                 </Button>
