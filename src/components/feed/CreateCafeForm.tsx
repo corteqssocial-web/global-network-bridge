@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Coffee, Loader2, Linkedin } from "lucide-react";
+import { Coffee, Loader2, Linkedin, Globe2, MapPin, Ticket, Users } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,10 +15,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { allCountries, countryCities } from "@/data/countryCities";
+import { continents } from "@/data/continents";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { toast } from "@/hooks/use-toast";
+import { moderateCafeName } from "@/lib/cafeNameModeration";
 
 const THEME_SUGGESTIONS = [
   "IT",
@@ -30,13 +32,7 @@ const THEME_SUGGESTIONS = [
   "Genel",
 ];
 
-// Diaspora Passport: foreign (non-TR) verified phone number
-const hasDiasporaPassport = (phone: string | null | undefined) => {
-  if (!phone) return false;
-  const p = phone.replace(/\s+/g, "");
-  if (p.startsWith("+90") || p.startsWith("0090")) return false;
-  return p.startsWith("+") || p.startsWith("00");
-};
+type AudienceScope = "everyone" | "geo" | "referral";
 
 interface Props {
   trigger?: React.ReactNode;
@@ -46,18 +42,20 @@ interface Props {
 }
 
 const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false }: Props) => {
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const isPremium = useIsPremium();
   const navigate = useNavigate();
   const defaultDuration = ambassadorMode ? 6 : (isPremium ? 4 : 2);
   const [duration, setDuration] = useState<number>(defaultDuration);
-  const canOpenCafe = hasDiasporaPassport(profile?.phone);
 
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [theme, setTheme] = useState("Genel");
+  const [audienceScope, setAudienceScope] = useState<AudienceScope>("everyone");
+  const [continent, setContinent] = useState("");
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
+  const [referralCode, setReferralCode] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [extra, setExtra] = useState("");
   const [openEntry, setOpenEntry] = useState(true);
@@ -65,6 +63,7 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false }: Props) =
   const [submitting, setSubmitting] = useState(false);
 
   const cities = country ? countryCities[country] || [] : [];
+  const continentList = Object.keys(continents);
   const capacity = ambassadorMode ? 500 : (duration >= 4 ? 300 : 100);
 
   const submit = async () => {
@@ -72,20 +71,17 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false }: Props) =
       toast({ title: "Giriş yapmalısın", variant: "destructive" });
       return;
     }
-    if (!canOpenCafe) {
-      toast({
-        title: "Diaspora Pasaportu gerekli",
-        description: "Cafe açmak için yurt dışı (TR dışı) telefon numarası ile doğrulanmış olmalısın.",
-        variant: "destructive",
-      });
-      return;
-    }
-    if (!name.trim()) {
-      toast({ title: "Cafe adı zorunlu", variant: "destructive" });
+    const mod = moderateCafeName(name);
+    if (!mod.ok) {
+      toast({ title: "Cafe adı kabul edilmedi", description: mod.reason, variant: "destructive" });
       return;
     }
     if (!theme.trim()) {
       toast({ title: "Tema gir", variant: "destructive" });
+      return;
+    }
+    if (audienceScope === "referral" && !referralCode.trim()) {
+      toast({ title: "Davet kodu gir", description: "Sadece davet kodu olanlar katılabilsin diye bir kod tanımla.", variant: "destructive" });
       return;
     }
     if (!openEntry && !entryQuestion.trim()) {
@@ -101,26 +97,26 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false }: Props) =
     setSubmitting(true);
     const opens = new Date();
     const closes = new Date(opens.getTime() + duration * 60 * 60 * 1000);
-    const { data, error } = await supabase
-      .from("cafes" as any)
-      .insert({
-        name: name.trim(),
-        theme,
-        country: country || null,
-        city: city || null,
-        linkedin_url: linkedin.trim(),
-        extra_links: extra.trim() ? [extra.trim()] : [],
-        created_by: user.id,
-        opens_at: opens.toISOString(),
-        closes_at: closes.toISOString(),
-        duration_hours: duration,
-        kind: "community",
-        open_entry: openEntry,
-        entry_question: openEntry ? null : entryQuestion.trim(),
-        capacity,
-      })
-      .select("id")
-      .single();
+    const payload: any = {
+      name: name.trim(),
+      theme,
+      country: audienceScope === "geo" ? (country || null) : null,
+      city: audienceScope === "geo" ? (city || null) : null,
+      continent: audienceScope === "geo" ? (continent || null) : null,
+      audience_scope: audienceScope,
+      referral_code: audienceScope === "referral" ? referralCode.trim().toUpperCase() : null,
+      linkedin_url: linkedin.trim(),
+      extra_links: extra.trim() ? [extra.trim()] : [],
+      created_by: user.id,
+      opens_at: opens.toISOString(),
+      closes_at: closes.toISOString(),
+      duration_hours: duration,
+      kind: "community",
+      open_entry: openEntry,
+      entry_question: openEntry ? null : entryQuestion.trim(),
+      capacity,
+    };
+    const { data, error } = await supabase.from("cafes" as any).insert(payload).select("id").single();
 
     if (error) {
       setSubmitting(false);
@@ -141,6 +137,7 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false }: Props) =
     setExtra("");
     setEntryQuestion("");
     setOpenEntry(true);
+    setReferralCode("");
     toast({ title: "Cafe açıldı ☕", description: `${duration} saat · kapasite ${capacity}.` });
     onCreated?.();
     navigate(`/cadde/${cafeId}`);
@@ -155,21 +152,19 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false }: Props) =
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Coffee className="h-5 w-5 text-amber-600" /> Yeni Cafe Aç
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-3">
-          {!canOpenCafe && (
-            <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-2.5 text-xs text-destructive">
-              Cafe açmak için <strong>Diaspora Pasaportu</strong> gerekli (yurt dışı telefon numarası ile doğrulama). TR (+90) numaralı kullanıcılar cafe açamaz.
-            </div>
-          )}
           <div>
             <Label className="text-xs">Cafe Adı *</Label>
             <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Örn: Berlin Devs Cafe" maxLength={60} />
+            <p className="text-[10px] text-muted-foreground mt-1">
+              Parti, siyasi/dini referanslar, lider isimleri, küfür ve hakaret içeren adlar reddedilir.
+            </p>
           </div>
           <div>
             <Label className="text-xs">Tema</Label>
@@ -184,26 +179,82 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false }: Props) =
               {THEME_SUGGESTIONS.map((t) => <option key={t} value={t} />)}
             </datalist>
           </div>
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <Label className="text-xs">Ülke</Label>
-              <Select value={country} onValueChange={(v) => { setCountry(v); setCity(""); }}>
-                <SelectTrigger><SelectValue placeholder="Seç" /></SelectTrigger>
-                <SelectContent className="max-h-60">
-                  {allCountries.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                </SelectContent>
-              </Select>
+
+          {/* Audience scope */}
+          <div className="rounded-lg border border-border p-2.5 space-y-2">
+            <Label className="text-xs font-semibold">Kimler katılabilir?</Label>
+            <div className="grid grid-cols-3 gap-1.5">
+              {([
+                { v: "everyone" as const, icon: Users, label: "Herkes" },
+                { v: "geo" as const, icon: Globe2, label: "Coğrafya" },
+                { v: "referral" as const, icon: Ticket, label: "Davet kodu" },
+              ]).map(({ v, icon: Icon, label }) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setAudienceScope(v)}
+                  className={`flex flex-col items-center gap-1 rounded-md border px-2 py-2 text-[11px] font-medium transition-colors ${
+                    audienceScope === v
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border hover:border-primary/40"
+                  }`}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                  {label}
+                </button>
+              ))}
             </div>
-            <div>
-              <Label className="text-xs">Şehir</Label>
-              <Select value={city} onValueChange={setCity} disabled={!country}>
-                <SelectTrigger><SelectValue placeholder="Seç" /></SelectTrigger>
-                <SelectContent className="max-h-60">
-                  {cities.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
+
+            {audienceScope === "geo" && (
+              <div className="space-y-2 pt-1">
+                <div>
+                  <Label className="text-[11px] flex items-center gap-1"><Globe2 className="h-3 w-3" /> Kıta (opsiyonel)</Label>
+                  <Select value={continent} onValueChange={setContinent}>
+                    <SelectTrigger><SelectValue placeholder="Tüm kıtalar" /></SelectTrigger>
+                    <SelectContent className="max-h-60">
+                      {continentList.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Label className="text-[11px]">Ülke</Label>
+                    <Select value={country} onValueChange={(v) => { setCountry(v); setCity(""); }}>
+                      <SelectTrigger><SelectValue placeholder="Seç" /></SelectTrigger>
+                      <SelectContent className="max-h-60">
+                        {allCountries.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label className="text-[11px] flex items-center gap-1"><MapPin className="h-3 w-3" /> Şehir</Label>
+                    <Select value={city} onValueChange={setCity} disabled={!country}>
+                      <SelectTrigger><SelectValue placeholder="Seç" /></SelectTrigger>
+                      <SelectContent className="max-h-60">
+                        {cities.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {audienceScope === "referral" && (
+              <div className="pt-1">
+                <Label className="text-[11px] flex items-center gap-1"><Ticket className="h-3 w-3" /> Davet Kodu *</Label>
+                <Input
+                  value={referralCode}
+                  onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
+                  placeholder="Örn: BERLIN-DEV-2026"
+                  maxLength={32}
+                />
+                <p className="text-[10px] text-muted-foreground mt-1">
+                  Sadece bu kodu girenler cafe'ye katılabilir.
+                </p>
+              </div>
+            )}
           </div>
+
           <div>
             <Label className="text-xs flex items-center gap-1"><Linkedin className="h-3 w-3" /> LinkedIn URL (opsiyonel)</Label>
             <Input value={linkedin} onChange={(e) => setLinkedin(e.target.value)} placeholder="https://linkedin.com/in/..." />
@@ -254,7 +305,7 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false }: Props) =
             <strong className="text-foreground">{capacity} kişi</strong>{" "}
             {ambassadorMode ? "(Şehir Elçisi avantajı)" : (!isPremium && "(Premium: 4 saat / 300 kişi)")}
           </div>
-          <Button className="w-full" disabled={submitting || !canOpenCafe} onClick={submit}>
+          <Button className="w-full" disabled={submitting} onClick={submit}>
             {submitting && <Loader2 className="h-4 w-4 animate-spin mr-2" />} Cafe'yi Aç
           </Button>
         </div>
