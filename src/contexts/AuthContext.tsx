@@ -99,6 +99,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setProfile(null);
   };
 
+  const phone = profile?.phone ?? null;
+  const isGlobalDiaspora = !!phone && !phone.replace(/\s|-/g, "").startsWith("+90") && !phone.replace(/\s|-/g, "").startsWith("0090");
+  const profileComplete = !!(profile?.onboarding_completed && profile?.country && profile?.city && profile?.phone_verified);
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -107,6 +111,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       profile,
       accountType: profile?.account_type ?? null,
       onboardingCompleted: profile?.onboarding_completed ?? false,
+      profileComplete,
+      isGlobalDiaspora,
       signOut,
       refreshProfile,
     }}>
