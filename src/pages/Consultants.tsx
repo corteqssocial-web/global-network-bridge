@@ -470,19 +470,21 @@ const Consultants = () => {
 
                   return (
                     <div className="max-w-6xl mx-auto space-y-6">
-                      {/* Top row: 4 professional consultants */}
+                      {/* EN ÜSTTE: Şehir Elçileri + Gönüllü Mentörler (şehre göre) */}
+                      {(ambassadorCards.length + volunteerCardsFinal.length) > 0 && (
+                        <div className="pt-2">
+                          <p className="text-xs text-muted-foreground font-body mb-3 text-center uppercase tracking-wider">
+                            {city !== "all" ? `${city} · ` : ""}Şehir Elçileri & Gönüllü Mentörler
+                          </p>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {[...ambassadorCards, ...volunteerCardsFinal].map(renderCard)}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Profesyonel danışmanlar */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {professionalCards.map(renderCard)}
-                      </div>
-
-                      {/* Bottom row: Volunteer Mentor + City Ambassador (community) */}
-                      <div className="pt-2">
-                        <p className="text-xs text-muted-foreground font-body mb-3 text-center uppercase tracking-wider">
-                          Topluluk & Dayanışma
-                        </p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
-                          {communityCards.map(renderCard)}
-                        </div>
                       </div>
                     </div>
                   );
