@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Gift, X, ExternalLink, Landmark, Smartphone, Coffee, Check, Copy, ChevronDown, ChevronUp, Plane, Car, Bus, UserCheck } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Gift, X, ExternalLink, Landmark, Smartphone, Coffee, Check, Copy, ChevronDown, ChevronUp, Plane, Car, Bus, UserCheck, Lock } from "lucide-react";
 import WelcomePackOrderForm from "@/components/WelcomePackOrderForm";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface WelcomePackProps {
   userName: string;
