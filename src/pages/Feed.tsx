@@ -151,7 +151,7 @@ const Feed = () => {
       if (demoMode) return; // Don't fetch DB when in demo mode
       if (isDemoCafe) {
         // Inject mock posts as the "chat feed" of the demo cafe
-        setPosts(mockPosts.slice(0, 4) as any);
+        setPosts(mockCafeITPosts as any);
         setHasMore(false);
         setAuthorMap(
           Object.fromEntries(
