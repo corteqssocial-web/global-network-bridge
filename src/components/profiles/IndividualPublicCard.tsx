@@ -98,6 +98,12 @@ const IndividualPublicCard = ({
             )}
           </div>
 
+          {relocating && (relocating.country || relocating.city) && (
+            <Badge className="mt-2 gap-1 bg-amber-500/15 text-amber-700 border-amber-500/30">
+              <Plane className="h-3 w-3" /> Yakında taşınacak: {[relocating.city, relocating.country].filter(Boolean).join(", ")}
+            </Badge>
+          )}
+
           {worldMessage && (
             <div className="mt-3 rounded-xl border border-border bg-muted/30 px-3 py-2 text-sm text-foreground/90">
               <span className="text-xs font-semibold text-primary mr-2">Dünyaya Mesajım:</span>
