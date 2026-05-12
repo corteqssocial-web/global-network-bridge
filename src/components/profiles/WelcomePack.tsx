@@ -99,7 +99,12 @@ const WelcomePack = ({ userName, country, city, onDismiss }: WelcomePackProps) =
             <Gift className="h-4.5 w-4.5" />
           </div>
           <div>
-            <h2 className="text-base font-bold text-foreground">🎉 Hoş Geldin Paketi</h2>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="text-base font-bold text-foreground">🎉 Hoş Geldin Paketi</h2>
+              <Badge variant="outline" className="text-[10px] gap-1 border-amber-500/40 text-amber-600 bg-amber-500/5">
+                <Lock className="h-2.5 w-2.5" /> Yakında
+              </Badge>
+            </div>
             <p className="text-sm text-muted-foreground">
               Merhaba {firstName}! {city}, {country} için hazırlandı
             </p>
