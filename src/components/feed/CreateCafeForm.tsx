@@ -197,7 +197,7 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
             </div>
           </div>
           <div>
-            <Label className="text-xs flex items-center gap-1"><Linkedin className="h-3 w-3" /> LinkedIn URL *</Label>
+            <Label className="text-xs flex items-center gap-1"><Linkedin className="h-3 w-3" /> LinkedIn URL (opsiyonel)</Label>
             <Input value={linkedin} onChange={(e) => setLinkedin(e.target.value)} placeholder="https://linkedin.com/in/..." />
           </div>
           <div>
