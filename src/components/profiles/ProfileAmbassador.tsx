@@ -40,6 +40,7 @@ type AmbassadorEvent = {
 };
 
 const ProfileAmbassador = () => {
+  const { user } = useAuth();
   const [messageText, setMessageText] = useState("");
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<AmbassadorEvent | null>(null);
@@ -48,6 +49,19 @@ const ProfileAmbassador = () => {
     whatsappCtaEnabled: true,
     profilePublic: true,
   });
+  const [myCafes, setMyCafes] = useState<Array<{ id: string; name: string; theme: string; city: string | null; member_count: number; opens_at: string; closes_at: string }>>([]);
+
+  const loadCafes = async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from("cafes" as any)
+      .select("id,name,theme,city,member_count,opens_at,closes_at")
+      .eq("created_by", user.id)
+      .order("opens_at", { ascending: false });
+    if (data) setMyCafes(data as any);
+  };
+  useEffect(() => { loadCafes(); }, [user]);
+  const totalCafeVisitors = myCafes.reduce((s, c) => s + (c.member_count || 0), 0);
 
   // KPIs and lists are reset to zero/empty for launch — real values will be
   // populated from Stripe (transactions/payouts), events, profiles (onboarded users),
