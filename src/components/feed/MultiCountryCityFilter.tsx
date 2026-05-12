@@ -94,14 +94,17 @@ const MultiCountryCityFilter = ({
       <button
         type="button"
         onClick={pickKopru}
-        className={`w-full flex items-center justify-center gap-2 rounded-lg border px-3 py-2 text-xs font-bold transition-all ${
+        className={`w-full flex flex-col items-center justify-center gap-0.5 rounded-lg border px-3 py-2 transition-all ${
           isKopru
             ? "bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 text-white border-transparent shadow-sm"
             : "bg-card text-foreground border-border hover:border-primary/40"
         }`}
-        title="Herkese açık ortak cadde"
+        title="Taşınacaklar & Diaspora ile İş Yapanlar"
       >
-        🌉 Köprü — Herkese Serbest
+        <span className="text-xs font-bold">🌉 Köprü — Herkese Serbest</span>
+        <span className={`text-[10px] leading-tight ${isKopru ? "text-white/90" : "text-muted-foreground"}`}>
+          Taşınacaklar & Diaspora ile İş Yapanlar
+        </span>
       </button>
       <div className="flex flex-wrap items-center gap-2">
         {/* Continent picker */}
