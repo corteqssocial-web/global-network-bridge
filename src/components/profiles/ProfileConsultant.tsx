@@ -33,6 +33,7 @@ import NotificationsList from "@/components/NotificationsList";
 import SocialMediaInputs from "@/components/SocialMediaInputs";
 import ConsultantFeatureToggles from "@/components/profiles/ConsultantFeatureToggles";
 import { Sliders } from "lucide-react";
+import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
 
 const ProfileConsultant = () => {
   const { user } = useAuth();
@@ -539,7 +540,8 @@ const ProfileConsultant = () => {
           <JobListingsManager />
         </TabsContent>
 
-        <TabsContent value="settings" className="mt-6">
+        <TabsContent value="settings" className="mt-6 space-y-6">
+          <ProfileLocationPhoneSettings />
           {/* Profile Feature Toggles */}
           <div className="bg-card rounded-2xl border border-border p-6 shadow-card mb-6">
             <h2 className="text-xl font-bold text-foreground mb-1 flex items-center gap-2">

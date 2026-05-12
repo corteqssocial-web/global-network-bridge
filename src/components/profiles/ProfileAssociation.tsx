@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import EventManagePanel from "@/components/EventManagePanel";
 import AssociationSettingsForm, { loadAssociationProfile, type AssociationProfileData } from "@/components/profiles/AssociationSettingsForm";
+import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
 import { findOrgCategory, findOrgSubcategory } from "@/data/organizationCategories";
 import {
   Users, MapPin, Globe, Calendar, Heart, Megaphone,
@@ -342,6 +343,7 @@ const ProfileAssociation = () => {
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6 space-y-6">
+          <ProfileLocationPhoneSettings />
           <AssociationSettingsForm onSaved={(d) => setProfileData(d)} />
 
           <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
