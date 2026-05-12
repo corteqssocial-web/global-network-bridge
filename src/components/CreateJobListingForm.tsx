@@ -53,6 +53,7 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
   const [selectedPackage, setSelectedPackage] = useState(isEditing ? "basic" : "basic");
   const [boostToCountrySearch, setBoostToCountrySearch] = useState(false);
   const [boostEmailNotify, setBoostEmailNotify] = useState(false);
+  const [hideBusinessName, setHideBusinessName] = useState(false);
 
   const boostCosts = {
     countrySearch: 15,
