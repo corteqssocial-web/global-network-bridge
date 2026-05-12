@@ -97,11 +97,12 @@ const DiasporaPeopleSearch = () => {
       if (q && !(p.full_name || "").toLowerCase().includes(q.toLowerCase()) && !(p.profession || "").toLowerCase().includes(q.toLowerCase())) return false;
       if (country !== "all" && p.country !== country) return false;
       if (city !== "all" && p.city !== city) return false;
+      if (profession !== "all" && !(p.profession || "").toLowerCase().includes(profession.split(" ")[0].toLowerCase())) return false;
       if (filter === "job" && !p.job_seeking) return false;
       if (filter === "relocating" && !p.relocating_country) return false;
       return true;
     });
-  }, [people, q, country, city, filter]);
+  }, [people, q, country, city, profession, filter]);
 
   const visible = showAll ? filtered : filtered.slice(0, 5);
 
@@ -117,7 +118,7 @@ const DiasporaPeopleSearch = () => {
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-1.5">
+      <div className="grid grid-cols-3 gap-1.5">
         <Select value={country} onValueChange={(v) => { setCountry(v); setCity("all"); }}>
           <SelectTrigger className="h-7 text-[11px]"><SelectValue placeholder="Ülke" /></SelectTrigger>
           <SelectContent className="max-h-64">
@@ -132,6 +133,13 @@ const DiasporaPeopleSearch = () => {
           <SelectContent className="max-h-64">
             <SelectItem value="all">{country === "all" ? "Tüm Şehirler" : `Tüm Şehirler - ${country}`}</SelectItem>
             {cities.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+          </SelectContent>
+        </Select>
+        <Select value={profession} onValueChange={setProfession}>
+          <SelectTrigger className="h-7 text-[11px]"><SelectValue placeholder="Meslek" /></SelectTrigger>
+          <SelectContent className="max-h-64">
+            <SelectItem value="all">🎓 Tüm Meslekler</SelectItem>
+            {PROFESSIONS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
           </SelectContent>
         </Select>
       </div>
@@ -150,6 +158,16 @@ const DiasporaPeopleSearch = () => {
           onClick={() => setFilter("relocating")}
           className={`text-[10px] px-2 py-0.5 rounded-full border inline-flex items-center gap-0.5 ${filter === "relocating" ? "bg-amber-500 text-white border-amber-500" : "bg-card text-muted-foreground border-border hover:border-amber-500/40"}`}
         ><Plane className="h-2.5 w-2.5" /> Taşınacaklar</button>
+        {/* Meslek hızlı seçim chip'leri (top navigasyon) */}
+        <span className="mx-1 h-3 w-px bg-border" />
+        <GraduationCap className="h-3 w-3 text-muted-foreground" />
+        {["Yazılım & IT", "Sağlık (Doktor / Hemşire)", "Mühendislik", "Pazarlama & Satış", "Akademisyen / Araştırmacı"].map((p) => (
+          <button
+            key={p}
+            onClick={() => setProfession(profession === p ? "all" : p)}
+            className={`text-[10px] px-2 py-0.5 rounded-full border ${profession === p ? "bg-violet-500 text-white border-violet-500" : "bg-card text-muted-foreground border-border hover:border-violet-500/40"}`}
+          >{p.split(" ")[0]}</button>
+        ))}
       </div>
 
     </div>
