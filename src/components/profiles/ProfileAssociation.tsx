@@ -343,6 +343,7 @@ const ProfileAssociation = () => {
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6 space-y-6">
+          <ProfileLocationPhoneSettings />
           <AssociationSettingsForm onSaved={(d) => setProfileData(d)} />
 
           <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
