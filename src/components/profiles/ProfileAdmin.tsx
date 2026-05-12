@@ -194,7 +194,13 @@ const ProfileAdmin = () => {
       <Tabs defaultValue="approvals" className="w-full">
         <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
           <TabsTrigger value="approvals" className="gap-1.5"><Clock className="h-4 w-4" /> Onaylar</TabsTrigger>
+          <TabsTrigger value="founding" className="gap-1.5"><Crown className="h-4 w-4" /> Founding 1000{stats.foundingCount > 0 && <Badge variant="secondary" className="ml-1 h-4 px-1 text-[10px]">{stats.foundingCount}</Badge>}</TabsTrigger>
+          <TabsTrigger value="contact" className="gap-1.5"><Mail className="h-4 w-4" /> İletişim{stats.contactCount > 0 && <Badge variant="secondary" className="ml-1 h-4 px-1 text-[10px]">{stats.contactCount}</Badge>}</TabsTrigger>
           <TabsTrigger value="ambassadors" className="gap-1.5"><Star className="h-4 w-4" /> Elçi Başvuruları</TabsTrigger>
+          <TabsTrigger value="ambassadors-dash" className="gap-1.5"><Globe className="h-4 w-4" /> Elçi Yönetimi</TabsTrigger>
+          <TabsTrigger value="welcome-pack" className="gap-1.5"><Package className="h-4 w-4" /> Welcome Pack</TabsTrigger>
+          <TabsTrigger value="bloggers" className="gap-1.5"><PenLine className="h-4 w-4" /> Bloggerlar</TabsTrigger>
+          <TabsTrigger value="whatsapp" className="gap-1.5"><MessageSquare className="h-4 w-4" /> WhatsApp</TabsTrigger>
           <TabsTrigger value="reports" className="gap-1.5"><AlertTriangle className="h-4 w-4" /> Şikayetler</TabsTrigger>
           <TabsTrigger value="users" className="gap-1.5"><Users className="h-4 w-4" /> Kullanıcılar</TabsTrigger>
           <TabsTrigger value="revenue" className="gap-1.5"><CreditCard className="h-4 w-4" /> Gelir</TabsTrigger>
@@ -202,8 +208,89 @@ const ProfileAdmin = () => {
           <TabsTrigger value="brand" className="gap-1.5"><Sparkles className="h-4 w-4" /> Marka</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="brand" className="mt-6">
-          <BrandSettings />
+        <TabsContent value="brand" className="mt-6"><BrandSettings /></TabsContent>
+        <TabsContent value="ambassadors-dash" className="mt-6"><AmbassadorDashboard /></TabsContent>
+        <TabsContent value="welcome-pack" className="mt-6"><WelcomePackTracker /></TabsContent>
+        <TabsContent value="bloggers" className="mt-6"><VBloggerDashboard /></TabsContent>
+        <TabsContent value="whatsapp" className="mt-6"><WhatsAppLandingsModeration /></TabsContent>
+
+        {/* FOUNDING 1000 */}
+        <TabsContent value="founding" className="mt-6">
+          <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+            <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
+              <Crown className="h-5 w-5 text-amber-500" /> Founding 1000 Kayıtları
+              <Badge variant="secondary" className="ml-2">{foundingSignups.length}</Badge>
+            </h2>
+            {foundingSignups.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-8">Henüz kayıt yok.</p>
+            ) : (
+              <div className="space-y-3">
+                {foundingSignups.map((s) => (
+                  <div key={s.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50">
+                    <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
+                      <Crown className="h-5 w-5 text-amber-500" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-foreground">{s.full_name || s.email || s.user_id?.slice(0, 8)}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        {s.account_type} · {s.email || "—"} · {new Date(s.created_at).toLocaleDateString("tr-TR")}
+                      </p>
+                    </div>
+                    <Badge className={s.status === "approved" ? "bg-success/15 text-success" : s.status === "rejected" ? "bg-destructive/15 text-destructive" : "bg-gold/15 text-gold"}>
+                      {s.status === "approved" ? "Onaylı" : s.status === "rejected" ? "Reddedildi" : "Beklemede"}
+                    </Badge>
+                    {s.status === "pending" && (
+                      <div className="flex gap-2 shrink-0">
+                        <Button size="sm" className="gap-1" onClick={() => updateFoundingStatus(s.id, "approved")}><CheckCircle className="h-3 w-3" /> Onayla</Button>
+                        <Button variant="outline" size="sm" className="gap-1 text-destructive" onClick={() => updateFoundingStatus(s.id, "rejected")}><Ban className="h-3 w-3" /> Reddet</Button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </TabsContent>
+
+        {/* CONTACT MESSAGES */}
+        <TabsContent value="contact" className="mt-6">
+          <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+            <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
+              <Mail className="h-5 w-5 text-primary" /> İletişim Mesajları
+              <Badge variant="secondary" className="ml-2">{contactMessages.length}</Badge>
+            </h2>
+            {contactMessages.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-8">Henüz mesaj yok.</p>
+            ) : (
+              <div className="space-y-3">
+                {contactMessages.map((m) => (
+                  <div key={m.id} className="p-4 rounded-xl bg-muted/50 space-y-2">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-foreground">{m.full_name}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          <a href={`mailto:${m.email}`} className="hover:text-primary underline-offset-2 hover:underline">{m.email}</a>
+                          {(m.city || m.country) && <> · {[m.city, m.country].filter(Boolean).join(", ")}</>}
+                          {" · "}{new Date(m.created_at).toLocaleString("tr-TR")}
+                        </p>
+                      </div>
+                      <Badge className={m.status === "resolved" ? "bg-success/15 text-success" : "bg-primary/15 text-primary"}>
+                        {m.status === "resolved" ? "Çözüldü" : "Yeni"}
+                      </Badge>
+                    </div>
+                    {m.message && <p className="text-sm text-foreground whitespace-pre-wrap">{m.message}</p>}
+                    {m.status !== "resolved" && (
+                      <div className="flex gap-2 pt-1">
+                        <Button size="sm" variant="outline" className="gap-1" onClick={() => updateContactStatus(m.id, "resolved")}>
+                          <CheckCircle className="h-3 w-3" /> Çözüldü olarak işaretle
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </TabsContent>
 
         {/* APPROVALS */}
