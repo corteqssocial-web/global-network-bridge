@@ -12,6 +12,7 @@ import ProfileConsultant from "@/components/profiles/ProfileConsultant";
 import ProfileAdmin from "@/components/profiles/ProfileAdmin";
 import ProfileBlogger from "@/components/profiles/ProfileBlogger";
 import ProfileAmbassador from "@/components/profiles/ProfileAmbassador";
+import ProfileCompletePopup from "@/components/ProfileCompletePopup";
 
 const Profile = () => {
   const { user, loading, accountType, onboardingCompleted } = useAuth();
