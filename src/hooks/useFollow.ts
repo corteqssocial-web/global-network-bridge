@@ -28,6 +28,8 @@ const makeKey = (kind: string, id: string) => `${kind}:${id}`;
 export function useFollow() {
   const [map, setMap] = useState<FollowMap>(() => (typeof window !== "undefined" ? read() : {}));
   const { toast } = useToast();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const sync = () => setMap(read());
