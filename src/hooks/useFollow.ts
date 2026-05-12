@@ -48,6 +48,15 @@ export function useFollow() {
 
   const toggle = useCallback(
     (kind: string, id: string, name: string) => {
+      if (!user) {
+        toast({
+          title: "Giriş gerekli",
+          description: "Takip etmek için lütfen giriş yapın veya kayıt olun.",
+          variant: "destructive",
+        });
+        navigate("/auth");
+        return false;
+      }
       const key = makeKey(kind, id);
       const current = read();
       if (current[key]) {
