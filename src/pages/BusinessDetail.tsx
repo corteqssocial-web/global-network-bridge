@@ -275,10 +275,10 @@ const BusinessDetail = () => {
                   <Button
                     size="sm"
                     className="gap-1 bg-turquoise hover:bg-turquoise/90 text-primary-foreground"
-                    onClick={() => {
+                    onClick={requireAuth(() => {
                       markRealCouponPurchase();
                       toast({ title: "Kupon eklendi 🎁", description: `${freeCoupon.title} kuponlarınıza eklendi.` });
-                    }}
+                    })}
                   >
                     <Tag className="h-3.5 w-3.5" /> Kuponu Al
                   </Button>
