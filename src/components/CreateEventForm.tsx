@@ -283,47 +283,54 @@ const CreateEventForm = ({ onClose, onCreated, organizerType = "community" }: Cr
             />
           </div>
         </div>
+      </div>
+
+      {/* Online Bağlantı Linki — ayrı satır */}
+      <div>
+        <Label className="flex items-center gap-1.5 mb-1.5">
+          <LinkIcon className="h-4 w-4 text-primary" /> Online Bağlantı URL
+        </Label>
+        <Input
+          value={form.onlineUrl}
+          onChange={(e) => setForm({ ...form, onlineUrl: e.target.value })}
+          placeholder="https://zoom.us/... veya https://meet.google.com/..."
+        />
+        <p className="text-[11px] text-muted-foreground mt-1.5">
+          Online / Hybrid etkinlikler için yayın bağlantısı (Zoom, Google Meet, Teams, YouTube Live…).
+        </p>
+      </div>
+
+      {/* Ücret & Maks. Kişi */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <Label className="flex items-center gap-1.5 mb-1.5">
-            <LinkIcon className="h-4 w-4 text-primary" /> Online Bağlantı URL
+            <DollarSign className="h-4 w-4 text-primary" /> Ücret (€)
+            <Badge variant="outline" className="ml-1 text-[10px] h-4 px-1.5 border-primary/40 text-primary">Yakında</Badge>
           </Label>
           <Input
-            value={form.onlineUrl}
-            onChange={(e) => setForm({ ...form, onlineUrl: e.target.value })}
-            placeholder="https://zoom.us/..."
+            type="number"
+            value={form.price}
+            disabled
+            placeholder="0"
+            onChange={(e) =>
+              setForm({ ...form, price: Number(e.target.value) })
+            }
           />
+          <p className="text-[10px] text-muted-foreground mt-1 leading-tight">
+            Ücretli etkinlik tahsilatı yakında platform üzerinden (Stripe altyapısı) yapılacak ve tutar size aktarılacak.
+          </p>
         </div>
-        <div className="grid grid-cols-2 gap-2">
-          <div>
-            <Label className="flex items-center gap-1.5 mb-1.5">
-              <DollarSign className="h-4 w-4 text-primary" /> Ücret (€)
-              <Badge variant="outline" className="ml-1 text-[10px] h-4 px-1.5 border-primary/40 text-primary">Yakında</Badge>
-            </Label>
-            <Input
-              type="number"
-              value={form.price}
-              disabled
-              placeholder="0"
-              onChange={(e) =>
-                setForm({ ...form, price: Number(e.target.value) })
-              }
-            />
-            <p className="text-[10px] text-muted-foreground mt-1 leading-tight">
-              Ücretli etkinlik tahsilatı yakında platform üzerinden (Stripe altyapısı) yapılacak ve tutar size aktarılacak.
-            </p>
-          </div>
-          <div>
-            <Label className="flex items-center gap-1.5 mb-1.5">
-              <Users className="h-4 w-4 text-primary" /> Maks. Kişi
-            </Label>
-            <Input
-              type="number"
-              value={form.maxAttendees}
-              onChange={(e) =>
-                setForm({ ...form, maxAttendees: Number(e.target.value) })
-              }
-            />
-          </div>
+        <div>
+          <Label className="flex items-center gap-1.5 mb-1.5">
+            <Users className="h-4 w-4 text-primary" /> Maks. Kişi
+          </Label>
+          <Input
+            type="number"
+            value={form.maxAttendees}
+            onChange={(e) =>
+              setForm({ ...form, maxAttendees: Number(e.target.value) })
+            }
+          />
         </div>
       </div>
 
