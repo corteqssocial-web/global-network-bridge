@@ -77,7 +77,8 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
       const { data: prof } = await supabase.from("profiles").select("business_name, country, city").eq("id", auth.user.id).maybeSingle();
       const payload = {
         user_id: auth.user.id,
-        business_name: (prof as any)?.business_name || null,
+        business_name: hideBusinessName ? null : ((prof as any)?.business_name || null),
+        hide_business_name: hideBusinessName,
         title: formData.title || "Adsız İlan",
         department: formData.department || null,
         employment_type: formData.type,
