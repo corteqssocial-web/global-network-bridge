@@ -3,9 +3,15 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   Users, Building2, Calendar, BarChart3, ShieldCheck,
   AlertTriangle, CheckCircle, Clock, Eye, TrendingUp,
-  Settings, Globe, Megaphone, CreditCard, Ban, UserCheck, Star, Sparkles
+  Settings, Globe, Megaphone, CreditCard, Ban, UserCheck, Star, Sparkles,
+  Crown, Mail, Package, MessageSquare, PenLine, Coffee
 } from "lucide-react";
 import BrandSettings from "@/components/admin/BrandSettings";
+import RevenueTracker from "@/components/admin/RevenueTracker";
+import WelcomePackTracker from "@/components/admin/WelcomePackTracker";
+import VBloggerDashboard from "@/components/admin/VBloggerDashboard";
+import AmbassadorDashboard from "@/components/admin/AmbassadorDashboard";
+import WhatsAppLandingsModeration from "@/components/admin/WhatsAppLandingsModeration";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
