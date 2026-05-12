@@ -108,11 +108,16 @@ const chartTooltipStyle = {
 
 // Onboard sayıları (KPI takibi için) — mock veriden türetilen tahmini onboarding adedi.
 // Tüm kategorilerdeki onboarding kırılımını da hesaplıyoruz.
-const ambassadorsWithOnboarding = ambassadors.map((a) => {
+const ambassadorsWithOnboarding = ambassadors.map((a, idx) => {
   const total = Math.round(a.participants * 0.18 + a.couponSubscriptions * 0.6);
+  // Cafe performansı (mock): elçi başına açılan cafe sayısı ve toplam ziyaretçi
+  const cafesOpened = 3 + (idx % 5);
+  const cafeVisitors = Math.round(a.participants * 0.35 + cafesOpened * 22);
   return {
     ...a,
     onboarded: total,
+    cafesOpened,
+    cafeVisitors,
     onboardingBreakdown: {
       individuals: Math.round(total * 0.45),
       consultants: Math.round(total * 0.18),
