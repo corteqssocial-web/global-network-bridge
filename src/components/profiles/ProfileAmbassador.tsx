@@ -554,9 +554,6 @@ const ProfileAmbassador = () => {
                       <Button variant="outline" size="sm" className="w-full justify-start gap-1.5">
                         <MessageSquare className="h-3.5 w-3.5" /> WhatsApp CTA Test Et
                       </Button>
-                      <Button variant="outline" size="sm" className="w-full justify-start gap-1.5">
-                        <Video className="h-3.5 w-3.5" /> Canlı Görüş CTA Test Et
-                      </Button>
                     </div>
                   </div>
                 </div>
