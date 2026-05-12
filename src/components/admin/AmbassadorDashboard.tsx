@@ -166,6 +166,13 @@ const AmbassadorDashboard = () => {
       events: list.reduce((s, a) => s + a.events, 0),
       participants: list.reduce((s, a) => s + a.participants, 0),
       onboarded: list.reduce((s, a) => s + a.onboarded, 0),
+      onboardingBreakdown: {
+        individuals: list.reduce((s, a) => s + a.onboardingBreakdown.individuals, 0),
+        consultants: list.reduce((s, a) => s + a.onboardingBreakdown.consultants, 0),
+        businesses: list.reduce((s, a) => s + a.onboardingBreakdown.businesses, 0),
+        organizations: list.reduce((s, a) => s + a.onboardingBreakdown.organizations, 0),
+        bloggers: list.reduce((s, a) => s + a.onboardingBreakdown.bloggers, 0),
+      },
       totalRevenue: list.reduce((s, a) => s + a.totalRevenue, 0),
       corteqsRevenue: list.reduce((s, a) => s + a.corteqsRevenue, 0),
       subscriptionShare: list.reduce((s, a) => s + getSubscriptionShare(a), 0),
