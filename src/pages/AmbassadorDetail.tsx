@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DemoPageBanner from "@/components/DemoPageBanner";
 import { cityAmbassadors } from "@/data/mock";
+import { getAmbassadorScore, getScoreTier } from "@/lib/ambassadorScore";
 
 const AmbassadorDetail = () => {
   const { id } = useParams();
@@ -69,9 +70,25 @@ const AmbassadorDetail = () => {
                   <MapPin className="h-4 w-4" /> {ambassador.city}, {ambassador.country}
                 </p>
                 <p className="text-sm text-muted-foreground font-body mb-4">{ambassador.bio}</p>
-                <div className="flex items-center gap-2 mb-4">
-                  <Star className="h-4 w-4 text-gold fill-gold" />
-                  <span className="font-bold">{ambassador.rating}</span>
+                <div className="flex items-center gap-3 mb-4 flex-wrap">
+                  <div className="flex items-center gap-1">
+                    <Star className="h-4 w-4 text-gold fill-gold" />
+                    <span className="font-bold">{ambassador.rating}</span>
+                  </div>
+                  {(() => {
+                    const score = getAmbassadorScore({
+                      usersOnboarded: ambassador.usersOnboarded,
+                      eventsOrganized: ambassador.eventsOrganized,
+                      activeAdvisors: ambassador.activeAdvisors,
+                      rating: ambassador.rating,
+                    });
+                    const tier = getScoreTier(score);
+                    return (
+                      <Badge variant="outline" className={`gap-1 border-gold/40 bg-gold/5 ${tier.color}`} title="Performans Skoru (KPI bazlı)">
+                        <Target className="h-3.5 w-3.5" /> Skor {score} / 100 · {tier.label}
+                      </Badge>
+                    );
+                  })()}
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {ambassador.specialties.map((s) => (

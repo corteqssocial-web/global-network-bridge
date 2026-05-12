@@ -106,15 +106,23 @@ const chartTooltipStyle = {
   fontSize: 12,
 };
 
+// Onboard sayıları (KPI takibi için) — mock veriden türetilen tahmini onboarding adedi
+const ambassadorsWithOnboarding = ambassadors.map((a) => ({
+  ...a,
+  onboarded: Math.round(a.participants * 0.18 + a.couponSubscriptions * 0.6),
+}));
+
 const AmbassadorDashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("revenue");
   const [countryFilter, setCountryFilter] = useState("all");
+  const [cityFilter, setCityFilter] = useState("all");
   const [autoNewsletter, setAutoNewsletter] = useState(false);
 
   const filtered = useMemo(() => {
-    let list = [...ambassadors];
+    let list = [...ambassadorsWithOnboarding];
     if (countryFilter !== "all") list = list.filter(a => a.country === countryFilter);
+    if (cityFilter !== "all") list = list.filter(a => a.city === cityFilter);
     if (searchTerm) list = list.filter(a =>
       a.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       a.city.toLowerCase().includes(searchTerm.toLowerCase())
@@ -126,31 +134,39 @@ const AmbassadorDashboard = () => {
         case "country": return a.country.localeCompare(b.country);
         case "events": return b.events - a.events;
         case "participants": return b.participants - a.participants;
+        case "onboarded": return b.onboarded - a.onboarded;
         case "subscriptionShare": return getSubscriptionShare(b) - getSubscriptionShare(a);
         default: return b.totalRevenue - a.totalRevenue;
       }
     });
     return list;
-  }, [searchTerm, sortBy, countryFilter]);
+  }, [searchTerm, sortBy, countryFilter, cityFilter]);
 
   const top3 = useMemo(() => {
-    return [...ambassadors].sort((a, b) => b.totalRevenue - a.totalRevenue).slice(0, 3);
+    return [...ambassadorsWithOnboarding].sort((a, b) => b.totalRevenue - a.totalRevenue).slice(0, 3);
   }, []);
 
   const totals = useMemo(() => {
-    const list = countryFilter === "all" ? ambassadors : ambassadors.filter(a => a.country === countryFilter);
+    let list = ambassadorsWithOnboarding;
+    if (countryFilter !== "all") list = list.filter(a => a.country === countryFilter);
+    if (cityFilter !== "all") list = list.filter(a => a.city === cityFilter);
     return {
       ambassadors: list.length,
       events: list.reduce((s, a) => s + a.events, 0),
       participants: list.reduce((s, a) => s + a.participants, 0),
+      onboarded: list.reduce((s, a) => s + a.onboarded, 0),
       totalRevenue: list.reduce((s, a) => s + a.totalRevenue, 0),
       corteqsRevenue: list.reduce((s, a) => s + a.corteqsRevenue, 0),
       subscriptionShare: list.reduce((s, a) => s + getSubscriptionShare(a), 0),
       couponSubscriptions: list.reduce((s, a) => s + a.couponSubscriptions, 0),
     };
-  }, [countryFilter]);
+  }, [countryFilter, cityFilter]);
 
   const countries = [...new Set(ambassadors.map(a => a.country))];
+  const citiesForCountry = useMemo(() => {
+    const list = countryFilter === "all" ? ambassadors : ambassadors.filter(a => a.country === countryFilter);
+    return [...new Set(list.map(a => a.city))];
+  }, [countryFilter]);
 
   const countryPieData = useMemo(() => {
     const colors = ["hsl(var(--primary))", "hsl(var(--chart-1))", "hsl(var(--chart-2))", "hsl(var(--chart-3))", "hsl(var(--chart-4))", "hsl(var(--chart-5))"];
@@ -189,26 +205,35 @@ const AmbassadorDashboard = () => {
             <SelectItem value="country">Ülkeye Göre</SelectItem>
             <SelectItem value="events">Etkinlik Sayısına Göre</SelectItem>
             <SelectItem value="participants">Katılımcı Sayısına Göre</SelectItem>
+            <SelectItem value="onboarded">Onboarding Sayısına Göre</SelectItem>
             <SelectItem value="subscriptionShare">Sub. Share'e Göre</SelectItem>
           </SelectContent>
         </Select>
-        <Select value={countryFilter} onValueChange={setCountryFilter}>
+        <Select value={countryFilter} onValueChange={(v) => { setCountryFilter(v); setCityFilter("all"); }}>
           <SelectTrigger className="w-40 h-8 text-xs"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Tüm Ülkeler</SelectItem>
             {countries.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
           </SelectContent>
         </Select>
+        <Select value={cityFilter} onValueChange={setCityFilter}>
+          <SelectTrigger className="w-40 h-8 text-xs"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tüm Şehirler{countryFilter !== "all" ? ` - ${countryFilter}` : ""}</SelectItem>
+            {citiesForCountry.sort().map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+          </SelectContent>
+        </Select>
       </div>
 
       {/* KPI Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
         {[
           { label: "Elçi Sayısı", value: totals.ambassadors, icon: Flag, color: "text-primary" },
+          { label: "Onboarding", value: totals.onboarded.toLocaleString(), icon: Users, color: "text-emerald-500" },
           { label: "Etkinlikler", value: totals.events, icon: Calendar, color: "text-chart-1" },
           { label: "Katılımcılar", value: totals.participants.toLocaleString(), icon: Users, color: "text-chart-2" },
-          { label: "Toplam Gelir", value: `€${totals.totalRevenue.toLocaleString()}`, icon: DollarSign, color: "text-chart-3" },
-          { label: "CorteQS Geliri", value: `€${totals.corteqsRevenue.toLocaleString()}`, icon: TrendingUp, color: "text-chart-4" },
+          { label: "Toplam Ciro", value: `€${totals.totalRevenue.toLocaleString()}`, icon: DollarSign, color: "text-chart-3" },
+          { label: "CorteQS Kazancı", value: `€${totals.corteqsRevenue.toLocaleString()}`, icon: TrendingUp, color: "text-chart-4" },
           { label: "Sub. Share", value: `€${totals.subscriptionShare.toLocaleString()}`, icon: Crown, color: "text-chart-5" },
           { label: "Kupon Abonelik", value: totals.couponSubscriptions, icon: Tag, color: "text-primary" },
         ].map(kpi => {
@@ -344,14 +369,15 @@ const AmbassadorDashboard = () => {
         <CardContent className="p-0">
           <ScrollArea className="h-[480px]">
             {/* Header Row */}
-            <div className="grid grid-cols-9 gap-2 px-4 py-2 text-[10px] font-semibold text-muted-foreground border-b border-border bg-muted/30 sticky top-0">
+            <div className="grid grid-cols-10 gap-2 px-4 py-2 text-[10px] font-semibold text-muted-foreground border-b border-border bg-muted/30 sticky top-0">
               <span>İsim</span>
               <span>Şehir</span>
               <span>Ülke</span>
               <span className="text-center">Etkinlik</span>
+              <span className="text-center">Onboarding</span>
               <span className="text-center">Katılımcı</span>
-              <span className="text-right">T. Gelir</span>
-              <span className="text-right">CQ Geliri</span>
+              <span className="text-right">Ciro</span>
+              <span className="text-right">CQ Kazancı</span>
               <span className="text-center">Kupon Sub.</span>
               <span className="text-right">Sub. Share</span>
             </div>
@@ -359,11 +385,12 @@ const AmbassadorDashboard = () => {
               {filtered.map((amb) => {
                 const share = getSubscriptionShare(amb);
                 return (
-                  <div key={amb.id} className="grid grid-cols-9 gap-2 px-4 py-3 hover:bg-muted/30 transition-colors items-center text-xs">
+                  <div key={amb.id} className="grid grid-cols-10 gap-2 px-4 py-3 hover:bg-muted/30 transition-colors items-center text-xs">
                     <span className="font-medium text-foreground">{amb.name}</span>
                     <span className="text-muted-foreground">{amb.city}</span>
                     <span className="text-muted-foreground">{amb.country}</span>
                     <span className="text-center font-semibold text-foreground">{amb.events}</span>
+                    <span className="text-center font-semibold text-emerald-600">{amb.onboarded}</span>
                     <span className="text-center text-foreground">{amb.participants}</span>
                     <span className="text-right font-bold text-primary">€{amb.totalRevenue.toLocaleString()}</span>
                     <span className="text-right text-chart-3">€{amb.corteqsRevenue.toLocaleString()}</span>
