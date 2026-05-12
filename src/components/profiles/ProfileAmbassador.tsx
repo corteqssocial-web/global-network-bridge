@@ -532,7 +532,7 @@ const ProfileAmbassador = () => {
                     <p className="text-muted-foreground mb-1">Aktif CTA'lar</p>
                     <div className="flex flex-wrap gap-2">
                       {profileSettings.whatsappCtaEnabled && <Badge variant="secondary">WhatsApp</Badge>}
-                      {profileSettings.liveCallCtaEnabled && <Badge variant="secondary">Canlı Görüş</Badge>}
+                      
                       <Badge variant="outline">Profili Aç</Badge>
                     </div>
                   </div>
