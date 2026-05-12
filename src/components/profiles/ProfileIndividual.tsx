@@ -857,6 +857,7 @@ const ProfileIndividual = () => {
 
         <TabsContent value="settings" className="mt-6 space-y-6">
           <ProfileLocationPhoneSettings />
+          <ProfileSubcategoriesSettings accountTypeOverride="individual" />
           {/* Genel Profil */}
           <div className="bg-card rounded-2xl border border-border p-6 shadow-card mb-6">
             <h2 className="text-xl font-bold text-foreground mb-1 flex items-center gap-2">
