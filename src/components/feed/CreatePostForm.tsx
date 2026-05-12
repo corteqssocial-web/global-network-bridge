@@ -64,9 +64,9 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
     }
     if (!content.trim()) return;
 
-    // TR users always post locked to Türkiye cadde — they reach Global only via high engagement.
-    const finalCountry = isTR ? "Türkiye" : (globalOnly ? null : (country || null));
-    const finalCity = isTR ? (profileCity || city || null) : (globalOnly ? null : (city || null));
+    // Köprü is the open all-access cadde; otherwise TR users are locked to Türkiye.
+    const finalCountry = kopruOnly ? "Köprü" : (isTR ? "Türkiye" : (globalOnly ? null : (country || null)));
+    const finalCity = kopruOnly ? null : (isTR ? (profileCity || city || null) : (globalOnly ? null : (city || null)));
 
     setSubmitting(true);
     const { error } = await supabase.from("feed_posts").insert({
