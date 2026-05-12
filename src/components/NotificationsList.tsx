@@ -90,6 +90,7 @@ const NotificationsList = ({ accent = "primary" }: { accent?: "primary" | "gold"
 
   return (
     <div className="space-y-3">
+      <ConnectionRequestsInline />
       {unread > 0 && (
         <div className="flex justify-end">
           <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs" onClick={markAllRead}>
