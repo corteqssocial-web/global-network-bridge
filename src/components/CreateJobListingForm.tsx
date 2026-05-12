@@ -246,16 +246,19 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
             {listingPackages.map((pkg) => (
               <button
                 key={pkg.id}
-                onClick={() => setSelectedPackage(pkg.id)}
+                disabled={pkg.comingSoon}
+                onClick={() => !pkg.comingSoon && setSelectedPackage(pkg.id)}
                 className={`relative text-left p-5 rounded-xl border-2 transition-all ${
-                  selectedPackage === pkg.id
-                    ? "border-primary bg-primary/5"
-                    : "border-border hover:border-primary/30"
+                  pkg.comingSoon
+                    ? "border-border bg-muted/30 opacity-70 cursor-not-allowed"
+                    : selectedPackage === pkg.id
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:border-primary/30"
                 }`}
               >
                 {pkg.comingSoon && (
-                  <Badge variant="outline" className="absolute top-2 right-2 text-[10px] bg-gold/10 text-gold border-gold/30">
-                    Yakında
+                  <Badge className="absolute top-3 right-3 text-sm font-bold px-3 py-1 bg-gold text-white border-0 shadow-md gap-1">
+                    <Sparkles className="h-3.5 w-3.5" /> YAKINDA
                   </Badge>
                 )}
                 <div className="flex items-center justify-between mb-2">
