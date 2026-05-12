@@ -80,6 +80,24 @@ const ProfileIndividual = () => {
   const [mentorWeeklyHours, setMentorWeeklyHours] = useState("");
   const [savingMentor, setSavingMentor] = useState(false);
 
+  // Public profile editable fields (persisted in localStorage for now)
+  const [tagline, setTagline] = useState(() => localStorage.getItem("indiv_tagline") || "");
+  const [worldMessage, setWorldMessage] = useState(() => localStorage.getItem("indiv_world_message") || "");
+  const [birthDate, setBirthDate] = useState(() => localStorage.getItem("indiv_birth_date") || "");
+  const [pCountry, setPCountry] = useState(() => localStorage.getItem("indiv_country") || "Almanya");
+  const [pCity, setPCity] = useState(() => localStorage.getItem("indiv_city") || "Berlin");
+  const [hasPassport, setHasPassport] = useState(() => localStorage.getItem("indiv_corteqs_passport") === "true");
+  const cityChoices = countryCities[pCountry] || [];
+  const savePublicProfile = () => {
+    localStorage.setItem("indiv_tagline", tagline);
+    localStorage.setItem("indiv_world_message", worldMessage);
+    localStorage.setItem("indiv_birth_date", birthDate);
+    localStorage.setItem("indiv_country", pCountry);
+    localStorage.setItem("indiv_city", pCity);
+    localStorage.setItem("indiv_corteqs_passport", String(hasPassport));
+    toast({ title: "Profil güncellendi", description: "Genel profilin yenilendi." });
+  };
+
   const user = {
     name: "Emre Aydın",
     email: "emre@example.com",
