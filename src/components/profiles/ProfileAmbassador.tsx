@@ -40,7 +40,6 @@ const ProfileAmbassador = () => {
   const [viewingEvent, setViewingEvent] = useState<AmbassadorEvent | null>(null);
   const [profileSettings, setProfileSettings] = useState({
     whatsappCtaEnabled: true,
-    liveCallCtaEnabled: true,
     profilePublic: true,
   });
 
