@@ -74,8 +74,20 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-secondary-foreground/10 mt-6 pt-4 text-center text-sm text-secondary-foreground/40 font-body">
-          © 2026 CorteQS. Tüm hakları saklıdır.
+        <div className="border-t border-secondary-foreground/10 mt-6 pt-4 text-center text-xs text-secondary-foreground/40 font-body space-y-1.5">
+          <div>© 2026 CorteQS. Tüm hakları saklıdır.</div>
+          <div>
+            A{" "}
+            <a
+              href="https://www.qualtronsinclair.com/qs-networks"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-secondary-foreground/70 hover:text-primary transition-colors font-medium"
+            >
+              Qualtron Sinclair / UBT Venture
+              <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
         </div>
       </div>
     </footer>
