@@ -63,8 +63,9 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
     }
     if (!content.trim()) return;
 
-    const finalCountry = globalOnly ? null : (country || null);
-    const finalCity = globalOnly ? null : (city || null);
+    // TR users always post locked to Türkiye cadde — they reach Global only via high engagement.
+    const finalCountry = isTR ? "Türkiye" : (globalOnly ? null : (country || null));
+    const finalCity = isTR ? (profileCity || city || null) : (globalOnly ? null : (city || null));
 
     setSubmitting(true);
     const { error } = await supabase.from("feed_posts").insert({
