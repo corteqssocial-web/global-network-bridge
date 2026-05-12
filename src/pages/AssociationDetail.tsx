@@ -129,7 +129,11 @@ const AssociationDetail = () => {
 
               {/* CTAs */}
               <div className="flex flex-col gap-2 shrink-0 w-full md:w-auto">
-                {isHospital ? (
+                {!user ? (
+                  <Button variant="default" className="gap-2 w-full" onClick={() => navigate("/auth")}>
+                    <Lock className="h-4 w-4" /> Etkileşim için Giriş Yap
+                  </Button>
+                ) : isHospital ? (
                   <>
                     <Link to={`/hospital-appointment/${assoc.id}`}>
                       <Button variant="default" className="gap-2 w-full bg-turquoise hover:bg-turquoise/90 text-primary-foreground">
