@@ -51,14 +51,25 @@ const ProfileIndividual = () => {
   const [managingEvent, setManagingEvent] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState(initialTab);
   const [isVolunteerMentor, setIsVolunteerMentor] = useState(false);
-  const [showSocialOnProfile, setShowSocialOnProfile] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    const v = localStorage.getItem("individual_show_social_on_profile");
-    return v === null ? true : v === "true";
+  const [socialVisibility, setSocialVisibility] = useState<Record<string, boolean>>(() => {
+    if (typeof window === "undefined") return {};
+    try {
+      const raw = localStorage.getItem("individual_social_visibility");
+      if (raw) return JSON.parse(raw);
+    } catch {}
+    return {};
   });
   useEffect(() => {
-    localStorage.setItem("individual_show_social_on_profile", String(showSocialOnProfile));
-  }, [showSocialOnProfile]);
+    const handler = () => {
+      try {
+        const raw = localStorage.getItem("individual_social_visibility");
+        setSocialVisibility(raw ? JSON.parse(raw) : {});
+      } catch {}
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, []);
+  const linkedinVisible = socialVisibility.linkedin ?? true;
   const [mentorTopics, setMentorTopics] = useState("");
   const [mentorWeeklyHours, setMentorWeeklyHours] = useState("");
   const [savingMentor, setSavingMentor] = useState(false);
@@ -312,7 +323,7 @@ const ProfileIndividual = () => {
               <MapPin className="h-3 w-3" /> {user.city}, {user.country}
             </p>
             <div className="flex items-center gap-3 mt-2">
-              {linkedinUrl && showSocialOnProfile && (
+              {linkedinUrl && linkedinVisible && (
                 <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-sm text-primary hover:underline">
                   <Linkedin className="h-4 w-4" /> LinkedIn
                 </a>
@@ -913,20 +924,11 @@ const ProfileIndividual = () => {
               </div>
             </div>
           </div>
-          <div className="mt-6 space-y-3">
-            <div className="bg-card rounded-2xl border border-border p-4 flex items-center justify-between gap-4">
-              <div>
-                <div className="font-semibold text-foreground flex items-center gap-2">
-                  {showSocialOnProfile ? <Eye className="h-4 w-4 text-primary" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}
-                  Sosyal medya hesaplarını profilimde göster
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Kapatırsan eklediğin hesaplar kayıtlı kalır ama profilinde görünmez.
-                </p>
-              </div>
-              <Switch checked={showSocialOnProfile} onCheckedChange={setShowSocialOnProfile} />
-            </div>
-            <SocialMediaInputs defaultValues={{ linkedin: linkedinUrl }} />
+          <div className="mt-6">
+            <SocialMediaInputs
+              defaultValues={{ linkedin: linkedinUrl }}
+              storageKey="individual_social_visibility"
+            />
           </div>
         </TabsContent>
         {/* SERVICE REQUESTS */}
