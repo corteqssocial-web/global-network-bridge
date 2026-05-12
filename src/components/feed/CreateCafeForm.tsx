@@ -235,7 +235,7 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false }: Props) =
           <div className="rounded-lg bg-muted/50 p-2.5 text-xs text-muted-foreground">
             Süre: <strong className="text-foreground">{duration} saat</strong> · Kapasite:{" "}
             <strong className="text-foreground">{capacity} kişi</strong>{" "}
-            {!isPremium && "(Premium: 4 saat / 300 kişi)"}
+            {ambassadorMode ? "(Şehir Elçisi avantajı)" : (!isPremium && "(Premium: 4 saat / 300 kişi)")}
           </div>
           <Button className="w-full" disabled={submitting || !canOpenCafe} onClick={submit}>
             {submitting && <Loader2 className="h-4 w-4 animate-spin mr-2" />} Cafe'yi Aç
