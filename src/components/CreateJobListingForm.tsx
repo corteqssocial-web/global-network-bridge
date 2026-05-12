@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
-  Briefcase, MapPin, DollarSign, Clock, Users, Tag, FileText,
-  CreditCard, Star, TrendingUp, Megaphone, ArrowLeft, Check, Image
+  Briefcase, Tag, CreditCard, Check, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,8 +29,8 @@ interface CreateJobListingFormProps {
 
 const listingPackages = [
   { id: "basic", name: "Standart İlan", price: 0, duration: "30 gün", comingSoon: false, features: ["Arama sonuçlarında görünür", "30 gün yayında kalır"] },
-  { id: "premium", name: "Premium İlan", price: 27, duration: "45 gün", comingSoon: true, features: ["🔍 Ülke aramasında öne çıkar (+€15 değerinde)", "📧 AI eşleşmeli e-posta bildirimi (+€12 değerinde)", "45 gün yayında", "Öne çıkan rozeti"] },
-  { id: "featured", name: "Spotlight İlan", price: 59, duration: "60 gün", comingSoon: false, features: ["Ana sayfada görünür", "60 gün yayında", "AI eşleşmeli aday bildirimi", "Sosyal medya tanıtımı", "Detaylı başvuru raporu"] },
+  { id: "premium", name: "Premium İlan", price: 27, duration: "45 gün", comingSoon: true, features: ["45 gün yayında", "Öne çıkan rozeti"] },
+  { id: "featured", name: "Spotlight İlan", price: 59, duration: "60 gün", comingSoon: true, features: ["Ana sayfada görünür", "60 gün yayında", "AI eşleşmeli aday bildirimi", "Sosyal medya tanıtımı", "Detaylı başvuru raporu"] },
 ];
 
 const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListingFormProps) => {
@@ -50,20 +49,11 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
     requirements: editData?.requirements || "",
   });
 
-  const [selectedPackage, setSelectedPackage] = useState(isEditing ? "basic" : "basic");
-  const [boostToCountrySearch, setBoostToCountrySearch] = useState(false);
-  const [boostEmailNotify, setBoostEmailNotify] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState("basic");
   const [hideBusinessName, setHideBusinessName] = useState(false);
 
-  const boostCosts = {
-    countrySearch: 15,
-    emailNotify: 12,
-  };
-
   const packagePrice = listingPackages.find(p => p.id === selectedPackage)?.price || 0;
-  const totalPrice = packagePrice
-    + (boostToCountrySearch ? boostCosts.countrySearch : 0)
-    + (boostEmailNotify ? boostCosts.emailNotify : 0);
+  const totalPrice = packagePrice;
 
   const handleSubmit = async () => {
     const pkg = listingPackages.find((p) => p.id === selectedPackage);
@@ -256,16 +246,19 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
             {listingPackages.map((pkg) => (
               <button
                 key={pkg.id}
-                onClick={() => setSelectedPackage(pkg.id)}
+                disabled={pkg.comingSoon}
+                onClick={() => !pkg.comingSoon && setSelectedPackage(pkg.id)}
                 className={`relative text-left p-5 rounded-xl border-2 transition-all ${
-                  selectedPackage === pkg.id
-                    ? "border-primary bg-primary/5"
-                    : "border-border hover:border-primary/30"
+                  pkg.comingSoon
+                    ? "border-border bg-muted/30 opacity-70 cursor-not-allowed"
+                    : selectedPackage === pkg.id
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:border-primary/30"
                 }`}
               >
                 {pkg.comingSoon && (
-                  <Badge variant="outline" className="absolute top-2 right-2 text-[10px] bg-gold/10 text-gold border-gold/30">
-                    Yakında
+                  <Badge className="absolute top-3 right-3 text-sm font-bold px-3 py-1 bg-gold text-white border-0 shadow-md gap-1">
+                    <Sparkles className="h-3.5 w-3.5" /> YAKINDA
                   </Badge>
                 )}
                 <div className="flex items-center justify-between mb-2">
@@ -293,33 +286,6 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
         </div>
       )}
 
-      {/* Boost Options */}
-      <div className="bg-muted/50 rounded-xl p-5 space-y-4">
-        <h3 className="font-bold text-foreground flex items-center gap-2">
-          <TrendingUp className="h-4 w-4 text-turquoise" /> Ek Tanıtım Seçenekleri
-        </h3>
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-medium text-foreground text-sm">🔍 Ülke Aramasında Öne Çıkar</p>
-            <p className="text-xs text-muted-foreground">İlanınız ülke bazlı aramalarda üst sırada görünür</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-semibold text-primary">+€{boostCosts.countrySearch}</span>
-            <Switch checked={boostToCountrySearch} onCheckedChange={setBoostToCountrySearch} />
-          </div>
-        </div>
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-medium text-foreground text-sm">📧 AI Eşleşmeli E-posta Bildirimi</p>
-            <p className="text-xs text-muted-foreground">Profiline uygun adaylara otomatik bildirim gönderilir</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-semibold text-primary">+€{boostCosts.emailNotify}</span>
-            <Switch checked={boostEmailNotify} onCheckedChange={setBoostEmailNotify} />
-          </div>
-        </div>
-      </div>
-
       {/* Order Summary */}
       <div className="bg-card border-2 border-primary/20 rounded-xl p-5">
         <h3 className="font-bold text-foreground mb-3 flex items-center gap-2">
@@ -332,18 +298,6 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
               <span className="text-foreground font-medium">
                 {packagePrice === 0 ? "Ücretsiz" : `€${packagePrice}`}
               </span>
-            </div>
-          )}
-          {boostToCountrySearch && (
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Ülke Aramasında Öne Çıkar</span>
-              <span className="text-foreground font-medium">€{boostCosts.countrySearch}</span>
-            </div>
-          )}
-          {boostEmailNotify && (
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">AI E-posta Bildirimi</span>
-              <span className="text-foreground font-medium">€{boostCosts.emailNotify}</span>
             </div>
           )}
           <div className="border-t border-border pt-2 mt-2 flex justify-between">
