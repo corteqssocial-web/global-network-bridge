@@ -47,7 +47,7 @@ const PlatformMessageDialog = ({
   recipientUserId,
   defaultSubject,
 }: Props) => {
-  const { user, profile } = useAuth();
+  const { user, profile, accountType } = useAuth();
   const { toast } = useToast();
   const { isFollowed, isFollowAccepted, toggle } = useFollow();
   const navigate = useNavigate();
@@ -57,7 +57,8 @@ const PlatformMessageDialog = ({
 
   const following = isFollowed(recipientKind, recipientSlug);
   const accepted = isFollowAccepted(recipientKind, recipientSlug);
-  const canSend = following && accepted;
+  const isAdmin = accountType === "admin";
+  const canSend = isAdmin || (following && accepted);
 
   const goToAuth = () => {
     const redirect = encodeURIComponent(window.location.pathname + window.location.search);
