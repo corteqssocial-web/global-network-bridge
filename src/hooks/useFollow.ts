@@ -4,21 +4,22 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 
 const STORAGE_KEY = "corteqs:followed";
+const ACCEPTED_KEY = "corteqs:follow-accepted";
 
 type FollowMap = Record<string, true>;
 
-const read = (): FollowMap => {
+const read = (key: string): FollowMap => {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(key);
     return raw ? JSON.parse(raw) : {};
   } catch {
     return {};
   }
 };
 
-const write = (map: FollowMap) => {
+const write = (key: string, map: FollowMap) => {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
+    localStorage.setItem(key, JSON.stringify(map));
     window.dispatchEvent(new CustomEvent("corteqs:follow-change"));
   } catch {}
 };
@@ -26,13 +27,17 @@ const write = (map: FollowMap) => {
 const makeKey = (kind: string, id: string) => `${kind}:${id}`;
 
 export function useFollow() {
-  const [map, setMap] = useState<FollowMap>(() => (typeof window !== "undefined" ? read() : {}));
+  const [map, setMap] = useState<FollowMap>(() => (typeof window !== "undefined" ? read(STORAGE_KEY) : {}));
+  const [accepted, setAccepted] = useState<FollowMap>(() => (typeof window !== "undefined" ? read(ACCEPTED_KEY) : {}));
   const { toast } = useToast();
   const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const sync = () => setMap(read());
+    const sync = () => {
+      setMap(read(STORAGE_KEY));
+      setAccepted(read(ACCEPTED_KEY));
+    };
     window.addEventListener("storage", sync);
     window.addEventListener("corteqs:follow-change", sync as EventListener);
     return () => {
@@ -44,6 +49,12 @@ export function useFollow() {
   const isFollowed = useCallback(
     (kind: string, id: string) => !!map[makeKey(kind, id)],
     [map]
+  );
+
+  /** Whether the recipient has accepted our follow request — required to message. */
+  const isFollowAccepted = useCallback(
+    (kind: string, id: string) => !!accepted[makeKey(kind, id)],
+    [accepted]
   );
 
   const toggle = useCallback(
@@ -58,18 +69,32 @@ export function useFollow() {
         return false;
       }
       const key = makeKey(kind, id);
-      const current = read();
+      const current = read(STORAGE_KEY);
+      const acc = read(ACCEPTED_KEY);
       if (current[key]) {
         delete current[key];
-        write(current);
+        delete acc[key];
+        write(STORAGE_KEY, current);
+        write(ACCEPTED_KEY, acc);
         setMap({ ...current });
+        setAccepted({ ...acc });
         toast({ title: "Takipten çıkıldı", description: `${name} artık takip edilmiyor.` });
         return false;
       }
       current[key] = true;
-      write(current);
+      write(STORAGE_KEY, current);
       setMap({ ...current });
-      toast({ title: "Takip edildi! 🔔", description: `${name} yeni paylaşım yaptığında bildirim alacaksınız.` });
+      toast({
+        title: "Takip isteği gönderildi 🔔",
+        description: `${name} isteğini onayladığında mesaj gönderebileceksin.`,
+      });
+      // Mock: auto-accept after a short delay so the user can continue
+      setTimeout(() => {
+        const a = read(ACCEPTED_KEY);
+        a[key] = true;
+        write(ACCEPTED_KEY, a);
+        setAccepted({ ...a });
+      }, 2500);
       return true;
     },
     [toast, user, navigate]
@@ -85,5 +110,5 @@ export function useFollow() {
     [map]
   );
 
-  return { isFollowed, toggle, list };
+  return { isFollowed, isFollowAccepted, toggle, list };
 }
