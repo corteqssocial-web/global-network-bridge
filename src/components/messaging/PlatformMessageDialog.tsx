@@ -14,7 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { useFollow } from "@/hooks/useFollow";
+import { useConnections } from "@/hooks/useConnections";
 import { supabase } from "@/integrations/supabase/client";
 
 export type RecipientKind =
