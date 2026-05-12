@@ -268,6 +268,37 @@ const AmbassadorDashboard = () => {
         })}
       </div>
 
+      {/* Onboarding Kırılımı (filtreye göre toplam) */}
+      <Card className="border-border">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-semibold flex items-center gap-2 flex-wrap">
+            <Users className="h-4 w-4 text-emerald-500" /> Onboarding Kırılımı
+            <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-600">
+              Toplam: {totals.onboarded.toLocaleString()}
+            </Badge>
+            <span className="text-[10px] text-muted-foreground font-normal">
+              ({countryFilter === "all" ? "Tüm Ülkeler" : countryFilter}{cityFilter !== "all" ? ` · ${cityFilter}` : ""})
+            </span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            {[
+              { label: "Bireysel Kullanıcı", value: totals.onboardingBreakdown.individuals, color: "text-primary" },
+              { label: "Danışman", value: totals.onboardingBreakdown.consultants, color: "text-chart-2" },
+              { label: "İşletme", value: totals.onboardingBreakdown.businesses, color: "text-chart-3" },
+              { label: "Kuruluş", value: totals.onboardingBreakdown.organizations, color: "text-chart-4" },
+              { label: "Blogger / Vlogger", value: totals.onboardingBreakdown.bloggers, color: "text-chart-5" },
+            ].map((b) => (
+              <div key={b.label} className="rounded-lg border border-border bg-muted/20 p-3 text-center">
+                <p className={`text-lg font-bold ${b.color}`}>{b.value.toLocaleString()}</p>
+                <p className="text-[10px] text-muted-foreground mt-1 leading-tight">{b.label}</p>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Top 3 Ambassadors */}
       <Card className="border-border bg-gradient-to-r from-primary/5 to-chart-1/5">
         <CardHeader className="pb-2">
