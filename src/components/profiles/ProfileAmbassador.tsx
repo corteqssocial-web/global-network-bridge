@@ -2,9 +2,15 @@ import {
   Users, Calendar, TrendingUp, DollarSign, MapPin,
   Wallet, ArrowUpRight, ArrowDownRight, Clock, CreditCard,
   MessageSquare, Bell, Target, Star, Globe, Plus,
-  Send, CheckCircle, XCircle, Eye, Settings, ExternalLink, Video, ArrowLeft
+  Send, CheckCircle, XCircle, Eye, Settings, ExternalLink, Video, ArrowLeft,
+  Coffee
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CreateCafeForm from "@/components/feed/CreateCafeForm";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+
+import { supabase } from "@/integrations/supabase/client";
 import MessagesInbox from "@/components/messaging/MessagesInbox";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +19,7 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CreateEventForm from "@/components/CreateEventForm";
 import EventManagePanel from "@/components/EventManagePanel";
 import StripeTransactionsPanel, { type StripeTxn } from "@/components/StripeTransactionsPanel";
@@ -34,6 +40,7 @@ type AmbassadorEvent = {
 };
 
 const ProfileAmbassador = () => {
+  const { user } = useAuth();
   const [messageText, setMessageText] = useState("");
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<AmbassadorEvent | null>(null);
@@ -42,6 +49,19 @@ const ProfileAmbassador = () => {
     whatsappCtaEnabled: true,
     profilePublic: true,
   });
+  const [myCafes, setMyCafes] = useState<Array<{ id: string; name: string; theme: string; city: string | null; member_count: number; opens_at: string; closes_at: string }>>([]);
+
+  const loadCafes = async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from("cafes" as any)
+      .select("id,name,theme,city,member_count,opens_at,closes_at")
+      .eq("created_by", user.id)
+      .order("opens_at", { ascending: false });
+    if (data) setMyCafes(data as any);
+  };
+  useEffect(() => { loadCafes(); }, [user]);
+  const totalCafeVisitors = myCafes.reduce((s, c) => s + (c.member_count || 0), 0);
 
   // KPIs and lists are reset to zero/empty for launch — real values will be
   // populated from Stripe (transactions/payouts), events, profiles (onboarded users),
@@ -143,16 +163,103 @@ const ProfileAmbassador = () => {
 
       {/* Tabs */}
       <Tabs defaultValue="transactions" className="w-full">
-        <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
-          <TabsTrigger value="transactions" className="gap-1.5"><CreditCard className="h-4 w-4" /> İşlemlerim</TabsTrigger>
-          <TabsTrigger value="events" className="gap-1.5"><Calendar className="h-4 w-4" /> Etkinlikler</TabsTrigger>
-          <TabsTrigger value="onboarding" className="gap-1.5"><Users className="h-4 w-4" /> Onboarding</TabsTrigger>
-          <TabsTrigger value="messaging" className="gap-1.5"><MessageSquare className="h-4 w-4" /> Mesajlar</TabsTrigger>
-          <TabsTrigger value="performance" className="gap-1.5"><TrendingUp className="h-4 w-4" /> Performans</TabsTrigger>
-          <TabsTrigger value="community" className="gap-1.5"><Globe className="h-4 w-4" /> Topluluk</TabsTrigger>
+        <TabsList className="bg-gradient-to-r from-primary/10 via-turquoise/10 to-gold/10 border border-primary/20 w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1.5 shadow-sm">
+          <TabsTrigger value="transactions" className="gap-1.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><CreditCard className="h-4 w-4" /> İşlemlerim</TabsTrigger>
+          <TabsTrigger value="events" className="gap-1.5 data-[state=active]:bg-gold data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Calendar className="h-4 w-4" /> Etkinlikler</TabsTrigger>
+          <TabsTrigger value="cadde" className="gap-1.5 data-[state=active]:bg-amber-600 data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Coffee className="h-4 w-4" /> Cadde'de Cafe</TabsTrigger>
+          <TabsTrigger value="onboarding" className="gap-1.5 data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Users className="h-4 w-4" /> Onboarding</TabsTrigger>
+          <TabsTrigger value="messaging" className="gap-1.5 data-[state=active]:bg-turquoise data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><MessageSquare className="h-4 w-4" /> Mesajlar</TabsTrigger>
+          <TabsTrigger value="performance" className="gap-1.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><TrendingUp className="h-4 w-4" /> Performans</TabsTrigger>
+          <TabsTrigger value="community" className="gap-1.5 data-[state=active]:bg-turquoise data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Globe className="h-4 w-4" /> Topluluk</TabsTrigger>
           <NotificationsTabTrigger />
-          <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Profil Ayarları</TabsTrigger>
+          <TabsTrigger value="settings" className="gap-1.5 data-[state=active]:bg-foreground data-[state=active]:text-background data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Settings className="h-4 w-4" /> Profil Ayarları</TabsTrigger>
         </TabsList>
+
+        {/* CADDE'DE CAFE */}
+        <TabsContent value="cadde" className="mt-6 space-y-5">
+          <Card className="border-amber-500/30 bg-gradient-to-br from-amber-50/50 to-orange-50/30 dark:from-amber-950/20 dark:to-orange-950/10">
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
+                <div>
+                  <h3 className="font-bold text-foreground flex items-center gap-2">
+                    <Coffee className="h-5 w-5 text-amber-600" /> Cadde'de Cafe Aç
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Şehir Elçisi olarak <strong>6 saatlik</strong> uzun cafeler açabilir, topluluğunu canlı tutabilirsin.
+                  </p>
+                </div>
+                <CreateCafeForm
+                  ambassadorMode
+                  onCreated={loadCafes}
+                  trigger={
+                    <Button size="sm" className="gap-1.5 bg-amber-600 hover:bg-amber-700 text-white">
+                      <Plus className="h-4 w-4" /> 6 Saatlik Cafe Aç
+                    </Button>
+                  }
+                />
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="rounded-lg bg-card border border-border p-3 text-center">
+                  <p className="text-2xl font-bold text-amber-600">{myCafes.length}</p>
+                  <p className="text-[11px] text-muted-foreground">Açtığın Cafe</p>
+                </div>
+                <div className="rounded-lg bg-card border border-border p-3 text-center">
+                  <p className="text-2xl font-bold text-primary">{totalCafeVisitors}</p>
+                  <p className="text-[11px] text-muted-foreground">Toplam Ziyaretçi</p>
+                </div>
+                <div className="rounded-lg bg-card border border-border p-3 text-center">
+                  <p className="text-2xl font-bold text-success">6h</p>
+                  <p className="text-[11px] text-muted-foreground">Süre Avantajı</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {myCafes.length === 0 ? (
+            <EmptyDashboardState
+              icon={Coffee}
+              title="Henüz cafe açmadın"
+              description="Yukarıdaki '6 Saatlik Cafe Aç' butonu ile şehrinde tematik bir cafe başlat. Açılan cafe'ler ve ziyaretçi sayıları burada listelenir."
+            />
+          ) : (
+            <Card className="border-border">
+              <CardContent className="p-0">
+                <div className="px-4 py-3 border-b border-border">
+                  <h4 className="font-semibold text-foreground text-sm">Açtığın Cafeler</h4>
+                </div>
+                <div className="divide-y divide-border">
+                  {myCafes.map((c) => {
+                    const isLive = new Date(c.closes_at) > new Date();
+                    return (
+                      <Link key={c.id} to={`/cadde/${c.id}`} className="flex items-center justify-between px-4 py-3 hover:bg-muted/30 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                            <Coffee className="h-4 w-4 text-amber-600" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-foreground text-sm">{c.name}</p>
+                            <p className="text-[11px] text-muted-foreground">
+                              {c.theme} {c.city ? `· ${c.city}` : ""} · {new Date(c.opens_at).toLocaleDateString("tr-TR")}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <Badge variant={isLive ? "default" : "secondary"} className={isLive ? "bg-success text-white" : ""}>
+                            {isLive ? "Canlı" : "Bitti"}
+                          </Badge>
+                          <div className="text-right">
+                            <p className="text-sm font-bold text-foreground">{c.member_count}</p>
+                            <p className="text-[10px] text-muted-foreground">ziyaretçi</p>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
 
         {/* TRANSACTIONS (Stripe) */}
         <TabsContent value="transactions" className="mt-6">

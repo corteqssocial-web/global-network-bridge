@@ -41,13 +41,15 @@ const hasDiasporaPassport = (phone: string | null | undefined) => {
 interface Props {
   trigger?: React.ReactNode;
   onCreated?: () => void;
+  /** Ambassadors get an extended 6-hour slot with larger capacity */
+  ambassadorMode?: boolean;
 }
 
-const CreateCafeForm = ({ trigger, onCreated }: Props) => {
+const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false }: Props) => {
   const { user, profile } = useAuth();
   const isPremium = useIsPremium();
   const navigate = useNavigate();
-  const duration = isPremium ? 4 : 2;
+  const duration = ambassadorMode ? 6 : (isPremium ? 4 : 2);
   const canOpenCafe = hasDiasporaPassport(profile?.phone);
 
   const [open, setOpen] = useState(false);
@@ -62,7 +64,7 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
   const [submitting, setSubmitting] = useState(false);
 
   const cities = country ? countryCities[country] || [] : [];
-  const capacity = duration >= 4 ? 300 : 100;
+  const capacity = ambassadorMode ? 500 : (duration >= 4 ? 300 : 100);
 
   const submit = async () => {
     if (!user) {
@@ -233,7 +235,7 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
           <div className="rounded-lg bg-muted/50 p-2.5 text-xs text-muted-foreground">
             Süre: <strong className="text-foreground">{duration} saat</strong> · Kapasite:{" "}
             <strong className="text-foreground">{capacity} kişi</strong>{" "}
-            {!isPremium && "(Premium: 4 saat / 300 kişi)"}
+            {ambassadorMode ? "(Şehir Elçisi avantajı)" : (!isPremium && "(Premium: 4 saat / 300 kişi)")}
           </div>
           <Button className="w-full" disabled={submitting || !canOpenCafe} onClick={submit}>
             {submitting && <Loader2 className="h-4 w-4 animate-spin mr-2" />} Cafe'yi Aç

@@ -11,7 +11,7 @@ import {
 import {
   Flag, Users, Calendar, DollarSign, TrendingUp, Trophy, Crown,
   ArrowUpRight, Search, Mail, Send, Tag, Globe, MapPin, Star,
-  Ticket, Gift, BarChart3, Megaphone
+  Ticket, Gift, BarChart3, Megaphone, Coffee
 } from "lucide-react";
 import {
   BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area,
@@ -108,11 +108,16 @@ const chartTooltipStyle = {
 
 // Onboard sayıları (KPI takibi için) — mock veriden türetilen tahmini onboarding adedi.
 // Tüm kategorilerdeki onboarding kırılımını da hesaplıyoruz.
-const ambassadorsWithOnboarding = ambassadors.map((a) => {
+const ambassadorsWithOnboarding = ambassadors.map((a, idx) => {
   const total = Math.round(a.participants * 0.18 + a.couponSubscriptions * 0.6);
+  // Cafe performansı (mock): elçi başına açılan cafe sayısı ve toplam ziyaretçi
+  const cafesOpened = 3 + (idx % 5);
+  const cafeVisitors = Math.round(a.participants * 0.35 + cafesOpened * 22);
   return {
     ...a,
     onboarded: total,
+    cafesOpened,
+    cafeVisitors,
     onboardingBreakdown: {
       individuals: Math.round(total * 0.45),
       consultants: Math.round(total * 0.18),
@@ -166,6 +171,8 @@ const AmbassadorDashboard = () => {
       events: list.reduce((s, a) => s + a.events, 0),
       participants: list.reduce((s, a) => s + a.participants, 0),
       onboarded: list.reduce((s, a) => s + a.onboarded, 0),
+      cafesOpened: list.reduce((s, a) => s + a.cafesOpened, 0),
+      cafeVisitors: list.reduce((s, a) => s + a.cafeVisitors, 0),
       onboardingBreakdown: {
         individuals: list.reduce((s, a) => s + a.onboardingBreakdown.individuals, 0),
         consultants: list.reduce((s, a) => s + a.onboardingBreakdown.consultants, 0),
@@ -299,6 +306,42 @@ const AmbassadorDashboard = () => {
         </CardContent>
       </Card>
 
+      {/* Cafe Performansı (Cadde) */}
+      <Card className="border-amber-500/30 bg-gradient-to-r from-amber-50/50 to-orange-50/30 dark:from-amber-950/20 dark:to-orange-950/10">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-semibold flex items-center gap-2 flex-wrap">
+            <Coffee className="h-4 w-4 text-amber-600" /> Şehir Elçileri Cafe Performansı
+            <Badge variant="outline" className="text-[10px] border-amber-500/40 text-amber-700">
+              Toplam {totals.cafesOpened} cafe · {totals.cafeVisitors.toLocaleString()} ziyaretçi
+            </Badge>
+            <span className="text-[10px] text-muted-foreground font-normal">
+              ({countryFilter === "all" ? "Tüm Ülkeler" : countryFilter}{cityFilter !== "all" ? ` · ${cityFilter}` : ""})
+            </span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="rounded-lg bg-card border border-border p-3 text-center">
+              <Coffee className="h-4 w-4 text-amber-600 mx-auto mb-1" />
+              <p className="text-2xl font-bold text-amber-700">{totals.cafesOpened}</p>
+              <p className="text-[11px] text-muted-foreground">Açılan Cafe</p>
+            </div>
+            <div className="rounded-lg bg-card border border-border p-3 text-center">
+              <Users className="h-4 w-4 text-primary mx-auto mb-1" />
+              <p className="text-2xl font-bold text-primary">{totals.cafeVisitors.toLocaleString()}</p>
+              <p className="text-[11px] text-muted-foreground">Toplam Ziyaretçi</p>
+            </div>
+            <div className="rounded-lg bg-card border border-border p-3 text-center">
+              <TrendingUp className="h-4 w-4 text-success mx-auto mb-1" />
+              <p className="text-2xl font-bold text-success">
+                {totals.cafesOpened > 0 ? Math.round(totals.cafeVisitors / totals.cafesOpened) : 0}
+              </p>
+              <p className="text-[11px] text-muted-foreground">Cafe Başına Ort. Ziyaretçi</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Top 3 Ambassadors */}
       <Card className="border-border bg-gradient-to-r from-primary/5 to-chart-1/5">
         <CardHeader className="pb-2">
@@ -418,13 +461,15 @@ const AmbassadorDashboard = () => {
         <CardContent className="p-0">
           <ScrollArea className="h-[480px]">
             {/* Header Row */}
-            <div className="grid grid-cols-10 gap-2 px-4 py-2 text-[10px] font-semibold text-muted-foreground border-b border-border bg-muted/30 sticky top-0">
+            <div className="grid grid-cols-12 gap-2 px-4 py-2 text-[10px] font-semibold text-muted-foreground border-b border-border bg-muted/30 sticky top-0">
               <span>İsim</span>
               <span>Şehir</span>
               <span>Ülke</span>
               <span className="text-center">Etkinlik</span>
               <span className="text-center">Onboarding</span>
               <span className="text-center">Katılımcı</span>
+              <span className="text-center">Cafe</span>
+              <span className="text-center">Cafe Ziy.</span>
               <span className="text-right">Ciro</span>
               <span className="text-right">CQ Kazancı</span>
               <span className="text-center">Kupon Sub.</span>
@@ -436,13 +481,17 @@ const AmbassadorDashboard = () => {
                 const ob = amb.onboardingBreakdown;
                 return (
                   <div key={amb.id} className="px-4 py-3 hover:bg-muted/30 transition-colors">
-                    <div className="grid grid-cols-10 gap-2 items-center text-xs">
+                    <div className="grid grid-cols-12 gap-2 items-center text-xs">
                       <span className="font-medium text-foreground">{amb.name}</span>
                       <span className="text-muted-foreground">{amb.city}</span>
                       <span className="text-muted-foreground">{amb.country}</span>
                       <span className="text-center font-semibold text-foreground">{amb.events}</span>
                       <span className="text-center font-semibold text-emerald-600">{amb.onboarded}</span>
                       <span className="text-center text-foreground">{amb.participants}</span>
+                      <span className="text-center font-semibold text-amber-600 inline-flex items-center justify-center gap-1">
+                        <Coffee className="h-3 w-3" />{amb.cafesOpened}
+                      </span>
+                      <span className="text-center text-amber-700">{amb.cafeVisitors}</span>
                       <span className="text-right font-bold text-primary">€{amb.totalRevenue.toLocaleString()}</span>
                       <span className="text-right text-chart-3">€{amb.corteqsRevenue.toLocaleString()}</span>
                       <span className="text-center">
