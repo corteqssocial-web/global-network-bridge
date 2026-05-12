@@ -50,6 +50,10 @@ const Associations = () => {
     const matchesSearch = !q || [a.name, a.type, a.city, a.country, (a as any).description ?? ""]
       .filter(Boolean).join(" ").toLowerCase().includes(q);
     return matchesCountry && matchesCity && matchesType && matchesSearch;
+  }).sort((a, b) => {
+    const isDiplA = ["Büyükelçilik", "Konsolosluk"].includes(a.type) ? 0 : 1;
+    const isDiplB = ["Büyükelçilik", "Konsolosluk"].includes(b.type) ? 0 : 1;
+    return isDiplA - isDiplB;
   });
 
   const typeColors: Record<string, string> = {
