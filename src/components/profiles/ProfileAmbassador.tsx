@@ -79,20 +79,10 @@ const ProfileAmbassador = () => {
 
   return (
     <>
-      {/* Ambassador header */}
-      <div className="bg-card rounded-2xl border border-gold/30 p-6 md:p-8 shadow-card mb-8">
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-gold/15 flex items-center justify-center shrink-0">
-            <Star className="h-8 w-8 text-gold" />
-          </div>
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-              Şehir Elçisi Paneli
-              <Badge className="bg-gold/15 text-gold border-gold/30">Berlin</Badge>
-            </h1>
-            <p className="text-muted-foreground">Topluluk, performans, etkinlik ve gelir yönetimi</p>
-          </div>
-        </div>
+      {/* City badge strip */}
+      <div className="mb-8 flex items-center gap-2">
+        <Badge className="bg-gold/15 text-gold border-gold/30 gap-1.5"><Star className="h-3.5 w-3.5" /> Berlin</Badge>
+        <span className="text-xs text-muted-foreground">Topluluk, performans, etkinlik ve gelir yönetimi</span>
       </div>
 
       {/* KPI Cards */}
