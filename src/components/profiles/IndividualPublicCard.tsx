@@ -106,7 +106,7 @@ const IndividualPublicCard = ({
 
           {worldMessage && (
             <div className="mt-3 rounded-xl border border-border bg-muted/30 px-3 py-2 text-sm text-foreground/90">
-              <span className="text-xs font-semibold text-primary mr-2">Dünyaya Mesajım:</span>
+              <span className="text-xs font-semibold text-primary mr-2">Profil Mesajım:</span>
               {worldMessage}
             </div>
           )}
