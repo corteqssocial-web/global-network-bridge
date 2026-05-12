@@ -112,6 +112,8 @@ const ProfileAmbassador = () => {
         ))}
       </div>
 
+      <AmbassadorReferralCard />
+
       <div className="mb-6"><CorBotPromoBanner /></div>
 
       {/* Tabs */}
