@@ -107,6 +107,7 @@ const Feed = () => {
   const [hasMore, setHasMore] = useState(true);
   const [authorMap, setAuthorMap] = useState<Record<string, { full_name: string | null; avatar_url: string | null }>>({});
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
+  const [reactions, setReactions] = useState<Record<string, { thumb: number; laugh: number; party: number; mine: Set<string> }>>({});
   const [openComments, setOpenComments] = useState<Set<string>>(new Set());
   const [commentsMap, setCommentsMap] = useState<Record<string, { id: string; author: string; text: string; created_at: string }[]>>({});
   const [commentDrafts, setCommentDrafts] = useState<Record<string, string>>({});
