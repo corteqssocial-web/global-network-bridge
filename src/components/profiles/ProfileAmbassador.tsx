@@ -400,42 +400,21 @@ const ProfileAmbassador = () => {
             <Card className="border-border">
               <CardContent className="p-6">
                 <h3 className="font-bold text-foreground mb-4 flex items-center gap-2"><TrendingUp className="h-5 w-5 text-primary" /> Haftalık Performans</h3>
-                <div className="space-y-4">
-                  {[
-                    { label: "Yeni Kullanıcı", current: 8, target: 15 },
-                    { label: "Danışman Eşleşme", current: 3, target: 5 },
-                    { label: "Etkinlik Katılım", current: 22, target: 30 },
-                    { label: "WhatsApp Aktivite", current: 85, target: 100 },
-                  ].map((m, i) => (
-                    <div key={i}>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="text-foreground">{m.label}</span>
-                        <span className="text-muted-foreground">{m.current}/{m.target}</span>
-                      </div>
-                      <Progress value={(m.current / m.target) * 100} className="h-2" />
-                    </div>
-                  ))}
-                </div>
+                <EmptyDashboardState
+                  icon={TrendingUp}
+                  title="Henüz veri yok"
+                  description="Yeni kullanıcı kayıtları, danışman eşleşmeleri ve etkinlik katılımları geldikçe haftalık performans grafiği burada görünür."
+                />
               </CardContent>
             </Card>
             <Card className="border-border">
               <CardContent className="p-6">
                 <h3 className="font-bold text-foreground mb-4 flex items-center gap-2"><Calendar className="h-5 w-5 text-gold" /> Aylık Gelir Özeti</h3>
-                <div className="space-y-3">
-                  {[
-                    { month: "Ocak", val: 320 },
-                    { month: "Şubat", val: 480 },
-                    { month: "Mart", val: 440 },
-                  ].map((item) => (
-                    <div key={item.month} className="flex items-center gap-3">
-                      <span className="text-sm text-muted-foreground w-12">{item.month}</span>
-                      <div className="flex-1 bg-muted rounded-full h-3">
-                        <div className="bg-gold rounded-full h-3" style={{ width: `${(item.val / 500) * 100}%` }} />
-                      </div>
-                      <span className="text-sm font-medium text-foreground w-16 text-right">€{item.val}</span>
-                    </div>
-                  ))}
-                </div>
+                <EmptyDashboardState
+                  icon={DollarSign}
+                  title="Henüz gelir yok"
+                  description="Davet kodun ile gelen işletme/danışman ödemeleri burada aylık olarak listelenir."
+                />
               </CardContent>
             </Card>
           </div>
@@ -448,31 +427,11 @@ const ProfileAmbassador = () => {
               <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
                 <Globe className="h-5 w-5 text-turquoise" /> WhatsApp & Topluluk
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 rounded-xl bg-muted/50">
-                  <p className="text-sm font-semibold text-foreground mb-1">📱 Elçiler WhatsApp Grubu</p>
-                  <p className="text-xs text-muted-foreground mb-3">Tüm şehir elçileriyle koordinasyon</p>
-                  <Button variant="outline" size="sm" className="gap-1.5">
-                    <Globe className="h-3.5 w-3.5" /> Gruba Katıl
-                  </Button>
-                </div>
-                <div className="p-4 rounded-xl bg-muted/50">
-                  <p className="text-sm font-semibold text-foreground mb-1">📍 Berlin WhatsApp Grubu</p>
-                  <p className="text-xs text-muted-foreground mb-3">Kendi şehrinizin yerel grubu</p>
-                  <Button variant="outline" size="sm" className="gap-1.5">
-                    <MapPin className="h-3.5 w-3.5" /> Grup Yönetimi
-                  </Button>
-                </div>
-              </div>
-              <div className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/10">
-                <h4 className="font-semibold text-foreground text-sm mb-2">Otomatik Mesajlaşma</h4>
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <p className="flex items-center gap-2"><Clock className="h-3.5 w-3.5" /> Onboarding mesajları — yeni kullanıcı kaydında</p>
-                  <p className="flex items-center gap-2"><Clock className="h-3.5 w-3.5" /> Haftalık performans hatırlatması</p>
-                  <p className="flex items-center gap-2"><Clock className="h-3.5 w-3.5" /> Etkinlik bildirimleri</p>
-                  <p className="flex items-center gap-2"><Clock className="h-3.5 w-3.5" /> İnaktif elçi uyarısı</p>
-                </div>
-              </div>
+              <EmptyDashboardState
+                icon={Globe}
+                title="Topluluk grupları henüz yapılandırılmadı"
+                description="Şehir WhatsApp grubunu ve elçiler koordinasyon grubunu Profil Ayarları sekmesinden ekleyebilirsiniz; bağlandığında burada listelenir."
+              />
             </CardContent>
           </Card>
         </TabsContent>
