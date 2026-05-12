@@ -50,10 +50,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchProfile = useCallback(async (userId: string) => {
     const { data } = await supabase
       .from("profiles")
-      .select("full_name, avatar_url, phone, account_type, onboarding_completed")
+      .select("full_name, avatar_url, phone, phone_verified, country, city, account_type, onboarding_completed")
       .eq("id", userId)
       .single();
-    
+
     if (data) {
       setProfile(data as Profile);
     }
