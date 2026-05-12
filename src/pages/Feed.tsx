@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import CreateCafeForm from "@/components/feed/CreateCafeForm";
+import DiasporaPeopleSearch from "@/components/feed/DiasporaPeopleSearch";
 import { useActiveCafes, useCafe } from "@/hooks/useCafes";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
