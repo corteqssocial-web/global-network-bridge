@@ -293,7 +293,8 @@ const ProfileBusiness = () => {
       </TooltipProvider>
 
       {/* Tabs */}
-      <Tabs defaultValue="listings" className="w-full">
+      <ProfileSetupBanner />
+      <BusinessTabsRoot />
         <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
           <TabsTrigger value="listings" className="gap-1.5"><Package className="h-4 w-4" /> İlanlar</TabsTrigger>
           <TabsTrigger value="requests" className="gap-1.5"><Inbox className="h-4 w-4" /> Teklif Talepleri</TabsTrigger>
