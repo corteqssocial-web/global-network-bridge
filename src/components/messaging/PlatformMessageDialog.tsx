@@ -67,6 +67,14 @@ const PlatformMessageDialog = ({
 
   const send = async () => {
     if (!user) return;
+    if (!canSend) {
+      toast({
+        title: "Mesaj gönderilemedi",
+        description: "Önce takip et ve karşı tarafın onayını bekle.",
+        variant: "destructive",
+      });
+      return;
+    }
     const text = body.trim();
     if (!text) return;
     setSending(true);
