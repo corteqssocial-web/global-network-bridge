@@ -106,11 +106,22 @@ const chartTooltipStyle = {
   fontSize: 12,
 };
 
-// Onboard sayıları (KPI takibi için) — mock veriden türetilen tahmini onboarding adedi
-const ambassadorsWithOnboarding = ambassadors.map((a) => ({
-  ...a,
-  onboarded: Math.round(a.participants * 0.18 + a.couponSubscriptions * 0.6),
-}));
+// Onboard sayıları (KPI takibi için) — mock veriden türetilen tahmini onboarding adedi.
+// Tüm kategorilerdeki onboarding kırılımını da hesaplıyoruz.
+const ambassadorsWithOnboarding = ambassadors.map((a) => {
+  const total = Math.round(a.participants * 0.18 + a.couponSubscriptions * 0.6);
+  return {
+    ...a,
+    onboarded: total,
+    onboardingBreakdown: {
+      individuals: Math.round(total * 0.45),
+      consultants: Math.round(total * 0.18),
+      businesses: Math.round(total * 0.20),
+      organizations: Math.round(total * 0.07),
+      bloggers: Math.round(total * 0.10),
+    },
+  };
+});
 
 const AmbassadorDashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
