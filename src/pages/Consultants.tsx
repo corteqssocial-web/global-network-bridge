@@ -332,10 +332,15 @@ const Consultants = () => {
 
           {!activeFilter?.subs && <div className="mb-5" />}
 
-          {/* Demo: 4 professional consultants on top + 2 community cards (Volunteer + Ambassador) below */}
+          {/* Şehir Elçileri ve Gönüllü Mentörler — şehir/ülke filtresine göre EN ÜSTTE */}
           {(() => {
-            const amb = cityAmbassadors[0];
-            const ambassadorCard = {
+            const ambassadorsForArea = cityAmbassadors.filter((a) => {
+              const okCountry = country === "all" || a.country === country;
+              const okCity = city === "all" || a.city === city;
+              return okCountry && okCity;
+            });
+            const fallbackAmbassador = ambassadorsForArea[0] || cityAmbassadors[0];
+            const ambassadorCards = (ambassadorsForArea.length ? ambassadorsForArea : [fallbackAmbassador]).map((amb) => ({
               id: amb.id,
               name: amb.name,
               role: "Şehir Elçisi",
@@ -346,16 +351,19 @@ const Consultants = () => {
               reviews: amb.usersOnboarded,
               specialties: amb.specialties?.slice(0, 2) || [],
               isAmbassador: true,
-            };
+            }));
             const professionalCards = ["dr-hasan-turk", "dilek-aydin-psk", "mehmet-yilmaz", "ayse-kara"]
               .map((id) => consultants.find((c) => c.id === id))
               .filter(Boolean)
               .map((c: any) => ({ ...c, isAmbassador: false }));
-            const volunteerCard = consultants.find((c) => c.id === "ozlem-gonullu");
-            const communityCards = [
-              ...(volunteerCard ? [{ ...volunteerCard, isAmbassador: false }] : []),
-              ambassadorCard,
-            ];
+            const volunteerCards = consultants
+              .filter((c) => volunteerMentorIds.has(c.id))
+              .filter((c) => (country === "all" || c.country === country) && (city === "all" || c.city === city))
+              .map((c) => ({ ...c, isAmbassador: false }));
+            // Fallback: if no city-matching volunteer, show platform-wide volunteers
+            const volunteerCardsFinal = volunteerCards.length
+              ? volunteerCards
+              : consultants.filter((c) => volunteerMentorIds.has(c.id)).map((c) => ({ ...c, isAmbassador: false }));
 
             return (
               <>
