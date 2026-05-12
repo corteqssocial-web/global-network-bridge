@@ -205,20 +205,28 @@ const AmbassadorDashboard = () => {
             <SelectItem value="country">Ülkeye Göre</SelectItem>
             <SelectItem value="events">Etkinlik Sayısına Göre</SelectItem>
             <SelectItem value="participants">Katılımcı Sayısına Göre</SelectItem>
+            <SelectItem value="onboarded">Onboarding Sayısına Göre</SelectItem>
             <SelectItem value="subscriptionShare">Sub. Share'e Göre</SelectItem>
           </SelectContent>
         </Select>
-        <Select value={countryFilter} onValueChange={setCountryFilter}>
+        <Select value={countryFilter} onValueChange={(v) => { setCountryFilter(v); setCityFilter("all"); }}>
           <SelectTrigger className="w-40 h-8 text-xs"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Tüm Ülkeler</SelectItem>
             {countries.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
           </SelectContent>
         </Select>
+        <Select value={cityFilter} onValueChange={setCityFilter}>
+          <SelectTrigger className="w-40 h-8 text-xs"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tüm Şehirler{countryFilter !== "all" ? ` - ${countryFilter}` : ""}</SelectItem>
+            {citiesForCountry.sort().map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+          </SelectContent>
+        </Select>
       </div>
 
       {/* KPI Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
         {[
           { label: "Elçi Sayısı", value: totals.ambassadors, icon: Flag, color: "text-primary" },
           { label: "Etkinlikler", value: totals.events, icon: Calendar, color: "text-chart-1" },
