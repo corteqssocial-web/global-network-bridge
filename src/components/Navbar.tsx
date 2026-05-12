@@ -146,9 +146,9 @@ const Navbar = () => {
             {user ? (
               <>
                 <Link to="/profile">
-                  <Button variant="ghost" size="sm" className="gap-1.5">
+                  <Button variant="default" size="sm" className="gap-1.5">
                     <User className="h-4 w-4" />
-                    {t.nav.dashboard}
+                    {(profile?.full_name?.trim().split(/\s+/)[0]) || "Hesabım"} Panel
                   </Button>
                 </Link>
                 <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground" onClick={handleSignOut}>
