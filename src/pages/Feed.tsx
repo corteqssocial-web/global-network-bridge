@@ -210,6 +210,13 @@ const Feed = () => {
       }
 
       const newPosts = (data as FeedPost[]) || [];
+
+      // Fallback: gerçek paylaşım yoksa mock akışı göster (ilk yüklemede)
+      if (reset && newPosts.length === 0 && !cafeId) {
+        loadDemoData();
+        return;
+      }
+
       setHasMore(newPosts.length === PAGE_SIZE);
       setPosts((prev) => (reset ? newPosts : [...prev, ...newPosts]));
 
