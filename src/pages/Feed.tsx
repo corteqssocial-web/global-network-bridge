@@ -327,6 +327,20 @@ const Feed = () => {
   const addComment = (postId: string) => {
     const text = (commentDrafts[postId] || "").trim();
     if (!text) return;
+    const post = posts.find((p) => p.id === postId);
+    // TR kullanıcı, başka ülkedeki paylaşıma yorum yazmak için karşı tarafla bağlantı (connect) olmalı
+    if (post && isTRUser && post.country && post.country !== "Türkiye" && !demoMode) {
+      const isOwn = user?.id === post.user_id;
+      if (!isOwn && !canMessage(post.user_id)) {
+        toast({
+          title: "Yorum için bağlantı gerekli",
+          description: "Yurt dışındaki kullanıcılara yorum yazabilmek için önce bağlantı (connect) iste.",
+          variant: "destructive",
+        });
+        requestConnection(post.user_id, authorMap[post.user_id]?.full_name || undefined);
+        return;
+      }
+    }
     const c = {
       id: (typeof crypto !== "undefined" && (crypto as any).randomUUID) ? (crypto as any).randomUUID() : `c-${Date.now()}`,
       author: (user as any)?.email?.split("@")[0] || "Sen",
