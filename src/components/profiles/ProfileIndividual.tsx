@@ -823,7 +823,7 @@ const ProfileIndividual = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
                 <Label>Tag Line (Kısa tanıtım)</Label>
-                <Input value={tagline} onChange={(e) => setTagline(e.target.value)} maxLength={120} placeholder="Örn: Berlin'de yazılım, kahve ve diaspora ☕" />
+                <Input value={tagline} onChange={(e) => setTagline(e.target.value)} maxLength={30} placeholder="Örnek: Founder, Coach, CEO, Öğrenci, Kahve ve Diaspora" />
               </div>
               <div className="md:col-span-2">
                 <Label>Profil Mesajım</Label>
@@ -835,10 +835,6 @@ const ProfileIndividual = () => {
                   placeholder="Profilinde görünecek kısa bir mesaj yaz"
                   className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                 />
-              </div>
-              <div>
-                <Label>Doğum Tarihi</Label>
-                <Input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
               </div>
               <div>
                 <Label>Ülke</Label>
