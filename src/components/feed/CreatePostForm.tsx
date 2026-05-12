@@ -134,7 +134,7 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
         >
           🌉 {kopruOnly ? "Köprü ✓" : "Köprü"}
         </button>
-        {!isTR && (
+        {!isTR && !kopruOnly && (
           <>
             <button
               type="button"
@@ -184,8 +184,11 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
             )}
           </>
         )}
-        {isTR && (
+        {isTR && !kopruOnly && (
           <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">@Türkiye 🇹🇷</span>
+        )}
+        {kopruOnly && (
+          <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 text-white font-semibold">🌉 Köprü — herkese açık</span>
         )}
         <Button
           onClick={submit}
