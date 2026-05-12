@@ -60,6 +60,7 @@ const ProfileIndividual = () => {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState(initialTab);
+  const { locked: gateLocked } = useProfileGate();
   const [isVolunteerMentor, setIsVolunteerMentor] = useState(false);
   const [socialVisibility, setSocialVisibility] = useState<Record<string, boolean>>(() => {
     if (typeof window === "undefined") return {};
