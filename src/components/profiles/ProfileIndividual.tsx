@@ -392,6 +392,7 @@ const ProfileIndividual = () => {
             </div>
           </div>
         </div>
+      </div>
 
       {/* Volunteer Mentor CTA */}
       <div className="bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/30 rounded-2xl p-5 md:p-6 mb-8 flex flex-col sm:flex-row sm:items-center gap-4">
