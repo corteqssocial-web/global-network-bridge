@@ -6,6 +6,9 @@ interface Profile {
   full_name: string | null;
   avatar_url: string | null;
   phone: string | null;
+  phone_verified: boolean;
+  country: string | null;
+  city: string | null;
   account_type: string | null;
   onboarding_completed: boolean;
 }
@@ -17,6 +20,8 @@ interface AuthContextType {
   profile: Profile | null;
   accountType: string | null;
   onboardingCompleted: boolean;
+  profileComplete: boolean;
+  isGlobalDiaspora: boolean;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
