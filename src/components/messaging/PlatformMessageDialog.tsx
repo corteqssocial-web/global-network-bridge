@@ -140,19 +140,27 @@ const PlatformMessageDialog = ({
             </DialogHeader>
             {!canSend && (
               <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-sm text-foreground flex items-start gap-2">
-                {following ? (
+                {isPending ? (
                   <Clock className="h-4 w-4 text-amber-600 mt-0.5 shrink-0" />
                 ) : (
                   <Lock className="h-4 w-4 text-amber-600 mt-0.5 shrink-0" />
                 )}
                 <div className="min-w-0">
-                  {following ? (
+                  {isPending ? (
                     <p>
-                      <strong>Takip onayı bekleniyor.</strong> {recipientName} isteğini onayladığında mesaj gönderebilirsin.
+                      <strong>Bağlantı onayı bekleniyor.</strong> {recipientName} isteğini onayladığında mesaj gönderebilirsin.
+                    </p>
+                  ) : isBlocked ? (
+                    <p>
+                      Bu kullanıcıyla bağlantı kurulamıyor. Mesaj göndermek mümkün değil.
+                    </p>
+                  ) : !recipientUserId ? (
+                    <p>
+                      Bu profil henüz platforma katılmamış. Mesajlaşma için kullanıcının kayıt olması gerekir.
                     </p>
                   ) : (
                     <p>
-                      Mesaj gönderebilmek için önce <strong>{recipientName}</strong>'i takip etmen ve takibinin onaylanması gerekiyor.
+                      Mesaj gönderebilmek için önce <strong>{recipientName}</strong> ile <strong>bağlantı</strong> kurman ve karşı tarafın isteği onaylaması gerekir.
                     </p>
                   )}
                 </div>
@@ -167,7 +175,7 @@ const PlatformMessageDialog = ({
                 disabled={!canSend}
               />
               <Textarea
-                placeholder={canSend ? "Mesajını yaz..." : "Takip onayından sonra yazabilirsin..."}
+                placeholder={canSend ? "Mesajını yaz..." : "Bağlantı onayından sonra yazabilirsin..."}
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
                 rows={5}
@@ -177,9 +185,9 @@ const PlatformMessageDialog = ({
             </div>
             <DialogFooter className="gap-2 sm:gap-2">
               <Button variant="outline" onClick={() => onOpenChange(false)}>İptal</Button>
-              {!following ? (
-                <Button onClick={() => toggle(recipientKind, recipientSlug, recipientName)} className="gap-2">
-                  <UserPlus className="h-4 w-4" /> Takip İsteği Gönder
+              {!canSend && status === "none" && recipientUserId ? (
+                <Button onClick={() => requestConnection(recipientUserId, recipientName)} className="gap-2">
+                  <UserPlus className="h-4 w-4" /> Bağlantı İsteği Gönder
                 </Button>
               ) : (
                 <Button onClick={send} disabled={!body.trim() || sending || !canSend} className="gap-2">
