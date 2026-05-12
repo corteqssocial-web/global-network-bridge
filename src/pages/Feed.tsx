@@ -703,12 +703,17 @@ const Feed = () => {
                 </>
               ) : (
                 <header className="mb-4">
-                  <div className="flex items-center gap-2 mb-1.5">
+                  <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                     <Newspaper className="h-6 w-6 text-primary" />
                     <h1 className="text-2xl font-extrabold text-gradient-primary">Diaspora Cadde</h1>
+                    <Link to="/19-mayis" className="ml-auto">
+                      <Button size="sm" className="gap-1.5 bg-rose-500 hover:bg-rose-600 text-white shadow-md shadow-rose-500/30 h-8">
+                        <span className="text-base leading-none" role="img" aria-label="Türk Bayrağı">🇹🇷</span> 19Mayıs1919
+                      </Button>
+                    </Link>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Sol panelden kıta, ülke veya şehir seç. Akışın anında daralır.
+                    Sol panelden kıta, ülke veya şehir seç. Akışın anında daralır. Paylaşırken @Şehir veya @Ülke etiketleyebilirsin.
                   </p>
                 </header>
               )}
