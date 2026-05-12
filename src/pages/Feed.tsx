@@ -63,7 +63,32 @@ const Feed = () => {
   const { user, onboardingCompleted } = useAuth();
   const { cafeId } = useParams<{ cafeId?: string }>();
   const navigate = useNavigate();
-  const { cafe, isMember, approved, join: joinCafe } = useCafe(cafeId);
+  const isDemoCafe = cafeId === "demo-it";
+  const { cafe: realCafe, isMember: realIsMember, approved: realApproved, join: joinCafe } = useCafe(isDemoCafe ? undefined : cafeId);
+  const demoCafe = isDemoCafe
+    ? ({
+        id: "demo-it",
+        name: "Berlin IT ☕",
+        theme: "IT",
+        country: "Almanya",
+        city: "Berlin",
+        linkedin_url: "",
+        extra_links: null,
+        created_by: "demo",
+        opens_at: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+        closes_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+        duration_hours: 2,
+        created_at: new Date().toISOString(),
+        kind: "community" as const,
+        open_entry: true,
+        entry_question: null,
+        capacity: 40,
+        member_count: 24,
+      } as any)
+    : null;
+  const cafe = isDemoCafe ? demoCafe : realCafe;
+  const isMember = isDemoCafe ? true : realIsMember;
+  const approved = isDemoCafe ? true : realApproved;
   const [joinDialogOpen, setJoinDialogOpen] = useState(false);
   const [joinAnswer, setJoinAnswer] = useState("");
   const [pendingMembers, setPendingMembers] = useState<Array<{ id: string; user_id: string; answer: string | null; full_name?: string | null }>>([]);
