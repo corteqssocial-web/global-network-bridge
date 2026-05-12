@@ -441,43 +441,7 @@ const ProfileAdmin = () => {
 
         {/* REVENUE */}
         <TabsContent value="revenue" className="mt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-success" /> Aylık Gelir
-              </h2>
-              <div className="space-y-3">
-                {["Oca", "Şub", "Mar"].map((month, i) => {
-                  const val = [3200, 4100, 5800][i];
-                  return (
-                    <div key={month} className="flex items-center gap-3">
-                      <span className="text-sm text-muted-foreground w-8">{month}</span>
-                      <div className="flex-1 bg-muted rounded-full h-3">
-                        <div className="bg-success rounded-full h-3" style={{ width: `${(val / 6000) * 100}%` }} />
-                      </div>
-                      <span className="text-sm font-medium text-foreground w-16 text-right">€{val}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <CreditCard className="h-5 w-5 text-primary" /> Son İşlemler
-              </h2>
-              <div className="space-y-3">
-                {recentTransactions.map((tx, i) => (
-                  <div key={i} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
-                    <div>
-                      <p className="text-sm font-medium text-foreground">{tx.user}</p>
-                      <p className="text-xs text-muted-foreground">{tx.type} · {tx.date}</p>
-                    </div>
-                    <span className="font-bold text-sm text-success">+€{tx.amount}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <RevenueTracker />
         </TabsContent>
 
         {/* ANALYTICS */}
