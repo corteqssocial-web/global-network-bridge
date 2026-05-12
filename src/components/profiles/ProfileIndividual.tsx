@@ -319,8 +319,27 @@ const ProfileIndividual = () => {
     ? baseList
     : baseList.filter((e) => e.city === calendarFilter);
 
+  // Recent (last 2 months) events for public card
+  const twoMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 2, now.getDate());
+  const recentPublicEvents = calendarEvents
+    .filter((e) => {
+      const d = parseTrDate(e.date + " " + new Date().getFullYear());
+      return d ? d >= twoMonthsAgo : false;
+    })
+    .map((e) => ({ id: e.id, title: e.title, date: e.date, city: e.city, source: e.source }));
+
   return (
     <>
+      <IndividualPublicCard
+        name={user.name}
+        avatarInitials={user.avatar}
+        tagline={tagline}
+        worldMessage={worldMessage}
+        city={pCity || user.city}
+        country={pCountry || user.country}
+        corteqsPassport={hasPassport}
+        recentEvents={recentPublicEvents}
+      />
 
       {/* Profile header */}
       <div className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-card mb-8">
