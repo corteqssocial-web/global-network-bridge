@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DemoPageBanner from "@/components/DemoPageBanner";
 import { cityAmbassadors } from "@/data/mock";
+import { getAmbassadorScore, getScoreTier } from "@/lib/ambassadorScore";
 
 const AmbassadorDetail = () => {
   const { id } = useParams();
