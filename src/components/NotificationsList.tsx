@@ -73,12 +73,15 @@ const NotificationsList = ({ accent = "primary" }: { accent?: "primary" | "gold"
 
   if (items.length === 0) {
     return (
-      <div className="text-center py-12">
-        <Bell className={`h-10 w-10 mx-auto mb-3 ${accent === "gold" ? "text-gold/40" : "text-primary/40"}`} />
-        <p className="text-sm font-semibold text-foreground">Henüz bildiriminiz yok</p>
-        <p className="text-xs text-muted-foreground mt-1">
-          Yeni teklif talepleri, etkinlik güncellemeleri ve takip bildirimleri burada görünecek.
-        </p>
+      <div className="space-y-4">
+        <ConnectionRequestsInline />
+        <div className="text-center py-12">
+          <Bell className={`h-10 w-10 mx-auto mb-3 ${accent === "gold" ? "text-gold/40" : "text-primary/40"}`} />
+          <p className="text-sm font-semibold text-foreground">Henüz bildiriminiz yok</p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Yeni teklif talepleri, etkinlik güncellemeleri ve takip bildirimleri burada görünecek.
+          </p>
+        </div>
       </div>
     );
   }
