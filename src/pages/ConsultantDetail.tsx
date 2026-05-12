@@ -15,6 +15,7 @@ import { useState } from "react";
 import AppointmentBookingDialog from "@/components/booking/AppointmentBookingDialog";
 import DemoPageBanner from "@/components/DemoPageBanner";
 import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
+import DetailAuthLock from "@/components/DetailAuthLock";
 import PublicEventsList from "@/components/PublicEventsList";
 import { useConsultantFeatures } from "@/hooks/useProfileFeatures";
 
