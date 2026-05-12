@@ -331,7 +331,7 @@ const BusinessDetail = () => {
                       <h3 className="font-semibold text-foreground">{job.title}</h3>
                       <p className="text-sm text-muted-foreground font-body">{job.location} · {job.type}</p>
                     </div>
-                    <Button size="sm">Başvur</Button>
+                    <Button size="sm" onClick={requireAuth(() => toast({ title: "Başvuru alındı", description: `${job.title} pozisyonuna başvurunuz iletildi.` }))}>Başvur</Button>
                   </div>
                 ))}
               </div>
