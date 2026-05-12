@@ -11,6 +11,10 @@ interface Profile {
   city: string | null;
   account_type: string | null;
   onboarding_completed: boolean;
+  business_description: string | null;
+  business_name: string | null;
+  mentor_topics: string | null;
+  profession: string | null;
 }
 
 interface AuthContextType {
