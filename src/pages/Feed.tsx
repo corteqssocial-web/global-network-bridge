@@ -196,6 +196,9 @@ const Feed = () => {
           query = query.in("country", continents[selectedContinent] || []);
         } else if (selectedCountries.length > 0) {
           query = query.in("country", selectedCountries);
+        } else {
+          // Global akış: Türkiye paylaşımları yalnızca yüksek etkileşimde sızar
+          query = query.or(`country.is.null,country.neq.Türkiye,like_count.gte.${TR_GLOBAL_THRESHOLD}`);
         }
       }
 
