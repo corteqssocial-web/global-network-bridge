@@ -107,6 +107,7 @@ const Feed = () => {
   const [hasMore, setHasMore] = useState(true);
   const [authorMap, setAuthorMap] = useState<Record<string, { full_name: string | null; avatar_url: string | null }>>({});
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
+  const [reactions, setReactions] = useState<Record<string, { thumb: number; laugh: number; party: number; mine: Set<string> }>>({});
   const [openComments, setOpenComments] = useState<Set<string>>(new Set());
   const [commentsMap, setCommentsMap] = useState<Record<string, { id: string; author: string; text: string; created_at: string }[]>>({});
   const [commentDrafts, setCommentDrafts] = useState<Record<string, string>>({});
@@ -454,9 +455,37 @@ const Feed = () => {
             <MessageCircle className="h-4 w-4" />
             <span className="text-xs font-medium">{p.comment_count}</span>
           </Button>
-          <Button variant="ghost" size="sm" className="h-8 px-2 rounded-full text-muted-foreground hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:text-amber-500" onClick={() => toggleLike(p)}>
-            <Smile className="h-4 w-4" />
-          </Button>
+          {(["thumb", "laugh", "party"] as const).map((kind) => {
+            const emoji = kind === "thumb" ? "👍" : kind === "laugh" ? "😄" : "🎉";
+            const r = reactions[p.id] || { thumb: 0, laugh: 0, party: 0, mine: new Set<string>() };
+            const active = r.mine.has(kind);
+            return (
+              <Button
+                key={kind}
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  if (!user && !demoMode) {
+                    toast({ title: "Reaksiyon için giriş yapın", variant: "destructive" });
+                    return;
+                  }
+                  setReactions((prev) => {
+                    const cur = prev[p.id] || { thumb: 0, laugh: 0, party: 0, mine: new Set<string>() };
+                    const mine = new Set(cur.mine);
+                    const next = { ...cur, mine };
+                    if (mine.has(kind)) { mine.delete(kind); next[kind] = Math.max(0, cur[kind] - 1); }
+                    else { mine.add(kind); next[kind] = cur[kind] + 1; }
+                    return { ...prev, [p.id]: next };
+                  });
+                }}
+                className={`h-8 px-2 rounded-full hover:bg-amber-50 dark:hover:bg-amber-500/10 ${active ? "text-amber-600 bg-amber-500/10" : "text-muted-foreground hover:text-amber-500"}`}
+                title={kind === "thumb" ? "Beğen" : kind === "laugh" ? "Güldür" : "Kutla"}
+              >
+                <span className="text-sm leading-none">{emoji}</span>
+                {r[kind] > 0 && <span className="text-[11px] font-medium ml-1">{r[kind]}</span>}
+              </Button>
+            );
+          })}
           <Button variant="ghost" size="sm" onClick={() => sharePost(p)} className="ml-auto h-8 px-2 rounded-full text-muted-foreground hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:text-emerald-500">
             <Share2 className="h-4 w-4" />
           </Button>

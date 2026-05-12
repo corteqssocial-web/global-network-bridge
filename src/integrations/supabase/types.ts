@@ -144,9 +144,11 @@ export type Database = {
       }
       cafes: {
         Row: {
+          audience_scope: string
           capacity: number | null
           city: string | null
           closes_at: string
+          continent: string | null
           country: string | null
           created_at: string
           created_by: string
@@ -160,12 +162,15 @@ export type Database = {
           name: string
           open_entry: boolean
           opens_at: string
+          referral_code: string | null
           theme: string
         }
         Insert: {
+          audience_scope?: string
           capacity?: number | null
           city?: string | null
           closes_at: string
+          continent?: string | null
           country?: string | null
           created_at?: string
           created_by: string
@@ -179,12 +184,15 @@ export type Database = {
           name: string
           open_entry?: boolean
           opens_at?: string
+          referral_code?: string | null
           theme: string
         }
         Update: {
+          audience_scope?: string
           capacity?: number | null
           city?: string | null
           closes_at?: string
+          continent?: string | null
           country?: string | null
           created_at?: string
           created_by?: string
@@ -198,6 +206,7 @@ export type Database = {
           name?: string
           open_entry?: boolean
           opens_at?: string
+          referral_code?: string | null
           theme?: string
         }
         Relationships: []
