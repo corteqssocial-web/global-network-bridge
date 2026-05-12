@@ -3,7 +3,7 @@ import {
   Wallet, ArrowUpRight, ArrowDownRight, Clock, CreditCard,
   MessageSquare, Bell, Target, Star, Globe, Plus,
   Send, CheckCircle, XCircle, Eye, Settings, ExternalLink, Video, ArrowLeft,
-  Coffee
+  Coffee, Heart
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CreateCafeForm from "@/components/feed/CreateCafeForm";
