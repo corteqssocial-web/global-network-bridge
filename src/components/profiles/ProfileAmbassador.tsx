@@ -43,6 +43,8 @@ type AmbassadorEvent = {
 
 const ProfileAmbassador = () => {
   const { user } = useAuth();
+  const { locked: gateLocked } = useProfileGate();
+  const [activeTab, setActiveTab] = useState<string>("transactions");
   const [messageText, setMessageText] = useState("");
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<AmbassadorEvent | null>(null);
