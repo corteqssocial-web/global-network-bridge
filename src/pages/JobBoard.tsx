@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { countryCities } from "@/data/countryCities";
+import JobApplyDialog from "@/components/JobApplyDialog";
 
 type Listing = {
   id: string;
