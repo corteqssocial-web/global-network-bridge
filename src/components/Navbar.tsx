@@ -142,11 +142,7 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-            <Link to="/19-mayis">
-              <Button size="sm" className="gap-1.5 bg-rose-500 hover:bg-rose-600 text-white shadow-md shadow-rose-500/30">
-                <span className="text-base leading-none" role="img" aria-label="Türk Bayrağı">🇹🇷</span> 19Mayıs1919
-              </Button>
-            </Link>
+            {/* 19Mayıs butonu Cadde header'a taşındı */}
             {user ? (
               <>
                 <Link to="/profile">
@@ -209,7 +205,7 @@ const Navbar = () => {
               
               <Link to="/map" className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1" onClick={() => setIsOpen(false)}><MapPin className="h-3 w-3" />{t.nav.map}</Link>
               <Link to="/diaspora-people" className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1" onClick={() => setIsOpen(false)}><Users className="h-3 w-3" />Diasporada İnsanlar</Link>
-              <Link to="/19-mayis" className="text-sm font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1" onClick={() => setIsOpen(false)}><span role="img" aria-label="Türk Bayrağı">🇹🇷</span> 19Mayıs1919</Link>
+              
               <div className="border-t border-border pt-3 mt-1">
                 {user ? (
                   <>
