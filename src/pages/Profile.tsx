@@ -106,6 +106,7 @@ const Profile = () => {
           </div>
 
           {renderProfile()}
+          <ProfileCompletePopup onGoToSettings={() => navigate("/profile?tab=settings")} />
         </div>
       </main>
       <Footer />
