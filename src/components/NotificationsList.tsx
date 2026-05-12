@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from "date-fns";
 import { tr } from "date-fns/locale";
 import ConnectionRequestsInline from "./connections/ConnectionRequestsInline";
+import ConnectionsFollowersStats from "./connections/ConnectionsFollowersStats";
 
 interface NotificationRow {
   id: string;
