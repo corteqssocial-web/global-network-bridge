@@ -15,12 +15,12 @@ import CategorySearchBar from "@/components/CategorySearchBar";
 
 const typeFilters = [
   { key: "all", label: "Tümü" },
+  { key: "diplomatik", label: "🏛️ Büyükelçilik & Konsolosluk" },
   { key: "dernek", label: "Dernekler & Vakıflar" },
   { key: "oda", label: "🏢 Odalar & Konseyler" },
   { key: "akademik", label: "🎓 Akademik Birimler" },
   { key: "egitim", label: "📚 Eğitim Kuruluşları" },
   { key: "medya", label: "📺 Türk Medya Kuruluşları" },
-  { key: "diplomatik", label: "🏛️ Büyükelçilik & Konsolosluk" },
   { key: "hastane", label: "🏥 Sağlık Kuruluşları" },
   { key: "dijital", label: "💬 Dijital Topluluklar" },
 ];
@@ -50,6 +50,10 @@ const Associations = () => {
     const matchesSearch = !q || [a.name, a.type, a.city, a.country, (a as any).description ?? ""]
       .filter(Boolean).join(" ").toLowerCase().includes(q);
     return matchesCountry && matchesCity && matchesType && matchesSearch;
+  }).sort((a, b) => {
+    const isDiplA = ["Büyükelçilik", "Konsolosluk"].includes(a.type) ? 0 : 1;
+    const isDiplB = ["Büyükelçilik", "Konsolosluk"].includes(b.type) ? 0 : 1;
+    return isDiplA - isDiplB;
   });
 
   const typeColors: Record<string, string> = {
@@ -82,6 +86,9 @@ const Associations = () => {
                 {filtered.length} kuruluş bulundu
               </p>
             </div>
+            <div className="shrink-0">
+              <CountryCitySelector city={city} onCityChange={setCity} />
+            </div>
           </div>
 
           <CategorySearchBar
@@ -104,9 +111,6 @@ const Associations = () => {
                 {f.label}
               </Button>
             ))}
-            <div className="ml-auto">
-              <CountryCitySelector city={city} onCityChange={setCity} />
-            </div>
           </div>
 
           <CategoryListingBanner categoryLabel="Kuruluşlar" formAnchorId="kayit-form" />

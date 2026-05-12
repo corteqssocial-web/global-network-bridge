@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DemoPageBanner from "@/components/DemoPageBanner";
+import DetailAuthLock from "@/components/DetailAuthLock";
 import { cityAmbassadors } from "@/data/mock";
 import { getAmbassadorScore, getScoreTier } from "@/lib/ambassadorScore";
 
@@ -56,6 +57,7 @@ const AmbassadorDetail = () => {
           <Link to="/consultants" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6">
             <ArrowLeft className="h-4 w-4" /> Danışmanlara Dön
           </Link>
+          <DetailAuthLock category="elçi profili" />
 
           {/* Hero */}
           <div className="bg-card rounded-2xl border border-gold/30 p-8 shadow-card mb-8">

@@ -1,8 +1,8 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import PlatformMessageButton from "@/components/messaging/PlatformMessageButton";
 import { useFollow } from "@/hooks/useFollow";
-import { Star, Bot, MessageSquare, Calendar, Video, Globe as GlobeIcon, ArrowLeft, ExternalLink, UserPlus, UserCheck, Zap, Info, Clock, Home, MapPin, BedDouble, Bath, Maximize, Crown, Navigation } from "lucide-react";
+import { Star, Bot, MessageSquare, Calendar, Video, Globe as GlobeIcon, ArrowLeft, ExternalLink, UserPlus, UserCheck, Zap, Info, Clock, Home, MapPin, BedDouble, Bath, Maximize, Crown, Navigation, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,6 +15,7 @@ import { useState } from "react";
 import AppointmentBookingDialog from "@/components/booking/AppointmentBookingDialog";
 import DemoPageBanner from "@/components/DemoPageBanner";
 import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
+import DetailAuthLock from "@/components/DetailAuthLock";
 import PublicEventsList from "@/components/PublicEventsList";
 import { useConsultantFeatures } from "@/hooks/useProfileFeatures";
 
@@ -26,6 +27,7 @@ const ConsultantDetail = () => {
   const { isFollowed, toggle } = useFollow();
   const isFollowing = consultant ? isFollowed("consultant", consultant.id) : false;
   const [bookingOpen, setBookingOpen] = useState(false);
+  const navigate = useNavigate();
   const { isEnabled, isComingSoon } = useConsultantFeatures("__demo__");
 
   // Check if logged-in user is the consultant (mock: match by email or id)
@@ -57,6 +59,7 @@ const ConsultantDetail = () => {
           <Link to="/consultants" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
             <ArrowLeft className="h-4 w-4" /> Danışmanlara dön
           </Link>
+          <DetailAuthLock category="danışman kartı" />
 
           {/* Free Banner */}
           <div className="bg-gradient-to-r from-turquoise/10 via-primary/10 to-gold/10 border border-primary/20 rounded-2xl p-4 mb-6 flex items-center gap-3">
@@ -116,6 +119,11 @@ const ConsultantDetail = () => {
 
               {/* CTAs with pricing */}
               <div className="flex flex-col gap-2 shrink-0 w-full md:w-auto">
+                {!user ? (
+                  <Button variant="default" className="gap-2 w-full" onClick={() => navigate("/auth")}>
+                    <Lock className="h-4 w-4" /> Etkileşim için Giriş Yap
+                  </Button>
+                ) : (<>
                 {(isEnabled("live_call") || isEnabled("ai_twin")) && (
                   <div className="bg-muted/50 rounded-xl p-3 mb-1">
                     <p className="text-xs text-muted-foreground font-body text-center mb-2">Görüşme Ücretleri</p>
@@ -213,6 +221,7 @@ const ConsultantDetail = () => {
                     </Button>
                   </a>
                 )}
+                </>)}
               </div>
             </div>
           </div>

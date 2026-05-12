@@ -1,7 +1,8 @@
 import { useFollow } from "@/hooks/useFollow";
-import { useParams, Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import PlatformMessageButton from "@/components/messaging/PlatformMessageButton";
-import { Users, MapPin, Calendar as CalendarIcon, Globe as GlobeIcon, ArrowLeft, ExternalLink, MessageSquare, Share2, UserPlus, UserCheck, Heart, CreditCard, Ticket, Music, Radio, Landmark, Clock, FileText, Stethoscope, Navigation, Mail, Phone, Instagram, Facebook, Award, Target, Briefcase } from "lucide-react";
+import { Users, MapPin, Calendar as CalendarIcon, Globe as GlobeIcon, ArrowLeft, ExternalLink, MessageSquare, Share2, UserPlus, UserCheck, Heart, CreditCard, Ticket, Music, Radio, Landmark, Clock, FileText, Stethoscope, Navigation, Mail, Phone, Instagram, Facebook, Award, Target, Briefcase, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navbar from "@/components/Navbar";
@@ -10,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { associations } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
 import DemoPageBanner from "@/components/DemoPageBanner";
+import DetailAuthLock from "@/components/DetailAuthLock";
 import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
 import PublicEventsList from "@/components/PublicEventsList";
 
@@ -18,6 +20,8 @@ const AssociationDetail = () => {
   const { toast } = useToast();
   const assoc = associations.find((a) => a.id === id);
   const { isFollowed, toggle } = useFollow();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const isFollowing = assoc ? isFollowed("association", assoc.id) : false;
 
   if (!assoc) {
@@ -71,6 +75,7 @@ const AssociationDetail = () => {
           <Link to="/associations" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
             <ArrowLeft className="h-4 w-4" /> Kuruluşlara dön
           </Link>
+          <DetailAuthLock category="kuruluş" />
 
           {/* Header */}
           <div className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-card mb-8">
@@ -125,7 +130,11 @@ const AssociationDetail = () => {
 
               {/* CTAs */}
               <div className="flex flex-col gap-2 shrink-0 w-full md:w-auto">
-                {isHospital ? (
+                {!user ? (
+                  <Button variant="default" className="gap-2 w-full" onClick={() => navigate("/auth")}>
+                    <Lock className="h-4 w-4" /> Etkileşim için Giriş Yap
+                  </Button>
+                ) : isHospital ? (
                   <>
                     <Link to={`/hospital-appointment/${assoc.id}`}>
                       <Button variant="default" className="gap-2 w-full bg-turquoise hover:bg-turquoise/90 text-primary-foreground">
@@ -180,27 +189,31 @@ const AssociationDetail = () => {
                     </Button>
                   </>
                 )}
-                <Button variant="outline" className="gap-2 w-full">
-                  <Share2 className="h-4 w-4" /> Paylaş
-                </Button>
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(assoc.name + ', ' + assoc.city + ', ' + assoc.country)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="outline" className="gap-2 w-full">
-                    <MapPin className="h-4 w-4" /> Konum
-                  </Button>
-                </a>
-                <a
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(assoc.name + ', ' + assoc.city + ', ' + assoc.country)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="outline" className="gap-2 w-full">
-                    <Navigation className="h-4 w-4" /> Yol Tarifi
-                  </Button>
-                </a>
+                {user && (
+                  <>
+                    <Button variant="outline" className="gap-2 w-full">
+                      <Share2 className="h-4 w-4" /> Paylaş
+                    </Button>
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(assoc.name + ', ' + assoc.city + ', ' + assoc.country)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant="outline" className="gap-2 w-full">
+                        <MapPin className="h-4 w-4" /> Konum
+                      </Button>
+                    </a>
+                    <a
+                      href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(assoc.name + ', ' + assoc.city + ', ' + assoc.country)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant="outline" className="gap-2 w-full">
+                        <Navigation className="h-4 w-4" /> Yol Tarifi
+                      </Button>
+                    </a>
+                  </>
+                )}
               </div>
             </div>
           </div>

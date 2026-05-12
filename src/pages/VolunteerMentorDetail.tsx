@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PlatformMessageDialog from "@/components/messaging/PlatformMessageDialog";
+import DetailAuthLock from "@/components/DetailAuthLock";
 
 import { consultants } from "@/data/mock";
 import { useFollow } from "@/hooks/useFollow";
@@ -77,6 +78,7 @@ const VolunteerMentorDetail = () => {
           <Link to="/consultants?filter=gonullu" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors">
             <ArrowLeft className="h-4 w-4" /> Gönüllülere dön
           </Link>
+          <DetailAuthLock category="mentör profili" />
 
           {/* Demo notice */}
           <div className="bg-gold/15 border border-gold/40 rounded-xl px-4 py-2.5 mb-4 flex items-center gap-2">

@@ -15,6 +15,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
 import DemoPageBanner from "@/components/DemoPageBanner";
+import DetailAuthLock from "@/components/DetailAuthLock";
 import PublicEventsList from "@/components/PublicEventsList";
 import { bloggers } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
@@ -80,6 +81,7 @@ const BloggerDetail = () => {
           <Link to="/bloggers" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
             <ArrowLeft className="h-4 w-4" /> Geri dön
           </Link>
+          <DetailAuthLock category="blogger profili" />
 
           {/* Header */}
           <div className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-card mb-8">
