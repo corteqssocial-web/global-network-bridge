@@ -56,7 +56,7 @@ const ProfileAssociation = () => {
 
   const upcomingEvents: { id: number; title: string; date: string; attendees: number; type: string }[] = [];
 
-  const members: { name: string; role: string; since: string; active: boolean }[] = [];
+  
 
   const stats = {
     totalMembers: 0,
