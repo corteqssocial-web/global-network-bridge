@@ -44,10 +44,11 @@ interface Props {
 }
 
 const CreateCafeForm = ({ trigger, onCreated }: Props) => {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const isPremium = useIsPremium();
   const navigate = useNavigate();
   const duration = isPremium ? 4 : 2;
+  const canOpenCafe = hasDiasporaPassport(profile?.phone);
 
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
