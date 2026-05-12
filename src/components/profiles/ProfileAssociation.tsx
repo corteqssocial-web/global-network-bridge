@@ -120,8 +120,13 @@ const ProfileAssociation = () => {
       <div className="mb-6"><CorBotPromoBanner /></div>
 
       {/* Tabs */}
-      <Tabs defaultValue="events" className="w-full">
-        <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
+      <ProfileSetupBanner />
+      <Tabs
+        value={gateLocked ? "settings" : activeTab}
+        onValueChange={(v) => { if (!gateLocked || v === "settings") setActiveTab(v); }}
+        className="w-full"
+      >
+        <TabsList className={`bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1 ${gateLocked ? "[&>button:not([data-state=active])]:opacity-50" : ""}`}>
           <TabsTrigger value="events" className="gap-1.5"><Calendar className="h-4 w-4" /> Etkinlikler</TabsTrigger>
           <TabsTrigger value="communications" className="gap-1.5"><Mail className="h-4 w-4" /> İletişim</TabsTrigger>
           <TabsTrigger value="analytics" className="gap-1.5"><BarChart3 className="h-4 w-4" /> Analitik</TabsTrigger>
