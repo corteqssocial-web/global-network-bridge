@@ -25,7 +25,125 @@ export const mockAuthors: Record<string, MockAuthor> = {
   "user-4": { id: "user-4", full_name: "Dr. Elif Kaya", avatar_url: null },
   "user-5": { id: "user-5", full_name: "Chen Wei", avatar_url: null },
   "user-6": { id: "user-6", full_name: "Business Berlin GmbH", avatar_url: null },
+  // Berlin IT Cafe — hardcore IT karakterleri
+  "it-1": { id: "it-1", full_name: "Kerem Aydın · Staff SWE @ N26", avatar_url: null },
+  "it-2": { id: "it-2", full_name: "Lena Schulz · SRE @ Zalando", avatar_url: null },
+  "it-3": { id: "it-3", full_name: "Burak Demir · Platform Eng @ Trade Republic", avatar_url: null },
+  "it-4": { id: "it-4", full_name: "Anika Roy · ML Eng @ HuggingFace BER", avatar_url: null },
+  "it-5": { id: "it-5", full_name: "Mert Çelik · Rust/Backend Freelancer", avatar_url: null },
+  "it-6": { id: "it-6", full_name: "Sven Hoffmann · Principal @ Delivery Hero", avatar_url: null },
+  "it-7": { id: "it-7", full_name: "Zeynep Arslan · DevSecOps Lead", avatar_url: null },
 };
+
+// Berlin IT Cafe ☕ — hardcore IT sohbeti (mock)
+export const mockCafeITPosts: MockPost[] = [
+  {
+    id: "it-post-1",
+    user_id: "it-1",
+    content:
+      "☕ Bugün prod'da ilginç bir incident yaşadık: Postgres'te `pg_stat_activity` sürekli 3k+ idle-in-transaction connection gösteriyordu. Sebep: PgBouncer transaction pooling + Spring `@Transactional(readOnly=true)` ama prepared statement cache açık. Çözüm: `prepareThreshold=0` ve pool_mode=session → pool=transaction'a geri döndük ama prepared statements'ı kapattık. p99 latency 480ms → 70ms. Kimse bana bir daha 'ORM kara kutu değil' demesin.",
+    image_url: null,
+    country: "Almanya",
+    city: "Berlin",
+    author_role: "user",
+    like_count: 84,
+    comment_count: 27,
+    created_at: new Date(Date.now() - 1000 * 60 * 8).toISOString(),
+  },
+  {
+    id: "it-post-2",
+    user_id: "it-2",
+    content:
+      "Hot take: Kubernetes'te HPA + KEDA kombinasyonu olmadan event-driven workload ölçeklemek 2026'da masochism. Bizim Kafka consumer'lar lag bazlı KEDA ScaledObject ile ölçekleniyor, CPU bazlı HPA scale-down'a karışmasın diye `behavior.scaleDown.stabilizationWindowSeconds=600`. AWS faturası %38 düştü. PR linki commentlerde.",
+    image_url:
+      "https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&q=80",
+    country: "Almanya",
+    city: "Berlin",
+    author_role: "user",
+    like_count: 142,
+    comment_count: 41,
+    created_at: new Date(Date.now() - 1000 * 60 * 22).toISOString(),
+  },
+  {
+    id: "it-post-3",
+    user_id: "it-3",
+    content:
+      "gRPC streaming vs SSE tartışması yine açıldı. Bizim broker tarafında 200k concurrent client için gRPC bidirectional stream → HTTP/2 multiplexing avantajı kayboluyor çünkü her client'a ayrı stream açıyorsun. SSE + nginx + Redis pubsub bizde memory'de 4× daha verimli çıktı. WebTransport olgunlaşana kadar `text/event-stream` underrated.",
+    image_url: null,
+    country: "Almanya",
+    city: "Berlin",
+    author_role: "user",
+    like_count: 67,
+    comment_count: 33,
+    created_at: new Date(Date.now() - 1000 * 60 * 35).toISOString(),
+  },
+  {
+    id: "it-post-4",
+    user_id: "it-4",
+    content:
+      "🤖 Llama-3.1 70B'yi 8×H100'de vLLM ile serve ediyoruz, paged-attention + speculative decoding (draft model: Llama-3.2-1B) → 2.3× throughput. Ama EU AI Act compliance için her inference'ı log'lamak zorundayız, bu da S3'e ~12TB/gün. Sizde benzer GDPR + observability dengesini nasıl kuruyorsunuz? OpenTelemetry + Tempo yetiyor mu?",
+    image_url: null,
+    country: "Almanya",
+    city: "Berlin",
+    author_role: "user",
+    like_count: 96,
+    comment_count: 28,
+    created_at: new Date(Date.now() - 1000 * 60 * 51).toISOString(),
+  },
+  {
+    id: "it-post-5",
+    user_id: "it-5",
+    content:
+      "Rust'ta `tokio::select!` ile cancellation safety'yi yanlış anlayan ekipler için PSA: bir `async fn` içinde state mutate ediyorsan ve future drop edilirse, partial state ile kalırsın. `tokio_util::sync::CancellationToken` + explicit checkpoint pattern hayat kurtarıyor. Bu hafta bir startup'ın ödeme servisinde tam olarak bu yüzden double-charge bug'ı buldum 🙃",
+    image_url: null,
+    country: "Almanya",
+    city: "Berlin",
+    author_role: "user",
+    like_count: 118,
+    comment_count: 19,
+    created_at: new Date(Date.now() - 1000 * 60 * 68).toISOString(),
+  },
+  {
+    id: "it-post-6",
+    user_id: "it-6",
+    content:
+      "Monorepo migration update: 14 servisi Bazel + remote cache (BuildBuddy) ile birleştirdik. CI süresi 28dk → 4dk. Ama Bazel'in Go support'u hâlâ 2nd-class — `gazelle` her PR'da BUILD dosyalarını rewrite ediyor, devs kızıyor. Nx-style hybrid (Turborepo for TS, Bazel for JVM/Go) deneyen var mı? Mainstage'e çıkmadan önce ground truth lazım.",
+    image_url: null,
+    country: "Almanya",
+    city: "Berlin",
+    author_role: "user",
+    like_count: 54,
+    comment_count: 22,
+    created_at: new Date(Date.now() - 1000 * 60 * 84).toISOString(),
+  },
+  {
+    id: "it-post-7",
+    user_id: "it-7",
+    content:
+      "🔐 Supply-chain saldırılarına karşı: SLSA Level 3 + Sigstore (cosign) + in-toto attestations zincirini Argo Workflows üzerine kurduk. Kicker: OPA Gatekeeper policy → sadece imzalı + provenance'lı image'lar cluster'a girebiliyor. NPM'de `eslint-config` typosquatting saldırısını bu hafta bu pipeline yakaladı. Setup gist'i drop edebilirim, isteyen 👇",
+    image_url: null,
+    country: "Almanya",
+    city: "Berlin",
+    author_role: "user",
+    like_count: 201,
+    comment_count: 47,
+    created_at: new Date(Date.now() - 1000 * 60 * 102).toISOString(),
+  },
+  {
+    id: "it-post-8",
+    user_id: "it-1",
+    content:
+      "Cuma akşamı Kreuzberg'te `c-base`'de gayri-resmi system design jam: bu hafta konu 'Rate limiting at planet scale'. Token bucket vs leaky bucket vs sliding window log — kendi prod implementasyonunuzu getirin, whiteboard'ta yırtarız. Bira benden, redis instance'ı sizden 🍺",
+    image_url:
+      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=900&q=80",
+    country: "Almanya",
+    city: "Berlin",
+    author_role: "user",
+    like_count: 73,
+    comment_count: 14,
+    created_at: new Date(Date.now() - 1000 * 60 * 130).toISOString(),
+  },
+];
 
 export const mockPosts: MockPost[] = [
   {
