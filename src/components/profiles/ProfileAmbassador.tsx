@@ -185,7 +185,7 @@ const ProfileAmbassador = () => {
                     <Coffee className="h-5 w-5 text-amber-600" /> Cadde'de Cafe Aç
                   </h3>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Şehir Elçisi olarak <strong>6 saatlik</strong> uzun cafeler açabilir, topluluğunu canlı tutabilirsin.
+                    Şehir Elçisi olarak <strong>1–6 saat arası</strong> dilediğin süreyle cafe açabilir, topluluğunu canlı tutabilirsin.
                   </p>
                 </div>
                 <CreateCafeForm
@@ -193,7 +193,7 @@ const ProfileAmbassador = () => {
                   onCreated={loadCafes}
                   trigger={
                     <Button size="sm" className="gap-1.5 bg-amber-600 hover:bg-amber-700 text-white">
-                      <Plus className="h-4 w-4" /> 6 Saatlik Cafe Aç
+                      <Plus className="h-4 w-4" /> Cafe Aç (1–6 saat)
                     </Button>
                   }
                 />
@@ -219,7 +219,7 @@ const ProfileAmbassador = () => {
             <EmptyDashboardState
               icon={Coffee}
               title="Henüz cafe açmadın"
-              description="Yukarıdaki '6 Saatlik Cafe Aç' butonu ile şehrinde tematik bir cafe başlat. Açılan cafe'ler ve ziyaretçi sayıları burada listelenir."
+              description="Yukarıdaki 'Cafe Aç (1–6 saat)' butonu ile şehrinde tematik bir cafe başlat. Açılan cafe'ler ve ziyaretçi sayıları burada listelenir."
             />
           ) : (
             <Card className="border-border">
