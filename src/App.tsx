@@ -168,6 +168,7 @@ const App = () => (
                   <Route path="/feed" element={<Feed />} />
                   <Route path="/cadde" element={<Feed />} />
                   <Route path="/cadde/:cafeId" element={<Feed />} />
+                  <Route path="/diaspora-people" element={<DiasporaPeople />} />
                   <Route path="/19-mayis" element={<May19 />} />
                   <Route path="/19-mayis/harita" element={<May19Map />} />
                   <Route path="/may19" element={<May19 />} />
