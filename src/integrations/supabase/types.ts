@@ -1014,6 +1014,7 @@ export type Database = {
         Row: {
           account_type: string | null
           address: string | null
+          ambassador_referral_code: string | null
           avatar_url: string | null
           business_description: string | null
           business_name: string | null
@@ -1037,6 +1038,8 @@ export type Database = {
           presentation_name: string | null
           presentation_path: string | null
           profession: string | null
+          referral_discount_pct: number
+          referred_by_code: string | null
           school: string | null
           show_on_map: boolean
           updated_at: string
@@ -1044,6 +1047,7 @@ export type Database = {
         Insert: {
           account_type?: string | null
           address?: string | null
+          ambassador_referral_code?: string | null
           avatar_url?: string | null
           business_description?: string | null
           business_name?: string | null
@@ -1067,6 +1071,8 @@ export type Database = {
           presentation_name?: string | null
           presentation_path?: string | null
           profession?: string | null
+          referral_discount_pct?: number
+          referred_by_code?: string | null
           school?: string | null
           show_on_map?: boolean
           updated_at?: string
@@ -1074,6 +1080,7 @@ export type Database = {
         Update: {
           account_type?: string | null
           address?: string | null
+          ambassador_referral_code?: string | null
           avatar_url?: string | null
           business_description?: string | null
           business_name?: string | null
@@ -1097,6 +1104,8 @@ export type Database = {
           presentation_name?: string | null
           presentation_path?: string | null
           profession?: string | null
+          referral_discount_pct?: number
+          referred_by_code?: string | null
           school?: string | null
           show_on_map?: boolean
           updated_at?: string
@@ -1507,6 +1516,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      generate_ambassador_referral_code: { Args: never; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
