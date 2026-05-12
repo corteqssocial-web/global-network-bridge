@@ -34,6 +34,7 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
   const [country, setCountry] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [globalOnly, setGlobalOnly] = useState(false);
+  const [kopruOnly, setKopruOnly] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   // Load user's profile country/city as defaults
@@ -63,9 +64,9 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
     }
     if (!content.trim()) return;
 
-    // TR users always post locked to Türkiye cadde — they reach Global only via high engagement.
-    const finalCountry = isTR ? "Türkiye" : (globalOnly ? null : (country || null));
-    const finalCity = isTR ? (profileCity || city || null) : (globalOnly ? null : (city || null));
+    // Köprü is the open all-access cadde; otherwise TR users are locked to Türkiye.
+    const finalCountry = kopruOnly ? "Köprü" : (isTR ? "Türkiye" : (globalOnly ? null : (country || null)));
+    const finalCity = kopruOnly ? null : (isTR ? (profileCity || city || null) : (globalOnly ? null : (city || null)));
 
     setSubmitting(true);
     const { error } = await supabase.from("feed_posts").insert({
@@ -86,6 +87,7 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
     setCountry(profileCountry);
     setCity(profileCity);
     setGlobalOnly(false);
+    setKopruOnly(false);
     toast({ title: "Paylaşım yayınlandı" });
     onCreated();
   };
@@ -120,7 +122,19 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
         </p>
       )}
       <div className="flex flex-wrap gap-2 items-center">
-        {!isTR && (
+        <button
+          type="button"
+          onClick={() => setKopruOnly((v) => !v)}
+          className={`h-9 px-3 rounded-md border text-xs font-bold flex items-center gap-1.5 transition-colors ${
+            kopruOnly
+              ? "bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 text-white border-transparent"
+              : "bg-background border-border hover:bg-muted"
+          }`}
+          title="Herkese açık ortak cadde"
+        >
+          🌉 {kopruOnly ? "Köprü ✓" : "Köprü"}
+        </button>
+        {!isTR && !kopruOnly && (
           <>
             <button
               type="button"
@@ -170,8 +184,11 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
             )}
           </>
         )}
-        {isTR && (
+        {isTR && !kopruOnly && (
           <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">@Türkiye 🇹🇷</span>
+        )}
+        {kopruOnly && (
+          <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 text-white font-semibold">🌉 Köprü — herkese açık</span>
         )}
         <Button
           onClick={submit}

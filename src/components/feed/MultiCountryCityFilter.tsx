@@ -80,8 +80,29 @@ const MultiCountryCityFilter = ({
   const isGlobal =
     !selectedContinent && selectedCountries.length === 0 && selectedCities.length === 0;
 
+  const isKopru = selectedCountries.length === 1 && selectedCountries[0] === "Köprü";
+
+  const pickKopru = () => {
+    onContinentChange(null);
+    onCitiesChange([]);
+    onCountriesChange(isKopru ? [] : ["Köprü"]);
+  };
+
   return (
     <div className="flex flex-col gap-3">
+      {/* Köprü — herkese açık ortak cadde */}
+      <button
+        type="button"
+        onClick={pickKopru}
+        className={`w-full flex items-center justify-center gap-2 rounded-lg border px-3 py-2 text-xs font-bold transition-all ${
+          isKopru
+            ? "bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 text-white border-transparent shadow-sm"
+            : "bg-card text-foreground border-border hover:border-primary/40"
+        }`}
+        title="Herkese açık ortak cadde"
+      >
+        🌉 Köprü — Herkese Serbest
+      </button>
       <div className="flex flex-wrap items-center gap-2">
         {/* Continent picker */}
         <Popover>
