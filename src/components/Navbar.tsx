@@ -93,33 +93,24 @@ const Navbar = () => {
 
           <div className="hidden md:flex items-center gap-6">
             <Link to="/cadde" className="text-sm font-semibold text-foreground hover:text-primary transition-colors whitespace-nowrap">Cadde</Link>
-            <Link to="/consultants" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">{t.nav.consultants}</Link>
-            <Link to="/businesses" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t.nav.businesses}</Link>
-            <Link to="/associations" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t.nav.organizations}</Link>
-            <Link to="/bloggers" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t.nav.vblogger}</Link>
 
-            {/* More Dropdown */}
+            {/* İş Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="gap-1 text-sm font-medium text-muted-foreground hover:text-foreground px-2 h-auto">
-                  {t.nav.more}
+                  İş
                   <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-52">
                 <DropdownMenuItem asChild>
-                  <Link to="/events" className="flex items-center gap-2 cursor-pointer">
-                    <Calendar className="h-3.5 w-3.5 text-primary" />{t.nav.events}
+                  <Link to="/consultants" className="flex items-center gap-2 cursor-pointer">
+                    <Shield className="h-3.5 w-3.5 text-primary" />{t.nav.consultants}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/whatsapp-groups" className="flex items-center gap-2 cursor-pointer">
-                    <MessageCircle className="h-3.5 w-3.5 text-primary" />{t.nav.groups}
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/city-news" className="flex items-center gap-2 cursor-pointer">
-                    <Newspaper className="h-3.5 w-3.5 text-primary" />{t.nav.media}
+                  <Link to="/businesses" className="flex items-center gap-2 cursor-pointer">
+                    <Building2 className="h-3.5 w-3.5 text-primary" />{t.nav.businesses}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
@@ -127,18 +118,54 @@ const Navbar = () => {
                     <Briefcase className="h-3.5 w-3.5 text-primary" />İş İlanları
                   </Link>
                 </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Sosyal Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-1 text-sm font-medium text-muted-foreground hover:text-foreground px-2 h-auto">
+                  Sosyal
+                  <ChevronDown className="h-3 w-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-52">
                 <DropdownMenuItem asChild>
-                  <Link to="/map" className="flex items-center gap-2 cursor-pointer">
-                    <MapPin className="h-3.5 w-3.5 text-primary" />{t.nav.map}
+                  <Link to="/associations" className="flex items-center gap-2 cursor-pointer">
+                    <Flag className="h-3.5 w-3.5 text-primary" />{t.nav.organizations}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/bloggers" className="flex items-center gap-2 cursor-pointer">
+                    <PenLine className="h-3.5 w-3.5 text-primary" />{t.nav.vblogger}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/diaspora-people" className="flex items-center gap-2 cursor-pointer">
-                    <Users className="h-3.5 w-3.5 text-primary" />Diasporada İnsanlar
+                    <Users className="h-3.5 w-3.5 text-primary" />İnsanlar
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/events" className="flex items-center gap-2 cursor-pointer">
+                    <Calendar className="h-3.5 w-3.5 text-primary" />{t.nav.events}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/whatsapp-groups" className="flex items-center gap-2 cursor-pointer">
+                    <MessageCircle className="h-3.5 w-3.5 text-primary" />Mesajlaşma Grupları
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/city-news" className="flex items-center gap-2 cursor-pointer">
+                    <Newspaper className="h-3.5 w-3.5 text-primary" />{t.nav.media}
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+
+            <Link to="/map" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+              <MapPin className="h-3.5 w-3.5" />{t.nav.map}
+            </Link>
           </div>
 
           <div className="hidden md:flex items-center gap-3">
