@@ -39,10 +39,6 @@ const ProfileAmbassador = () => {
   const [managingEvent, setManagingEvent] = useState<AmbassadorEvent | null>(null);
   const [viewingEvent, setViewingEvent] = useState<AmbassadorEvent | null>(null);
   const [profileSettings, setProfileSettings] = useState({
-    showWallet: true,
-    showKpis: true,
-    showOnboarding: true,
-    showEvents: true,
     whatsappCtaEnabled: true,
     liveCallCtaEnabled: true,
     profilePublic: true,
