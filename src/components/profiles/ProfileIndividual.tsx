@@ -23,7 +23,7 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { consultants, associations, events as allEvents } from "@/data/mock";
+import { events as allEvents } from "@/data/mock";
 import { useRelocationResearches } from "@/hooks/useRelocationResearches";
 import ServiceRequestForm from "@/components/ServiceRequestForm";
 import ServiceRequestsList from "@/components/ServiceRequestsList";
@@ -53,7 +53,7 @@ const ProfileIndividual = () => {
   const [isJobSeeking, setIsJobSeeking] = useState(true);
   const [_showWelcomePack, _setShowWelcomePack] = useState(true); // kept for future use
   const [profileVisible, setProfileVisible] = useState(true);
-  const [linkedinUrl, setLinkedinUrl] = useState("https://linkedin.com/in/emreaydin");
+  const [linkedinUrl, setLinkedinUrl] = useState("");
   const [cvDoc, setCvDoc] = useState<{ path: string; name: string } | null>(null);
   const [pptDoc, setPptDoc] = useState<{ path: string; name: string } | null>(null);
   const [uploadingKind, setUploadingKind] = useState<null | "cv" | "presentation">(null);
@@ -89,8 +89,8 @@ const ProfileIndividual = () => {
   const [tagline, setTagline] = useState(() => localStorage.getItem("indiv_tagline") || "");
   const [worldMessage, setWorldMessage] = useState(() => localStorage.getItem("indiv_world_message") || "");
   const [birthDate, setBirthDate] = useState(() => localStorage.getItem("indiv_birth_date") || "");
-  const [pCountry, setPCountry] = useState(() => localStorage.getItem("indiv_country") || "Almanya");
-  const [pCity, setPCity] = useState(() => localStorage.getItem("indiv_city") || "Berlin");
+  const [pCountry, setPCountry] = useState(() => localStorage.getItem("indiv_country") || "");
+  const [pCity, setPCity] = useState(() => localStorage.getItem("indiv_city") || "");
   const [hasPassport, setHasPassport] = useState(() => localStorage.getItem("indiv_corteqs_passport") === "true");
   const [relocating, setRelocating] = useState(() => localStorage.getItem("indiv_relocating") === "true");
   const [relocCountry, setRelocCountry] = useState(() => localStorage.getItem("indiv_reloc_country") || "");
@@ -110,25 +110,29 @@ const ProfileIndividual = () => {
     toast({ title: "Profil güncellendi", description: "Genel profilin yenilendi." });
   };
 
+  const { user: authUser } = useAuth();
+  const { toast } = useToast();
+  const { profile } = useAuth();
+
+  const fullName = profile?.full_name?.trim() || authUser?.email?.split("@")[0] || "Üye";
+  const initials = fullName
+    .split(/\s+/)
+    .map((p) => p[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase() || "U";
   const user = {
-    name: "Emre Aydın",
-    email: "emre@example.com",
-    avatar: "EA",
-    country: "Almanya",
-    city: "Berlin",
-    balance: 250.00,
-    title: "Yazılım Mühendisi",
+    name: fullName,
+    email: authUser?.email || "",
+    avatar: initials,
+    country: profile?.country || pCountry || "",
+    city: profile?.city || pCity || "",
+    title: profile?.profession || "",
   };
 
-  const followedConsultants = consultants.slice(0, 3);
-  const followedAssociations = associations.slice(0, 2);
-
   const hasRealCoupons = useDemoFlag("coupons");
-  const demoCoupons = [
-    { id: 1, title: "Demo · Hoşgeldin İndirimi %15", code: "DEMO15", expires: "30 Nis 2026", type: "discount" as const, businessName: "Turkish Döner GmbH" },
-    { id: 2, title: "Demo · Hediye Baklava", code: "DEMOTATLI", expires: "15 Mar 2026", type: "free" as const, businessName: "İstanbul Baklava House" },
-  ];
-  const coupons = hasRealCoupons ? [] : demoCoupons;
+  const coupons: Array<{ id: number; title: string; code: string; expires: string; type: "discount" | "free"; businessName: string }> = [];
 
   const [selectedCouponForScan, setSelectedCouponForScan] = useState<number | null>(null);
   const [showScanner, setShowScanner] = useState(false);
@@ -138,8 +142,6 @@ const ProfileIndividual = () => {
   const [expandedChatId, setExpandedChatId] = useState<string | null>(null);
   const cvInputRef = useRef<HTMLInputElement>(null);
   const pptInputRef = useRef<HTMLInputElement>(null);
-  const { user: authUser } = useAuth();
-  const { toast } = useToast();
 
   // Load existing documents + mentor settings from profile
   useEffect(() => {
@@ -345,6 +347,8 @@ const ProfileIndividual = () => {
       <IndividualPublicCard
         name={user.name}
         avatarInitials={user.avatar}
+        email={user.email}
+        title={user.title}
         tagline={tagline}
         worldMessage={worldMessage}
         city={pCity || user.city}
@@ -352,52 +356,15 @@ const ProfileIndividual = () => {
         corteqsPassport={hasPassport}
         recentEvents={recentPublicEvents}
         relocating={relocating ? { country: relocCountry, city: relocCity } : null}
+        isJobSeeking={isJobSeeking}
+        profileVisible={profileVisible}
+        linkedinUrl={linkedinUrl}
+        linkedinVisible={linkedinVisible}
+        cvDoc={cvDoc}
+        pptDoc={pptDoc}
+        onOpenCv={() => handleDocOpen("cv")}
+        onOpenPpt={() => handleDocOpen("presentation")}
       />
-
-      {/* Profile header */}
-      <div className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-card mb-8">
-        <div className="flex flex-col sm:flex-row sm:items-start gap-6">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-primary flex items-center justify-center text-primary-foreground font-bold text-2xl shrink-0">
-            {user.avatar}
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-2xl font-bold text-foreground">{user.name}</h1>
-              {isJobSeeking && (
-                <Badge className="bg-turquoise/15 text-turquoise border-turquoise/30 gap-1">
-                  <Briefcase className="h-3 w-3" /> İş Arıyorum
-                </Badge>
-              )}
-              {profileVisible ? (
-                <Badge variant="outline" className="gap-1 text-xs"><Eye className="h-3 w-3" /> Profil Açık</Badge>
-              ) : (
-                <Badge variant="outline" className="gap-1 text-xs text-muted-foreground"><EyeOff className="h-3 w-3" /> Profil Gizli</Badge>
-              )}
-            </div>
-            <p className="text-muted-foreground">{user.title} · {user.email}</p>
-            <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
-              <MapPin className="h-3 w-3" /> {user.city}, {user.country}
-            </p>
-            <div className="flex items-center gap-3 mt-2">
-              {linkedinUrl && linkedinVisible && (
-                <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-sm text-primary hover:underline">
-                  <Linkedin className="h-4 w-4" /> LinkedIn
-                </a>
-              )}
-              {cvDoc && (
-                <button onClick={() => handleDocOpen("cv")} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
-                  <FileText className="h-4 w-4" /> CV
-                </button>
-              )}
-              {pptDoc && (
-                <button onClick={() => handleDocOpen("presentation")} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
-                  <Presentation className="h-4 w-4" /> Sunum
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Volunteer Mentor CTA */}
       <div className="bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/30 rounded-2xl p-5 md:p-6 mb-8 flex flex-col sm:flex-row sm:items-center gap-4">
