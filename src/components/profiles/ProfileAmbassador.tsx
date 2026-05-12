@@ -19,7 +19,7 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CreateEventForm from "@/components/CreateEventForm";
 import EventManagePanel from "@/components/EventManagePanel";
 import StripeTransactionsPanel, { type StripeTxn } from "@/components/StripeTransactionsPanel";
