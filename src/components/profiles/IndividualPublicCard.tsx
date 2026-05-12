@@ -29,6 +29,7 @@ const IndividualPublicCard = ({
   country,
   corteqsPassport,
   recentEvents,
+  relocating,
 }: Props) => {
   const { user } = useAuth();
   const { list } = useFollow();
