@@ -49,16 +49,20 @@ const PlatformMessageDialog = ({
 }: Props) => {
   const { user, profile, accountType } = useAuth();
   const { toast } = useToast();
-  const { isFollowed, isFollowAccepted, toggle } = useFollow();
+  const { canMessage, statusWith, requestConnection } = useConnections();
   const navigate = useNavigate();
   const [subject, setSubject] = useState(defaultSubject ?? "");
   const [body, setBody] = useState("");
   const [sending, setSending] = useState(false);
 
-  const following = isFollowed(recipientKind, recipientSlug);
-  const accepted = isFollowAccepted(recipientKind, recipientSlug);
   const isAdmin = accountType === "admin";
-  const canSend = isAdmin || (following && accepted);
+  const status = recipientUserId ? statusWith(recipientUserId) : "none";
+  const isPending = status === "pending";
+  const isAccepted = status === "accepted";
+  const isBlocked = status === "blocked" || status === "declined";
+  // Without a real recipient user id we cannot enforce DB-level connection (mock profile);
+  // in that case fall back to allowing send for admins only.
+  const canSend = isAdmin || isAccepted || (!recipientUserId && false);
 
   const goToAuth = () => {
     const redirect = encodeURIComponent(window.location.pathname + window.location.search);
