@@ -55,6 +55,9 @@ const cafeGifts = [
 
 const WelcomePack = ({ userName, country, city, onDismiss }: WelcomePackProps) => {
   const { toast } = useToast();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const isLocked = !user;
   const [expandedSection, setExpandedSection] = useState<string | null>("flight");
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [completedSteps, setCompletedSteps] = useState<string[]>([]);
