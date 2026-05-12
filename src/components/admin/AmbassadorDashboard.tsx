@@ -171,6 +171,8 @@ const AmbassadorDashboard = () => {
       events: list.reduce((s, a) => s + a.events, 0),
       participants: list.reduce((s, a) => s + a.participants, 0),
       onboarded: list.reduce((s, a) => s + a.onboarded, 0),
+      cafesOpened: list.reduce((s, a) => s + a.cafesOpened, 0),
+      cafeVisitors: list.reduce((s, a) => s + a.cafeVisitors, 0),
       onboardingBreakdown: {
         individuals: list.reduce((s, a) => s + a.onboardingBreakdown.individuals, 0),
         consultants: list.reduce((s, a) => s + a.onboardingBreakdown.consultants, 0),
