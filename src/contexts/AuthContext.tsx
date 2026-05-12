@@ -6,6 +6,9 @@ interface Profile {
   full_name: string | null;
   avatar_url: string | null;
   phone: string | null;
+  phone_verified: boolean;
+  country: string | null;
+  city: string | null;
   account_type: string | null;
   onboarding_completed: boolean;
 }
@@ -17,6 +20,8 @@ interface AuthContextType {
   profile: Profile | null;
   accountType: string | null;
   onboardingCompleted: boolean;
+  profileComplete: boolean;
+  isGlobalDiaspora: boolean;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -28,6 +33,8 @@ const AuthContext = createContext<AuthContextType>({
   profile: null,
   accountType: null,
   onboardingCompleted: false,
+  profileComplete: false,
+  isGlobalDiaspora: false,
   signOut: async () => {},
   refreshProfile: async () => {},
 });
@@ -43,10 +50,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchProfile = useCallback(async (userId: string) => {
     const { data } = await supabase
       .from("profiles")
-      .select("full_name, avatar_url, phone, account_type, onboarding_completed")
+      .select("full_name, avatar_url, phone, phone_verified, country, city, account_type, onboarding_completed")
       .eq("id", userId)
       .single();
-    
+
     if (data) {
       setProfile(data as Profile);
     }
@@ -92,6 +99,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setProfile(null);
   };
 
+  const phone = profile?.phone ?? null;
+  const isGlobalDiaspora = !!phone && !phone.replace(/\s|-/g, "").startsWith("+90") && !phone.replace(/\s|-/g, "").startsWith("0090");
+  const profileComplete = !!(profile?.onboarding_completed && profile?.country && profile?.city && profile?.phone_verified);
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -100,6 +111,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       profile,
       accountType: profile?.account_type ?? null,
       onboardingCompleted: profile?.onboarding_completed ?? false,
+      profileComplete,
+      isGlobalDiaspora,
       signOut,
       refreshProfile,
     }}>

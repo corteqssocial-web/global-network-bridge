@@ -18,6 +18,7 @@ import MultiCountryCityFilter from "@/components/feed/MultiCountryCityFilter";
 import CreatePostForm from "@/components/feed/CreatePostForm";
 import { mockPosts, mockAuthors } from "@/data/mockFeedPosts";
 import { useFeedSocial } from "@/hooks/useFeedSocial";
+import CaddeProfileGate from "@/components/CaddeProfileGate";
 
 const PAGE_SIZE = 20;
 
@@ -417,6 +418,7 @@ const Feed = () => {
   };
 
   return (
+    <CaddeProfileGate>
     <div className="min-h-screen bg-background">
       <Navbar />
 
@@ -1012,6 +1014,7 @@ const Feed = () => {
         </DialogContent>
       </Dialog>
     </div>
+    </CaddeProfileGate>
   );
 };
 
