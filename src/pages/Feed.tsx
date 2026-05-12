@@ -523,21 +523,38 @@ const Feed = () => {
                   <h3 className="text-sm font-bold">Konum</h3>
                   <Badge variant="secondary" className="ml-auto text-[10px]">{scopeLabel}</Badge>
                 </div>
-                {/* Global reset — tüm ülkelerin akışı */}
+                {/* Global — demo toggle: gerçek feed boşsa demo aç, doluysa demoyu kapat */}
                 <button
                   onClick={() => {
                     setSelectedContinent(null);
                     setSelectedCountries([]);
                     setSelectedCities([]);
+                    if (demoMode) {
+                      // Demo aktifse kapat ve gerçek feed'e dön
+                      setDemoMode(false);
+                      setPosts([]);
+                      setHasMore(true);
+                      setPage(0);
+                      fetchPosts(true);
+                      toast({ title: "Demo kapatıldı", description: "Gerçek akış yükleniyor." });
+                    } else if (posts.length === 0) {
+                      // Gerçek feed boşsa demoyu aç
+                      loadDemoData();
+                      toast({ title: "Demo açıldı", description: "Henüz gerçek akış yok — örnek içerik gösteriliyor." });
+                    } else {
+                      toast({ title: "Global akış", description: "Gerçek kullanıcı akışı zaten aktif." });
+                    }
                   }}
                   className={`w-full mb-3 flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-bold transition-all ${
-                    scopeLabel === "Global"
+                    demoMode
+                      ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white border-transparent shadow-sm"
+                      : scopeLabel === "Global"
                       ? "bg-gradient-to-r from-sky-500 to-violet-500 text-white border-transparent shadow-sm"
                       : "bg-card text-foreground border-border hover:border-primary/40"
                   }`}
-                  title="Tüm ülkelerin akışını göster"
+                  title={demoMode ? "Demoyu kapat" : "Global akış / boşsa demo aç"}
                 >
-                  🌍 Global — Tüm Ülkeler
+                  🌍 {demoMode ? "Demo Aktif — Kapat" : "Global — Tüm Ülkeler"}
                 </button>
                 <MultiCountryCityFilter
                   selectedCountries={selectedCountries}
