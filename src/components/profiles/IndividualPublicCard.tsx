@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Coffee, Calendar, MessageSquare, Info, ShieldCheck, Users, Heart } from "lucide-react";
+import { MapPin, Coffee, Calendar, MessageSquare, Info, ShieldCheck, Users, Heart, Plane } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
