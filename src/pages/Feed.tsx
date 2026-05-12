@@ -608,7 +608,7 @@ const Feed = () => {
                   Diasporada İnsanları Ara
                 </h3>
                 <p className="text-[11px] text-muted-foreground mb-2 leading-snug">
-                  Ülke/şehir + iş arayan, taşınacak filtreleri ile tüm diasporayı keşfet.
+                  Ülke/şehir + meslek + iş arayan, taşınacak filtreleri ile tüm diasporayı keşfet.
                 </p>
                 <span className="text-[11px] font-semibold text-sky-600 hover:underline">
                   Keşfet →
