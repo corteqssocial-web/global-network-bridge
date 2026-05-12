@@ -15,6 +15,7 @@ import CreateEventForm from "@/components/CreateEventForm";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MessagesInbox from "@/components/messaging/MessagesInbox";
+import MyFollowsSection from "@/components/profiles/MyFollowsSection";
 import { Inbox as InboxIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
