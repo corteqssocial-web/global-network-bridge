@@ -21,6 +21,7 @@ import NotificationsList from "@/components/NotificationsList";
 import CorBotPromoBanner from "@/components/CorBotPromoBanner";
 import EmptyDashboardState from "@/components/EmptyDashboardState";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
+import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
 
 type AmbassadorEvent = {
   id: number;
