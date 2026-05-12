@@ -19,8 +19,11 @@ import CreatePostForm from "@/components/feed/CreatePostForm";
 import { mockPosts, mockAuthors, mockCafeITPosts } from "@/data/mockFeedPosts";
 import { useFeedSocial } from "@/hooks/useFeedSocial";
 import CaddeProfileGate from "@/components/CaddeProfileGate";
+import { useConnections } from "@/hooks/useConnections";
 
 const PAGE_SIZE = 20;
+// Türkiye merkezli paylaşımların Global akışa "sızması" için minimum etkileşim eşiği
+const TR_GLOBAL_THRESHOLD = 25;
 
 interface FeedPost {
   id: string;
@@ -61,7 +64,10 @@ const formatTime = (iso: string) => {
 };
 
 const Feed = () => {
-  const { user, onboardingCompleted } = useAuth();
+  const { user, onboardingCompleted, profile } = useAuth();
+  const { canMessage, requestConnection } = useConnections();
+  const isTRUser = (profile?.country === "Türkiye") ||
+    (!!profile?.phone && (profile.phone.replace(/\s|-/g, "").startsWith("+90") || profile.phone.replace(/\s|-/g, "").startsWith("0090")));
   const { cafeId } = useParams<{ cafeId?: string }>();
   const navigate = useNavigate();
   const isDemoCafe = cafeId === "demo-it";
@@ -190,6 +196,9 @@ const Feed = () => {
           query = query.in("country", continents[selectedContinent] || []);
         } else if (selectedCountries.length > 0) {
           query = query.in("country", selectedCountries);
+        } else {
+          // Global akış: Türkiye paylaşımları yalnızca yüksek etkileşimde sızar
+          query = query.or(`country.is.null,country.neq.Türkiye,like_count.gte.${TR_GLOBAL_THRESHOLD}`);
         }
       }
 
@@ -318,6 +327,20 @@ const Feed = () => {
   const addComment = (postId: string) => {
     const text = (commentDrafts[postId] || "").trim();
     if (!text) return;
+    const post = posts.find((p) => p.id === postId);
+    // TR kullanıcı, başka ülkedeki paylaşıma yorum yazmak için karşı tarafla bağlantı (connect) olmalı
+    if (post && isTRUser && post.country && post.country !== "Türkiye" && !demoMode) {
+      const isOwn = user?.id === post.user_id;
+      if (!isOwn && !canMessage(post.user_id)) {
+        toast({
+          title: "Yorum için bağlantı gerekli",
+          description: "Yurt dışındaki kullanıcılara yorum yazabilmek için önce bağlantı (connect) iste.",
+          variant: "destructive",
+        });
+        requestConnection(post.user_id, authorMap[post.user_id]?.full_name || undefined);
+        return;
+      }
+    }
     const c = {
       id: (typeof crypto !== "undefined" && (crypto as any).randomUUID) ? (crypto as any).randomUUID() : `c-${Date.now()}`,
       author: (user as any)?.email?.split("@")[0] || "Sen",
