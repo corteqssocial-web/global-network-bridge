@@ -29,6 +29,7 @@ import NotificationsList from "@/components/NotificationsList";
 import { addDiasporaBlogLink, getDiasporaBlogLinksByAuthor, removeDiasporaBlogLink, type DiasporaBlogLink } from "@/lib/diasporaBlogLinks";
 import { toast } from "@/hooks/use-toast";
 import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
+import ProfileSubcategoriesSettings from "@/components/profiles/ProfileSubcategoriesSettings";
 
 const ProfileBlogger = () => {
   const blogger = {

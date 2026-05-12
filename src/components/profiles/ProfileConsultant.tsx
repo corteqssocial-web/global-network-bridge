@@ -34,6 +34,7 @@ import SocialMediaInputs from "@/components/SocialMediaInputs";
 import ConsultantFeatureToggles from "@/components/profiles/ConsultantFeatureToggles";
 import { Sliders } from "lucide-react";
 import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
+import ProfileSubcategoriesSettings from "@/components/profiles/ProfileSubcategoriesSettings";
 
 const ProfileConsultant = () => {
   const { user } = useAuth();
