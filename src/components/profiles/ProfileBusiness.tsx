@@ -18,6 +18,7 @@ import SocialMediaCampaignDialog from "@/components/SocialMediaCampaignDialog";
 import CategoryShowcasePurchase from "@/components/CategoryShowcasePurchase";
 import BusinessOpportunitiesPanel from "@/components/business/BusinessOpportunitiesPanel";
 import MyFollowsSection from "@/components/profiles/MyFollowsSection";
+import { ProfileSetupBanner, useProfileGate } from "@/components/profiles/ProfileSetupBanner";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
