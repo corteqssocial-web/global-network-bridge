@@ -1,7 +1,8 @@
 import { useFollow } from "@/hooks/useFollow";
-import { useParams, Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import PlatformMessageButton from "@/components/messaging/PlatformMessageButton";
-import { Users, MapPin, Calendar as CalendarIcon, Globe as GlobeIcon, ArrowLeft, ExternalLink, MessageSquare, Share2, UserPlus, UserCheck, Heart, CreditCard, Ticket, Music, Radio, Landmark, Clock, FileText, Stethoscope, Navigation, Mail, Phone, Instagram, Facebook, Award, Target, Briefcase } from "lucide-react";
+import { Users, MapPin, Calendar as CalendarIcon, Globe as GlobeIcon, ArrowLeft, ExternalLink, MessageSquare, Share2, UserPlus, UserCheck, Heart, CreditCard, Ticket, Music, Radio, Landmark, Clock, FileText, Stethoscope, Navigation, Mail, Phone, Instagram, Facebook, Award, Target, Briefcase, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navbar from "@/components/Navbar";
@@ -10,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { associations } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
 import DemoPageBanner from "@/components/DemoPageBanner";
+import DetailAuthLock from "@/components/DetailAuthLock";
 import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
 import PublicEventsList from "@/components/PublicEventsList";
 
