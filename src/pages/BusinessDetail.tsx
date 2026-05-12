@@ -25,8 +25,23 @@ const BusinessDetail = () => {
   const { id } = useParams();
   const b = businesses.find((x) => x.id === id);
   const { isFollowed: isFollowedFn, toggle } = useFollow();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const isFollowed = b ? isFollowedFn("business", b.id) : false;
   const { toast } = useToast();
+
+  const requireAuth = (action: () => void) => () => {
+    if (!user) {
+      toast({
+        title: "Giriş gerekli",
+        description: "Bu işlem için lütfen giriş yapın veya kayıt olun.",
+        variant: "destructive",
+      });
+      navigate("/auth");
+      return;
+    }
+    action();
+  };
 
   if (!b) {
     return (
