@@ -872,13 +872,13 @@ const ProfileIndividual = () => {
                 <Input value={tagline} onChange={(e) => setTagline(e.target.value)} maxLength={120} placeholder="Örn: Berlin'de yazılım, kahve ve diaspora ☕" />
               </div>
               <div className="md:col-span-2">
-                <Label>Dünyaya Mesajım</Label>
+                <Label>Profil Mesajım</Label>
                 <textarea
                   value={worldMessage}
                   onChange={(e) => setWorldMessage(e.target.value)}
                   rows={2}
                   maxLength={240}
-                  placeholder="Diasporaya, gelecek nesle veya dünyaya bırakmak istediğin kısa mesaj"
+                  placeholder="Profilinde görünecek kısa bir mesaj yaz"
                   className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
