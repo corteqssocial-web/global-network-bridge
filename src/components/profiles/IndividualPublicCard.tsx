@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Coffee, Calendar, MessageSquare, Info, ShieldCheck, Users, Heart } from "lucide-react";
+import { MapPin, Coffee, Calendar, MessageSquare, Info, ShieldCheck, Users, Heart, Plane } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -17,6 +17,7 @@ interface Props {
   country?: string;
   corteqsPassport?: boolean;
   recentEvents: Array<{ id: string; title: string; date: string; city?: string; source: "joined" | "followed" }>;
+  relocating?: { country?: string; city?: string } | null;
 }
 
 const IndividualPublicCard = ({
@@ -28,6 +29,7 @@ const IndividualPublicCard = ({
   country,
   corteqsPassport,
   recentEvents,
+  relocating,
 }: Props) => {
   const { user } = useAuth();
   const { list } = useFollow();
@@ -95,6 +97,12 @@ const IndividualPublicCard = ({
               <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {[city, country].filter(Boolean).join(", ")}</span>
             )}
           </div>
+
+          {relocating && (relocating.country || relocating.city) && (
+            <Badge className="mt-2 gap-1 bg-amber-500/15 text-amber-700 border-amber-500/30">
+              <Plane className="h-3 w-3" /> Yakında taşınacak: {[relocating.city, relocating.country].filter(Boolean).join(", ")}
+            </Badge>
+          )}
 
           {worldMessage && (
             <div className="mt-3 rounded-xl border border-border bg-muted/30 px-3 py-2 text-sm text-foreground/90">

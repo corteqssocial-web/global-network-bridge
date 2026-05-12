@@ -87,7 +87,11 @@ const ProfileIndividual = () => {
   const [pCountry, setPCountry] = useState(() => localStorage.getItem("indiv_country") || "Almanya");
   const [pCity, setPCity] = useState(() => localStorage.getItem("indiv_city") || "Berlin");
   const [hasPassport, setHasPassport] = useState(() => localStorage.getItem("indiv_corteqs_passport") === "true");
+  const [relocating, setRelocating] = useState(() => localStorage.getItem("indiv_relocating") === "true");
+  const [relocCountry, setRelocCountry] = useState(() => localStorage.getItem("indiv_reloc_country") || "");
+  const [relocCity, setRelocCity] = useState(() => localStorage.getItem("indiv_reloc_city") || "");
   const cityChoices = countryCities[pCountry] || [];
+  const relocCityChoices = countryCities[relocCountry] || [];
   const savePublicProfile = () => {
     localStorage.setItem("indiv_tagline", tagline);
     localStorage.setItem("indiv_world_message", worldMessage);
@@ -95,6 +99,9 @@ const ProfileIndividual = () => {
     localStorage.setItem("indiv_country", pCountry);
     localStorage.setItem("indiv_city", pCity);
     localStorage.setItem("indiv_corteqs_passport", String(hasPassport));
+    localStorage.setItem("indiv_relocating", String(relocating));
+    localStorage.setItem("indiv_reloc_country", relocCountry);
+    localStorage.setItem("indiv_reloc_city", relocCity);
     toast({ title: "Profil güncellendi", description: "Genel profilin yenilendi." });
   };
 
@@ -339,6 +346,7 @@ const ProfileIndividual = () => {
         country={pCountry || user.country}
         corteqsPassport={hasPassport}
         recentEvents={recentPublicEvents}
+        relocating={relocating ? { country: relocCountry, city: relocCity } : null}
       />
 
       {/* Profile header */}
@@ -385,7 +393,6 @@ const ProfileIndividual = () => {
           </div>
         </div>
       </div>
-
 
       {/* Volunteer Mentor CTA */}
       <div className="bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/30 rounded-2xl p-5 md:p-6 mb-8 flex flex-col sm:flex-row sm:items-center gap-4">
@@ -926,6 +933,41 @@ const ProfileIndividual = () => {
                   <Switch checked={hasPassport} onCheckedChange={setHasPassport} />
                 </div>
               </div>
+            </div>
+
+            {/* Yakında taşınacağım */}
+            <div className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/5 p-4">
+              <div className="flex items-start justify-between gap-3 flex-wrap">
+                <div>
+                  <h3 className="font-semibold text-foreground">Yakında Taşınacağım</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Açtığında taşınacağın ülke/şehir profilinde rozet olarak görünür ve "Diasporada İnsanları Ara" panelinde "Taşınacaklar" filtresinde listelenirsin.
+                  </p>
+                </div>
+                <Switch checked={relocating} onCheckedChange={setRelocating} />
+              </div>
+              {relocating && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                  <div>
+                    <Label>Taşınacağın Ülke</Label>
+                    <Select value={relocCountry} onValueChange={(v) => { setRelocCountry(v); setRelocCity(""); }}>
+                      <SelectTrigger><SelectValue placeholder="Ülke seç" /></SelectTrigger>
+                      <SelectContent className="max-h-[60vh]">
+                        {countryList.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label>Taşınacağın Şehir</Label>
+                    <Select value={relocCity} onValueChange={setRelocCity} disabled={!relocCountry}>
+                      <SelectTrigger><SelectValue placeholder={relocCountry ? `Tüm Şehirler - ${relocCountry}` : "Önce ülke seç"} /></SelectTrigger>
+                      <SelectContent className="max-h-[60vh]">
+                        {relocCityChoices.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end mt-5">
