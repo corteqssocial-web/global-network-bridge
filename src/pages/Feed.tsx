@@ -365,9 +365,17 @@ const Feed = () => {
               <span className="text-xs text-muted-foreground">· {formatTime(p.created_at)}</span>
             </div>
             {(p.country || p.city) && (
-              <div className="flex items-center gap-1 text-[11px] text-muted-foreground mt-0.5">
-                <MapPin className="h-3 w-3" />
-                {[p.city, p.country].filter(Boolean).join(" · ")}
+              <div className="flex items-center gap-1 text-[11px] mt-0.5 flex-wrap">
+                {p.city && (
+                  <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-turquoise/10 text-turquoise font-semibold">
+                    @{p.city}
+                  </span>
+                )}
+                {p.country && (
+                  <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">
+                    @{p.country}
+                  </span>
+                )}
               </div>
             )}
           </div>
