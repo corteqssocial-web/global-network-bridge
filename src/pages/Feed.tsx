@@ -1075,7 +1075,7 @@ const Feed = () => {
                   <Badge className="absolute top-1 right-2 bg-white/20 text-white border-0 text-[10px] backdrop-blur">Premium</Badge>
                 </div>
                 <div className="p-3 -mt-4">
-                  <img src="https://i.pravatar.cc/80?img=68" alt="" className="h-14 w-14 rounded-full ring-4 ring-card object-cover mb-2" />
+                  <img src="https://i.pravatar.cc/160?img=68" alt="" className="h-14 w-14 rounded-full ring-4 ring-card object-cover object-top mb-2" />
                   <h4 className="text-sm font-bold">Berk Kural</h4>
                   <p className="text-[11px] text-muted-foreground">💼 Almanya Vize & Oturum</p>
                   <div className="flex items-center gap-1 mt-1.5">
