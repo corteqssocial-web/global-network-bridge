@@ -120,6 +120,36 @@ const ProfileAmbassador = () => {
         ))}
       </div>
 
+      </div>
+
+      {/* Onboarding Kırılımı */}
+      <Card className="border-border mb-6">
+        <CardContent className="p-5">
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+            <h3 className="font-bold text-foreground flex items-center gap-2">
+              <Users className="h-5 w-5 text-primary" /> Onboarding Kırılımı
+            </h3>
+            <Badge variant="outline" className="border-primary/30 text-primary">
+              Toplam: {usersOnboardedTotal}
+            </Badge>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            {[
+              { label: "Bireysel Kullanıcı", value: onboardingBreakdown.individuals, color: "text-primary" },
+              { label: "Danışman", value: onboardingBreakdown.consultants, color: "text-turquoise" },
+              { label: "İşletme", value: onboardingBreakdown.businesses, color: "text-gold" },
+              { label: "Kuruluş", value: onboardingBreakdown.organizations, color: "text-success" },
+              { label: "Blogger / Vlogger", value: onboardingBreakdown.bloggers, color: "text-accent-foreground" },
+            ].map((b) => (
+              <div key={b.label} className="rounded-xl border border-border bg-muted/20 p-3 text-center">
+                <p className={`text-xl font-bold ${b.color}`}>{b.value}</p>
+                <p className="text-[11px] text-muted-foreground mt-1 leading-tight">{b.label}</p>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
       <AmbassadorReferralCard />
 
       <div className="mb-6"><CorBotPromoBanner /></div>
