@@ -415,6 +415,7 @@ const WelcomePack = ({ userName, country, city, onDismiss }: WelcomePackProps) =
             </div>
           )}
         </div>
+        </div>
       </div>
 
       {allDone && (
