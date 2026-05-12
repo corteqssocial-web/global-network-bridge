@@ -97,16 +97,16 @@ const PhoneVerification = () => {
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           placeholder="+49 170 …  (ülke kodu ile)"
-          disabled={verified}
+          disabled={inputDisabled}
         />
-        {!verified && (
+        {(!verified || editing) && (
           <Button size="sm" onClick={sendCode} disabled={sending} className="gap-1.5 shrink-0">
             {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
             {sent ? "Yeniden Gönder" : "Kod Gönder"}
           </Button>
         )}
       </div>
-      {!verified && sent && (
+      {(!verified || editing) && sent && (
         <div className="space-y-2">
           {demoCode && (
             <p className="text-[11px] text-muted-foreground bg-muted/50 rounded px-2 py-1">
@@ -127,10 +127,13 @@ const PhoneVerification = () => {
           </div>
         </div>
       )}
-      {verified && (
-        <p className="text-xs text-muted-foreground">
-          Numarayı değiştirmek için profil ayarlarından bu alanı düzenleyebilirsiniz (yeniden doğrulama gerekir).
-        </p>
+      {verified && !editing && (
+        <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+          <span>Doğrulanmış numarayı dilediğin zaman değiştirebilirsin (yeniden doğrulama gerekir).</span>
+          <Button size="sm" variant="outline" onClick={() => { setEditing(true); setSent(false); setDemoCode(null); }}>
+            Daha sonra değiştir
+          </Button>
+        </div>
       )}
     </div>
   );
