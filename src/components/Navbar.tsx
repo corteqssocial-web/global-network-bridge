@@ -208,6 +208,7 @@ const Navbar = () => {
               <Link to="/city-news" className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1" onClick={() => setIsOpen(false)}><Newspaper className="h-3 w-3" />{t.nav.media}</Link>
               
               <Link to="/map" className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1" onClick={() => setIsOpen(false)}><MapPin className="h-3 w-3" />{t.nav.map}</Link>
+              <Link to="/diaspora-people" className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1" onClick={() => setIsOpen(false)}><Users className="h-3 w-3" />Diasporada İnsanlar</Link>
               <Link to="/19-mayis" className="text-sm font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1" onClick={() => setIsOpen(false)}><span role="img" aria-label="Türk Bayrağı">🇹🇷</span> 19Mayıs1919</Link>
               <div className="border-t border-border pt-3 mt-1">
                 {user ? (
