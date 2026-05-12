@@ -103,6 +103,9 @@ const Feed = () => {
   const [hasMore, setHasMore] = useState(true);
   const [authorMap, setAuthorMap] = useState<Record<string, { full_name: string | null; avatar_url: string | null }>>({});
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
+  const [openComments, setOpenComments] = useState<Set<string>>(new Set());
+  const [commentsMap, setCommentsMap] = useState<Record<string, { id: string; author: string; text: string; created_at: string }[]>>({});
+  const [commentDrafts, setCommentDrafts] = useState<Record<string, string>>({});
   const { cafes: activeCafes, refresh: refreshCafes } = useActiveCafes({
     countries: selectedCountries,
     cities: selectedCities,
@@ -299,6 +302,47 @@ const Feed = () => {
     }
   };
 
+  const toggleComments = (id: string) => {
+    setOpenComments((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  const addComment = (postId: string) => {
+    const text = (commentDrafts[postId] || "").trim();
+    if (!text) return;
+    const c = {
+      id: (typeof crypto !== "undefined" && (crypto as any).randomUUID) ? (crypto as any).randomUUID() : `c-${Date.now()}`,
+      author: (user as any)?.email?.split("@")[0] || "Sen",
+      text,
+      created_at: new Date().toISOString(),
+    };
+    setCommentsMap((prev) => ({ ...prev, [postId]: [...(prev[postId] || []), c] }));
+    setCommentDrafts((prev) => ({ ...prev, [postId]: "" }));
+    setPosts((prev) => prev.map((p) => (p.id === postId ? { ...p, comment_count: p.comment_count + 1 } : p)));
+  };
+
+  const sharePost = async (p: FeedPost) => {
+    const url = `${window.location.origin}${window.location.pathname}#post-${p.id}`;
+    const shareData = { title: "Diaspora Cadde", text: p.content.slice(0, 120), url };
+    if ((navigator as any).share) {
+      try {
+        await (navigator as any).share(shareData);
+        return;
+      } catch {
+        /* user cancelled */
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      toast({ title: "Bağlantı kopyalandı", description: "Paylaşmak için yapıştırabilirsin." });
+    } catch {
+      toast({ title: "Paylaşım başarısız", variant: "destructive" });
+    }
+  };
+
   const scopeLabel = useMemo(() => {
     if (selectedCities.length > 0) return `${selectedCities.length} şehir`;
     if (selectedContinent) return selectedContinent;
@@ -402,17 +446,56 @@ const Feed = () => {
             <Heart className={`h-4 w-4 transition-transform ${liked ? "fill-rose-500 scale-110" : ""}`} />
             <span className="text-xs font-medium">{p.like_count}</span>
           </Button>
-          <Button variant="ghost" size="sm" className="gap-1.5 h-8 px-2 rounded-full text-muted-foreground hover:bg-sky-50 dark:hover:bg-sky-500/10 hover:text-sky-500">
+          <Button variant="ghost" size="sm" onClick={() => toggleComments(p.id)} className={`gap-1.5 h-8 px-2 rounded-full hover:bg-sky-50 dark:hover:bg-sky-500/10 ${openComments.has(p.id) ? "text-sky-500" : "text-muted-foreground hover:text-sky-500"}`}>
             <MessageCircle className="h-4 w-4" />
             <span className="text-xs font-medium">{p.comment_count}</span>
           </Button>
-          <Button variant="ghost" size="sm" className="h-8 px-2 rounded-full text-muted-foreground hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:text-amber-500">
+          <Button variant="ghost" size="sm" className="h-8 px-2 rounded-full text-muted-foreground hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:text-amber-500" onClick={() => toggleLike(p)}>
             <Smile className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="sm" className="ml-auto h-8 px-2 rounded-full text-muted-foreground hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:text-emerald-500">
+          <Button variant="ghost" size="sm" onClick={() => sharePost(p)} className="ml-auto h-8 px-2 rounded-full text-muted-foreground hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:text-emerald-500">
             <Share2 className="h-4 w-4" />
           </Button>
         </footer>
+
+        {openComments.has(p.id) && (
+          <div className="mt-3 ml-[52px] rounded-xl border border-border bg-muted/30 p-3 space-y-2">
+            {(commentsMap[p.id] || []).length === 0 && (
+              <p className="text-[11px] text-muted-foreground italic">Henüz yorum yok. İlk yorumu sen yap.</p>
+            )}
+            {(commentsMap[p.id] || []).map((c) => (
+              <div key={c.id} className="flex items-start gap-2">
+                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-sky-400 to-violet-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+                  {c.author.slice(0, 1).toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-baseline gap-1.5 flex-wrap">
+                    <span className="text-xs font-semibold">{c.author}</span>
+                    <span className="text-[10px] text-muted-foreground">· {formatTime(c.created_at)}</span>
+                  </div>
+                  <p className="text-xs text-foreground/85 whitespace-pre-wrap break-words">{c.text}</p>
+                </div>
+              </div>
+            ))}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                addComment(p.id);
+              }}
+              className="flex items-center gap-2 pt-1"
+            >
+              <Input
+                value={commentDrafts[p.id] || ""}
+                onChange={(e) => setCommentDrafts((prev) => ({ ...prev, [p.id]: e.target.value }))}
+                placeholder="Yorum yaz..."
+                className="h-8 text-xs"
+              />
+              <Button type="submit" size="sm" className="h-8 px-3 text-xs" disabled={!(commentDrafts[p.id] || "").trim()}>
+                Gönder
+              </Button>
+            </form>
+          </div>
+        )}
       </article>
     );
   };
@@ -760,9 +843,11 @@ const Feed = () => {
                   <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                     <Newspaper className="h-6 w-6 text-primary" />
                     <h1 className="text-2xl font-extrabold text-gradient-primary">Diaspora Cadde</h1>
-                    <Link to="/19-mayis" className="ml-auto">
-                      <Button size="sm" className="gap-1.5 bg-rose-500 hover:bg-rose-600 text-white shadow-md shadow-rose-500/30 h-8">
-                        <span className="text-base leading-none" role="img" aria-label="Türk Bayrağı">🇹🇷</span> 19Mayıs1919
+                    <Link to="/19-mayis" className="ml-auto group">
+                      <Button size="sm" className="gap-1.5 bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white shadow-lg shadow-rose-500/40 h-9 px-3 animate-pulse hover:animate-none">
+                        <span className="text-base leading-none" role="img" aria-label="Türk Bayrağı">🇹🇷</span>
+                        <span className="font-bold">19 Mayıs Etkinlikleri</span>
+                        <span className="ml-1 px-1.5 py-0.5 rounded-full bg-white/20 text-[10px] font-bold tracking-wide">TIKLA →</span>
                       </Button>
                     </Link>
                   </div>
