@@ -837,22 +837,8 @@ const ProfileIndividual = () => {
                 />
               </div>
               <div>
-                <Label>Ülke</Label>
-                <Select value={pCountry} onValueChange={(v) => { setPCountry(v); setPCity(""); }}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent className="max-h-[60vh]">
-                    {countryList.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label>Şehir</Label>
-                <Select value={pCity} onValueChange={setPCity}>
-                  <SelectTrigger><SelectValue placeholder={`Tüm Şehirler - ${pCountry}`} /></SelectTrigger>
-                  <SelectContent className="max-h-[60vh]">
-                    {cityChoices.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                  </SelectContent>
-                </Select>
+                <Label>Doğum Tarihi</Label>
+                <Input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
               </div>
             </div>
 
