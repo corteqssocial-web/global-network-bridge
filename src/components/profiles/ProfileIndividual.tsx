@@ -30,6 +30,7 @@ import ServiceRequestsList from "@/components/ServiceRequestsList";
 import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
 import WelcomePack from "@/components/profiles/WelcomePack";
 import IndividualPublicCard from "@/components/profiles/IndividualPublicCard";
+import MyFollowsSection from "@/components/profiles/MyFollowsSection";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ShieldCheck } from "lucide-react";
 import { countryList } from "@/contexts/DiasporaContext";
