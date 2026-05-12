@@ -337,6 +337,10 @@ const ProfileAssociation = () => {
           <MessagesInbox />
         </TabsContent>
 
+        <TabsContent value="job-listings" className="mt-6">
+          <JobListingsManager />
+        </TabsContent>
+
         <TabsContent value="settings" className="mt-6 space-y-6">
           <AssociationSettingsForm onSaved={(d) => setProfileData(d)} />
 
