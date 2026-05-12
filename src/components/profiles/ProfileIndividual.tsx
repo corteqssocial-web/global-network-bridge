@@ -23,7 +23,7 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { consultants, associations, events as allEvents } from "@/data/mock";
+import { events as allEvents } from "@/data/mock";
 import { useRelocationResearches } from "@/hooks/useRelocationResearches";
 import ServiceRequestForm from "@/components/ServiceRequestForm";
 import ServiceRequestsList from "@/components/ServiceRequestsList";
