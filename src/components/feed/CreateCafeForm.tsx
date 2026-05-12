@@ -64,7 +64,7 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false }: Props) =
   const [submitting, setSubmitting] = useState(false);
 
   const cities = country ? countryCities[country] || [] : [];
-  const capacity = duration >= 4 ? 300 : 100;
+  const capacity = ambassadorMode ? 500 : (duration >= 4 ? 300 : 100);
 
   const submit = async () => {
     if (!user) {
