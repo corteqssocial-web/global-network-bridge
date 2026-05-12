@@ -16,7 +16,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import MultiCountryCityFilter from "@/components/feed/MultiCountryCityFilter";
 import CreatePostForm from "@/components/feed/CreatePostForm";
-import { mockPosts, mockAuthors } from "@/data/mockFeedPosts";
+import { mockPosts, mockAuthors, mockCafeITPosts } from "@/data/mockFeedPosts";
 import { useFeedSocial } from "@/hooks/useFeedSocial";
 import CaddeProfileGate from "@/components/CaddeProfileGate";
 
