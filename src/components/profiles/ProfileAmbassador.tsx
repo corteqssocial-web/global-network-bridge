@@ -570,6 +570,10 @@ const ProfileAmbassador = () => {
           </Card>
         </TabsContent>
 
+        <TabsContent value="follows" className="mt-6">
+          <MyFollowsSection />
+        </TabsContent>
+
         {/* SETTINGS */}
         <TabsContent value="settings" className="mt-6 space-y-6">
           <ProfileLocationPhoneSettings />
