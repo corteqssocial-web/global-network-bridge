@@ -306,6 +306,42 @@ const AmbassadorDashboard = () => {
         </CardContent>
       </Card>
 
+      {/* Cafe Performansı (Cadde) */}
+      <Card className="border-amber-500/30 bg-gradient-to-r from-amber-50/50 to-orange-50/30 dark:from-amber-950/20 dark:to-orange-950/10">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-semibold flex items-center gap-2 flex-wrap">
+            <Coffee className="h-4 w-4 text-amber-600" /> Şehir Elçileri Cafe Performansı
+            <Badge variant="outline" className="text-[10px] border-amber-500/40 text-amber-700">
+              Toplam {totals.cafesOpened} cafe · {totals.cafeVisitors.toLocaleString()} ziyaretçi
+            </Badge>
+            <span className="text-[10px] text-muted-foreground font-normal">
+              ({countryFilter === "all" ? "Tüm Ülkeler" : countryFilter}{cityFilter !== "all" ? ` · ${cityFilter}` : ""})
+            </span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="rounded-lg bg-card border border-border p-3 text-center">
+              <Coffee className="h-4 w-4 text-amber-600 mx-auto mb-1" />
+              <p className="text-2xl font-bold text-amber-700">{totals.cafesOpened}</p>
+              <p className="text-[11px] text-muted-foreground">Açılan Cafe</p>
+            </div>
+            <div className="rounded-lg bg-card border border-border p-3 text-center">
+              <Users className="h-4 w-4 text-primary mx-auto mb-1" />
+              <p className="text-2xl font-bold text-primary">{totals.cafeVisitors.toLocaleString()}</p>
+              <p className="text-[11px] text-muted-foreground">Toplam Ziyaretçi</p>
+            </div>
+            <div className="rounded-lg bg-card border border-border p-3 text-center">
+              <TrendingUp className="h-4 w-4 text-success mx-auto mb-1" />
+              <p className="text-2xl font-bold text-success">
+                {totals.cafesOpened > 0 ? Math.round(totals.cafeVisitors / totals.cafesOpened) : 0}
+              </p>
+              <p className="text-[11px] text-muted-foreground">Cafe Başına Ort. Ziyaretçi</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Top 3 Ambassadors */}
       <Card className="border-border bg-gradient-to-r from-primary/5 to-chart-1/5">
         <CardHeader className="pb-2">
