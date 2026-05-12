@@ -1,5 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import PlatformMessageButton from "@/components/messaging/PlatformMessageButton";
 import { useFollow } from "@/hooks/useFollow";
 import { Star, Bot, MessageSquare, Calendar, Video, Globe as GlobeIcon, ArrowLeft, ExternalLink, UserPlus, UserCheck, Zap, Info, Clock, Home, MapPin, BedDouble, Bath, Maximize, Crown, Navigation, Lock } from "lucide-react";
