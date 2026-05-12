@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DemoPageBanner from "@/components/DemoPageBanner";
+import DetailAuthLock from "@/components/DetailAuthLock";
 import { cityAmbassadors } from "@/data/mock";
 import { getAmbassadorScore, getScoreTier } from "@/lib/ambassadorScore";
 
