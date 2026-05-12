@@ -37,6 +37,7 @@ import SocialMediaInputs from "@/components/SocialMediaInputs";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
 
 // Phone country code helper — keeps the prefix and the local number aligned with the user's saved country.
 const COUNTRY_DIAL: Record<string, string> = {
