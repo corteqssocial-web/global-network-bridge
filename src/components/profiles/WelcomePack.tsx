@@ -171,7 +171,7 @@ const WelcomePack = ({ userName, country, city, onDismiss }: WelcomePackProps) =
                   </a>
                 </div>
               ))}
-              <Button size="sm" variant={completedSteps.includes("flight") ? "outline" : "default"} className="w-full mt-1.5 gap-1.5 h-8 text-xs" onClick={() => markComplete("flight")}>
+              <Button size="sm" variant={completedSteps.includes("flight") ? "outline" : "default"} className="w-full mt-1.5 gap-1.5 h-8 text-xs" data-lockable="true" disabled onClick={() => markComplete("flight")}>
                 <Check className="h-3.5 w-3.5" /> {completedSteps.includes("flight") ? "Tamamlandı ✓" : "Bilet aldım, tamamla"}
               </Button>
             </div>
@@ -217,7 +217,7 @@ const WelcomePack = ({ userName, country, city, onDismiss }: WelcomePackProps) =
                 </div>
               ))}
               <p className="text-[11px] text-muted-foreground italic">💡 Bazı operatörler yalnızca mağazadan SIM satışı yapıyor. Kupon kodunu mağazada gösterin.</p>
-              <Button size="sm" variant={completedSteps.includes("sim") ? "outline" : "default"} className="w-full mt-1.5 gap-1.5 h-8 text-xs" onClick={() => markComplete("sim")}>
+              <Button size="sm" variant={completedSteps.includes("sim") ? "outline" : "default"} className="w-full mt-1.5 gap-1.5 h-8 text-xs" data-lockable="true" disabled onClick={() => markComplete("sim")}>
                 <Check className="h-3.5 w-3.5" /> {completedSteps.includes("sim") ? "Tamamlandı ✓" : "Hat aldım, tamamla"}
               </Button>
             </div>
@@ -255,7 +255,7 @@ const WelcomePack = ({ userName, country, city, onDismiss }: WelcomePackProps) =
                   </a>
                 </div>
               ))}
-              <Button size="sm" variant={completedSteps.includes("transfer") ? "outline" : "default"} className="w-full mt-1.5 gap-1.5 h-8 text-xs" onClick={() => markComplete("transfer")}>
+              <Button size="sm" variant={completedSteps.includes("transfer") ? "outline" : "default"} className="w-full mt-1.5 gap-1.5 h-8 text-xs" data-lockable="true" disabled onClick={() => markComplete("transfer")}>
                 <Check className="h-3.5 w-3.5" /> {completedSteps.includes("transfer") ? "Tamamlandı ✓" : "Transfer ayarladım, tamamla"}
               </Button>
             </div>
@@ -294,7 +294,7 @@ const WelcomePack = ({ userName, country, city, onDismiss }: WelcomePackProps) =
                   </a>
                 </div>
               ))}
-              <Button size="sm" variant={completedSteps.includes("car") ? "outline" : "default"} className="w-full mt-1.5 gap-1.5 h-8 text-xs" onClick={() => markComplete("car")}>
+              <Button size="sm" variant={completedSteps.includes("car") ? "outline" : "default"} className="w-full mt-1.5 gap-1.5 h-8 text-xs" data-lockable="true" disabled onClick={() => markComplete("car")}>
                 <Check className="h-3.5 w-3.5" /> {completedSteps.includes("car") ? "Tamamlandı ✓" : "Araç kiraladım, tamamla"}
               </Button>
             </div>
@@ -329,7 +329,7 @@ const WelcomePack = ({ userName, country, city, onDismiss }: WelcomePackProps) =
                   </a>
                 </div>
               ))}
-              <Button size="sm" variant={completedSteps.includes("bank") ? "outline" : "default"} className="w-full mt-1.5 gap-1.5 h-8 text-xs" onClick={() => markComplete("bank")}>
+              <Button size="sm" variant={completedSteps.includes("bank") ? "outline" : "default"} className="w-full mt-1.5 gap-1.5 h-8 text-xs" data-lockable="true" disabled onClick={() => markComplete("bank")}>
                 <Check className="h-3.5 w-3.5" /> {completedSteps.includes("bank") ? "Tamamlandı ✓" : "Banka seçtim, tamamla"}
               </Button>
             </div>
@@ -365,7 +365,7 @@ const WelcomePack = ({ userName, country, city, onDismiss }: WelcomePackProps) =
                 </div>
               ))}
               <p className="text-[11px] text-muted-foreground italic">💡 Hoşgeldin Paketi oluşturduğunuzda mentör tercihinizi belirtebilirsiniz.</p>
-              <Button size="sm" variant={completedSteps.includes("mentor") ? "outline" : "default"} className="w-full mt-1.5 gap-1.5 h-8 text-xs" onClick={() => markComplete("mentor")}>
+              <Button size="sm" variant={completedSteps.includes("mentor") ? "outline" : "default"} className="w-full mt-1.5 gap-1.5 h-8 text-xs" data-lockable="true" disabled onClick={() => markComplete("mentor")}>
                 <Check className="h-3.5 w-3.5" /> {completedSteps.includes("mentor") ? "Tamamlandı ✓" : "Mentör seçtim, tamamla"}
               </Button>
             </div>
@@ -402,7 +402,7 @@ const WelcomePack = ({ userName, country, city, onDismiss }: WelcomePackProps) =
                   <p className="text-[11px] text-muted-foreground">📱 {gift.redeemInfo}</p>
                 </div>
               ))}
-              <Button size="sm" variant={completedSteps.includes("cafe") ? "outline" : "default"} className="w-full mt-3 gap-1.5" onClick={() => markComplete("cafe")}>
+              <Button size="sm" variant={completedSteps.includes("cafe") ? "outline" : "default"} className="w-full mt-3 gap-1.5" data-lockable="true" disabled onClick={() => markComplete("cafe")}>
                 <Check className="h-3.5 w-3.5" /> {completedSteps.includes("cafe") ? "Kullanıldı ✓" : "Hediyemi kullandım"}
               </Button>
             </div>
