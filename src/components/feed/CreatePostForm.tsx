@@ -34,6 +34,7 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
   const [country, setCountry] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [globalOnly, setGlobalOnly] = useState(false);
+  const [kopruOnly, setKopruOnly] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   // Load user's profile country/city as defaults
