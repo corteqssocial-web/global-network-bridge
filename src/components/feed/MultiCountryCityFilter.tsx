@@ -90,32 +90,16 @@ const MultiCountryCityFilter = ({
 
   return (
     <div className="flex flex-col gap-3">
-      {/* Köprü — herkese açık ortak cadde */}
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={pickKopru}
-          className={`flex-1 flex items-center justify-center gap-2 rounded-lg border px-3 py-2 transition-all ${
-            isKopru
-              ? "bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 text-white border-transparent shadow-sm"
-              : "bg-card text-foreground border-border hover:border-primary/40"
-          }`}
-          title="Taşınacaklar & Diaspora ile İş Yapanlar"
-        >
-          <Pin className="h-3.5 w-3.5" />
-          <div className="flex flex-col items-start leading-tight">
-            <span className="text-xs font-bold">🌉 Köprü</span>
-            <span className={`text-[10px] ${isKopru ? "text-white/90" : "text-muted-foreground"}`}>
-              Taşınacaklar & Diaspora ile İş Yapanlar
-            </span>
-          </div>
-        </button>
+      {/* Caddeye Çık — global akış */}
+      <div className="flex">
         <Button
+          variant="outline"
           size="sm"
-          onClick={() => { if (!isKopru) pickKopru(); }}
-          className="h-9 gap-1 bg-primary text-primary-foreground"
+          onClick={() => { pickContinent(null); onCountriesChange([]); onCitiesChange([]); }}
+          className="gap-1.5 h-auto py-1.5 flex-col items-start"
         >
-          Caddeye Çık →
+          <span className="text-xs font-semibold leading-tight">Caddeye Çık →</span>
+          <span className="text-[10px] text-muted-foreground leading-tight">global akış</span>
         </Button>
       </div>
       <div className="flex flex-wrap items-center gap-2">
@@ -268,6 +252,18 @@ const MultiCountryCityFilter = ({
             )}
           </PopoverContent>
         </Popover>
+
+        {/* Köprü — herkese açık ortak cadde */}
+        <Button
+          variant={isKopru ? "default" : "outline"}
+          size="sm"
+          onClick={pickKopru}
+          className="gap-1.5 h-9"
+          title="Taşınacaklar & Diaspora ile İş Yapanlar"
+        >
+          <Pin className="h-4 w-4" />
+          🌉 Köprü
+        </Button>
 
         {isPremium && (
           <Badge className="gap-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0">
