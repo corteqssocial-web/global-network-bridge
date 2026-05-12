@@ -174,13 +174,15 @@ const ProfileAdmin = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {[
           { label: "Toplam Kullanıcı", value: platformStats.totalUsers.toLocaleString(), icon: Users, color: "text-primary" },
-          { label: "Aktif Kullanıcı", value: platformStats.activeUsers.toLocaleString(), icon: UserCheck, color: "text-turquoise" },
           { label: "İşletme", value: platformStats.totalBusinesses, icon: Building2, color: "text-gold" },
           { label: "Dernek / Vakıf", value: platformStats.totalAssociations, icon: Globe, color: "text-turquoise" },
+          { label: "Danışman", value: platformStats.totalConsultants, icon: UserCheck, color: "text-violet-500" },
           { label: "Etkinlik", value: platformStats.totalEvents, icon: Calendar, color: "text-primary" },
-          { label: "Gelir", value: `€${(platformStats.revenue / 1000).toFixed(1)}K`, icon: CreditCard, color: "text-success" },
+          { label: "Cafe", value: platformStats.totalCafes, icon: Coffee, color: "text-amber-600" },
+          { label: "İş İlanı", value: platformStats.totalJobs, icon: Megaphone, color: "text-emerald-500" },
+          { label: "Founding 1000", value: platformStats.foundingCount, icon: Crown, color: "text-amber-500" },
+          { label: "İletişim", value: platformStats.contactCount, icon: Mail, color: "text-primary" },
           { label: "Onay Bekleyen", value: platformStats.pendingApprovals, icon: Clock, color: "text-gold" },
-          { label: "Şikayet", value: platformStats.reports, icon: AlertTriangle, color: "text-destructive" },
         ].map((stat, i) => (
           <div key={i} className="bg-card rounded-xl border border-border p-4 shadow-card text-center">
             <stat.icon className={`h-5 w-5 ${stat.color} mx-auto mb-2`} />
