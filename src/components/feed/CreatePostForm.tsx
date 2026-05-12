@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Send, MapPin, Globe } from "lucide-react";
+import { Send, MapPin, Globe, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -19,8 +19,15 @@ interface Props {
   cafeId?: string;
 }
 
+const isTRPhone = (p?: string | null) => {
+  if (!p) return false;
+  const x = p.replace(/\s|-/g, "");
+  return x.startsWith("+90") || x.startsWith("0090");
+};
+
 const CreatePostForm = ({ onCreated, cafeId }: Props) => {
-  const { user, accountType } = useAuth();
+  const { user, accountType, profile } = useAuth();
+  const isTR = (profile?.country === "Türkiye") || isTRPhone(profile?.phone);
   const [content, setContent] = useState("");
   const [profileCountry, setProfileCountry] = useState<string>("");
   const [profileCity, setProfileCity] = useState<string>("");
