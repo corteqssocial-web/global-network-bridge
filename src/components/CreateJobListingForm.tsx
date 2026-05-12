@@ -283,33 +283,6 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
         </div>
       )}
 
-      {/* Boost Options */}
-      <div className="bg-muted/50 rounded-xl p-5 space-y-4">
-        <h3 className="font-bold text-foreground flex items-center gap-2">
-          <TrendingUp className="h-4 w-4 text-turquoise" /> Ek Tanıtım Seçenekleri
-        </h3>
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-medium text-foreground text-sm">🔍 Ülke Aramasında Öne Çıkar</p>
-            <p className="text-xs text-muted-foreground">İlanınız ülke bazlı aramalarda üst sırada görünür</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-semibold text-primary">+€{boostCosts.countrySearch}</span>
-            <Switch checked={boostToCountrySearch} onCheckedChange={setBoostToCountrySearch} />
-          </div>
-        </div>
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-medium text-foreground text-sm">📧 AI Eşleşmeli E-posta Bildirimi</p>
-            <p className="text-xs text-muted-foreground">Profiline uygun adaylara otomatik bildirim gönderilir</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-semibold text-primary">+€{boostCosts.emailNotify}</span>
-            <Switch checked={boostEmailNotify} onCheckedChange={setBoostEmailNotify} />
-          </div>
-        </div>
-      </div>
-
       {/* Order Summary */}
       <div className="bg-card border-2 border-primary/20 rounded-xl p-5">
         <h3 className="font-bold text-foreground mb-3 flex items-center gap-2">
@@ -322,18 +295,6 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
               <span className="text-foreground font-medium">
                 {packagePrice === 0 ? "Ücretsiz" : `€${packagePrice}`}
               </span>
-            </div>
-          )}
-          {boostToCountrySearch && (
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Ülke Aramasında Öne Çıkar</span>
-              <span className="text-foreground font-medium">€{boostCosts.countrySearch}</span>
-            </div>
-          )}
-          {boostEmailNotify && (
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">AI E-posta Bildirimi</span>
-              <span className="text-foreground font-medium">€{boostCosts.emailNotify}</span>
             </div>
           )}
           <div className="border-t border-border pt-2 mt-2 flex justify-between">
