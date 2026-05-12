@@ -15,12 +15,12 @@ import CategorySearchBar from "@/components/CategorySearchBar";
 
 const typeFilters = [
   { key: "all", label: "Tümü" },
+  { key: "diplomatik", label: "🏛️ Büyükelçilik & Konsolosluk" },
   { key: "dernek", label: "Dernekler & Vakıflar" },
   { key: "oda", label: "🏢 Odalar & Konseyler" },
   { key: "akademik", label: "🎓 Akademik Birimler" },
   { key: "egitim", label: "📚 Eğitim Kuruluşları" },
   { key: "medya", label: "📺 Türk Medya Kuruluşları" },
-  { key: "diplomatik", label: "🏛️ Büyükelçilik & Konsolosluk" },
   { key: "hastane", label: "🏥 Sağlık Kuruluşları" },
   { key: "dijital", label: "💬 Dijital Topluluklar" },
 ];
