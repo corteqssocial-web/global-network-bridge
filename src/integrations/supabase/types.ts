@@ -893,6 +893,39 @@ export type Database = {
         }
         Relationships: []
       }
+      phone_verifications: {
+        Row: {
+          attempts: number
+          code: string
+          created_at: string
+          expires_at: string
+          id: string
+          phone: string
+          user_id: string
+          verified_at: string | null
+        }
+        Insert: {
+          attempts?: number
+          code: string
+          created_at?: string
+          expires_at: string
+          id?: string
+          phone: string
+          user_id: string
+          verified_at?: string | null
+        }
+        Update: {
+          attempts?: number
+          code?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          phone?: string
+          user_id?: string
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
       profile_views: {
         Row: {
           created_at: string
@@ -937,6 +970,7 @@ export type Database = {
           mentor_weekly_hours: string | null
           onboarding_completed: boolean
           phone: string | null
+          phone_verified: boolean
           presentation_name: string | null
           presentation_path: string | null
           profession: string | null
@@ -966,6 +1000,7 @@ export type Database = {
           mentor_weekly_hours?: string | null
           onboarding_completed?: boolean
           phone?: string | null
+          phone_verified?: boolean
           presentation_name?: string | null
           presentation_path?: string | null
           profession?: string | null
@@ -995,6 +1030,7 @@ export type Database = {
           mentor_weekly_hours?: string | null
           onboarding_completed?: boolean
           phone?: string | null
+          phone_verified?: boolean
           presentation_name?: string | null
           presentation_path?: string | null
           profession?: string | null
