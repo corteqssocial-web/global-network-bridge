@@ -928,7 +928,7 @@ const ProfileIndividual = () => {
                     </h3>
                     <p className="text-xs text-muted-foreground mt-1">
                       Öneri: Yurt dışı SIM/numara ile kayıt olan üyeler bu pasaportu otomatik kazanır.
-                      Profilinde rozet olarak görünür ve premium özelliklere erişim sağlar.
+                      Profilinde rozet olarak görünür, premium özelliklere ve <strong>Cadde'de cafe açma</strong> hakkına erişim sağlar.
                     </p>
                   </div>
                 </div>
