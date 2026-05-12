@@ -117,21 +117,29 @@ const BusinessDetail = () => {
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row gap-2 shrink-0">
-                <PlatformMessageButton
-                  recipientKind="business"
-                  recipientSlug={b.id}
-                  recipientName={b.name}
-                  size="sm"
-                />
-                <Button
-                  variant={isFollowed ? "default" : "outline"}
-                  size="sm"
-                  onClick={toggleFollow}
-                  className="gap-1.5"
-                >
-                  {isFollowed ? <UserCheck className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
-                  {isFollowed ? "Takip Ediliyor" : "Takip Et"}
-                </Button>
+                {user ? (
+                  <>
+                    <PlatformMessageButton
+                      recipientKind="business"
+                      recipientSlug={b.id}
+                      recipientName={b.name}
+                      size="sm"
+                    />
+                    <Button
+                      variant={isFollowed ? "default" : "outline"}
+                      size="sm"
+                      onClick={toggleFollow}
+                      className="gap-1.5"
+                    >
+                      {isFollowed ? <UserCheck className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
+                      {isFollowed ? "Takip Ediliyor" : "Takip Et"}
+                    </Button>
+                  </>
+                ) : (
+                  <Button size="sm" variant="default" onClick={() => navigate("/auth")} className="gap-1.5">
+                    <Lock className="h-4 w-4" /> Etkileşim için Giriş Yap
+                  </Button>
+                )}
               </div>
             </div>
 
