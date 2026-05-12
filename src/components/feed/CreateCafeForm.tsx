@@ -72,7 +72,7 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false }: Props) =
       return;
     }
     const mod = moderateCafeName(name);
-    if (!mod.ok) {
+    if (mod.ok === false) {
       toast({ title: "Cafe adı kabul edilmedi", description: mod.reason, variant: "destructive" });
       return;
     }
