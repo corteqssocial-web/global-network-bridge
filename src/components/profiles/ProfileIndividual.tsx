@@ -142,8 +142,6 @@ const ProfileIndividual = () => {
   const [expandedChatId, setExpandedChatId] = useState<string | null>(null);
   const cvInputRef = useRef<HTMLInputElement>(null);
   const pptInputRef = useRef<HTMLInputElement>(null);
-  const { user: authUser } = useAuth();
-  const { toast } = useToast();
 
   // Load existing documents + mentor settings from profile
   useEffect(() => {
