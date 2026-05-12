@@ -15,6 +15,7 @@ import { useFollow } from "@/hooks/useFollow";
 import DemoBadge from "@/components/DemoBadge";
 import CategoryListingBanner from "@/components/CategoryListingBanner";
 import InterestForm from "@/components/InterestForm";
+import CategorySearchBar from "@/components/CategorySearchBar";
 
 // Each filter can match by `category` and/or by keywords found in role/specialties/bio.
 // `subs` are sub-category chips that appear under the row when this filter is active.
@@ -193,6 +194,7 @@ const Consultants = () => {
   const filterParam = searchParams.get("filter");
   const [category, setCategory] = useState(filterParam || "all");
   const [activeSub, setActiveSub] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
   const { toast } = useToast();
   const { isFollowed: isFollowedFn, toggle: toggleFollowState } = useFollow();
 
@@ -232,7 +234,11 @@ const Consultants = () => {
     if (category === "ambassador") return false;
     if (category === "gonullu") return matchesCountry && matchesCity && volunteerMentorIds.has(c.id);
     const matchesCategory = matchesFilter(c, activeFilter, activeSubFilter?.keywords);
-    return matchesCountry && matchesCity && matchesCategory;
+    const q = search.trim().toLowerCase();
+    const matchesSearch = !q || [
+      c.name, c.role, c.city, c.country, c.bio ?? "", ...(c.specialties ?? []),
+    ].join(" ").toLowerCase().includes(q);
+    return matchesCountry && matchesCity && matchesCategory && matchesSearch;
   });
 
   // Sort: showcase purchasers first
@@ -273,6 +279,13 @@ const Consultants = () => {
               <CountryCitySelector city={city} onCityChange={setCity} />
             </div>
           </div>
+
+          <CategorySearchBar
+            value={search}
+            onChange={setSearch}
+            placeholder="Danışman adı, uzmanlık, şehir ile ara…"
+            resultsLabel={search ? `${sortedFiltered.length} sonuç` : undefined}
+          />
 
           {/* Category filters */}
           <div className="flex flex-wrap items-center gap-2 mb-3">
