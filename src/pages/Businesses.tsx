@@ -14,6 +14,7 @@ import { useFollow } from "@/hooks/useFollow";
 import DemoBadge from "@/components/DemoBadge";
 import CategoryListingBanner from "@/components/CategoryListingBanner";
 import InterestForm from "@/components/InterestForm";
+import CategorySearchBar from "@/components/CategorySearchBar";
 
 interface SubFilter {
   key: string;
@@ -221,6 +222,7 @@ const Businesses = () => {
   const [sectorFilter, setSectorFilter] = useState("all");
   const [activeSub, setActiveSub] = useState<string | null>(null);
   const [offeringFilter, setOfferingFilter] = useState("all");
+  const [search, setSearch] = useState("");
   const { isFollowed: isFollowedFn, toggle: toggleFollowState } = useFollow();
   const { toast } = useToast();
 
@@ -242,7 +244,11 @@ const Businesses = () => {
     const matchesCountry = country === "all" || b.country === country;
     const matchesCity = city === "all" || b.city === city;
     const matchesOffering = offeringFilter === "all" || b.offerings.includes(offeringFilter as any);
-    return matchesCountry && matchesCity && matchesSector(b) && matchesOffering;
+    const q = search.trim().toLowerCase();
+    const matchesSearch = !q || [
+      b.name, b.sector, b.description, b.city, b.country,
+    ].filter(Boolean).join(" ").toLowerCase().includes(q);
+    return matchesCountry && matchesCity && matchesSector(b) && matchesOffering && matchesSearch;
   });
 
   const handleSectorClick = (key: string) => {
@@ -272,6 +278,13 @@ const Businesses = () => {
               <CountryCitySelector city={city} onCityChange={setCity} />
             </div>
           </div>
+
+          <CategorySearchBar
+            value={search}
+            onChange={setSearch}
+            placeholder="İşletme adı, sektör, şehir ile ara…"
+            resultsLabel={search ? `${filtered.length} sonuç` : undefined}
+          />
 
           {/* Sector filter */}
           <div className="flex flex-wrap gap-2 mb-3">

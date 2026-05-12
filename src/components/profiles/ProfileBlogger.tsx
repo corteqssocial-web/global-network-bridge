@@ -29,6 +29,7 @@ import NotificationsList from "@/components/NotificationsList";
 import { addDiasporaBlogLink, getDiasporaBlogLinksByAuthor, removeDiasporaBlogLink, type DiasporaBlogLink } from "@/lib/diasporaBlogLinks";
 import { toast } from "@/hooks/use-toast";
 import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
+import ProfileSubcategoriesSettings from "@/components/profiles/ProfileSubcategoriesSettings";
 
 const ProfileBlogger = () => {
   const blogger = {
@@ -390,6 +391,7 @@ const ProfileBlogger = () => {
 
         <TabsContent value="settings" className="mt-6 space-y-6">
           <ProfileLocationPhoneSettings />
+          <ProfileSubcategoriesSettings accountTypeOverride="blogger" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
               <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">

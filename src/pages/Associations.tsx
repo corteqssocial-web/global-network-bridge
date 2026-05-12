@@ -11,6 +11,7 @@ import { associations } from "@/data/mock";
 import DemoBadge from "@/components/DemoBadge";
 import CategoryListingBanner from "@/components/CategoryListingBanner";
 import InterestForm from "@/components/InterestForm";
+import CategorySearchBar from "@/components/CategorySearchBar";
 
 const typeFilters = [
   { key: "all", label: "Tümü" },
@@ -28,6 +29,7 @@ const Associations = () => {
   const { selectedCountry: country } = useDiaspora();
   const [city, setCity] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
+  const [search, setSearch] = useState("");
 
   // Reset city when country changes
   useEffect(() => { setCity("all"); }, [country]);
@@ -44,7 +46,10 @@ const Associations = () => {
       || (typeFilter === "diplomatik" && ["Büyükelçilik", "Konsolosluk"].includes(a.type))
       || (typeFilter === "hastane" && a.type === "Hastane")
       || (typeFilter === "dijital" && ["Dijital Topluluk", "WhatsApp Grubu", "Telegram Grubu", "Discord Topluluğu", "Online Topluluk"].includes(a.type));
-    return matchesCountry && matchesCity && matchesType;
+    const q = search.trim().toLowerCase();
+    const matchesSearch = !q || [a.name, a.type, a.city, a.country, (a as any).description ?? ""]
+      .filter(Boolean).join(" ").toLowerCase().includes(q);
+    return matchesCountry && matchesCity && matchesType && matchesSearch;
   });
 
   const typeColors: Record<string, string> = {
@@ -78,6 +83,13 @@ const Associations = () => {
               </p>
             </div>
           </div>
+
+          <CategorySearchBar
+            value={search}
+            onChange={setSearch}
+            placeholder="Kuruluş adı, tür, şehir ile ara…"
+            resultsLabel={search ? `${filtered.length} sonuç` : undefined}
+          />
 
           {/* Type filter tabs */}
           <div className="flex flex-wrap items-center gap-2 mb-8">

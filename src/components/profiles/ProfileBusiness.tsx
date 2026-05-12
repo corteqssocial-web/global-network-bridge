@@ -38,6 +38,7 @@ import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
+import ProfileSubcategoriesSettings from "@/components/profiles/ProfileSubcategoriesSettings";
 
 // Phone country code helper — keeps the prefix and the local number aligned with the user's saved country.
 const COUNTRY_DIAL: Record<string, string> = {
@@ -599,6 +600,7 @@ const ProfileBusiness = () => {
 
         <TabsContent value="settings" className="mt-6 space-y-6">
           <ProfileLocationPhoneSettings />
+          <ProfileSubcategoriesSettings accountTypeOverride="business" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
               <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
