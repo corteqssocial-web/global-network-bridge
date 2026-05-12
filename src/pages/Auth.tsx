@@ -22,7 +22,9 @@ const Auth = () => {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
-  const [signupName, setSignupName] = useState("");
+  const [signupFirstName, setSignupFirstName] = useState("");
+  const [signupLastName, setSignupLastName] = useState("");
+  const [signupBirthDate, setSignupBirthDate] = useState("");
   const [signupEmail, setSignupEmail] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
 
@@ -57,6 +59,14 @@ const Auth = () => {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!signupFirstName.trim() || !signupLastName.trim() || !signupBirthDate) {
+      toast({
+        title: "Eksik bilgi",
+        description: "İsim, soyisim ve doğum tarihi zorunludur.",
+        variant: "destructive",
+      });
+      return;
+    }
     if (!isConsentValid(consent)) {
       toast({
         title: "Onay gerekli",
@@ -71,7 +81,10 @@ const Auth = () => {
       password: signupPassword,
       options: {
         data: {
-          full_name: signupName,
+          full_name: `${signupFirstName.trim()} ${signupLastName.trim()}`,
+          first_name: signupFirstName.trim(),
+          last_name: signupLastName.trim(),
+          birth_date: signupBirthDate,
           consent_privacy: consent.privacy,
           consent_terms: consent.terms,
           consent_data_processing: consent.dataProcessing,
@@ -191,12 +204,22 @@ const Auth = () => {
 
                   <TabsContent value="signup">
                     <form onSubmit={handleSignup} className="space-y-4 mt-4">
-                      <div className="space-y-2">
-                        <Label>Ad Soyad</Label>
-                        <div className="relative">
-                          <User className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
-                          <Input className="pl-9" placeholder="Adınız Soyadınız" value={signupName} onChange={e => setSignupName(e.target.value)} required />
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-2">
+                          <Label>İsim *</Label>
+                          <div className="relative">
+                            <User className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
+                            <Input className="pl-9" placeholder="Adınız" value={signupFirstName} onChange={e => setSignupFirstName(e.target.value)} required maxLength={50} />
+                          </div>
                         </div>
+                        <div className="space-y-2">
+                          <Label>Soyisim *</Label>
+                          <Input placeholder="Soyadınız" value={signupLastName} onChange={e => setSignupLastName(e.target.value)} required maxLength={50} />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Doğum Tarihi *</Label>
+                        <Input type="date" value={signupBirthDate} onChange={e => setSignupBirthDate(e.target.value)} required max={new Date().toISOString().split("T")[0]} />
                       </div>
                       <div className="space-y-2">
                         <Label>E-posta</Label>
