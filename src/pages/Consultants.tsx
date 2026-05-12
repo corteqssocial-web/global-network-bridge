@@ -420,10 +420,24 @@ const Consultants = () => {
 
                         <p className="text-sm text-muted-foreground font-body mb-2">📍 {c.city}, {c.country}</p>
 
-                        <div className="flex items-center gap-1 mb-3">
-                          <Star className="h-4 w-4 text-gold fill-gold" />
-                          <span className="text-sm font-semibold text-foreground">{c.rating}</span>
-                          <span className="text-xs text-muted-foreground">({c.reviews})</span>
+                        <div className="flex items-center gap-2 mb-3 flex-wrap">
+                          <div className="flex items-center gap-1">
+                            <Star className="h-4 w-4 text-gold fill-gold" />
+                            <span className="text-sm font-semibold text-foreground">{c.rating}</span>
+                            <span className="text-xs text-muted-foreground">({c.reviews})</span>
+                          </div>
+                          {c.isAmbassador && typeof c.ambassadorScore === "number" && (() => {
+                            const tier = getScoreTier(c.ambassadorScore);
+                            return (
+                              <Badge
+                                variant="outline"
+                                className={`gap-1 text-[10px] font-bold border-gold/40 bg-gold/5 ${tier.color}`}
+                                title="Şehir Elçisi Performans Skoru"
+                              >
+                                <Crown className="h-3 w-3" /> Skor {c.ambassadorScore} · {tier.label}
+                              </Badge>
+                            );
+                          })()}
                         </div>
 
                         {isVolunteer ? (
