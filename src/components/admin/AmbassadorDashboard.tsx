@@ -461,13 +461,15 @@ const AmbassadorDashboard = () => {
         <CardContent className="p-0">
           <ScrollArea className="h-[480px]">
             {/* Header Row */}
-            <div className="grid grid-cols-10 gap-2 px-4 py-2 text-[10px] font-semibold text-muted-foreground border-b border-border bg-muted/30 sticky top-0">
+            <div className="grid grid-cols-12 gap-2 px-4 py-2 text-[10px] font-semibold text-muted-foreground border-b border-border bg-muted/30 sticky top-0">
               <span>İsim</span>
               <span>Şehir</span>
               <span>Ülke</span>
               <span className="text-center">Etkinlik</span>
               <span className="text-center">Onboarding</span>
               <span className="text-center">Katılımcı</span>
+              <span className="text-center">Cafe</span>
+              <span className="text-center">Cafe Ziy.</span>
               <span className="text-right">Ciro</span>
               <span className="text-right">CQ Kazancı</span>
               <span className="text-center">Kupon Sub.</span>
@@ -479,13 +481,17 @@ const AmbassadorDashboard = () => {
                 const ob = amb.onboardingBreakdown;
                 return (
                   <div key={amb.id} className="px-4 py-3 hover:bg-muted/30 transition-colors">
-                    <div className="grid grid-cols-10 gap-2 items-center text-xs">
+                    <div className="grid grid-cols-12 gap-2 items-center text-xs">
                       <span className="font-medium text-foreground">{amb.name}</span>
                       <span className="text-muted-foreground">{amb.city}</span>
                       <span className="text-muted-foreground">{amb.country}</span>
                       <span className="text-center font-semibold text-foreground">{amb.events}</span>
                       <span className="text-center font-semibold text-emerald-600">{amb.onboarded}</span>
                       <span className="text-center text-foreground">{amb.participants}</span>
+                      <span className="text-center font-semibold text-amber-600 inline-flex items-center justify-center gap-1">
+                        <Coffee className="h-3 w-3" />{amb.cafesOpened}
+                      </span>
+                      <span className="text-center text-amber-700">{amb.cafeVisitors}</span>
                       <span className="text-right font-bold text-primary">€{amb.totalRevenue.toLocaleString()}</span>
                       <span className="text-right text-chart-3">€{amb.corteqsRevenue.toLocaleString()}</span>
                       <span className="text-center">
