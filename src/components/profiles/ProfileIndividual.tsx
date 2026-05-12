@@ -51,14 +51,25 @@ const ProfileIndividual = () => {
   const [managingEvent, setManagingEvent] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState(initialTab);
   const [isVolunteerMentor, setIsVolunteerMentor] = useState(false);
-  const [showSocialOnProfile, setShowSocialOnProfile] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    const v = localStorage.getItem("individual_show_social_on_profile");
-    return v === null ? true : v === "true";
+  const [socialVisibility, setSocialVisibility] = useState<Record<string, boolean>>(() => {
+    if (typeof window === "undefined") return {};
+    try {
+      const raw = localStorage.getItem("individual_social_visibility");
+      if (raw) return JSON.parse(raw);
+    } catch {}
+    return {};
   });
   useEffect(() => {
-    localStorage.setItem("individual_show_social_on_profile", String(showSocialOnProfile));
-  }, [showSocialOnProfile]);
+    const handler = () => {
+      try {
+        const raw = localStorage.getItem("individual_social_visibility");
+        setSocialVisibility(raw ? JSON.parse(raw) : {});
+      } catch {}
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, []);
+  const linkedinVisible = socialVisibility.linkedin ?? true;
   const [mentorTopics, setMentorTopics] = useState("");
   const [mentorWeeklyHours, setMentorWeeklyHours] = useState("");
   const [savingMentor, setSavingMentor] = useState(false);
