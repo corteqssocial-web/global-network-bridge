@@ -4,6 +4,7 @@ import { Bell, UserPlus, Calendar, MessageSquare, Briefcase, Inbox, CheckCheck }
 import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from "date-fns";
 import { tr } from "date-fns/locale";
+import ConnectionRequestsInline from "./connections/ConnectionRequestsInline";
 
 interface NotificationRow {
   id: string;
