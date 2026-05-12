@@ -33,6 +33,8 @@ const AuthContext = createContext<AuthContextType>({
   profile: null,
   accountType: null,
   onboardingCompleted: false,
+  profileComplete: false,
+  isGlobalDiaspora: false,
   signOut: async () => {},
   refreshProfile: async () => {},
 });
