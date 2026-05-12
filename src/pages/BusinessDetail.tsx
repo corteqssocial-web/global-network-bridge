@@ -304,11 +304,11 @@ const BusinessDetail = () => {
                     <Button
                       size="sm"
                       className="gap-1 bg-gold hover:bg-gold/90 text-primary-foreground"
-                      onClick={() => {
+                      onClick={requireAuth(() => {
                         markRealCouponPurchase();
                         markRealTransaction();
                         toast({ title: "Satın alındı ✅", description: `${c.title} — Stripe işlemi kaydedildi.` });
-                      }}
+                      })}
                     >
                       <Tag className="h-3.5 w-3.5" /> Satın Al
                     </Button>
