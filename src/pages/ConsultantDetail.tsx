@@ -119,6 +119,11 @@ const ConsultantDetail = () => {
 
               {/* CTAs with pricing */}
               <div className="flex flex-col gap-2 shrink-0 w-full md:w-auto">
+                {!user ? (
+                  <Button variant="default" className="gap-2 w-full" onClick={() => navigate("/auth")}>
+                    <Lock className="h-4 w-4" /> Etkileşim için Giriş Yap
+                  </Button>
+                ) : (<>
                 {(isEnabled("live_call") || isEnabled("ai_twin")) && (
                   <div className="bg-muted/50 rounded-xl p-3 mb-1">
                     <p className="text-xs text-muted-foreground font-body text-center mb-2">Görüşme Ücretleri</p>
