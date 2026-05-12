@@ -54,7 +54,11 @@ const Footer = () => {
               <li><a href="#" className="hover:text-primary transition-colors">Hakkımızda</a></li>
               <li><Link to="/pricing" className="hover:text-primary transition-colors">Fiyatlandırma</Link></li>
               <li><Link to="/founders-1000" className="hover:text-primary transition-colors">Founding 1000</Link></li>
-              <li><a href="#" className="hover:text-primary transition-colors">İletişim</a></li>
+              <li>
+                <ContactDialog
+                  trigger={<button className="hover:text-primary transition-colors text-left">İletişim</button>}
+                />
+              </li>
               <li><Link to="/kariyer" className="hover:text-primary transition-colors">Kariyer</Link></li>
             </ul>
           </div>
