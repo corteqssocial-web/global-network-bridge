@@ -294,8 +294,12 @@ const ProfileBusiness = () => {
 
       {/* Tabs */}
       <ProfileSetupBanner />
-      <BusinessTabsRoot />
-        <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
+      <Tabs
+        value={gateLocked ? "settings" : (activeTab ?? "listings")}
+        onValueChange={(v) => { if (!gateLocked || v === "settings") setActiveTab(v); }}
+        className="w-full"
+      >
+        <TabsList className={`bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1 ${gateLocked ? "[&>button:not([data-state=active])]:opacity-50" : ""}`}>
           <TabsTrigger value="listings" className="gap-1.5"><Package className="h-4 w-4" /> İlanlar</TabsTrigger>
           <TabsTrigger value="requests" className="gap-1.5"><Inbox className="h-4 w-4" /> Teklif Talepleri</TabsTrigger>
           <TabsTrigger value="coupons" className="gap-1.5"><Tag className="h-4 w-4" /> Kuponlar</TabsTrigger>
