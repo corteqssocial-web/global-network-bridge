@@ -51,6 +51,14 @@ const ProfileIndividual = () => {
   const [managingEvent, setManagingEvent] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState(initialTab);
   const [isVolunteerMentor, setIsVolunteerMentor] = useState(false);
+  const [showSocialOnProfile, setShowSocialOnProfile] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    const v = localStorage.getItem("individual_show_social_on_profile");
+    return v === null ? true : v === "true";
+  });
+  useEffect(() => {
+    localStorage.setItem("individual_show_social_on_profile", String(showSocialOnProfile));
+  }, [showSocialOnProfile]);
   const [mentorTopics, setMentorTopics] = useState("");
   const [mentorWeeklyHours, setMentorWeeklyHours] = useState("");
   const [savingMentor, setSavingMentor] = useState(false);
