@@ -33,6 +33,7 @@ import NotificationsList from "@/components/NotificationsList";
 import SocialMediaInputs from "@/components/SocialMediaInputs";
 import ConsultantFeatureToggles from "@/components/profiles/ConsultantFeatureToggles";
 import { Sliders } from "lucide-react";
+import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
 
 const ProfileConsultant = () => {
   const { user } = useAuth();
