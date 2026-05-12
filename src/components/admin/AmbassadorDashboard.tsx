@@ -106,15 +106,23 @@ const chartTooltipStyle = {
   fontSize: 12,
 };
 
+// Onboard sayıları (KPI takibi için) — mock veriden türetilen tahmini onboarding adedi
+const ambassadorsWithOnboarding = ambassadors.map((a) => ({
+  ...a,
+  onboarded: Math.round(a.participants * 0.18 + a.couponSubscriptions * 0.6),
+}));
+
 const AmbassadorDashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("revenue");
   const [countryFilter, setCountryFilter] = useState("all");
+  const [cityFilter, setCityFilter] = useState("all");
   const [autoNewsletter, setAutoNewsletter] = useState(false);
 
   const filtered = useMemo(() => {
-    let list = [...ambassadors];
+    let list = [...ambassadorsWithOnboarding];
     if (countryFilter !== "all") list = list.filter(a => a.country === countryFilter);
+    if (cityFilter !== "all") list = list.filter(a => a.city === cityFilter);
     if (searchTerm) list = list.filter(a =>
       a.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       a.city.toLowerCase().includes(searchTerm.toLowerCase())
@@ -126,31 +134,39 @@ const AmbassadorDashboard = () => {
         case "country": return a.country.localeCompare(b.country);
         case "events": return b.events - a.events;
         case "participants": return b.participants - a.participants;
+        case "onboarded": return b.onboarded - a.onboarded;
         case "subscriptionShare": return getSubscriptionShare(b) - getSubscriptionShare(a);
         default: return b.totalRevenue - a.totalRevenue;
       }
     });
     return list;
-  }, [searchTerm, sortBy, countryFilter]);
+  }, [searchTerm, sortBy, countryFilter, cityFilter]);
 
   const top3 = useMemo(() => {
-    return [...ambassadors].sort((a, b) => b.totalRevenue - a.totalRevenue).slice(0, 3);
+    return [...ambassadorsWithOnboarding].sort((a, b) => b.totalRevenue - a.totalRevenue).slice(0, 3);
   }, []);
 
   const totals = useMemo(() => {
-    const list = countryFilter === "all" ? ambassadors : ambassadors.filter(a => a.country === countryFilter);
+    let list = ambassadorsWithOnboarding;
+    if (countryFilter !== "all") list = list.filter(a => a.country === countryFilter);
+    if (cityFilter !== "all") list = list.filter(a => a.city === cityFilter);
     return {
       ambassadors: list.length,
       events: list.reduce((s, a) => s + a.events, 0),
       participants: list.reduce((s, a) => s + a.participants, 0),
+      onboarded: list.reduce((s, a) => s + a.onboarded, 0),
       totalRevenue: list.reduce((s, a) => s + a.totalRevenue, 0),
       corteqsRevenue: list.reduce((s, a) => s + a.corteqsRevenue, 0),
       subscriptionShare: list.reduce((s, a) => s + getSubscriptionShare(a), 0),
       couponSubscriptions: list.reduce((s, a) => s + a.couponSubscriptions, 0),
     };
-  }, [countryFilter]);
+  }, [countryFilter, cityFilter]);
 
   const countries = [...new Set(ambassadors.map(a => a.country))];
+  const citiesForCountry = useMemo(() => {
+    const list = countryFilter === "all" ? ambassadors : ambassadors.filter(a => a.country === countryFilter);
+    return [...new Set(list.map(a => a.city))];
+  }, [countryFilter]);
 
   const countryPieData = useMemo(() => {
     const colors = ["hsl(var(--primary))", "hsl(var(--chart-1))", "hsl(var(--chart-2))", "hsl(var(--chart-3))", "hsl(var(--chart-4))", "hsl(var(--chart-5))"];
