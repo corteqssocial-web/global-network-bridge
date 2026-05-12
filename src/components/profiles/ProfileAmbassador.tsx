@@ -2,9 +2,15 @@ import {
   Users, Calendar, TrendingUp, DollarSign, MapPin,
   Wallet, ArrowUpRight, ArrowDownRight, Clock, CreditCard,
   MessageSquare, Bell, Target, Star, Globe, Plus,
-  Send, CheckCircle, XCircle, Eye, Settings, ExternalLink, Video, ArrowLeft
+  Send, CheckCircle, XCircle, Eye, Settings, ExternalLink, Video, ArrowLeft,
+  Coffee
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CreateCafeForm from "@/components/feed/CreateCafeForm";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import MessagesInbox from "@/components/messaging/MessagesInbox";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
