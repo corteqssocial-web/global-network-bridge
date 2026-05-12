@@ -27,7 +27,7 @@ interface PersonRow {
 }
 
 const MOCK_PEOPLE: PersonRow[] = [
-  { id: "m1", full_name: "Selin Korkmaz", avatar_url: null, city: "Berlin", country: "Almanya", profession: "Yazılım Mühendisi", job_seeking: false, online: true },
+  { id: "m1", full_name: "Berk Kural", avatar_url: null, city: "Berlin", country: "Almanya", profession: "Yazılım Mühendisi", job_seeking: false, online: true },
   { id: "m2", full_name: "Mert Demir", avatar_url: null, city: "Londra", country: "İngiltere", profession: "Pazarlama", job_seeking: true, online: true },
   { id: "m3", full_name: "Ayşe Yıldız", avatar_url: null, city: "Amsterdam", country: "Hollanda", profession: "UX Designer", job_seeking: false, relocating_country: "Almanya", relocating_city: "Münih" },
   { id: "m4", full_name: "Cem Aksoy", avatar_url: null, city: "İstanbul", country: "Türkiye", profession: "Doktor", job_seeking: false, relocating_country: "Kanada", relocating_city: "Toronto" },

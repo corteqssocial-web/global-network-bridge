@@ -909,7 +909,7 @@ const Feed = () => {
                 </div>
                 <div className="p-3 -mt-4">
                   <img src="https://i.pravatar.cc/80?img=68" alt="" className="h-14 w-14 rounded-full ring-4 ring-card object-cover mb-2" />
-                  <h4 className="text-sm font-bold">Av. Selin Korkmaz</h4>
+                  <h4 className="text-sm font-bold">Berk Kural</h4>
                   <p className="text-[11px] text-muted-foreground">💼 Almanya Vize & Oturum</p>
                   <div className="flex items-center gap-1 mt-1.5">
                     <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
