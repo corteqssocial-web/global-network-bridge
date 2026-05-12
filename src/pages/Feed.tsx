@@ -64,7 +64,10 @@ const formatTime = (iso: string) => {
 };
 
 const Feed = () => {
-  const { user, onboardingCompleted } = useAuth();
+  const { user, onboardingCompleted, profile } = useAuth();
+  const { canMessage, requestConnection } = useConnections();
+  const isTRUser = (profile?.country === "Türkiye") ||
+    (!!profile?.phone && (profile.phone.replace(/\s|-/g, "").startsWith("+90") || profile.phone.replace(/\s|-/g, "").startsWith("0090")));
   const { cafeId } = useParams<{ cafeId?: string }>();
   const navigate = useNavigate();
   const isDemoCafe = cafeId === "demo-it";
