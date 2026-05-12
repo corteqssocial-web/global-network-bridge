@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Send, MapPin, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,9 +22,30 @@ interface Props {
 const CreatePostForm = ({ onCreated, cafeId }: Props) => {
   const { user, accountType } = useAuth();
   const [content, setContent] = useState("");
+  const [profileCountry, setProfileCountry] = useState<string>("");
+  const [profileCity, setProfileCity] = useState<string>("");
   const [country, setCountry] = useState<string>("");
   const [city, setCity] = useState<string>("");
+  const [globalOnly, setGlobalOnly] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  // Load user's profile country/city as defaults
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("country, city")
+        .eq("id", user.id)
+        .maybeSingle();
+      if (data) {
+        setProfileCountry(data.country || "");
+        setProfileCity(data.city || "");
+        setCountry((prev) => prev || data.country || "");
+        setCity((prev) => prev || data.city || "");
+      }
+    })();
+  }, [user]);
 
   const cities = country ? countryCities[country] || [] : [];
 
@@ -35,12 +56,15 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
     }
     if (!content.trim()) return;
 
+    const finalCountry = globalOnly ? null : (country || null);
+    const finalCity = globalOnly ? null : (city || null);
+
     setSubmitting(true);
     const { error } = await supabase.from("feed_posts").insert({
       user_id: user.id,
       content: content.trim(),
-      country: country || null,
-      city: city || null,
+      country: finalCountry,
+      city: finalCity,
       author_role: accountType || "user",
       ...(cafeId ? { cafe_id: cafeId } : {}),
     } as any);
@@ -51,8 +75,9 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
       return;
     }
     setContent("");
-    setCountry("");
-    setCity("");
+    setCountry(profileCountry);
+    setCity(profileCity);
+    setGlobalOnly(false);
     toast({ title: "Paylaşım yayınlandı" });
     onCreated();
   };
@@ -75,10 +100,25 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
         className="resize-none"
       />
       <p className="text-[11px] text-muted-foreground">
-        İstersen @Ülke veya @Şehir etiketleyerek o bölgenin akışında görün. Boş bırakırsan global yayınlanır.
+        Varsayılan olarak profilindeki <strong>{profileCity || "şehir"} · {profileCountry || "ülke"}</strong> akışında görünür. İstersen başka bir @Ülke / @Şehir seç ya da sadece global yayınla.
       </p>
-      <div className="flex flex-wrap gap-2">
-        <Select value={country} onValueChange={(v) => { setCountry(v); setCity(""); }}>
+      <div className="flex flex-wrap gap-2 items-center">
+        <button
+          type="button"
+          onClick={() => setGlobalOnly((v) => !v)}
+          className={`h-9 px-3 rounded-md border text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+            globalOnly
+              ? "bg-primary text-primary-foreground border-primary"
+              : "bg-background border-border hover:bg-muted"
+          }`}
+        >
+          <Globe className="h-3.5 w-3.5" /> {globalOnly ? "Global'de yayınla ✓" : "Sadece Global"}
+        </button>
+        <Select
+          value={country}
+          onValueChange={(v) => { setCountry(v); setCity(""); setGlobalOnly(false); }}
+          disabled={globalOnly}
+        >
           <SelectTrigger className="h-9 text-xs w-44">
             <Globe className="h-3.5 w-3.5 text-primary mr-1" />
             <SelectValue placeholder="@Ülke seç" />
@@ -89,7 +129,7 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
             ))}
           </SelectContent>
         </Select>
-        <Select value={city} onValueChange={setCity} disabled={!country}>
+        <Select value={city} onValueChange={(v) => { setCity(v); setGlobalOnly(false); }} disabled={!country || globalOnly}>
           <SelectTrigger className="h-9 text-xs w-44">
             <MapPin className="h-3.5 w-3.5 text-turquoise mr-1" />
             <SelectValue placeholder="@Şehir seç" />
@@ -100,11 +140,14 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
             ))}
           </SelectContent>
         </Select>
-        {(country || city) && (
+        {!globalOnly && (country || city) && (
           <div className="flex items-center gap-1 text-[11px] flex-wrap">
             {city && <span className="px-1.5 py-0.5 rounded-full bg-turquoise/10 text-turquoise font-semibold">@{city}</span>}
             {country && <span className="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">@{country}</span>}
           </div>
+        )}
+        {globalOnly && (
+          <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">🌍 Global</span>
         )}
         <Button
           onClick={submit}
