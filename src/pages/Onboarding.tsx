@@ -61,6 +61,30 @@ const Onboarding = () => {
   const { toast } = useToast();
   const [selected, setSelected] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [foundingLoading, setFoundingLoading] = useState(false);
+  const [foundingDone, setFoundingDone] = useState(false);
+
+  const handleFoundingSignup = async () => {
+    if (!user || !selected || selected === "user") return;
+    setFoundingLoading(true);
+    const meta = (user.user_metadata || {}) as Record<string, any>;
+    const { error } = await (supabase.from("founding_1000_signups") as any).insert({
+      user_id: user.id,
+      account_type: selected,
+      full_name: meta.full_name || meta.name || null,
+      email: user.email || null,
+    });
+    setFoundingLoading(false);
+    if (error && !error.message.includes("duplicate")) {
+      toast({ title: "Kayıt başarısız", description: error.message, variant: "destructive" });
+      return;
+    }
+    setFoundingDone(true);
+    toast({
+      title: "Founding 1000 başvurun alındı! ⭐",
+      description: "Platform admin en kısa sürede seninle iletişime geçecek.",
+    });
+  };
 
   const handleContinue = async () => {
     if (!selected || !user) return;
