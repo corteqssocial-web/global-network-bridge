@@ -173,6 +173,7 @@ const ProfileAmbassador = () => {
           <TabsTrigger value="performance" className="gap-1.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><TrendingUp className="h-4 w-4" /> Performans</TabsTrigger>
           <TabsTrigger value="community" className="gap-1.5 data-[state=active]:bg-turquoise data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Globe className="h-4 w-4" /> Topluluk</TabsTrigger>
           <NotificationsTabTrigger />
+          <TabsTrigger value="follows" className="gap-1.5 data-[state=active]:bg-pink-600 data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Heart className="h-4 w-4" /> Takip Ettiklerim</TabsTrigger>
           <TabsTrigger value="settings" className="gap-1.5 data-[state=active]:bg-foreground data-[state=active]:text-background data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Settings className="h-4 w-4" /> Profil Ayarları</TabsTrigger>
         </TabsList>
 
