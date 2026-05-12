@@ -543,6 +543,10 @@ const ProfileConsultant = () => {
           <JobListingsManager />
         </TabsContent>
 
+        <TabsContent value="follows" className="mt-6">
+          <MyFollowsSection />
+        </TabsContent>
+
         <TabsContent value="settings" className="mt-6 space-y-6">
           <ProfileLocationPhoneSettings />
           <ProfileSubcategoriesSettings accountTypeOverride="consultant" />
