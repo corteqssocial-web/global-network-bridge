@@ -1,7 +1,8 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import PlatformMessageButton from "@/components/messaging/PlatformMessageButton";
 import { useFollow } from "@/hooks/useFollow";
-import { MapPin, Users, Briefcase, Globe, Mail, Building2, Calendar, UserPlus, UserCheck, ArrowLeft, Tag, Store, Stethoscope, ExternalLink, Navigation } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { MapPin, Users, Briefcase, Globe, Mail, Building2, Calendar, UserPlus, UserCheck, ArrowLeft, Tag, Store, Stethoscope, ExternalLink, Navigation, Lock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +12,7 @@ import { businesses } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
 import { markRealCouponPurchase, markRealTransaction } from "@/lib/demoFlags";
 import DemoPageBanner from "@/components/DemoPageBanner";
+import DemoBadge from "@/components/DemoBadge";
 import PublicEventsList from "@/components/PublicEventsList";
 
 const offeringColors: Record<string, string> = {
