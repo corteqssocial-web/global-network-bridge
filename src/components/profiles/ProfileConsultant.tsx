@@ -168,8 +168,13 @@ const ProfileConsultant = () => {
       <div className="mb-6"><CorBotPromoBanner /></div>
 
       {/* Tabs */}
-      <Tabs defaultValue="incoming-requests" className="w-full">
-        <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
+      <ProfileSetupBanner />
+      <Tabs
+        value={gateLocked ? "settings" : activeTab}
+        onValueChange={(v) => { if (!gateLocked || v === "settings") setActiveTab(v); }}
+        className="w-full"
+      >
+        <TabsList className={`bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1 ${gateLocked ? "[&>button:not([data-state=active])]:opacity-50" : ""}`}>
           <TabsTrigger value="incoming-requests" className="gap-1.5"><ClipboardList className="h-4 w-4" /> Gelen Talepler</TabsTrigger>
           <TabsTrigger value="events" className="gap-1.5"><Calendar className="h-4 w-4" /> Takvim/Etkinlikler</TabsTrigger>
           <TabsTrigger value="reviews" className="gap-1.5"><Star className="h-4 w-4" /> Değerlendirmeler</TabsTrigger>
