@@ -66,27 +66,31 @@ const Feed = () => {
   const navigate = useNavigate();
   const isDemoCafe = cafeId === "demo-it";
   const { cafe: realCafe, isMember: realIsMember, approved: realApproved, join: joinCafe } = useCafe(isDemoCafe ? undefined : cafeId);
-  const demoCafe = isDemoCafe
-    ? ({
-        id: "demo-it",
-        name: "Berlin IT Cafe ☕",
-        theme: "IT",
-        country: "Almanya",
-        city: "Berlin",
-        linkedin_url: "",
-        extra_links: null,
-        created_by: "demo",
-        opens_at: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
-        closes_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
-        duration_hours: 2,
-        created_at: new Date().toISOString(),
-        kind: "community" as const,
-        open_entry: true,
-        entry_question: null,
-        capacity: 40,
-        member_count: 24,
-      } as any)
-    : null;
+  const demoCafe = useMemo(
+    () =>
+      isDemoCafe
+        ? ({
+            id: "demo-it",
+            name: "Berlin IT Cafe ☕",
+            theme: "IT",
+            country: "Almanya",
+            city: "Berlin",
+            linkedin_url: "",
+            extra_links: null,
+            created_by: "demo",
+            opens_at: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+            closes_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+            duration_hours: 2,
+            created_at: new Date().toISOString(),
+            kind: "community" as const,
+            open_entry: true,
+            entry_question: null,
+            capacity: 40,
+            member_count: 24,
+          } as any)
+        : null,
+    [isDemoCafe],
+  );
   const cafe = isDemoCafe ? demoCafe : realCafe;
   const isMember = isDemoCafe ? true : realIsMember;
   const approved = isDemoCafe ? true : realApproved;
