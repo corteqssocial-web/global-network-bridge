@@ -20,7 +20,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { toast } from "@/hooks/use-toast";
 
-const THEMES = [
+const THEME_SUGGESTIONS = [
   "IT",
   "Hekimler",
   "Profesyoneller",
@@ -30,16 +30,25 @@ const THEMES = [
   "Genel",
 ];
 
+// Diaspora Passport: foreign (non-TR) verified phone number
+const hasDiasporaPassport = (phone: string | null | undefined) => {
+  if (!phone) return false;
+  const p = phone.replace(/\s+/g, "");
+  if (p.startsWith("+90") || p.startsWith("0090")) return false;
+  return p.startsWith("+") || p.startsWith("00");
+};
+
 interface Props {
   trigger?: React.ReactNode;
   onCreated?: () => void;
 }
 
 const CreateCafeForm = ({ trigger, onCreated }: Props) => {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const isPremium = useIsPremium();
   const navigate = useNavigate();
   const duration = isPremium ? 4 : 2;
+  const canOpenCafe = hasDiasporaPassport(profile?.phone);
 
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
@@ -60,19 +69,31 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
       toast({ title: "Giriş yapmalısın", variant: "destructive" });
       return;
     }
-    if (!name.trim() || !linkedin.trim()) {
-      toast({ title: "Cafe adı ve LinkedIn zorunlu", variant: "destructive" });
+    if (!canOpenCafe) {
+      toast({
+        title: "Diaspora Pasaportu gerekli",
+        description: "Cafe açmak için yurt dışı (TR dışı) telefon numarası ile doğrulanmış olmalısın.",
+        variant: "destructive",
+      });
+      return;
+    }
+    if (!name.trim()) {
+      toast({ title: "Cafe adı zorunlu", variant: "destructive" });
+      return;
+    }
+    if (!theme.trim()) {
+      toast({ title: "Tema gir", variant: "destructive" });
       return;
     }
     if (!openEntry && !entryQuestion.trim()) {
       toast({ title: "Onaylı giriş için bir soru gir", variant: "destructive" });
       return;
     }
-    try {
-      new URL(linkedin);
-    } catch {
-      toast({ title: "Geçerli LinkedIn URL gir", variant: "destructive" });
-      return;
+    if (linkedin.trim()) {
+      try { new URL(linkedin); } catch {
+        toast({ title: "Geçerli LinkedIn URL gir", variant: "destructive" });
+        return;
+      }
     }
     setSubmitting(true);
     const opens = new Date();
@@ -138,18 +159,27 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-3">
+          {!canOpenCafe && (
+            <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-2.5 text-xs text-destructive">
+              Cafe açmak için <strong>Diaspora Pasaportu</strong> gerekli (yurt dışı telefon numarası ile doğrulama). TR (+90) numaralı kullanıcılar cafe açamaz.
+            </div>
+          )}
           <div>
             <Label className="text-xs">Cafe Adı *</Label>
             <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Örn: Berlin Devs Cafe" maxLength={60} />
           </div>
           <div>
             <Label className="text-xs">Tema</Label>
-            <Select value={theme} onValueChange={setTheme}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                {THEMES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
-              </SelectContent>
-            </Select>
+            <Input
+              list="cafe-theme-suggestions"
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
+              placeholder="Örn: IT, Hekimler, Genel veya kendi temanı yaz"
+              maxLength={40}
+            />
+            <datalist id="cafe-theme-suggestions">
+              {THEME_SUGGESTIONS.map((t) => <option key={t} value={t} />)}
+            </datalist>
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div>
@@ -172,7 +202,7 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
             </div>
           </div>
           <div>
-            <Label className="text-xs flex items-center gap-1"><Linkedin className="h-3 w-3" /> LinkedIn URL *</Label>
+            <Label className="text-xs flex items-center gap-1"><Linkedin className="h-3 w-3" /> LinkedIn URL (opsiyonel)</Label>
             <Input value={linkedin} onChange={(e) => setLinkedin(e.target.value)} placeholder="https://linkedin.com/in/..." />
           </div>
           <div>
@@ -205,7 +235,7 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
             <strong className="text-foreground">{capacity} kişi</strong>{" "}
             {!isPremium && "(Premium: 4 saat / 300 kişi)"}
           </div>
-          <Button className="w-full" disabled={submitting} onClick={submit}>
+          <Button className="w-full" disabled={submitting || !canOpenCafe} onClick={submit}>
             {submitting && <Loader2 className="h-4 w-4 animate-spin mr-2" />} Cafe'yi Aç
           </Button>
         </div>
