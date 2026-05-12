@@ -476,14 +476,13 @@ const ProfileAmbassador = () => {
                 <div className="space-y-5">
                   <div className="rounded-xl border border-border p-4 bg-muted/20">
                     <p className="text-sm font-semibold text-foreground mb-3">CTA Yönetimi (Mock)</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div className="grid grid-cols-1 gap-4 mb-4">
                       <div className="space-y-2">
-                        <Label htmlFor="whatsapp-link">WhatsApp Linki</Label>
-                        <Input id="whatsapp-link" defaultValue="https://wa.me/491234567890" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="live-link">Canlı Görüşme Linki</Label>
-                        <Input id="live-link" defaultValue="https://meet.google.com" />
+                        <Label htmlFor="whatsapp-link">WhatsApp numarası (telefon doğrulamandan otomatik gelir)</Label>
+                        <Input id="whatsapp-link" defaultValue="+49 1234 567890" />
+                        <p className="text-[11px] text-muted-foreground">
+                          Profilindeki "WhatsApp'la Görüş" butonu doğruladığın telefon numarasını kullanır.
+                        </p>
                       </div>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-4">
@@ -492,13 +491,6 @@ const ProfileAmbassador = () => {
                         <Switch
                           checked={profileSettings.whatsappCtaEnabled}
                           onCheckedChange={(checked) => setProfileSettings((prev) => ({ ...prev, whatsappCtaEnabled: checked }))}
-                        />
-                      </div>
-                      <div className="flex items-center justify-between gap-4 rounded-lg border border-border p-3 flex-1">
-                        <Label className="text-sm text-foreground">Canlı Görüş CTA aktif</Label>
-                        <Switch
-                          checked={profileSettings.liveCallCtaEnabled}
-                          onCheckedChange={(checked) => setProfileSettings((prev) => ({ ...prev, liveCallCtaEnabled: checked }))}
                         />
                       </div>
                     </div>
