@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import CountryCitySelector from "@/components/CountryCitySelector";
 import { useDiaspora } from "@/contexts/DiasporaContext";
 import { consultants, cityAmbassadors } from "@/data/mock";
+import { getAmbassadorScore, getScoreTier } from "@/lib/ambassadorScore";
 import { countryCities } from "@/data/countryCities";
 import { useToast } from "@/hooks/use-toast";
 import { useFollow } from "@/hooks/useFollow";
