@@ -20,7 +20,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { toast } from "@/hooks/use-toast";
 
-const THEMES = [
+const THEME_SUGGESTIONS = [
   "IT",
   "Hekimler",
   "Profesyoneller",
@@ -29,6 +29,14 @@ const THEMES = [
   "Blogger/Vlogger",
   "Genel",
 ];
+
+// Diaspora Passport: foreign (non-TR) verified phone number
+const hasDiasporaPassport = (phone: string | null | undefined) => {
+  if (!phone) return false;
+  const p = phone.replace(/\s+/g, "");
+  if (p.startsWith("+90") || p.startsWith("0090")) return false;
+  return p.startsWith("+") || p.startsWith("00");
+};
 
 interface Props {
   trigger?: React.ReactNode;
