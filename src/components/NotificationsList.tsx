@@ -75,6 +75,7 @@ const NotificationsList = ({ accent = "primary" }: { accent?: "primary" | "gold"
   if (items.length === 0) {
     return (
       <div className="space-y-4">
+        <ConnectionsFollowersStats />
         <ConnectionRequestsInline />
         <div className="text-center py-12">
           <Bell className={`h-10 w-10 mx-auto mb-3 ${accent === "gold" ? "text-gold/40" : "text-primary/40"}`} />
