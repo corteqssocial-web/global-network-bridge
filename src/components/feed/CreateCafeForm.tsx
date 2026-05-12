@@ -41,13 +41,15 @@ const hasDiasporaPassport = (phone: string | null | undefined) => {
 interface Props {
   trigger?: React.ReactNode;
   onCreated?: () => void;
+  /** Ambassadors get an extended 6-hour slot with larger capacity */
+  ambassadorMode?: boolean;
 }
 
-const CreateCafeForm = ({ trigger, onCreated }: Props) => {
+const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false }: Props) => {
   const { user, profile } = useAuth();
   const isPremium = useIsPremium();
   const navigate = useNavigate();
-  const duration = isPremium ? 4 : 2;
+  const duration = ambassadorMode ? 6 : (isPremium ? 4 : 2);
   const canOpenCafe = hasDiasporaPassport(profile?.phone);
 
   const [open, setOpen] = useState(false);
