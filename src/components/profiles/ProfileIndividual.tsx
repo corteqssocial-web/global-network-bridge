@@ -89,8 +89,8 @@ const ProfileIndividual = () => {
   const [tagline, setTagline] = useState(() => localStorage.getItem("indiv_tagline") || "");
   const [worldMessage, setWorldMessage] = useState(() => localStorage.getItem("indiv_world_message") || "");
   const [birthDate, setBirthDate] = useState(() => localStorage.getItem("indiv_birth_date") || "");
-  const [pCountry, setPCountry] = useState(() => localStorage.getItem("indiv_country") || "Almanya");
-  const [pCity, setPCity] = useState(() => localStorage.getItem("indiv_city") || "Berlin");
+  const [pCountry, setPCountry] = useState(() => localStorage.getItem("indiv_country") || "");
+  const [pCity, setPCity] = useState(() => localStorage.getItem("indiv_city") || "");
   const [hasPassport, setHasPassport] = useState(() => localStorage.getItem("indiv_corteqs_passport") === "true");
   const [relocating, setRelocating] = useState(() => localStorage.getItem("indiv_relocating") === "true");
   const [relocCountry, setRelocCountry] = useState(() => localStorage.getItem("indiv_reloc_country") || "");
