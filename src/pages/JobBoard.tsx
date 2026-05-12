@@ -15,6 +15,7 @@ type Listing = {
   id: string;
   title: string;
   business_name: string | null;
+  hide_business_name: boolean | null;
   department: string | null;
   employment_type: string;
   location_type: string;
@@ -36,6 +37,7 @@ const JobBoard = () => {
   const [country, setCountry] = useState<string>("all");
   const [city, setCity] = useState<string>("all");
   const [keyword, setKeyword] = useState("");
+  const [applyTarget, setApplyTarget] = useState<Listing | null>(null);
 
   useEffect(() => {
     (async () => {
