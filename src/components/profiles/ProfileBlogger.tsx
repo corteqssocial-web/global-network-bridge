@@ -383,6 +383,10 @@ const ProfileBlogger = () => {
           <MessagesInbox />
         </TabsContent>
 
+        <TabsContent value="job-listings" className="mt-6">
+          <JobListingsManager />
+        </TabsContent>
+
         <TabsContent value="settings" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
