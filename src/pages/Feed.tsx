@@ -106,6 +106,7 @@ const Feed = () => {
     countries: selectedCountries,
     cities: selectedCities,
   });
+  const [showAllCafeCities, setShowAllCafeCities] = useState(false);
   const inCafe = !!cafeId && !!cafe;
   const cafeOpen = inCafe && new Date(cafe!.closes_at) > new Date();
 
