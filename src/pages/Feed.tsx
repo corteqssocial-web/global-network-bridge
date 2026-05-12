@@ -489,14 +489,22 @@ const Feed = () => {
                 )}
               </section>
 
-              {/* Diasporada İnsanları Ara */}
-              <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-                <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
+              {/* Diasporada İnsanları Ara — CTA card linking to LP */}
+              <Link
+                to="/diaspora-people"
+                className="block rounded-2xl border border-sky-500/30 bg-gradient-to-br from-sky-500/10 to-violet-500/10 p-4 shadow-sm hover:shadow-md hover:border-sky-500/50 transition-all"
+              >
+                <h3 className="text-sm font-bold mb-1 flex items-center gap-2">
                   <Users className="h-4 w-4 text-sky-500" />
                   Diasporada İnsanları Ara
                 </h3>
-                <DiasporaPeopleSearch />
-              </section>
+                <p className="text-[11px] text-muted-foreground mb-2 leading-snug">
+                  Ülke/şehir + iş arayan, taşınacak filtreleri ile tüm diasporayı keşfet.
+                </p>
+                <span className="text-[11px] font-semibold text-sky-600 hover:underline">
+                  Keşfet →
+                </span>
+              </Link>
 
 
               {/* Takip ettiklerin — gerçek veri */}
