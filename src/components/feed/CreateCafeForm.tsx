@@ -235,7 +235,7 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
             <strong className="text-foreground">{capacity} kişi</strong>{" "}
             {!isPremium && "(Premium: 4 saat / 300 kişi)"}
           </div>
-          <Button className="w-full" disabled={submitting} onClick={submit}>
+          <Button className="w-full" disabled={submitting || !canOpenCafe} onClick={submit}>
             {submitting && <Loader2 className="h-4 w-4 animate-spin mr-2" />} Cafe'yi Aç
           </Button>
         </div>
