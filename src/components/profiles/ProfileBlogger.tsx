@@ -34,6 +34,8 @@ import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationP
 import ProfileSubcategoriesSettings from "@/components/profiles/ProfileSubcategoriesSettings";
 
 const ProfileBlogger = () => {
+  const { locked: gateLocked } = useProfileGate();
+  const [activeTab, setActiveTab] = useState<string>("content");
   const blogger = {
     name: "Selin Akış",
     title: "Travel & Lifestyle Influencer",
