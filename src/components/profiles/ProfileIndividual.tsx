@@ -87,7 +87,11 @@ const ProfileIndividual = () => {
   const [pCountry, setPCountry] = useState(() => localStorage.getItem("indiv_country") || "Almanya");
   const [pCity, setPCity] = useState(() => localStorage.getItem("indiv_city") || "Berlin");
   const [hasPassport, setHasPassport] = useState(() => localStorage.getItem("indiv_corteqs_passport") === "true");
+  const [relocating, setRelocating] = useState(() => localStorage.getItem("indiv_relocating") === "true");
+  const [relocCountry, setRelocCountry] = useState(() => localStorage.getItem("indiv_reloc_country") || "");
+  const [relocCity, setRelocCity] = useState(() => localStorage.getItem("indiv_reloc_city") || "");
   const cityChoices = countryCities[pCountry] || [];
+  const relocCityChoices = countryCities[relocCountry] || [];
   const savePublicProfile = () => {
     localStorage.setItem("indiv_tagline", tagline);
     localStorage.setItem("indiv_world_message", worldMessage);
@@ -95,6 +99,9 @@ const ProfileIndividual = () => {
     localStorage.setItem("indiv_country", pCountry);
     localStorage.setItem("indiv_city", pCity);
     localStorage.setItem("indiv_corteqs_passport", String(hasPassport));
+    localStorage.setItem("indiv_relocating", String(relocating));
+    localStorage.setItem("indiv_reloc_country", relocCountry);
+    localStorage.setItem("indiv_reloc_city", relocCity);
     toast({ title: "Profil güncellendi", description: "Genel profilin yenilendi." });
   };
 
