@@ -168,8 +168,8 @@ const ProfileAmbassador = () => {
       {/* Tabs */}
       <ProfileSetupBanner />
       <Tabs
-        value={gateLocked && activeTab !== "messages" ? "settings" : activeTab}
-        onValueChange={(v) => { if (!gateLocked || v === "settings" || v === "messages") setActiveTab(v); }}
+        value={gateLocked && !["messages","notifications"].includes(activeTab) ? "settings" : activeTab}
+        onValueChange={(v) => { if (!gateLocked || v === "settings" || v === "messages" || v === "notifications") setActiveTab(v); }}
         className="w-full"
       >
         <TabsList className={`bg-gradient-to-r from-primary/10 via-turquoise/10 to-gold/10 border border-primary/20 w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1.5 shadow-sm ${gateLocked ? "[&>button:not([data-state=active])]:opacity-50" : ""}`}>
