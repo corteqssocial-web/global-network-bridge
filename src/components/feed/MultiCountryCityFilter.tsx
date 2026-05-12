@@ -253,6 +253,18 @@ const MultiCountryCityFilter = ({
           </PopoverContent>
         </Popover>
 
+        {/* Köprü — herkese açık ortak cadde */}
+        <Button
+          variant={isKopru ? "default" : "outline"}
+          size="sm"
+          onClick={pickKopru}
+          className="gap-1.5 h-9"
+          title="Taşınacaklar & Diaspora ile İş Yapanlar"
+        >
+          <Pin className="h-4 w-4" />
+          🌉 Köprü
+        </Button>
+
         {isPremium && (
           <Badge className="gap-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0">
             <Crown className="h-3 w-3" /> Premium · Sınırsız
