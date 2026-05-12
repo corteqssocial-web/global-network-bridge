@@ -475,7 +475,8 @@ const ProfileAmbassador = () => {
         </TabsContent>
 
         {/* SETTINGS */}
-        <TabsContent value="settings" className="mt-6">
+        <TabsContent value="settings" className="mt-6 space-y-6">
+          <ProfileLocationPhoneSettings />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <Card className="border-border lg:col-span-2">
               <CardContent className="p-6">
