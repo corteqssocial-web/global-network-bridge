@@ -215,6 +215,13 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
           <Label>Başvuru Bitiş Tarihi</Label>
           <Input type="date" className="mt-1.5" />
         </div>
+        <div className="md:col-span-2 flex items-center justify-between p-3 rounded-lg border border-border bg-muted/40">
+          <div>
+            <p className="font-medium text-foreground text-sm">Firma ismini ilanda gizle</p>
+            <p className="text-xs text-muted-foreground">Açıkça yayınlamak istemiyorsanız işletme adınız ilanda görünmez.</p>
+          </div>
+          <Switch checked={hideBusinessName} onCheckedChange={setHideBusinessName} />
+        </div>
       </div>
 
       {/* Description */}
