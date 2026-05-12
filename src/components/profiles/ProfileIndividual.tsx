@@ -110,25 +110,29 @@ const ProfileIndividual = () => {
     toast({ title: "Profil güncellendi", description: "Genel profilin yenilendi." });
   };
 
+  const { user: authUser } = useAuth();
+  const { toast } = useToast();
+  const { profile } = useAuth();
+
+  const fullName = profile?.full_name?.trim() || authUser?.email?.split("@")[0] || "Üye";
+  const initials = fullName
+    .split(/\s+/)
+    .map((p) => p[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase() || "U";
   const user = {
-    name: "Emre Aydın",
-    email: "emre@example.com",
-    avatar: "EA",
-    country: "Almanya",
-    city: "Berlin",
-    balance: 250.00,
-    title: "Yazılım Mühendisi",
+    name: fullName,
+    email: authUser?.email || "",
+    avatar: initials,
+    country: profile?.country || pCountry || "",
+    city: profile?.city || pCity || "",
+    title: profile?.profession || "",
   };
 
-  const followedConsultants = consultants.slice(0, 3);
-  const followedAssociations = associations.slice(0, 2);
-
   const hasRealCoupons = useDemoFlag("coupons");
-  const demoCoupons = [
-    { id: 1, title: "Demo · Hoşgeldin İndirimi %15", code: "DEMO15", expires: "30 Nis 2026", type: "discount" as const, businessName: "Turkish Döner GmbH" },
-    { id: 2, title: "Demo · Hediye Baklava", code: "DEMOTATLI", expires: "15 Mar 2026", type: "free" as const, businessName: "İstanbul Baklava House" },
-  ];
-  const coupons = hasRealCoupons ? [] : demoCoupons;
+  const coupons: Array<{ id: number; title: string; code: string; expires: string; type: "discount" | "free"; businessName: string }> = [];
 
   const [selectedCouponForScan, setSelectedCouponForScan] = useState<number | null>(null);
   const [showScanner, setShowScanner] = useState(false);
