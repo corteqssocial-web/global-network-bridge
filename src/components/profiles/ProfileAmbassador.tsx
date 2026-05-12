@@ -449,28 +449,6 @@ const ProfileAmbassador = () => {
 
                 <div className="space-y-5">
                   <div className="rounded-xl border border-border p-4 bg-muted/20">
-                    <p className="text-sm font-semibold text-foreground mb-3">Profil Modülleri</p>
-                    <div className="space-y-3">
-                      {[
-                        { key: "showKpis", label: "KPI kartları görünsün" },
-                        { key: "showWallet", label: "İşlemlerim (Stripe) görünsün" },
-                        { key: "showEvents", label: "Etkinlik verileri görünsün" },
-                        { key: "showOnboarding", label: "Onboarding sayıları görünsün" },
-                      ].map((item) => (
-                        <div key={item.key} className="flex items-center justify-between">
-                          <Label className="text-sm text-foreground">{item.label}</Label>
-                          <Switch
-                            checked={profileSettings[item.key as keyof typeof profileSettings] as boolean}
-                            onCheckedChange={(checked) =>
-                              setProfileSettings((prev) => ({ ...prev, [item.key]: checked }))
-                            }
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border border-border p-4 bg-muted/20">
                     <p className="text-sm font-semibold text-foreground mb-3">CTA Yönetimi (Mock)</p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                       <div className="space-y-2">
