@@ -106,11 +106,22 @@ const chartTooltipStyle = {
   fontSize: 12,
 };
 
-// Onboard sayıları (KPI takibi için) — mock veriden türetilen tahmini onboarding adedi
-const ambassadorsWithOnboarding = ambassadors.map((a) => ({
-  ...a,
-  onboarded: Math.round(a.participants * 0.18 + a.couponSubscriptions * 0.6),
-}));
+// Onboard sayıları (KPI takibi için) — mock veriden türetilen tahmini onboarding adedi.
+// Tüm kategorilerdeki onboarding kırılımını da hesaplıyoruz.
+const ambassadorsWithOnboarding = ambassadors.map((a) => {
+  const total = Math.round(a.participants * 0.18 + a.couponSubscriptions * 0.6);
+  return {
+    ...a,
+    onboarded: total,
+    onboardingBreakdown: {
+      individuals: Math.round(total * 0.45),
+      consultants: Math.round(total * 0.18),
+      businesses: Math.round(total * 0.20),
+      organizations: Math.round(total * 0.07),
+      bloggers: Math.round(total * 0.10),
+    },
+  };
+});
 
 const AmbassadorDashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -155,6 +166,13 @@ const AmbassadorDashboard = () => {
       events: list.reduce((s, a) => s + a.events, 0),
       participants: list.reduce((s, a) => s + a.participants, 0),
       onboarded: list.reduce((s, a) => s + a.onboarded, 0),
+      onboardingBreakdown: {
+        individuals: list.reduce((s, a) => s + a.onboardingBreakdown.individuals, 0),
+        consultants: list.reduce((s, a) => s + a.onboardingBreakdown.consultants, 0),
+        businesses: list.reduce((s, a) => s + a.onboardingBreakdown.businesses, 0),
+        organizations: list.reduce((s, a) => s + a.onboardingBreakdown.organizations, 0),
+        bloggers: list.reduce((s, a) => s + a.onboardingBreakdown.bloggers, 0),
+      },
       totalRevenue: list.reduce((s, a) => s + a.totalRevenue, 0),
       corteqsRevenue: list.reduce((s, a) => s + a.corteqsRevenue, 0),
       subscriptionShare: list.reduce((s, a) => s + getSubscriptionShare(a), 0),
@@ -249,6 +267,37 @@ const AmbassadorDashboard = () => {
           );
         })}
       </div>
+
+      {/* Onboarding Kırılımı (filtreye göre toplam) */}
+      <Card className="border-border">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-semibold flex items-center gap-2 flex-wrap">
+            <Users className="h-4 w-4 text-emerald-500" /> Onboarding Kırılımı
+            <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-600">
+              Toplam: {totals.onboarded.toLocaleString()}
+            </Badge>
+            <span className="text-[10px] text-muted-foreground font-normal">
+              ({countryFilter === "all" ? "Tüm Ülkeler" : countryFilter}{cityFilter !== "all" ? ` · ${cityFilter}` : ""})
+            </span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            {[
+              { label: "Bireysel Kullanıcı", value: totals.onboardingBreakdown.individuals, color: "text-primary" },
+              { label: "Danışman", value: totals.onboardingBreakdown.consultants, color: "text-chart-2" },
+              { label: "İşletme", value: totals.onboardingBreakdown.businesses, color: "text-chart-3" },
+              { label: "Kuruluş", value: totals.onboardingBreakdown.organizations, color: "text-chart-4" },
+              { label: "Blogger / Vlogger", value: totals.onboardingBreakdown.bloggers, color: "text-chart-5" },
+            ].map((b) => (
+              <div key={b.label} className="rounded-lg border border-border bg-muted/20 p-3 text-center">
+                <p className={`text-lg font-bold ${b.color}`}>{b.value.toLocaleString()}</p>
+                <p className="text-[10px] text-muted-foreground mt-1 leading-tight">{b.label}</p>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Top 3 Ambassadors */}
       <Card className="border-border bg-gradient-to-r from-primary/5 to-chart-1/5">
@@ -384,22 +433,33 @@ const AmbassadorDashboard = () => {
             <div className="divide-y divide-border">
               {filtered.map((amb) => {
                 const share = getSubscriptionShare(amb);
+                const ob = amb.onboardingBreakdown;
                 return (
-                  <div key={amb.id} className="grid grid-cols-10 gap-2 px-4 py-3 hover:bg-muted/30 transition-colors items-center text-xs">
-                    <span className="font-medium text-foreground">{amb.name}</span>
-                    <span className="text-muted-foreground">{amb.city}</span>
-                    <span className="text-muted-foreground">{amb.country}</span>
-                    <span className="text-center font-semibold text-foreground">{amb.events}</span>
-                    <span className="text-center font-semibold text-emerald-600">{amb.onboarded}</span>
-                    <span className="text-center text-foreground">{amb.participants}</span>
-                    <span className="text-right font-bold text-primary">€{amb.totalRevenue.toLocaleString()}</span>
-                    <span className="text-right text-chart-3">€{amb.corteqsRevenue.toLocaleString()}</span>
-                    <span className="text-center">
-                      <Badge variant="secondary" className="text-[10px]">{amb.couponSubscriptions}</Badge>
-                    </span>
-                    <div className="text-right">
-                      <span className="font-bold text-chart-4">€{share}</span>
-                      <span className="text-[9px] text-muted-foreground ml-1">({amb.year === 1 ? "20%" : "10%"})</span>
+                  <div key={amb.id} className="px-4 py-3 hover:bg-muted/30 transition-colors">
+                    <div className="grid grid-cols-10 gap-2 items-center text-xs">
+                      <span className="font-medium text-foreground">{amb.name}</span>
+                      <span className="text-muted-foreground">{amb.city}</span>
+                      <span className="text-muted-foreground">{amb.country}</span>
+                      <span className="text-center font-semibold text-foreground">{amb.events}</span>
+                      <span className="text-center font-semibold text-emerald-600">{amb.onboarded}</span>
+                      <span className="text-center text-foreground">{amb.participants}</span>
+                      <span className="text-right font-bold text-primary">€{amb.totalRevenue.toLocaleString()}</span>
+                      <span className="text-right text-chart-3">€{amb.corteqsRevenue.toLocaleString()}</span>
+                      <span className="text-center">
+                        <Badge variant="secondary" className="text-[10px]">{amb.couponSubscriptions}</Badge>
+                      </span>
+                      <div className="text-right">
+                        <span className="font-bold text-chart-4">€{share}</span>
+                        <span className="text-[9px] text-muted-foreground ml-1">({amb.year === 1 ? "20%" : "10%"})</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 mt-1.5 pl-1 text-[10px]">
+                      <span className="text-muted-foreground">Onboarding kırılımı:</span>
+                      <Badge variant="outline" className="text-[9px] border-primary/30">Bireysel {ob.individuals}</Badge>
+                      <Badge variant="outline" className="text-[9px] border-chart-2/30">Danışman {ob.consultants}</Badge>
+                      <Badge variant="outline" className="text-[9px] border-chart-3/30">İşletme {ob.businesses}</Badge>
+                      <Badge variant="outline" className="text-[9px] border-chart-4/30">Kuruluş {ob.organizations}</Badge>
+                      <Badge variant="outline" className="text-[9px] border-chart-5/30">Blogger {ob.bloggers}</Badge>
                     </div>
                   </div>
                 );
