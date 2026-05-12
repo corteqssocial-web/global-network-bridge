@@ -47,8 +47,20 @@ const ProfileAmbassador = () => {
   // KPIs and lists are reset to zero/empty for launch — real values will be
   // populated from Stripe (transactions/payouts), events, profiles (onboarded users),
   // and platform messages tables as activity comes in.
+  const onboardingBreakdown = {
+    individuals: 0,
+    consultants: 0,
+    businesses: 0,
+    organizations: 0,
+    bloggers: 0,
+  };
+  const usersOnboardedTotal =
+    onboardingBreakdown.individuals + onboardingBreakdown.consultants +
+    onboardingBreakdown.businesses + onboardingBreakdown.organizations +
+    onboardingBreakdown.bloggers;
+
   const kpis = {
-    usersOnboarded: 0,
+    usersOnboarded: usersOnboardedTotal,
     usersTarget: 100,
     activeAdvisors: 0,
     advisorsTarget: 20,
