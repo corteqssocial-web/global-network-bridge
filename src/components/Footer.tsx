@@ -1,7 +1,8 @@
-import { Globe, Flag } from "lucide-react";
+import { Globe, Flag, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { diasporaOptions } from "@/contexts/DiasporaContext";
 import corteqsLogo from "@/assets/corteqs-logo.png";
+import ContactDialog from "@/components/ContactDialog";
 
 const Footer = () => {
   return (
