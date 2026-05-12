@@ -233,6 +233,22 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false }: Props) =
               </div>
             )}
           </div>
+          {ambassadorMode && (
+            <div>
+              <Label className="text-xs">Cafe Süresi (Şehir Elçisi)</Label>
+              <Select value={String(duration)} onValueChange={(v) => setDuration(Number(v))}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {[1, 2, 3, 4, 5, 6].map((h) => (
+                    <SelectItem key={h} value={String(h)}>{h} saat</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-[10px] text-muted-foreground mt-1">
+                Şehir elçileri 1–6 saat arası diledikleri süreyi seçebilir.
+              </p>
+            </div>
+          )}
           <div className="rounded-lg bg-muted/50 p-2.5 text-xs text-muted-foreground">
             Süre: <strong className="text-foreground">{duration} saat</strong> · Kapasite:{" "}
             <strong className="text-foreground">{capacity} kişi</strong>{" "}
