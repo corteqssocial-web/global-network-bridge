@@ -329,7 +329,7 @@ const Feed = () => {
     if (!text) return;
     const post = posts.find((p) => p.id === postId);
     // TR kullanıcı, başka ülkedeki paylaşıma yorum yazmak için karşı tarafla bağlantı (connect) olmalı
-    if (post && isTRUser && post.country && post.country !== "Türkiye" && !demoMode) {
+    if (post && isTRUser && post.country && post.country !== "Türkiye" && post.country !== "Köprü" && !demoMode) {
       const isOwn = user?.id === post.user_id;
       if (!isOwn && !canMessage(post.user_id)) {
         toast({
