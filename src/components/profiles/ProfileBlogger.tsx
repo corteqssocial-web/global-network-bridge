@@ -18,6 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AppointmentManagePanel from "@/components/booking/AppointmentManagePanel";
 import MessagesInbox from "@/components/messaging/MessagesInbox";
 import MyFollowsSection from "@/components/profiles/MyFollowsSection";
+import { ProfileSetupBanner, useProfileGate } from "@/components/profiles/ProfileSetupBanner";
 import { Inbox as InboxIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -33,6 +34,8 @@ import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationP
 import ProfileSubcategoriesSettings from "@/components/profiles/ProfileSubcategoriesSettings";
 
 const ProfileBlogger = () => {
+  const { locked: gateLocked } = useProfileGate();
+  const [activeTab, setActiveTab] = useState<string>("content");
   const blogger = {
     name: "Selin Akış",
     title: "Travel & Lifestyle Influencer",
@@ -167,8 +170,13 @@ const ProfileBlogger = () => {
       <div className="mb-6"><CorBotPromoBanner /></div>
 
       {/* Tabs */}
-      <Tabs defaultValue="content" className="w-full">
-        <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
+      <ProfileSetupBanner />
+      <Tabs
+        value={gateLocked ? "settings" : activeTab}
+        onValueChange={(v) => { if (!gateLocked || v === "settings") setActiveTab(v); }}
+        className="w-full"
+      >
+        <TabsList className={`bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1 ${gateLocked ? "[&>button:not([data-state=active])]:opacity-50" : ""}`}>
           <TabsTrigger value="content" className="gap-1.5"><PenLine className="h-4 w-4" /> İçerikler</TabsTrigger>
           <TabsTrigger value="sessions" className="gap-1.5"><Video className="h-4 w-4" /> Görüşmeler</TabsTrigger>
           <TabsTrigger value="collaborations" className="gap-1.5"><Handshake className="h-4 w-4" /> İşbirlikleri</TabsTrigger>

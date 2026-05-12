@@ -13,6 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import MessagesInbox from "@/components/messaging/MessagesInbox";
 import MyFollowsSection from "@/components/profiles/MyFollowsSection";
+import { ProfileSetupBanner, useProfileGate } from "@/components/profiles/ProfileSetupBanner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -42,6 +43,8 @@ type AmbassadorEvent = {
 
 const ProfileAmbassador = () => {
   const { user } = useAuth();
+  const { locked: gateLocked } = useProfileGate();
+  const [activeTab, setActiveTab] = useState<string>("transactions");
   const [messageText, setMessageText] = useState("");
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<AmbassadorEvent | null>(null);
@@ -163,8 +166,13 @@ const ProfileAmbassador = () => {
       <div className="mb-6"><CorBotPromoBanner /></div>
 
       {/* Tabs */}
-      <Tabs defaultValue="transactions" className="w-full">
-        <TabsList className="bg-gradient-to-r from-primary/10 via-turquoise/10 to-gold/10 border border-primary/20 w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1.5 shadow-sm">
+      <ProfileSetupBanner />
+      <Tabs
+        value={gateLocked ? "settings" : activeTab}
+        onValueChange={(v) => { if (!gateLocked || v === "settings") setActiveTab(v); }}
+        className="w-full"
+      >
+        <TabsList className={`bg-gradient-to-r from-primary/10 via-turquoise/10 to-gold/10 border border-primary/20 w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1.5 shadow-sm ${gateLocked ? "[&>button:not([data-state=active])]:opacity-50" : ""}`}>
           <TabsTrigger value="transactions" className="gap-1.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><CreditCard className="h-4 w-4" /> İşlemlerim</TabsTrigger>
           <TabsTrigger value="events" className="gap-1.5 data-[state=active]:bg-gold data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Calendar className="h-4 w-4" /> Etkinlikler</TabsTrigger>
           <TabsTrigger value="cadde" className="gap-1.5 data-[state=active]:bg-amber-600 data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Coffee className="h-4 w-4" /> Cadde'de Cafe</TabsTrigger>

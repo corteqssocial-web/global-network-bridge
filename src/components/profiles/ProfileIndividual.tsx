@@ -31,6 +31,7 @@ import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
 import WelcomePack from "@/components/profiles/WelcomePack";
 import IndividualPublicCard from "@/components/profiles/IndividualPublicCard";
 import MyFollowsSection from "@/components/profiles/MyFollowsSection";
+import { ProfileSetupBanner, useProfileGate } from "@/components/profiles/ProfileSetupBanner";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ShieldCheck } from "lucide-react";
 import { countryList } from "@/contexts/DiasporaContext";
@@ -59,6 +60,7 @@ const ProfileIndividual = () => {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [managingEvent, setManagingEvent] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState(initialTab);
+  const { locked: gateLocked } = useProfileGate();
   const [isVolunteerMentor, setIsVolunteerMentor] = useState(false);
   const [socialVisibility, setSocialVisibility] = useState<Record<string, boolean>>(() => {
     if (typeof window === "undefined") return {};
@@ -418,8 +420,13 @@ const ProfileIndividual = () => {
       </div>
 
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
+      <ProfileSetupBanner />
+      <Tabs
+        value={gateLocked ? "settings" : activeTab}
+        onValueChange={(v) => { if (!gateLocked || v === "settings") setActiveTab(v); }}
+        className="w-full"
+      >
+        <TabsList className={`bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1 ${gateLocked ? "[&>button:not([data-state=active]):not([value=settings])]:opacity-50" : ""}`}>
           <TabsTrigger value="service-requests" className="gap-1.5"><ClipboardList className="h-4 w-4" /> Hizmet Talepleri</TabsTrigger>
           <TabsTrigger value="relocations" className="gap-1.5"><Globe className="h-4 w-4" /> Taşınma Yönetimi</TabsTrigger>
           <TabsTrigger value="calendar" className="gap-1.5"><Calendar className="h-4 w-4" /> Takvim</TabsTrigger>

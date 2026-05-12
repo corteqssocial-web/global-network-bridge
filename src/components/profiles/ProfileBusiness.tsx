@@ -18,6 +18,7 @@ import SocialMediaCampaignDialog from "@/components/SocialMediaCampaignDialog";
 import CategoryShowcasePurchase from "@/components/CategoryShowcasePurchase";
 import BusinessOpportunitiesPanel from "@/components/business/BusinessOpportunitiesPanel";
 import MyFollowsSection from "@/components/profiles/MyFollowsSection";
+import { ProfileSetupBanner, useProfileGate } from "@/components/profiles/ProfileSetupBanner";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -53,6 +54,8 @@ const dialFor = (country?: string | null) => (country && COUNTRY_DIAL[country]) 
 
 const ProfileBusiness = () => {
   const { user } = useAuth();
+  const { locked: gateLocked } = useProfileGate();
+  const [activeTab, setActiveTab] = useState<string>("listings");
   const [isVerified, setIsVerified] = useState(false);
   const [hiringMode, setHiringMode] = useState(false);
   const [verifiedReq, setVerifiedReq] = useState<{ status: string } | null>(null);
@@ -292,8 +295,13 @@ const ProfileBusiness = () => {
       </TooltipProvider>
 
       {/* Tabs */}
-      <Tabs defaultValue="listings" className="w-full">
-        <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
+      <ProfileSetupBanner />
+      <Tabs
+        value={gateLocked ? "settings" : (activeTab ?? "listings")}
+        onValueChange={(v) => { if (!gateLocked || v === "settings") setActiveTab(v); }}
+        className="w-full"
+      >
+        <TabsList className={`bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1 ${gateLocked ? "[&>button:not([data-state=active])]:opacity-50" : ""}`}>
           <TabsTrigger value="listings" className="gap-1.5"><Package className="h-4 w-4" /> İlanlar</TabsTrigger>
           <TabsTrigger value="requests" className="gap-1.5"><Inbox className="h-4 w-4" /> Teklif Talepleri</TabsTrigger>
           <TabsTrigger value="coupons" className="gap-1.5"><Tag className="h-4 w-4" /> Kuponlar</TabsTrigger>
