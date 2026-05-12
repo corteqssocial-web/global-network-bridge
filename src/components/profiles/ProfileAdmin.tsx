@@ -3,9 +3,15 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   Users, Building2, Calendar, BarChart3, ShieldCheck,
   AlertTriangle, CheckCircle, Clock, Eye, TrendingUp,
-  Settings, Globe, Megaphone, CreditCard, Ban, UserCheck, Star, Sparkles
+  Settings, Globe, Megaphone, CreditCard, Ban, UserCheck, Star, Sparkles,
+  Crown, Mail, Package, MessageSquare, PenLine, Coffee
 } from "lucide-react";
 import BrandSettings from "@/components/admin/BrandSettings";
+import RevenueTracker from "@/components/admin/RevenueTracker";
+import WelcomePackTracker from "@/components/admin/WelcomePackTracker";
+import VBloggerDashboard from "@/components/admin/VBloggerDashboard";
+import AmbassadorDashboard from "@/components/admin/AmbassadorDashboard";
+import WhatsAppLandingsModeration from "@/components/admin/WhatsAppLandingsModeration";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -16,10 +22,28 @@ const ProfileAdmin = () => {
   const [ambassadorApps, setAmbassadorApps] = useState<any[]>([]);
   const [appsLoading, setAppsLoading] = useState(false);
   const [pendingApprovals, setPendingApprovals] = useState<any[]>([]);
+  const [foundingSignups, setFoundingSignups] = useState<any[]>([]);
+  const [contactMessages, setContactMessages] = useState<any[]>([]);
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    activeUsers: 0,
+    totalBusinesses: 0,
+    totalAssociations: 0,
+    totalConsultants: 0,
+    totalEvents: 0,
+    totalCafes: 0,
+    totalJobs: 0,
+    revenue: 0,
+    foundingCount: 0,
+    contactCount: 0,
+  });
 
   useEffect(() => {
     fetchAmbassadorApps();
     fetchApprovals();
+    fetchFounding();
+    fetchContacts();
+    fetchStats();
   }, []);
 
   const fetchAmbassadorApps = async () => {
@@ -35,6 +59,63 @@ const ProfileAdmin = () => {
       .eq("status", "pending")
       .order("created_at", { ascending: false });
     setPendingApprovals((data as any[]) || []);
+  };
+
+  const fetchFounding = async () => {
+    const { data } = await (supabase.from("founding_1000_signups" as any) as any)
+      .select("*")
+      .order("created_at", { ascending: false });
+    setFoundingSignups((data as any[]) || []);
+  };
+
+  const fetchContacts = async () => {
+    const { data } = await (supabase.from("contact_messages" as any) as any)
+      .select("*")
+      .order("created_at", { ascending: false });
+    setContactMessages((data as any[]) || []);
+  };
+
+  const fetchStats = async () => {
+    const head = { count: "exact" as const, head: true };
+    const [users, biz, assoc, cons, ev, cf, jb, fnd, ctc] = await Promise.all([
+      supabase.from("profiles").select("*", head),
+      supabase.from("profiles").select("*", head).eq("account_type", "business"),
+      supabase.from("profiles").select("*", head).eq("account_type", "association"),
+      supabase.from("profiles").select("*", head).eq("account_type", "consultant"),
+      supabase.from("events" as any).select("*", head),
+      supabase.from("cafes" as any).select("*", head),
+      supabase.from("job_listings" as any).select("*", head),
+      supabase.from("founding_1000_signups" as any).select("*", head),
+      supabase.from("contact_messages" as any).select("*", head),
+    ]);
+    setStats((prev) => ({
+      ...prev,
+      totalUsers: users.count || 0,
+      activeUsers: users.count || 0,
+      totalBusinesses: biz.count || 0,
+      totalAssociations: assoc.count || 0,
+      totalConsultants: cons.count || 0,
+      totalEvents: ev.count || 0,
+      totalCafes: cf.count || 0,
+      totalJobs: jb.count || 0,
+      foundingCount: fnd.count || 0,
+      contactCount: ctc.count || 0,
+    }));
+  };
+
+  const updateFoundingStatus = async (id: string, status: string) => {
+    const { error } = await (supabase.from("founding_1000_signups" as any) as any)
+      .update({ status }).eq("id", id);
+    if (error) { toast({ title: "Hata", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Güncellendi", description: status });
+    fetchFounding();
+  };
+
+  const updateContactStatus = async (id: string, status: string) => {
+    const { error } = await (supabase.from("contact_messages" as any) as any)
+      .update({ status }).eq("id", id);
+    if (error) { toast({ title: "Hata", description: error.message, variant: "destructive" }); return; }
+    fetchContacts();
   };
 
   const decideApproval = async (item: any, approve: boolean) => {
@@ -62,29 +143,13 @@ const ProfileAdmin = () => {
   };
 
   const platformStats = {
-    totalUsers: 0,
-    activeUsers: 0,
-    totalBusinesses: 0,
-    totalAssociations: 0,
-    totalEvents: 0,
-    revenue: 0,
+    ...stats,
     pendingApprovals: pendingApprovals.length,
     reports: 0,
   };
 
-  const recentReports = [
-    { id: 1, reporter: "Elif D.", target: "Spam Etkinlik", reason: "Sahte etkinlik ilanı", status: "Beklemede" },
-    { id: 2, reporter: "Can Ö.", target: "FakeConsult Ltd.", reason: "Yanıltıcı bilgi", status: "Beklemede" },
-    { id: 3, reporter: "Zeynep A.", target: "Kullanıcı #4521", reason: "Uygunsuz içerik", status: "İnceleniyor" },
-  ];
-
-  const recentTransactions = [
-    { user: "Anatolian Tech GmbH", type: "Etkinlik Boost", amount: 49, date: "08 Mar" },
-    { user: "Emre Aydın", type: "Para Yükleme", amount: 100, date: "07 Mar" },
-    { user: "ATT Derneği", type: "Öne Çıkan Dernek", amount: 29, date: "06 Mar" },
-    { user: "Zeynep Arslan", type: "AI Twin Seans", amount: 15, date: "05 Mar" },
-  ];
-
+  const recentReports: { id: number; reporter: string; target: string; reason: string; status: string }[] = [];
+  const recentTransactions: { user: string; type: string; amount: number; date: string }[] = [];
   return (
     <>
       {/* Admin header */}
@@ -109,13 +174,15 @@ const ProfileAdmin = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {[
           { label: "Toplam Kullanıcı", value: platformStats.totalUsers.toLocaleString(), icon: Users, color: "text-primary" },
-          { label: "Aktif Kullanıcı", value: platformStats.activeUsers.toLocaleString(), icon: UserCheck, color: "text-turquoise" },
           { label: "İşletme", value: platformStats.totalBusinesses, icon: Building2, color: "text-gold" },
           { label: "Dernek / Vakıf", value: platformStats.totalAssociations, icon: Globe, color: "text-turquoise" },
+          { label: "Danışman", value: platformStats.totalConsultants, icon: UserCheck, color: "text-violet-500" },
           { label: "Etkinlik", value: platformStats.totalEvents, icon: Calendar, color: "text-primary" },
-          { label: "Gelir", value: `€${(platformStats.revenue / 1000).toFixed(1)}K`, icon: CreditCard, color: "text-success" },
+          { label: "Cafe", value: platformStats.totalCafes, icon: Coffee, color: "text-amber-600" },
+          { label: "İş İlanı", value: platformStats.totalJobs, icon: Megaphone, color: "text-emerald-500" },
+          { label: "Founding 1000", value: platformStats.foundingCount, icon: Crown, color: "text-amber-500" },
+          { label: "İletişim", value: platformStats.contactCount, icon: Mail, color: "text-primary" },
           { label: "Onay Bekleyen", value: platformStats.pendingApprovals, icon: Clock, color: "text-gold" },
-          { label: "Şikayet", value: platformStats.reports, icon: AlertTriangle, color: "text-destructive" },
         ].map((stat, i) => (
           <div key={i} className="bg-card rounded-xl border border-border p-4 shadow-card text-center">
             <stat.icon className={`h-5 w-5 ${stat.color} mx-auto mb-2`} />
@@ -129,7 +196,13 @@ const ProfileAdmin = () => {
       <Tabs defaultValue="approvals" className="w-full">
         <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
           <TabsTrigger value="approvals" className="gap-1.5"><Clock className="h-4 w-4" /> Onaylar</TabsTrigger>
+          <TabsTrigger value="founding" className="gap-1.5"><Crown className="h-4 w-4" /> Founding 1000{stats.foundingCount > 0 && <Badge variant="secondary" className="ml-1 h-4 px-1 text-[10px]">{stats.foundingCount}</Badge>}</TabsTrigger>
+          <TabsTrigger value="contact" className="gap-1.5"><Mail className="h-4 w-4" /> İletişim{stats.contactCount > 0 && <Badge variant="secondary" className="ml-1 h-4 px-1 text-[10px]">{stats.contactCount}</Badge>}</TabsTrigger>
           <TabsTrigger value="ambassadors" className="gap-1.5"><Star className="h-4 w-4" /> Elçi Başvuruları</TabsTrigger>
+          <TabsTrigger value="ambassadors-dash" className="gap-1.5"><Globe className="h-4 w-4" /> Elçi Yönetimi</TabsTrigger>
+          <TabsTrigger value="welcome-pack" className="gap-1.5"><Package className="h-4 w-4" /> Welcome Pack</TabsTrigger>
+          <TabsTrigger value="bloggers" className="gap-1.5"><PenLine className="h-4 w-4" /> Bloggerlar</TabsTrigger>
+          <TabsTrigger value="whatsapp" className="gap-1.5"><MessageSquare className="h-4 w-4" /> WhatsApp</TabsTrigger>
           <TabsTrigger value="reports" className="gap-1.5"><AlertTriangle className="h-4 w-4" /> Şikayetler</TabsTrigger>
           <TabsTrigger value="users" className="gap-1.5"><Users className="h-4 w-4" /> Kullanıcılar</TabsTrigger>
           <TabsTrigger value="revenue" className="gap-1.5"><CreditCard className="h-4 w-4" /> Gelir</TabsTrigger>
@@ -137,8 +210,89 @@ const ProfileAdmin = () => {
           <TabsTrigger value="brand" className="gap-1.5"><Sparkles className="h-4 w-4" /> Marka</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="brand" className="mt-6">
-          <BrandSettings />
+        <TabsContent value="brand" className="mt-6"><BrandSettings /></TabsContent>
+        <TabsContent value="ambassadors-dash" className="mt-6"><AmbassadorDashboard /></TabsContent>
+        <TabsContent value="welcome-pack" className="mt-6"><WelcomePackTracker /></TabsContent>
+        <TabsContent value="bloggers" className="mt-6"><VBloggerDashboard /></TabsContent>
+        <TabsContent value="whatsapp" className="mt-6"><WhatsAppLandingsModeration /></TabsContent>
+
+        {/* FOUNDING 1000 */}
+        <TabsContent value="founding" className="mt-6">
+          <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+            <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
+              <Crown className="h-5 w-5 text-amber-500" /> Founding 1000 Kayıtları
+              <Badge variant="secondary" className="ml-2">{foundingSignups.length}</Badge>
+            </h2>
+            {foundingSignups.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-8">Henüz kayıt yok.</p>
+            ) : (
+              <div className="space-y-3">
+                {foundingSignups.map((s) => (
+                  <div key={s.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50">
+                    <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
+                      <Crown className="h-5 w-5 text-amber-500" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-foreground">{s.full_name || s.email || s.user_id?.slice(0, 8)}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        {s.account_type} · {s.email || "—"} · {new Date(s.created_at).toLocaleDateString("tr-TR")}
+                      </p>
+                    </div>
+                    <Badge className={s.status === "approved" ? "bg-success/15 text-success" : s.status === "rejected" ? "bg-destructive/15 text-destructive" : "bg-gold/15 text-gold"}>
+                      {s.status === "approved" ? "Onaylı" : s.status === "rejected" ? "Reddedildi" : "Beklemede"}
+                    </Badge>
+                    {s.status === "pending" && (
+                      <div className="flex gap-2 shrink-0">
+                        <Button size="sm" className="gap-1" onClick={() => updateFoundingStatus(s.id, "approved")}><CheckCircle className="h-3 w-3" /> Onayla</Button>
+                        <Button variant="outline" size="sm" className="gap-1 text-destructive" onClick={() => updateFoundingStatus(s.id, "rejected")}><Ban className="h-3 w-3" /> Reddet</Button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </TabsContent>
+
+        {/* CONTACT MESSAGES */}
+        <TabsContent value="contact" className="mt-6">
+          <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+            <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
+              <Mail className="h-5 w-5 text-primary" /> İletişim Mesajları
+              <Badge variant="secondary" className="ml-2">{contactMessages.length}</Badge>
+            </h2>
+            {contactMessages.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-8">Henüz mesaj yok.</p>
+            ) : (
+              <div className="space-y-3">
+                {contactMessages.map((m) => (
+                  <div key={m.id} className="p-4 rounded-xl bg-muted/50 space-y-2">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-foreground">{m.full_name}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          <a href={`mailto:${m.email}`} className="hover:text-primary underline-offset-2 hover:underline">{m.email}</a>
+                          {(m.city || m.country) && <> · {[m.city, m.country].filter(Boolean).join(", ")}</>}
+                          {" · "}{new Date(m.created_at).toLocaleString("tr-TR")}
+                        </p>
+                      </div>
+                      <Badge className={m.status === "resolved" ? "bg-success/15 text-success" : "bg-primary/15 text-primary"}>
+                        {m.status === "resolved" ? "Çözüldü" : "Yeni"}
+                      </Badge>
+                    </div>
+                    {m.message && <p className="text-sm text-foreground whitespace-pre-wrap">{m.message}</p>}
+                    {m.status !== "resolved" && (
+                      <div className="flex gap-2 pt-1">
+                        <Button size="sm" variant="outline" className="gap-1" onClick={() => updateContactStatus(m.id, "resolved")}>
+                          <CheckCircle className="h-3 w-3" /> Çözüldü olarak işaretle
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </TabsContent>
 
         {/* APPROVALS */}
@@ -289,43 +443,7 @@ const ProfileAdmin = () => {
 
         {/* REVENUE */}
         <TabsContent value="revenue" className="mt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-success" /> Aylık Gelir
-              </h2>
-              <div className="space-y-3">
-                {["Oca", "Şub", "Mar"].map((month, i) => {
-                  const val = [3200, 4100, 5800][i];
-                  return (
-                    <div key={month} className="flex items-center gap-3">
-                      <span className="text-sm text-muted-foreground w-8">{month}</span>
-                      <div className="flex-1 bg-muted rounded-full h-3">
-                        <div className="bg-success rounded-full h-3" style={{ width: `${(val / 6000) * 100}%` }} />
-                      </div>
-                      <span className="text-sm font-medium text-foreground w-16 text-right">€{val}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <CreditCard className="h-5 w-5 text-primary" /> Son İşlemler
-              </h2>
-              <div className="space-y-3">
-                {recentTransactions.map((tx, i) => (
-                  <div key={i} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
-                    <div>
-                      <p className="text-sm font-medium text-foreground">{tx.user}</p>
-                      <p className="text-xs text-muted-foreground">{tx.type} · {tx.date}</p>
-                    </div>
-                    <span className="font-bold text-sm text-success">+€{tx.amount}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <RevenueTracker />
         </TabsContent>
 
         {/* ANALYTICS */}

@@ -1,7 +1,8 @@
-import { Globe, Flag } from "lucide-react";
+import { Globe, Flag, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { diasporaOptions } from "@/contexts/DiasporaContext";
 import corteqsLogo from "@/assets/corteqs-logo.png";
+import ContactDialog from "@/components/ContactDialog";
 
 const Footer = () => {
   return (
@@ -53,7 +54,11 @@ const Footer = () => {
               <li><a href="#" className="hover:text-primary transition-colors">Hakkımızda</a></li>
               <li><Link to="/pricing" className="hover:text-primary transition-colors">Fiyatlandırma</Link></li>
               <li><Link to="/founders-1000" className="hover:text-primary transition-colors">Founding 1000</Link></li>
-              <li><a href="#" className="hover:text-primary transition-colors">İletişim</a></li>
+              <li>
+                <ContactDialog
+                  trigger={<button className="hover:text-primary transition-colors text-left">İletişim</button>}
+                />
+              </li>
               <li><Link to="/kariyer" className="hover:text-primary transition-colors">Kariyer</Link></li>
             </ul>
           </div>
@@ -69,8 +74,20 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-secondary-foreground/10 mt-6 pt-4 text-center text-sm text-secondary-foreground/40 font-body">
-          © 2026 CorteQS. Tüm hakları saklıdır.
+        <div className="border-t border-secondary-foreground/10 mt-6 pt-4 text-center text-xs text-secondary-foreground/40 font-body space-y-1.5">
+          <div>© 2026 CorteQS. Tüm hakları saklıdır.</div>
+          <div>
+            A{" "}
+            <a
+              href="https://www.qualtronsinclair.com/qs-networks"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-secondary-foreground/70 hover:text-primary transition-colors font-medium"
+            >
+              Qualtron Sinclair / UBT Venture
+              <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
         </div>
       </div>
     </footer>

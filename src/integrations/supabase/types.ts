@@ -283,6 +283,39 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_messages: {
+        Row: {
+          city: string | null
+          country: string | null
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          message: string | null
+          status: string
+        }
+        Insert: {
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          message?: string | null
+          status?: string
+        }
+        Update: {
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          message?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       coupon_purchases: {
         Row: {
           business_name: string | null
