@@ -6,7 +6,7 @@ import {
   MapPin, Clock, Gift, TrendingUp, Briefcase, Linkedin,
   FileText, Eye, EyeOff, Settings, Shield, UserPlus, ScanLine, QrCode,
   Globe, Trash2, ExternalLink, ClipboardList, Download, ChevronDown, ChevronUp, Info,
-  Presentation, Loader2
+  Presentation, Loader2, User
 } from "lucide-react";
 
 import NotificationsList from "@/components/NotificationsList";
