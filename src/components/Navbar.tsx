@@ -132,6 +132,11 @@ const Navbar = () => {
                     <MapPin className="h-3.5 w-3.5 text-primary" />{t.nav.map}
                   </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/diaspora-people" className="flex items-center gap-2 cursor-pointer">
+                    <Users className="h-3.5 w-3.5 text-primary" />Diasporada İnsanlar
+                  </Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
