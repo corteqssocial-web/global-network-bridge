@@ -92,6 +92,7 @@ const NotificationsList = ({ accent = "primary" }: { accent?: "primary" | "gold"
 
   return (
     <div className="space-y-3">
+      <ConnectionsFollowersStats />
       <ConnectionRequestsInline />
       {unread > 0 && (
         <div className="flex justify-end">
