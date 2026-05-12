@@ -392,42 +392,6 @@ const ProfileIndividual = () => {
             </div>
           </div>
         </div>
-            </div>
-
-            {/* Yakında taşınacağım */}
-            <div className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/5 p-4">
-              <div className="flex items-start justify-between gap-3 flex-wrap">
-                <div>
-                  <h3 className="font-semibold text-foreground">Yakında Taşınacağım</h3>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    Açtığında taşınacağın ülke/şehir profilinde rozet olarak görünür ve "Taşınacaklar" filtresinde listelenirsin.
-                  </p>
-                </div>
-                <Switch checked={relocating} onCheckedChange={setRelocating} />
-              </div>
-              {relocating && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
-                  <div>
-                    <Label>Taşınacağın Ülke</Label>
-                    <Select value={relocCountry} onValueChange={(v) => { setRelocCountry(v); setRelocCity(""); }}>
-                      <SelectTrigger><SelectValue placeholder="Ülke seç" /></SelectTrigger>
-                      <SelectContent className="max-h-[60vh]">
-                        {countryList.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label>Taşınacağın Şehir</Label>
-                    <Select value={relocCity} onValueChange={setRelocCity} disabled={!relocCountry}>
-                      <SelectTrigger><SelectValue placeholder={relocCountry ? `Tüm Şehirler - ${relocCountry}` : "Önce ülke seç"} /></SelectTrigger>
-                      <SelectContent className="max-h-[60vh]">
-                        {relocCityChoices.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              )}
-            </div>
 
       {/* Volunteer Mentor CTA */}
       <div className="bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/30 rounded-2xl p-5 md:p-6 mb-8 flex flex-col sm:flex-row sm:items-center gap-4">
