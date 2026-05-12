@@ -107,55 +107,71 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
         rows={3}
         className="resize-none"
       />
-      <p className="text-[11px] text-muted-foreground">
-        Varsayılan olarak profilindeki <strong>{profileCity || "şehir"} · {profileCountry || "ülke"}</strong> akışında görünür. İstersen başka bir @Ülke / @Şehir seç ya da sadece global yayınla.
-      </p>
+      {isTR ? (
+        <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-2.5 text-[11px] text-amber-700 dark:text-amber-300 flex items-start gap-2">
+          <Info className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+          <span>
+            Türkiye merkezli kullanıcı olarak paylaşımların <strong>@Türkiye caddesinde</strong> yayınlanır. Yüksek etkileşim alan paylaşımlar Global akışta da görünür.
+          </span>
+        </div>
+      ) : (
+        <p className="text-[11px] text-muted-foreground">
+          Varsayılan olarak profilindeki <strong>{profileCity || "şehir"} · {profileCountry || "ülke"}</strong> akışında görünür. İstersen başka bir @Ülke / @Şehir seç ya da sadece global yayınla.
+        </p>
+      )}
       <div className="flex flex-wrap gap-2 items-center">
-        <button
-          type="button"
-          onClick={() => setGlobalOnly((v) => !v)}
-          className={`h-9 px-3 rounded-md border text-xs font-semibold flex items-center gap-1.5 transition-colors ${
-            globalOnly
-              ? "bg-primary text-primary-foreground border-primary"
-              : "bg-background border-border hover:bg-muted"
-          }`}
-        >
-          <Globe className="h-3.5 w-3.5" /> {globalOnly ? "Global'de yayınla ✓" : "Sadece Global"}
-        </button>
-        <Select
-          value={country}
-          onValueChange={(v) => { setCountry(v); setCity(""); setGlobalOnly(false); }}
-          disabled={globalOnly}
-        >
-          <SelectTrigger className="h-9 text-xs w-44">
-            <Globe className="h-3.5 w-3.5 text-primary mr-1" />
-            <SelectValue placeholder="@Ülke seç" />
-          </SelectTrigger>
-          <SelectContent className="max-h-60">
-            {allCountries.map((c) => (
-              <SelectItem key={c} value={c}>@{c}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={city} onValueChange={(v) => { setCity(v); setGlobalOnly(false); }} disabled={!country || globalOnly}>
-          <SelectTrigger className="h-9 text-xs w-44">
-            <MapPin className="h-3.5 w-3.5 text-turquoise mr-1" />
-            <SelectValue placeholder="@Şehir seç" />
-          </SelectTrigger>
-          <SelectContent className="max-h-60">
-            {cities.map((c) => (
-              <SelectItem key={c} value={c}>@{c}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {!globalOnly && (country || city) && (
-          <div className="flex items-center gap-1 text-[11px] flex-wrap">
-            {city && <span className="px-1.5 py-0.5 rounded-full bg-turquoise/10 text-turquoise font-semibold">@{city}</span>}
-            {country && <span className="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">@{country}</span>}
-          </div>
+        {!isTR && (
+          <>
+            <button
+              type="button"
+              onClick={() => setGlobalOnly((v) => !v)}
+              className={`h-9 px-3 rounded-md border text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+                globalOnly
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-background border-border hover:bg-muted"
+              }`}
+            >
+              <Globe className="h-3.5 w-3.5" /> {globalOnly ? "Global'de yayınla ✓" : "Sadece Global"}
+            </button>
+            <Select
+              value={country}
+              onValueChange={(v) => { setCountry(v); setCity(""); setGlobalOnly(false); }}
+              disabled={globalOnly}
+            >
+              <SelectTrigger className="h-9 text-xs w-44">
+                <Globe className="h-3.5 w-3.5 text-primary mr-1" />
+                <SelectValue placeholder="@Ülke seç" />
+              </SelectTrigger>
+              <SelectContent className="max-h-60">
+                {allCountries.map((c) => (
+                  <SelectItem key={c} value={c}>@{c}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={city} onValueChange={(v) => { setCity(v); setGlobalOnly(false); }} disabled={!country || globalOnly}>
+              <SelectTrigger className="h-9 text-xs w-44">
+                <MapPin className="h-3.5 w-3.5 text-turquoise mr-1" />
+                <SelectValue placeholder="@Şehir seç" />
+              </SelectTrigger>
+              <SelectContent className="max-h-60">
+                {cities.map((c) => (
+                  <SelectItem key={c} value={c}>@{c}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {!globalOnly && (country || city) && (
+              <div className="flex items-center gap-1 text-[11px] flex-wrap">
+                {city && <span className="px-1.5 py-0.5 rounded-full bg-turquoise/10 text-turquoise font-semibold">@{city}</span>}
+                {country && <span className="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">@{country}</span>}
+              </div>
+            )}
+            {globalOnly && (
+              <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">🌍 Global</span>
+            )}
+          </>
         )}
-        {globalOnly && (
-          <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">🌍 Global</span>
+        {isTR && (
+          <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">@Türkiye 🇹🇷</span>
         )}
         <Button
           onClick={submit}
