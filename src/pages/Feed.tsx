@@ -429,6 +429,22 @@ const Feed = () => {
                   <h3 className="text-sm font-bold">Konum</h3>
                   <Badge variant="secondary" className="ml-auto text-[10px]">{scopeLabel}</Badge>
                 </div>
+                {/* Global reset — tüm ülkelerin akışı */}
+                <button
+                  onClick={() => {
+                    setSelectedContinent(null);
+                    setSelectedCountries([]);
+                    setSelectedCities([]);
+                  }}
+                  className={`w-full mb-3 flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-bold transition-all ${
+                    scopeLabel === "Global"
+                      ? "bg-gradient-to-r from-sky-500 to-violet-500 text-white border-transparent shadow-sm"
+                      : "bg-card text-foreground border-border hover:border-primary/40"
+                  }`}
+                  title="Tüm ülkelerin akışını göster"
+                >
+                  🌍 Global — Tüm Ülkeler
+                </button>
                 <MultiCountryCityFilter
                   selectedCountries={selectedCountries}
                   selectedCities={selectedCities}
