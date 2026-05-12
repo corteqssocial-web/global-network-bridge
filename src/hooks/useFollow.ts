@@ -72,7 +72,7 @@ export function useFollow() {
       toast({ title: "Takip edildi! 🔔", description: `${name} yeni paylaşım yaptığında bildirim alacaksınız.` });
       return true;
     },
-    [toast]
+    [toast, user, navigate]
   );
 
   const list = useCallback(
