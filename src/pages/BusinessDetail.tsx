@@ -177,41 +177,80 @@ const BusinessDetail = () => {
             </div>
 
             <div className="flex flex-wrap gap-3 mt-6">
-              {b.sector === "Sağlık" && (
-                <Link to={`/hospital-appointment/${b.id}`}>
-                  <Button variant="default" size="sm" className="gap-1.5 bg-turquoise hover:bg-turquoise/90 text-primary-foreground">
-                    <Stethoscope className="h-4 w-4" /> Randevu Al
-                  </Button>
-                </Link>
+              {!user && (
+                <div className="w-full flex items-center justify-between gap-3 p-3 rounded-xl border border-dashed border-gold/40 bg-gold/5 text-sm">
+                  <span className="text-foreground font-body flex items-center gap-2">
+                    <Lock className="h-4 w-4 text-gold" />
+                    Bu kart DEMO içeriktir. Etkileşime geçmek için giriş yapın veya kayıt olun.
+                  </span>
+                  <Button size="sm" variant="default" onClick={() => navigate("/auth")}>Giriş / Kayıt</Button>
+                </div>
               )}
-              <a href={b.website} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <Globe className="h-4 w-4" /> Web Sitesi
+              {b.sector === "Sağlık" && (
+                user ? (
+                  <Link to={`/hospital-appointment/${b.id}`}>
+                    <Button variant="default" size="sm" className="gap-1.5 bg-turquoise hover:bg-turquoise/90 text-primary-foreground">
+                      <Stethoscope className="h-4 w-4" /> Randevu Al
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button variant="default" size="sm" disabled className="gap-1.5 bg-turquoise/60 text-primary-foreground">
+                    <Lock className="h-4 w-4" /> Randevu Al
+                  </Button>
+                )
+              )}
+              {user ? (
+                <a href={b.website} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm" className="gap-1.5">
+                    <Globe className="h-4 w-4" /> Web Sitesi
+                  </Button>
+                </a>
+              ) : (
+                <Button variant="outline" size="sm" disabled className="gap-1.5">
+                  <Lock className="h-4 w-4" /> Web Sitesi
                 </Button>
-              </a>
-              <a href={`mailto:${b.contactEmail}`}>
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <Mail className="h-4 w-4" /> İletişim
+              )}
+              {user ? (
+                <a href={`mailto:${b.contactEmail}`}>
+                  <Button variant="outline" size="sm" className="gap-1.5">
+                    <Mail className="h-4 w-4" /> İletişim
+                  </Button>
+                </a>
+              ) : (
+                <Button variant="outline" size="sm" disabled className="gap-1.5">
+                  <Lock className="h-4 w-4" /> İletişim
                 </Button>
-              </a>
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.name + ', ' + b.city + ', ' + b.country)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <MapPin className="h-4 w-4" /> Konum
+              )}
+              {user ? (
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.name + ', ' + b.city + ', ' + b.country)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="outline" size="sm" className="gap-1.5">
+                    <MapPin className="h-4 w-4" /> Konum
+                  </Button>
+                </a>
+              ) : (
+                <Button variant="outline" size="sm" disabled className="gap-1.5">
+                  <Lock className="h-4 w-4" /> Konum
                 </Button>
-              </a>
-              <a
-                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(b.name + ', ' + b.city + ', ' + b.country)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <Navigation className="h-4 w-4" /> Yol Tarifi
+              )}
+              {user ? (
+                <a
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(b.name + ', ' + b.city + ', ' + b.country)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="outline" size="sm" className="gap-1.5">
+                    <Navigation className="h-4 w-4" /> Yol Tarifi
+                  </Button>
+                </a>
+              ) : (
+                <Button variant="outline" size="sm" disabled className="gap-1.5">
+                  <Lock className="h-4 w-4" /> Yol Tarifi
                 </Button>
-              </a>
+              )}
             </div>
           </div>
 
