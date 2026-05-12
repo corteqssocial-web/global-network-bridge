@@ -170,8 +170,8 @@ const ProfileConsultant = () => {
       {/* Tabs */}
       <ProfileSetupBanner />
       <Tabs
-        value={gateLocked ? "settings" : activeTab}
-        onValueChange={(v) => { if (!gateLocked || v === "settings") setActiveTab(v); }}
+        value={gateLocked && activeTab !== "messages" ? "settings" : activeTab}
+        onValueChange={(v) => { if (!gateLocked || v === "settings" || v === "messages") setActiveTab(v); }}
         className="w-full"
       >
         <TabsList className={`bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1 ${gateLocked ? "[&>button:not([data-state=active])]:opacity-50" : ""}`}>

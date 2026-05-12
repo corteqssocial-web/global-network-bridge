@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MessageSquare, Send, Lock, Mail } from "lucide-react";
+import { MessageSquare, Send, Lock, Mail, UserPlus, Clock } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { useFollow } from "@/hooks/useFollow";
 import { supabase } from "@/integrations/supabase/client";
 
 export type RecipientKind =
@@ -46,12 +47,18 @@ const PlatformMessageDialog = ({
   recipientUserId,
   defaultSubject,
 }: Props) => {
-  const { user, profile } = useAuth();
+  const { user, profile, accountType } = useAuth();
   const { toast } = useToast();
+  const { isFollowed, isFollowAccepted, toggle } = useFollow();
   const navigate = useNavigate();
   const [subject, setSubject] = useState(defaultSubject ?? "");
   const [body, setBody] = useState("");
   const [sending, setSending] = useState(false);
+
+  const following = isFollowed(recipientKind, recipientSlug);
+  const accepted = isFollowAccepted(recipientKind, recipientSlug);
+  const isAdmin = accountType === "admin";
+  const canSend = isAdmin || (following && accepted);
 
   const goToAuth = () => {
     const redirect = encodeURIComponent(window.location.pathname + window.location.search);
@@ -61,6 +68,14 @@ const PlatformMessageDialog = ({
 
   const send = async () => {
     if (!user) return;
+    if (!canSend) {
+      toast({
+        title: "Mesaj gönderilemedi",
+        description: "Önce takip et ve karşı tarafın onayını bekle.",
+        variant: "destructive",
+      });
+      return;
+    }
     const text = body.trim();
     if (!text) return;
     setSending(true);
@@ -119,26 +134,54 @@ const PlatformMessageDialog = ({
                 Mesajın platform üzerinden iletilir. Cevap geldiğinde panelindeki Mesaj Kutusu'nda bildirim alırsın.
               </DialogDescription>
             </DialogHeader>
+            {!canSend && (
+              <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-sm text-foreground flex items-start gap-2">
+                {following ? (
+                  <Clock className="h-4 w-4 text-amber-600 mt-0.5 shrink-0" />
+                ) : (
+                  <Lock className="h-4 w-4 text-amber-600 mt-0.5 shrink-0" />
+                )}
+                <div className="min-w-0">
+                  {following ? (
+                    <p>
+                      <strong>Takip onayı bekleniyor.</strong> {recipientName} isteğini onayladığında mesaj gönderebilirsin.
+                    </p>
+                  ) : (
+                    <p>
+                      Mesaj gönderebilmek için önce <strong>{recipientName}</strong>'i takip etmen ve takibinin onaylanması gerekiyor.
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
             <div className="space-y-3">
               <Input
                 placeholder="Konu (opsiyonel)"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 maxLength={120}
+                disabled={!canSend}
               />
               <Textarea
-                placeholder="Mesajını yaz..."
+                placeholder={canSend ? "Mesajını yaz..." : "Takip onayından sonra yazabilirsin..."}
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
                 rows={5}
                 maxLength={2000}
+                disabled={!canSend}
               />
             </div>
             <DialogFooter className="gap-2 sm:gap-2">
               <Button variant="outline" onClick={() => onOpenChange(false)}>İptal</Button>
-              <Button onClick={send} disabled={!body.trim() || sending} className="gap-2">
-                <Send className="h-4 w-4" /> {sending ? "Gönderiliyor..." : "Gönder"}
-              </Button>
+              {!following ? (
+                <Button onClick={() => toggle(recipientKind, recipientSlug, recipientName)} className="gap-2">
+                  <UserPlus className="h-4 w-4" /> Takip İsteği Gönder
+                </Button>
+              ) : (
+                <Button onClick={send} disabled={!body.trim() || sending || !canSend} className="gap-2">
+                  <Send className="h-4 w-4" /> {sending ? "Gönderiliyor..." : "Gönder"}
+                </Button>
+              )}
             </DialogFooter>
           </>
         )}

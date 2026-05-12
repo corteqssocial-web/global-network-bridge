@@ -11,6 +11,10 @@ interface Profile {
   city: string | null;
   account_type: string | null;
   onboarding_completed: boolean;
+  business_description: string | null;
+  business_name: string | null;
+  mentor_topics: string | null;
+  profession: string | null;
 }
 
 interface AuthContextType {
@@ -50,7 +54,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchProfile = useCallback(async (userId: string) => {
     const { data } = await supabase
       .from("profiles")
-      .select("full_name, avatar_url, phone, phone_verified, country, city, account_type, onboarding_completed")
+      .select("full_name, avatar_url, phone, phone_verified, country, city, account_type, onboarding_completed, business_description, business_name, mentor_topics, profession")
       .eq("id", userId)
       .single();
 
