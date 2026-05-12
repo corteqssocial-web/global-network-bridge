@@ -525,7 +525,7 @@ const Feed = () => {
                       Şu an başka aktif cafe yok.
                     </p>
                   )}
-                  {activeCafes.map((c) => {
+                  {visibleCafes.map((c) => {
                     const st = themeStyle(c.theme);
                     const Icon = st.icon;
                     return (
@@ -563,6 +563,27 @@ const Feed = () => {
                     );
                   })}
                 </div>
+                {hiddenCount > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setShowAllCafeCities(true)}
+                    className="mt-2 w-full text-[11px] text-primary font-semibold hover:underline py-1"
+                  >
+                    +{hiddenCount} şehir daha göster ↓
+                  </button>
+                )}
+                {showAllCafeCities && ranked.length > TOP_N && (
+                  <button
+                    type="button"
+                    onClick={() => setShowAllCafeCities(false)}
+                    className="mt-2 w-full text-[11px] text-muted-foreground hover:underline py-1"
+                  >
+                    Daralt ↑
+                  </button>
+                )}
+                    </>
+                  );
+                })()}
                 {user ? (
                   <div className="mt-3">
                     <CreateCafeForm onCreated={refreshCafes} />
