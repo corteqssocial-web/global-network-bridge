@@ -68,7 +68,7 @@ const Feed = () => {
   const demoCafe = isDemoCafe
     ? ({
         id: "demo-it",
-        name: "Berlin IT ☕",
+        name: "Berlin IT Cafe ☕",
         theme: "IT",
         country: "Almanya",
         city: "Berlin",
@@ -509,7 +509,7 @@ const Feed = () => {
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="text-xs font-semibold truncate flex items-center gap-1">
-                        Berlin IT ☕
+                        Berlin IT Cafe ☕
                         <Badge variant="secondary" className="text-[9px] h-3.5 px-1">Demo</Badge>
                       </div>
                       <div className="text-[10px] text-muted-foreground truncate">Berlin · 👥 24/40</div>
