@@ -137,19 +137,7 @@ const WelcomePack = ({ userName, country, city, onDismiss }: WelcomePackProps) =
 
       {/* Sections */}
       <div className="relative">
-        {isLocked && (
-          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 rounded-xl bg-background/70 backdrop-blur-sm p-4 text-center">
-            <div className="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-              <Lock className="h-5 w-5" />
-            </div>
-            <p className="text-sm font-semibold text-foreground">Hoş Geldin Paketi'ni açmak için giriş yapın</p>
-            <p className="text-xs text-muted-foreground max-w-xs">Kupon kodları, transfer indirimleri ve mentör eşleşmesi yalnızca kayıtlı üyelere özeldir.</p>
-            <div className="flex gap-2">
-              <Button size="sm" onClick={() => navigate("/auth")} className="gap-1.5"><Lock className="h-3.5 w-3.5" /> Giriş Yap / Kayıt Ol</Button>
-            </div>
-          </div>
-        )}
-        <div className={`space-y-2 ${isLocked ? "pointer-events-none select-none blur-[2px] opacity-60" : ""}`}>
+        <div className="space-y-2 [&_a]:pointer-events-none [&_a]:opacity-60 [&_button[data-lockable=true]]:pointer-events-none [&_button[data-lockable=true]]:opacity-60">
 
         {/* 1. FLIGHT DISCOUNT */}
         <div className={`bg-card rounded-xl border transition-all ${completedSteps.includes("flight") ? "border-success/40 bg-success/5" : "border-border"}`}>
