@@ -503,6 +503,36 @@ export type Database = {
           },
         ]
       }
+      founding_1000_signups: {
+        Row: {
+          account_type: string
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          account_type: string
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          account_type?: string
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       generated_posts: {
         Row: {
           created_at: string
