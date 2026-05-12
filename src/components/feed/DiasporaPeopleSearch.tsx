@@ -34,10 +34,28 @@ const MOCK_PEOPLE: PersonRow[] = [
   { id: "m5", full_name: "Deniz Kara", avatar_url: null, city: "Paris", country: "Fransa", profession: "Şef", job_seeking: true, online: true },
 ];
 
+const PROFESSIONS = [
+  "Yazılım & IT",
+  "Mühendislik",
+  "Sağlık (Doktor / Hemşire)",
+  "Akademisyen / Araştırmacı",
+  "Pazarlama & Satış",
+  "Tasarım & UX",
+  "Hukuk",
+  "Finans & Muhasebe",
+  "Eğitim / Öğretmen",
+  "Şef / Gastronomi",
+  "Sanat & Medya",
+  "Girişimci",
+  "Öğrenci",
+  "Diğer",
+];
+
 const DiasporaPeopleSearch = () => {
   const [q, setQ] = useState("");
   const [country, setCountry] = useState<string>("all");
   const [city, setCity] = useState<string>("all");
+  const [profession, setProfession] = useState<string>("all");
   const [filter, setFilter] = useState<"all" | "job" | "relocating">("all");
   const [people, setPeople] = useState<PersonRow[]>([]);
   const [showAll, setShowAll] = useState(false);
