@@ -120,8 +120,6 @@ const ProfileAmbassador = () => {
         ))}
       </div>
 
-      </div>
-
       {/* Onboarding Kırılımı */}
       <Card className="border-border mb-6">
         <CardContent className="p-5">
