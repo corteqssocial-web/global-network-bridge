@@ -122,6 +122,18 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
         </p>
       )}
       <div className="flex flex-wrap gap-2 items-center">
+        <button
+          type="button"
+          onClick={() => setKopruOnly((v) => !v)}
+          className={`h-9 px-3 rounded-md border text-xs font-bold flex items-center gap-1.5 transition-colors ${
+            kopruOnly
+              ? "bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 text-white border-transparent"
+              : "bg-background border-border hover:bg-muted"
+          }`}
+          title="Herkese açık ortak cadde"
+        >
+          🌉 {kopruOnly ? "Köprü ✓" : "Köprü"}
+        </button>
         {!isTR && (
           <>
             <button
