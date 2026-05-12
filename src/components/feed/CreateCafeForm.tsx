@@ -165,12 +165,16 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
           </div>
           <div>
             <Label className="text-xs">Tema</Label>
-            <Select value={theme} onValueChange={setTheme}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                {THEMES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
-              </SelectContent>
-            </Select>
+            <Input
+              list="cafe-theme-suggestions"
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
+              placeholder="Örn: IT, Hekimler, Genel veya kendi temanı yaz"
+              maxLength={40}
+            />
+            <datalist id="cafe-theme-suggestions">
+              {THEME_SUGGESTIONS.map((t) => <option key={t} value={t} />)}
+            </datalist>
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div>
