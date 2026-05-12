@@ -69,19 +69,31 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
       toast({ title: "Giriş yapmalısın", variant: "destructive" });
       return;
     }
-    if (!name.trim() || !linkedin.trim()) {
-      toast({ title: "Cafe adı ve LinkedIn zorunlu", variant: "destructive" });
+    if (!canOpenCafe) {
+      toast({
+        title: "Diaspora Pasaportu gerekli",
+        description: "Cafe açmak için yurt dışı (TR dışı) telefon numarası ile doğrulanmış olmalısın.",
+        variant: "destructive",
+      });
+      return;
+    }
+    if (!name.trim()) {
+      toast({ title: "Cafe adı zorunlu", variant: "destructive" });
+      return;
+    }
+    if (!theme.trim()) {
+      toast({ title: "Tema gir", variant: "destructive" });
       return;
     }
     if (!openEntry && !entryQuestion.trim()) {
       toast({ title: "Onaylı giriş için bir soru gir", variant: "destructive" });
       return;
     }
-    try {
-      new URL(linkedin);
-    } catch {
-      toast({ title: "Geçerli LinkedIn URL gir", variant: "destructive" });
-      return;
+    if (linkedin.trim()) {
+      try { new URL(linkedin); } catch {
+        toast({ title: "Geçerli LinkedIn URL gir", variant: "destructive" });
+        return;
+      }
     }
     setSubmitting(true);
     const opens = new Date();
