@@ -6,10 +6,9 @@ import { findOrgCategory, findOrgSubcategory } from "@/data/organizationCategori
 import {
   Users, MapPin, Globe, Calendar, Heart, Megaphone,
   TrendingUp, Settings, Bell, Mail, MessageSquare, Briefcase,
-  Plus, ChevronRight, Star, Eye, BarChart3, FileText, ArrowLeft, Crown, Inbox
+  Plus, Star, BarChart3, ArrowLeft, Crown
 } from "lucide-react";
 import JobListingsManager from "@/components/JobListingsManager";
-import ConsultantServiceRequests from "@/components/ConsultantServiceRequests";
 import SocialMediaCampaignDialog from "@/components/SocialMediaCampaignDialog";
 import CategoryShowcasePurchase from "@/components/CategoryShowcasePurchase";
 import CreateEventForm from "@/components/CreateEventForm";
@@ -57,7 +56,7 @@ const ProfileAssociation = () => {
 
   const upcomingEvents: { id: number; title: string; date: string; attendees: number; type: string }[] = [];
 
-  const members: { name: string; role: string; since: string; active: boolean }[] = [];
+  
 
   const stats = {
     totalMembers: 0,
@@ -120,8 +119,6 @@ const ProfileAssociation = () => {
       <Tabs defaultValue="events" className="w-full">
         <TabsList className="bg-card border border-border w-full justify-start overflow-x-auto flex-wrap h-auto gap-1 p-1">
           <TabsTrigger value="events" className="gap-1.5"><Calendar className="h-4 w-4" /> Etkinlikler</TabsTrigger>
-          <TabsTrigger value="requests" className="gap-1.5"><Inbox className="h-4 w-4" /> Teklif Talepleri</TabsTrigger>
-          <TabsTrigger value="members" className="gap-1.5"><Users className="h-4 w-4" /> Üyeler</TabsTrigger>
           <TabsTrigger value="communications" className="gap-1.5"><Mail className="h-4 w-4" /> İletişim</TabsTrigger>
           <TabsTrigger value="analytics" className="gap-1.5"><BarChart3 className="h-4 w-4" /> Analitik</TabsTrigger>
           <TabsTrigger value="promotions" className="gap-1.5"><Megaphone className="h-4 w-4" /> Tanıtım</TabsTrigger>
@@ -179,48 +176,6 @@ const ProfileAssociation = () => {
               )}
             </div>
           )}
-        </TabsContent>
-
-        {/* REQUESTS */}
-        <TabsContent value="requests" className="mt-6">
-          <ConsultantServiceRequests />
-        </TabsContent>
-
-        {/* MEMBERS */}
-        <TabsContent value="members" className="mt-6">
-          <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <Users className="h-5 w-5 text-primary" /> Üye Yönetimi
-              </h2>
-              <Button className="gap-2"><Plus className="h-4 w-4" /> Üye Ekle</Button>
-            </div>
-            {members.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-border bg-muted/30 p-8 text-center">
-                <Users className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
-                <p className="text-sm font-medium text-foreground">Henüz üye yok</p>
-                <p className="text-xs text-muted-foreground mt-0.5">"Üye Ekle" ile derneğinize üye eklemeye başlayın.</p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {members.map((member, i) => (
-                  <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm shrink-0">
-                      {member.name.split(" ").map(n => n[0]).join("")}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-foreground">{member.name}</h3>
-                      <p className="text-sm text-muted-foreground">{member.role} · {member.since}'den beri</p>
-                    </div>
-                    <Badge variant={member.active ? "default" : "secondary"} className="text-xs">
-                      {member.active ? "Aktif" : "Pasif"}
-                    </Badge>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
         </TabsContent>
 
         {/* COMMUNICATIONS */}
