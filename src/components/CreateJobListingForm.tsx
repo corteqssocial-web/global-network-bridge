@@ -49,20 +49,11 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
     requirements: editData?.requirements || "",
   });
 
-  const [selectedPackage, setSelectedPackage] = useState(isEditing ? "basic" : "basic");
-  const [boostToCountrySearch, setBoostToCountrySearch] = useState(false);
-  const [boostEmailNotify, setBoostEmailNotify] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState("basic");
   const [hideBusinessName, setHideBusinessName] = useState(false);
 
-  const boostCosts = {
-    countrySearch: 15,
-    emailNotify: 12,
-  };
-
   const packagePrice = listingPackages.find(p => p.id === selectedPackage)?.price || 0;
-  const totalPrice = packagePrice
-    + (boostToCountrySearch ? boostCosts.countrySearch : 0)
-    + (boostEmailNotify ? boostCosts.emailNotify : 0);
+  const totalPrice = packagePrice;
 
   const handleSubmit = async () => {
     const pkg = listingPackages.find((p) => p.id === selectedPackage);
