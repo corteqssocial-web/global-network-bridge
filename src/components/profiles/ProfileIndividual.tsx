@@ -346,6 +346,7 @@ const ProfileIndividual = () => {
         country={pCountry || user.country}
         corteqsPassport={hasPassport}
         recentEvents={recentPublicEvents}
+        relocating={relocating ? { country: relocCountry, city: relocCity } : null}
       />
 
       {/* Profile header */}
