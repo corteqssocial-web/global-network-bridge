@@ -875,4 +875,40 @@ const Feed = () => {
   );
 };
 
+interface CategoryLink { to: string; label: string; icon: any; bg: string; color: string; }
+const CategorySearch = ({ links }: { links: CategoryLink[] }) => {
+  const [q, setQ] = useState("");
+  const filtered = useMemo(
+    () => links.filter((l) => l.label.toLowerCase().includes(q.trim().toLowerCase())),
+    [q, links]
+  );
+  return (
+    <>
+      <div className="relative mb-3">
+        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+        <Input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Kategori ara..."
+          className="h-8 pl-8 text-xs"
+        />
+      </div>
+      <div className="space-y-1">
+        {filtered.length === 0 && (
+          <p className="text-[11px] text-muted-foreground py-2 text-center">Eşleşme yok.</p>
+        )}
+        {filtered.map((l) => (
+          <Link key={l.to} to={l.to} className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-muted/60 transition-colors">
+            <div className={`h-8 w-8 rounded-full ${l.bg} flex items-center justify-center`}>
+              <l.icon className={`h-4 w-4 ${l.color}`} />
+            </div>
+            <span className="text-sm font-medium">{l.label}</span>
+          </Link>
+        ))}
+      </div>
+    </>
+  );
+};
+
 export default Feed;
+
