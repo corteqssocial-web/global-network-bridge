@@ -40,6 +40,8 @@ import ProfileSubcategoriesSettings from "@/components/profiles/ProfileSubcatego
 
 const ProfileConsultant = () => {
   const { user } = useAuth();
+  const { locked: gateLocked } = useProfileGate();
+  const [activeTab, setActiveTab] = useState<string>("incoming-requests");
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [profile, setProfile] = useState<any>(null);
   const [myEvents, setMyEvents] = useState<Array<{ id: string; title: string; event_date: string; max_attendees: number | null; status: string }>>([]);
