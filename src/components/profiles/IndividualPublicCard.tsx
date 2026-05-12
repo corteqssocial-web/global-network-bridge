@@ -17,6 +17,7 @@ interface Props {
   country?: string;
   corteqsPassport?: boolean;
   recentEvents: Array<{ id: string; title: string; date: string; city?: string; source: "joined" | "followed" }>;
+  relocating?: { country?: string; city?: string } | null;
 }
 
 const IndividualPublicCard = ({
