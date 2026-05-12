@@ -11,7 +11,7 @@ import {
 import {
   Flag, Users, Calendar, DollarSign, TrendingUp, Trophy, Crown,
   ArrowUpRight, Search, Mail, Send, Tag, Globe, MapPin, Star,
-  Ticket, Gift, BarChart3, Megaphone
+  Ticket, Gift, BarChart3, Megaphone, Coffee
 } from "lucide-react";
 import {
   BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area,
