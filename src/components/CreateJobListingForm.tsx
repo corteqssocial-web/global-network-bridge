@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
-  Briefcase, MapPin, DollarSign, Clock, Users, Tag, FileText,
-  CreditCard, Star, TrendingUp, Megaphone, ArrowLeft, Check, Image
+  Briefcase, Tag, CreditCard, Check, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
