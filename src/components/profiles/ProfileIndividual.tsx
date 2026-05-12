@@ -913,20 +913,11 @@ const ProfileIndividual = () => {
               </div>
             </div>
           </div>
-          <div className="mt-6 space-y-3">
-            <div className="bg-card rounded-2xl border border-border p-4 flex items-center justify-between gap-4">
-              <div>
-                <div className="font-semibold text-foreground flex items-center gap-2">
-                  {showSocialOnProfile ? <Eye className="h-4 w-4 text-primary" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}
-                  Sosyal medya hesaplarını profilimde göster
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Kapatırsan eklediğin hesaplar kayıtlı kalır ama profilinde görünmez.
-                </p>
-              </div>
-              <Switch checked={showSocialOnProfile} onCheckedChange={setShowSocialOnProfile} />
-            </div>
-            <SocialMediaInputs defaultValues={{ linkedin: linkedinUrl }} />
+          <div className="mt-6">
+            <SocialMediaInputs
+              defaultValues={{ linkedin: linkedinUrl }}
+              storageKey="individual_social_visibility"
+            />
           </div>
         </TabsContent>
         {/* SERVICE REQUESTS */}
