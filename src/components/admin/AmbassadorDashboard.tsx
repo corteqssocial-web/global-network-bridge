@@ -229,10 +229,11 @@ const AmbassadorDashboard = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
         {[
           { label: "Elçi Sayısı", value: totals.ambassadors, icon: Flag, color: "text-primary" },
+          { label: "Onboarding", value: totals.onboarded.toLocaleString(), icon: Users, color: "text-emerald-500" },
           { label: "Etkinlikler", value: totals.events, icon: Calendar, color: "text-chart-1" },
           { label: "Katılımcılar", value: totals.participants.toLocaleString(), icon: Users, color: "text-chart-2" },
-          { label: "Toplam Gelir", value: `€${totals.totalRevenue.toLocaleString()}`, icon: DollarSign, color: "text-chart-3" },
-          { label: "CorteQS Geliri", value: `€${totals.corteqsRevenue.toLocaleString()}`, icon: TrendingUp, color: "text-chart-4" },
+          { label: "Toplam Ciro", value: `€${totals.totalRevenue.toLocaleString()}`, icon: DollarSign, color: "text-chart-3" },
+          { label: "CorteQS Kazancı", value: `€${totals.corteqsRevenue.toLocaleString()}`, icon: TrendingUp, color: "text-chart-4" },
           { label: "Sub. Share", value: `€${totals.subscriptionShare.toLocaleString()}`, icon: Crown, color: "text-chart-5" },
           { label: "Kupon Abonelik", value: totals.couponSubscriptions, icon: Tag, color: "text-primary" },
         ].map(kpi => {
