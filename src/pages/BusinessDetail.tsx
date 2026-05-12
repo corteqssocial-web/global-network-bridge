@@ -1,7 +1,8 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import PlatformMessageButton from "@/components/messaging/PlatformMessageButton";
 import { useFollow } from "@/hooks/useFollow";
-import { MapPin, Users, Briefcase, Globe, Mail, Building2, Calendar, UserPlus, UserCheck, ArrowLeft, Tag, Store, Stethoscope, ExternalLink, Navigation } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { MapPin, Users, Briefcase, Globe, Mail, Building2, Calendar, UserPlus, UserCheck, ArrowLeft, Tag, Store, Stethoscope, ExternalLink, Navigation, Lock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +12,7 @@ import { businesses } from "@/data/mock";
 import { useToast } from "@/hooks/use-toast";
 import { markRealCouponPurchase, markRealTransaction } from "@/lib/demoFlags";
 import DemoPageBanner from "@/components/DemoPageBanner";
+import DemoBadge from "@/components/DemoBadge";
 import PublicEventsList from "@/components/PublicEventsList";
 
 const offeringColors: Record<string, string> = {
@@ -23,8 +25,23 @@ const BusinessDetail = () => {
   const { id } = useParams();
   const b = businesses.find((x) => x.id === id);
   const { isFollowed: isFollowedFn, toggle } = useFollow();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const isFollowed = b ? isFollowedFn("business", b.id) : false;
   const { toast } = useToast();
+
+  const requireAuth = (action: () => void) => () => {
+    if (!user) {
+      toast({
+        title: "Giriş gerekli",
+        description: "Bu işlem için lütfen giriş yapın veya kayıt olun.",
+        variant: "destructive",
+      });
+      navigate("/auth");
+      return;
+    }
+    action();
+  };
 
   if (!b) {
     return (
@@ -80,7 +97,8 @@ const BusinessDetail = () => {
           </Link>
 
           {/* Header */}
-          <div className="bg-card rounded-2xl p-8 border border-border shadow-card mb-8">
+          <div className="bg-card rounded-2xl p-8 pt-10 border border-border shadow-card mb-8 relative overflow-hidden">
+            <DemoBadge variant="page" />
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-xl bg-secondary flex items-center justify-center text-secondary-foreground font-bold text-lg shrink-0">
@@ -99,21 +117,29 @@ const BusinessDetail = () => {
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row gap-2 shrink-0">
-                <PlatformMessageButton
-                  recipientKind="business"
-                  recipientSlug={b.id}
-                  recipientName={b.name}
-                  size="sm"
-                />
-                <Button
-                  variant={isFollowed ? "default" : "outline"}
-                  size="sm"
-                  onClick={toggleFollow}
-                  className="gap-1.5"
-                >
-                  {isFollowed ? <UserCheck className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
-                  {isFollowed ? "Takip Ediliyor" : "Takip Et"}
-                </Button>
+                {user ? (
+                  <>
+                    <PlatformMessageButton
+                      recipientKind="business"
+                      recipientSlug={b.id}
+                      recipientName={b.name}
+                      size="sm"
+                    />
+                    <Button
+                      variant={isFollowed ? "default" : "outline"}
+                      size="sm"
+                      onClick={toggleFollow}
+                      className="gap-1.5"
+                    >
+                      {isFollowed ? <UserCheck className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
+                      {isFollowed ? "Takip Ediliyor" : "Takip Et"}
+                    </Button>
+                  </>
+                ) : (
+                  <Button size="sm" variant="default" onClick={() => navigate("/auth")} className="gap-1.5">
+                    <Lock className="h-4 w-4" /> Etkileşim için Giriş Yap
+                  </Button>
+                )}
               </div>
             </div>
 
@@ -151,41 +177,80 @@ const BusinessDetail = () => {
             </div>
 
             <div className="flex flex-wrap gap-3 mt-6">
-              {b.sector === "Sağlık" && (
-                <Link to={`/hospital-appointment/${b.id}`}>
-                  <Button variant="default" size="sm" className="gap-1.5 bg-turquoise hover:bg-turquoise/90 text-primary-foreground">
-                    <Stethoscope className="h-4 w-4" /> Randevu Al
-                  </Button>
-                </Link>
+              {!user && (
+                <div className="w-full flex items-center justify-between gap-3 p-3 rounded-xl border border-dashed border-gold/40 bg-gold/5 text-sm">
+                  <span className="text-foreground font-body flex items-center gap-2">
+                    <Lock className="h-4 w-4 text-gold" />
+                    Bu kart DEMO içeriktir. Etkileşime geçmek için giriş yapın veya kayıt olun.
+                  </span>
+                  <Button size="sm" variant="default" onClick={() => navigate("/auth")}>Giriş / Kayıt</Button>
+                </div>
               )}
-              <a href={b.website} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <Globe className="h-4 w-4" /> Web Sitesi
+              {b.sector === "Sağlık" && (
+                user ? (
+                  <Link to={`/hospital-appointment/${b.id}`}>
+                    <Button variant="default" size="sm" className="gap-1.5 bg-turquoise hover:bg-turquoise/90 text-primary-foreground">
+                      <Stethoscope className="h-4 w-4" /> Randevu Al
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button variant="default" size="sm" disabled className="gap-1.5 bg-turquoise/60 text-primary-foreground">
+                    <Lock className="h-4 w-4" /> Randevu Al
+                  </Button>
+                )
+              )}
+              {user ? (
+                <a href={b.website} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm" className="gap-1.5">
+                    <Globe className="h-4 w-4" /> Web Sitesi
+                  </Button>
+                </a>
+              ) : (
+                <Button variant="outline" size="sm" disabled className="gap-1.5">
+                  <Lock className="h-4 w-4" /> Web Sitesi
                 </Button>
-              </a>
-              <a href={`mailto:${b.contactEmail}`}>
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <Mail className="h-4 w-4" /> İletişim
+              )}
+              {user ? (
+                <a href={`mailto:${b.contactEmail}`}>
+                  <Button variant="outline" size="sm" className="gap-1.5">
+                    <Mail className="h-4 w-4" /> İletişim
+                  </Button>
+                </a>
+              ) : (
+                <Button variant="outline" size="sm" disabled className="gap-1.5">
+                  <Lock className="h-4 w-4" /> İletişim
                 </Button>
-              </a>
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.name + ', ' + b.city + ', ' + b.country)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <MapPin className="h-4 w-4" /> Konum
+              )}
+              {user ? (
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.name + ', ' + b.city + ', ' + b.country)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="outline" size="sm" className="gap-1.5">
+                    <MapPin className="h-4 w-4" /> Konum
+                  </Button>
+                </a>
+              ) : (
+                <Button variant="outline" size="sm" disabled className="gap-1.5">
+                  <Lock className="h-4 w-4" /> Konum
                 </Button>
-              </a>
-              <a
-                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(b.name + ', ' + b.city + ', ' + b.country)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <Navigation className="h-4 w-4" /> Yol Tarifi
+              )}
+              {user ? (
+                <a
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(b.name + ', ' + b.city + ', ' + b.country)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="outline" size="sm" className="gap-1.5">
+                    <Navigation className="h-4 w-4" /> Yol Tarifi
+                  </Button>
+                </a>
+              ) : (
+                <Button variant="outline" size="sm" disabled className="gap-1.5">
+                  <Lock className="h-4 w-4" /> Yol Tarifi
                 </Button>
-              </a>
+              )}
             </div>
           </div>
 
@@ -210,10 +275,10 @@ const BusinessDetail = () => {
                   <Button
                     size="sm"
                     className="gap-1 bg-turquoise hover:bg-turquoise/90 text-primary-foreground"
-                    onClick={() => {
+                    onClick={requireAuth(() => {
                       markRealCouponPurchase();
                       toast({ title: "Kupon eklendi 🎁", description: `${freeCoupon.title} kuponlarınıza eklendi.` });
-                    }}
+                    })}
                   >
                     <Tag className="h-3.5 w-3.5" /> Kuponu Al
                   </Button>
@@ -239,11 +304,11 @@ const BusinessDetail = () => {
                     <Button
                       size="sm"
                       className="gap-1 bg-gold hover:bg-gold/90 text-primary-foreground"
-                      onClick={() => {
+                      onClick={requireAuth(() => {
                         markRealCouponPurchase();
                         markRealTransaction();
                         toast({ title: "Satın alındı ✅", description: `${c.title} — Stripe işlemi kaydedildi.` });
-                      }}
+                      })}
                     >
                       <Tag className="h-3.5 w-3.5" /> Satın Al
                     </Button>
@@ -266,7 +331,7 @@ const BusinessDetail = () => {
                       <h3 className="font-semibold text-foreground">{job.title}</h3>
                       <p className="text-sm text-muted-foreground font-body">{job.location} · {job.type}</p>
                     </div>
-                    <Button size="sm">Başvur</Button>
+                    <Button size="sm" onClick={requireAuth(() => toast({ title: "Başvuru alındı", description: `${job.title} pozisyonuna başvurunuz iletildi.` }))}>Başvur</Button>
                   </div>
                 ))}
               </div>

@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 const STORAGE_KEY = "corteqs:followed";
 
@@ -26,6 +28,8 @@ const makeKey = (kind: string, id: string) => `${kind}:${id}`;
 export function useFollow() {
   const [map, setMap] = useState<FollowMap>(() => (typeof window !== "undefined" ? read() : {}));
   const { toast } = useToast();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const sync = () => setMap(read());
@@ -44,6 +48,15 @@ export function useFollow() {
 
   const toggle = useCallback(
     (kind: string, id: string, name: string) => {
+      if (!user) {
+        toast({
+          title: "Giriş gerekli",
+          description: "Takip etmek için lütfen giriş yapın veya kayıt olun.",
+          variant: "destructive",
+        });
+        navigate("/auth");
+        return false;
+      }
       const key = makeKey(kind, id);
       const current = read();
       if (current[key]) {
@@ -59,7 +72,7 @@ export function useFollow() {
       toast({ title: "Takip edildi! 🔔", description: `${name} yeni paylaşım yaptığında bildirim alacaksınız.` });
       return true;
     },
-    [toast]
+    [toast, user, navigate]
   );
 
   const list = useCallback(
