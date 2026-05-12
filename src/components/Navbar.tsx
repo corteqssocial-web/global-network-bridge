@@ -148,7 +148,7 @@ const Navbar = () => {
                 <Link to="/profile">
                   <Button variant="default" size="sm" className="gap-1.5">
                     <User className="h-4 w-4" />
-                    {(profile?.full_name?.trim().split(/\s+/)[0]) || "Hesabım"} Panel
+                    Hesabım
                   </Button>
                 </Link>
                 <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground" onClick={handleSignOut}>
@@ -211,7 +211,7 @@ const Navbar = () => {
                   <>
                     <Link to="/profile" className="flex items-center gap-2 text-sm font-medium text-foreground py-1.5" onClick={() => setIsOpen(false)}>
                       <User className="h-4 w-4 text-primary" />
-                      {(profile?.full_name?.trim().split(/\s+/)[0]) || "Hesabım"} Panel
+                      Hesabım
                     </Link>
                     <button
                       className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground py-1.5 w-full"
