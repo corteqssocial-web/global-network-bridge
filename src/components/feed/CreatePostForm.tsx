@@ -87,6 +87,7 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
     setCountry(profileCountry);
     setCity(profileCity);
     setGlobalOnly(false);
+    setKopruOnly(false);
     toast({ title: "Paylaşım yayınlandı" });
     onCreated();
   };
