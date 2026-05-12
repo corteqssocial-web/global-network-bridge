@@ -106,6 +106,7 @@ const Feed = () => {
     countries: selectedCountries,
     cities: selectedCities,
   });
+  const [showAllCafeCities, setShowAllCafeCities] = useState(false);
   const inCafe = !!cafeId && !!cafe;
   const cafeOpen = inCafe && new Date(cafe!.closes_at) > new Date();
 
@@ -475,8 +476,30 @@ const Feed = () => {
                 <p className="text-[10px] text-muted-foreground mb-3 leading-snug">
                   Aktif cafe'ler — açılış 2 saat, Premium 4 saat. Günde 1 katılım.
                 </p>
+                {(() => {
+                  // Group cafes by city, rank cities by total member_count
+                  const cityMap = new Map<string, { city: string; country: string; total: number; cafes: typeof activeCafes }>();
+                  for (const c of activeCafes) {
+                    const key = `${c.city || "Global"}|${c.country || ""}`;
+                    const entry = cityMap.get(key) || { city: c.city || "Global", country: c.country || "", total: 0, cafes: [] };
+                    entry.total += c.member_count || 0;
+                    entry.cafes.push(c);
+                    cityMap.set(key, entry);
+                  }
+                  const ranked = Array.from(cityMap.values()).sort((a, b) => b.total - a.total);
+                  const TOP_N = 7;
+                  const visibleCities = showAllCafeCities ? ranked : ranked.slice(0, TOP_N);
+                  const visibleCafes = visibleCities.flatMap((g) => g.cafes.sort((a, b) => (b.member_count || 0) - (a.member_count || 0)));
+                  const hiddenCount = ranked.length - visibleCities.length;
+                  return (
+                    <>
+                      {ranked.length > 0 && (
+                        <div className="text-[10px] text-muted-foreground mb-2 px-1">
+                          🔥 En dolu {visibleCities.length} şehir gösteriliyor
+                        </div>
+                      )}
                 <div className="space-y-1 max-h-72 overflow-y-auto pr-1">
-                  {/* Demo / örnek cafe — her zaman görünür */}
+                   {/* Demo / örnek cafe — her zaman görünür */}
                   <Link
                     to="/cadde/demo-it"
                     className={`w-full flex items-center gap-3 px-2 py-2 rounded-lg border border-dashed border-amber-500/30 transition-colors ${cafeId === "demo-it" ? "bg-amber-500/10" : "bg-amber-500/5 hover:bg-amber-500/10"}`}
@@ -503,7 +526,7 @@ const Feed = () => {
                       Şu an başka aktif cafe yok.
                     </p>
                   )}
-                  {activeCafes.map((c) => {
+                  {visibleCafes.map((c) => {
                     const st = themeStyle(c.theme);
                     const Icon = st.icon;
                     return (
@@ -541,6 +564,27 @@ const Feed = () => {
                     );
                   })}
                 </div>
+                {hiddenCount > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setShowAllCafeCities(true)}
+                    className="mt-2 w-full text-[11px] text-primary font-semibold hover:underline py-1"
+                  >
+                    +{hiddenCount} şehir daha göster ↓
+                  </button>
+                )}
+                {showAllCafeCities && ranked.length > TOP_N && (
+                  <button
+                    type="button"
+                    onClick={() => setShowAllCafeCities(false)}
+                    className="mt-2 w-full text-[11px] text-muted-foreground hover:underline py-1"
+                  >
+                    Daralt ↑
+                  </button>
+                )}
+                    </>
+                  );
+                })()}
                 {user ? (
                   <div className="mt-3">
                     <CreateCafeForm onCreated={refreshCafes} />
