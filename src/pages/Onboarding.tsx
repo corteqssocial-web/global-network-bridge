@@ -117,8 +117,7 @@ const Onboarding = () => {
       }
       const { error: profileError } = await (supabase
         .from("profiles") as any)
-        .update(profilePatch)
-        .eq("id", user.id);
+        .upsert({ id: user.id, ...profilePatch }, { onConflict: "id" });
 
       if (profileError) throw profileError;
 
