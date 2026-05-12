@@ -417,6 +417,7 @@ const Feed = () => {
   };
 
   return (
+    <CaddeProfileGate>
     <div className="min-h-screen bg-background">
       <Navbar />
 
