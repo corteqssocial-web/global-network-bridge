@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MessagesInbox from "@/components/messaging/MessagesInbox";
+import JobListingsManager from "@/components/JobListingsManager";
 import { Inbox as InboxIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -170,6 +171,7 @@ const ProfileConsultant = () => {
           <TabsTrigger value="campaign" className="gap-1.5"><Megaphone className="h-4 w-4" /> Tanıtım</TabsTrigger>
           <TabsTrigger value="whatsapp" className="gap-1.5"><MessageSquare className="h-4 w-4" /> WhatsApp</TabsTrigger>
           <TabsTrigger value="messages" className="gap-1.5"><InboxIcon className="h-4 w-4" /> Mesaj Kutusu</TabsTrigger>
+          <TabsTrigger value="job-listings" className="gap-1.5"><Briefcase className="h-4 w-4" /> İş İlanları</TabsTrigger>
           <NotificationsTabTrigger />
           <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Profil Ayarları</TabsTrigger>
           <TabsTrigger value="ai-twin" className="gap-1.5"><Bot className="h-4 w-4" /> AI Twin</TabsTrigger>
@@ -531,6 +533,10 @@ const ProfileConsultant = () => {
         {/* PROFILE EDIT / SETTINGS */}
         <TabsContent value="messages" className="space-y-4">
           <MessagesInbox />
+        </TabsContent>
+
+        <TabsContent value="job-listings" className="mt-6">
+          <JobListingsManager />
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6">

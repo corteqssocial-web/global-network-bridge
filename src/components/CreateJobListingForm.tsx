@@ -53,6 +53,7 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
   const [selectedPackage, setSelectedPackage] = useState(isEditing ? "basic" : "basic");
   const [boostToCountrySearch, setBoostToCountrySearch] = useState(false);
   const [boostEmailNotify, setBoostEmailNotify] = useState(false);
+  const [hideBusinessName, setHideBusinessName] = useState(false);
 
   const boostCosts = {
     countrySearch: 15,
@@ -76,7 +77,8 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
       const { data: prof } = await supabase.from("profiles").select("business_name, country, city").eq("id", auth.user.id).maybeSingle();
       const payload = {
         user_id: auth.user.id,
-        business_name: (prof as any)?.business_name || null,
+        business_name: hideBusinessName ? null : ((prof as any)?.business_name || null),
+        hide_business_name: hideBusinessName,
         title: formData.title || "Adsız İlan",
         department: formData.department || null,
         employment_type: formData.type,
@@ -212,6 +214,13 @@ const CreateJobListingForm = ({ onClose, editData, onCreated }: CreateJobListing
         <div>
           <Label>Başvuru Bitiş Tarihi</Label>
           <Input type="date" className="mt-1.5" />
+        </div>
+        <div className="md:col-span-2 flex items-center justify-between p-3 rounded-lg border border-border bg-muted/40">
+          <div>
+            <p className="font-medium text-foreground text-sm">Firma ismini ilanda gizle</p>
+            <p className="text-xs text-muted-foreground">Açıkça yayınlamak istemiyorsanız işletme adınız ilanda görünmez.</p>
+          </div>
+          <Switch checked={hideBusinessName} onCheckedChange={setHideBusinessName} />
         </div>
       </div>
 

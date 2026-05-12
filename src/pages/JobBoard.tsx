@@ -9,11 +9,13 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { countryCities } from "@/data/countryCities";
+import JobApplyDialog from "@/components/JobApplyDialog";
 
 type Listing = {
   id: string;
   title: string;
   business_name: string | null;
+  hide_business_name: boolean | null;
   department: string | null;
   employment_type: string;
   location_type: string;
@@ -35,6 +37,7 @@ const JobBoard = () => {
   const [country, setCountry] = useState<string>("all");
   const [city, setCity] = useState<string>("all");
   const [keyword, setKeyword] = useState("");
+  const [applyTarget, setApplyTarget] = useState<Listing | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -146,8 +149,11 @@ const JobBoard = () => {
                       {l.package === "featured" && <Badge className="bg-primary/10 text-primary border border-primary/30 text-[10px]">Spotlight</Badge>}
                     </div>
                     <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
-                      {l.business_name && (
+                      {!l.hide_business_name && l.business_name && (
                         <span className="flex items-center gap-1"><Building2 className="h-3.5 w-3.5" />{l.business_name}</span>
+                      )}
+                      {l.hide_business_name && (
+                        <span className="flex items-center gap-1 italic"><Building2 className="h-3.5 w-3.5" />Gizli işveren</span>
                       )}
                       {(l.city || l.country) && (
                         <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{[l.city, l.country].filter(Boolean).join(", ")}</span>
@@ -164,9 +170,7 @@ const JobBoard = () => {
                     {formatSalary(l) && (
                       <span className="text-sm font-semibold text-foreground">{formatSalary(l)}</span>
                     )}
-                    <Button size="sm" asChild>
-                      <Link to={`/dashboard?tab=messages&to=${l.id}`}>Başvur</Link>
-                    </Button>
+                    <Button size="sm" onClick={() => setApplyTarget(l)}>Başvur</Button>
                   </div>
                 </div>
               </div>
@@ -174,6 +178,13 @@ const JobBoard = () => {
           </div>
         )}
       </main>
+      {applyTarget && (
+        <JobApplyDialog
+          open={!!applyTarget}
+          onOpenChange={(o) => !o && setApplyTarget(null)}
+          listing={{ id: applyTarget.id, title: applyTarget.title }}
+        />
+      )}
       <Footer />
     </div>
   );

@@ -608,6 +608,54 @@ export type Database = {
         }
         Relationships: []
       }
+      job_applications: {
+        Row: {
+          applicant_email: string | null
+          applicant_id: string
+          applicant_name: string | null
+          applicant_phone: string | null
+          attachment_name: string | null
+          attachment_url: string | null
+          created_at: string
+          id: string
+          link_url: string | null
+          listing_id: string
+          message: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          applicant_email?: string | null
+          applicant_id: string
+          applicant_name?: string | null
+          applicant_phone?: string | null
+          attachment_name?: string | null
+          attachment_url?: string | null
+          created_at?: string
+          id?: string
+          link_url?: string | null
+          listing_id: string
+          message?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          applicant_email?: string | null
+          applicant_id?: string
+          applicant_name?: string | null
+          applicant_phone?: string | null
+          attachment_name?: string | null
+          attachment_url?: string | null
+          created_at?: string
+          id?: string
+          link_url?: string | null
+          listing_id?: string
+          message?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       job_listings: {
         Row: {
           business_name: string | null
@@ -619,6 +667,7 @@ export type Database = {
           description: string | null
           employment_type: string
           expires_at: string | null
+          hide_business_name: boolean
           id: string
           location: string | null
           location_type: string
@@ -642,6 +691,7 @@ export type Database = {
           description?: string | null
           employment_type?: string
           expires_at?: string | null
+          hide_business_name?: boolean
           id?: string
           location?: string | null
           location_type?: string
@@ -665,6 +715,7 @@ export type Database = {
           description?: string | null
           employment_type?: string
           expires_at?: string | null
+          hide_business_name?: boolean
           id?: string
           location?: string | null
           location_type?: string
