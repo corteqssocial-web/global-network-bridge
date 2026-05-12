@@ -125,26 +125,54 @@ const PlatformMessageDialog = ({
                 Mesajın platform üzerinden iletilir. Cevap geldiğinde panelindeki Mesaj Kutusu'nda bildirim alırsın.
               </DialogDescription>
             </DialogHeader>
+            {!canSend && (
+              <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-sm text-foreground flex items-start gap-2">
+                {following ? (
+                  <Clock className="h-4 w-4 text-amber-600 mt-0.5 shrink-0" />
+                ) : (
+                  <Lock className="h-4 w-4 text-amber-600 mt-0.5 shrink-0" />
+                )}
+                <div className="min-w-0">
+                  {following ? (
+                    <p>
+                      <strong>Takip onayı bekleniyor.</strong> {recipientName} isteğini onayladığında mesaj gönderebilirsin.
+                    </p>
+                  ) : (
+                    <p>
+                      Mesaj gönderebilmek için önce <strong>{recipientName}</strong>'i takip etmen ve takibinin onaylanması gerekiyor.
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
             <div className="space-y-3">
               <Input
                 placeholder="Konu (opsiyonel)"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 maxLength={120}
+                disabled={!canSend}
               />
               <Textarea
-                placeholder="Mesajını yaz..."
+                placeholder={canSend ? "Mesajını yaz..." : "Takip onayından sonra yazabilirsin..."}
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
                 rows={5}
                 maxLength={2000}
+                disabled={!canSend}
               />
             </div>
             <DialogFooter className="gap-2 sm:gap-2">
               <Button variant="outline" onClick={() => onOpenChange(false)}>İptal</Button>
-              <Button onClick={send} disabled={!body.trim() || sending} className="gap-2">
-                <Send className="h-4 w-4" /> {sending ? "Gönderiliyor..." : "Gönder"}
-              </Button>
+              {!following ? (
+                <Button onClick={() => toggle(recipientKind, recipientSlug, recipientName)} className="gap-2">
+                  <UserPlus className="h-4 w-4" /> Takip İsteği Gönder
+                </Button>
+              ) : (
+                <Button onClick={send} disabled={!body.trim() || sending || !canSend} className="gap-2">
+                  <Send className="h-4 w-4" /> {sending ? "Gönderiliyor..." : "Gönder"}
+                </Button>
+              )}
             </DialogFooter>
           </>
         )}
