@@ -1364,6 +1364,16 @@ export type Database = {
         }
         Returns: boolean
       }
+      notify_followers: {
+        Args: {
+          _author_id: string
+          _message: string
+          _related_id: string
+          _title: string
+          _type: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role:
