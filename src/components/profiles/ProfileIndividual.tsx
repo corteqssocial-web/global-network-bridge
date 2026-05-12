@@ -323,7 +323,7 @@ const ProfileIndividual = () => {
               <MapPin className="h-3 w-3" /> {user.city}, {user.country}
             </p>
             <div className="flex items-center gap-3 mt-2">
-              {linkedinUrl && showSocialOnProfile && (
+              {linkedinUrl && linkedinVisible && (
                 <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-sm text-primary hover:underline">
                   <Linkedin className="h-4 w-4" /> LinkedIn
                 </a>
