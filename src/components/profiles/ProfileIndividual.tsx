@@ -31,6 +31,7 @@ import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
 import WelcomePack from "@/components/profiles/WelcomePack";
 import IndividualPublicCard from "@/components/profiles/IndividualPublicCard";
 import MyFollowsSection from "@/components/profiles/MyFollowsSection";
+import { ProfileSetupBanner, useProfileGate } from "@/components/profiles/ProfileSetupBanner";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ShieldCheck } from "lucide-react";
 import { countryList } from "@/contexts/DiasporaContext";
