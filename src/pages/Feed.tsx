@@ -147,6 +147,17 @@ const Feed = () => {
   const fetchPosts = useCallback(
     async (reset = false) => {
       if (demoMode) return; // Don't fetch DB when in demo mode
+      if (isDemoCafe) {
+        // Inject mock posts as the "chat feed" of the demo cafe
+        setPosts(mockPosts.slice(0, 4) as any);
+        setHasMore(false);
+        setAuthorMap(
+          Object.fromEntries(
+            Object.entries(mockAuthors).map(([id, a]) => [id, { full_name: a.full_name, avatar_url: a.avatar_url }]),
+          ),
+        );
+        return;
+      }
       setLoading(true);
       const from = reset ? 0 : page * PAGE_SIZE;
       const to = from + PAGE_SIZE - 1;
