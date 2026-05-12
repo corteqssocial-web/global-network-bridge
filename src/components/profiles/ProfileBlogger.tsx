@@ -28,6 +28,7 @@ import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 import NotificationsList from "@/components/NotificationsList";
 import { addDiasporaBlogLink, getDiasporaBlogLinksByAuthor, removeDiasporaBlogLink, type DiasporaBlogLink } from "@/lib/diasporaBlogLinks";
 import { toast } from "@/hooks/use-toast";
+import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
 
 const ProfileBlogger = () => {
   const blogger = {
