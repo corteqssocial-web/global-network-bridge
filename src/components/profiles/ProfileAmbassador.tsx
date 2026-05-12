@@ -22,7 +22,7 @@ import CorBotPromoBanner from "@/components/CorBotPromoBanner";
 import EmptyDashboardState from "@/components/EmptyDashboardState";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
-import ProfileSubcategoriesSettings from "@/components/profiles/ProfileSubcategoriesSettings";
+import AmbassadorReferralCard from "@/components/AmbassadorReferralCard";
 
 type AmbassadorEvent = {
   id: number;
