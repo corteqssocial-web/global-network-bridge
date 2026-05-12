@@ -20,6 +20,8 @@ const AssociationDetail = () => {
   const { toast } = useToast();
   const assoc = associations.find((a) => a.id === id);
   const { isFollowed, toggle } = useFollow();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const isFollowing = assoc ? isFollowed("association", assoc.id) : false;
 
   if (!assoc) {
