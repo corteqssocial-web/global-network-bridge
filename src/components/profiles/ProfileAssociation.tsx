@@ -4,9 +4,10 @@ import AssociationSettingsForm, { loadAssociationProfile, type AssociationProfil
 import { findOrgCategory, findOrgSubcategory } from "@/data/organizationCategories";
 import {
   Users, MapPin, Globe, Calendar, Heart, Megaphone,
-  TrendingUp, Settings, Bell, Mail, MessageSquare,
+  TrendingUp, Settings, Bell, Mail, MessageSquare, Briefcase,
   Plus, ChevronRight, Star, Eye, BarChart3, FileText, ArrowLeft, Crown, Inbox
 } from "lucide-react";
+import JobListingsManager from "@/components/JobListingsManager";
 import ConsultantServiceRequests from "@/components/ConsultantServiceRequests";
 import SocialMediaCampaignDialog from "@/components/SocialMediaCampaignDialog";
 import CategoryShowcasePurchase from "@/components/CategoryShowcasePurchase";
