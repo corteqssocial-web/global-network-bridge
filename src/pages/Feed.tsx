@@ -446,17 +446,56 @@ const Feed = () => {
             <Heart className={`h-4 w-4 transition-transform ${liked ? "fill-rose-500 scale-110" : ""}`} />
             <span className="text-xs font-medium">{p.like_count}</span>
           </Button>
-          <Button variant="ghost" size="sm" className="gap-1.5 h-8 px-2 rounded-full text-muted-foreground hover:bg-sky-50 dark:hover:bg-sky-500/10 hover:text-sky-500">
+          <Button variant="ghost" size="sm" onClick={() => toggleComments(p.id)} className={`gap-1.5 h-8 px-2 rounded-full hover:bg-sky-50 dark:hover:bg-sky-500/10 ${openComments.has(p.id) ? "text-sky-500" : "text-muted-foreground hover:text-sky-500"}`}>
             <MessageCircle className="h-4 w-4" />
             <span className="text-xs font-medium">{p.comment_count}</span>
           </Button>
-          <Button variant="ghost" size="sm" className="h-8 px-2 rounded-full text-muted-foreground hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:text-amber-500">
+          <Button variant="ghost" size="sm" className="h-8 px-2 rounded-full text-muted-foreground hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:text-amber-500" onClick={() => toggleLike(p)}>
             <Smile className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="sm" className="ml-auto h-8 px-2 rounded-full text-muted-foreground hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:text-emerald-500">
+          <Button variant="ghost" size="sm" onClick={() => sharePost(p)} className="ml-auto h-8 px-2 rounded-full text-muted-foreground hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:text-emerald-500">
             <Share2 className="h-4 w-4" />
           </Button>
         </footer>
+
+        {openComments.has(p.id) && (
+          <div className="mt-3 ml-[52px] rounded-xl border border-border bg-muted/30 p-3 space-y-2">
+            {(commentsMap[p.id] || []).length === 0 && (
+              <p className="text-[11px] text-muted-foreground italic">Henüz yorum yok. İlk yorumu sen yap.</p>
+            )}
+            {(commentsMap[p.id] || []).map((c) => (
+              <div key={c.id} className="flex items-start gap-2">
+                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-sky-400 to-violet-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+                  {c.author.slice(0, 1).toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-baseline gap-1.5 flex-wrap">
+                    <span className="text-xs font-semibold">{c.author}</span>
+                    <span className="text-[10px] text-muted-foreground">· {formatTime(c.created_at)}</span>
+                  </div>
+                  <p className="text-xs text-foreground/85 whitespace-pre-wrap break-words">{c.text}</p>
+                </div>
+              </div>
+            ))}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                addComment(p.id);
+              }}
+              className="flex items-center gap-2 pt-1"
+            >
+              <Input
+                value={commentDrafts[p.id] || ""}
+                onChange={(e) => setCommentDrafts((prev) => ({ ...prev, [p.id]: e.target.value }))}
+                placeholder="Yorum yaz..."
+                className="h-8 text-xs"
+              />
+              <Button type="submit" size="sm" className="h-8 px-3 text-xs" disabled={!(commentDrafts[p.id] || "").trim()}>
+                Gönder
+              </Button>
+            </form>
+          </div>
+        )}
       </article>
     );
   };
