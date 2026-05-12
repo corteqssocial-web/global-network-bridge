@@ -302,6 +302,47 @@ const Feed = () => {
     }
   };
 
+  const toggleComments = (id: string) => {
+    setOpenComments((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  const addComment = (postId: string) => {
+    const text = (commentDrafts[postId] || "").trim();
+    if (!text) return;
+    const c = {
+      id: (typeof crypto !== "undefined" && (crypto as any).randomUUID) ? (crypto as any).randomUUID() : `c-${Date.now()}`,
+      author: (user as any)?.email?.split("@")[0] || "Sen",
+      text,
+      created_at: new Date().toISOString(),
+    };
+    setCommentsMap((prev) => ({ ...prev, [postId]: [...(prev[postId] || []), c] }));
+    setCommentDrafts((prev) => ({ ...prev, [postId]: "" }));
+    setPosts((prev) => prev.map((p) => (p.id === postId ? { ...p, comment_count: p.comment_count + 1 } : p)));
+  };
+
+  const sharePost = async (p: FeedPost) => {
+    const url = `${window.location.origin}${window.location.pathname}#post-${p.id}`;
+    const shareData = { title: "Diaspora Cadde", text: p.content.slice(0, 120), url };
+    if ((navigator as any).share) {
+      try {
+        await (navigator as any).share(shareData);
+        return;
+      } catch {
+        /* user cancelled */
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      toast({ title: "Bağlantı kopyalandı", description: "Paylaşmak için yapıştırabilirsin." });
+    } catch {
+      toast({ title: "Paylaşım başarısız", variant: "destructive" });
+    }
+  };
+
   const scopeLabel = useMemo(() => {
     if (selectedCities.length > 0) return `${selectedCities.length} şehir`;
     if (selectedContinent) return selectedContinent;
