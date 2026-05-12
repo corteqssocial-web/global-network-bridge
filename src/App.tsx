@@ -52,6 +52,7 @@ const KVKK = lazy(() => import("./pages/legal/KVKK"));
 const CookiePolicy = lazy(() => import("./pages/legal/CookiePolicy"));
 
 const Feed = lazy(() => import("./pages/Feed"));
+const DiasporaPeople = lazy(() => import("./pages/DiasporaPeople"));
 const May19 = lazy(() => import("./pages/May19"));
 const May19Map = lazy(() => import("./pages/May19Map"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -167,6 +168,7 @@ const App = () => (
                   <Route path="/feed" element={<Feed />} />
                   <Route path="/cadde" element={<Feed />} />
                   <Route path="/cadde/:cafeId" element={<Feed />} />
+                  <Route path="/diaspora-people" element={<DiasporaPeople />} />
                   <Route path="/19-mayis" element={<May19 />} />
                   <Route path="/19-mayis/harita" element={<May19Map />} />
                   <Route path="/may19" element={<May19 />} />

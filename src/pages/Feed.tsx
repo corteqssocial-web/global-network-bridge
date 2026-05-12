@@ -63,7 +63,32 @@ const Feed = () => {
   const { user, onboardingCompleted } = useAuth();
   const { cafeId } = useParams<{ cafeId?: string }>();
   const navigate = useNavigate();
-  const { cafe, isMember, approved, join: joinCafe } = useCafe(cafeId);
+  const isDemoCafe = cafeId === "demo-it";
+  const { cafe: realCafe, isMember: realIsMember, approved: realApproved, join: joinCafe } = useCafe(isDemoCafe ? undefined : cafeId);
+  const demoCafe = isDemoCafe
+    ? ({
+        id: "demo-it",
+        name: "Berlin IT ☕",
+        theme: "IT",
+        country: "Almanya",
+        city: "Berlin",
+        linkedin_url: "",
+        extra_links: null,
+        created_by: "demo",
+        opens_at: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+        closes_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+        duration_hours: 2,
+        created_at: new Date().toISOString(),
+        kind: "community" as const,
+        open_entry: true,
+        entry_question: null,
+        capacity: 40,
+        member_count: 24,
+      } as any)
+    : null;
+  const cafe = isDemoCafe ? demoCafe : realCafe;
+  const isMember = isDemoCafe ? true : realIsMember;
+  const approved = isDemoCafe ? true : realApproved;
   const [joinDialogOpen, setJoinDialogOpen] = useState(false);
   const [joinAnswer, setJoinAnswer] = useState("");
   const [pendingMembers, setPendingMembers] = useState<Array<{ id: string; user_id: string; answer: string | null; full_name?: string | null }>>([]);
@@ -122,6 +147,17 @@ const Feed = () => {
   const fetchPosts = useCallback(
     async (reset = false) => {
       if (demoMode) return; // Don't fetch DB when in demo mode
+      if (isDemoCafe) {
+        // Inject mock posts as the "chat feed" of the demo cafe
+        setPosts(mockPosts.slice(0, 4) as any);
+        setHasMore(false);
+        setAuthorMap(
+          Object.fromEntries(
+            Object.entries(mockAuthors).map(([id, a]) => [id, { full_name: a.full_name, avatar_url: a.avatar_url }]),
+          ),
+        );
+        return;
+      }
       setLoading(true);
       const from = reset ? 0 : page * PAGE_SIZE;
       const to = from + PAGE_SIZE - 1;
@@ -393,6 +429,22 @@ const Feed = () => {
                   <h3 className="text-sm font-bold">Konum</h3>
                   <Badge variant="secondary" className="ml-auto text-[10px]">{scopeLabel}</Badge>
                 </div>
+                {/* Global reset — tüm ülkelerin akışı */}
+                <button
+                  onClick={() => {
+                    setSelectedContinent(null);
+                    setSelectedCountries([]);
+                    setSelectedCities([]);
+                  }}
+                  className={`w-full mb-3 flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-bold transition-all ${
+                    scopeLabel === "Global"
+                      ? "bg-gradient-to-r from-sky-500 to-violet-500 text-white border-transparent shadow-sm"
+                      : "bg-card text-foreground border-border hover:border-primary/40"
+                  }`}
+                  title="Tüm ülkelerin akışını göster"
+                >
+                  🌍 Global — Tüm Ülkeler
+                </button>
                 <MultiCountryCityFilter
                   selectedCountries={selectedCountries}
                   selectedCities={selectedCities}
@@ -417,19 +469,22 @@ const Feed = () => {
                 </p>
                 <div className="space-y-1 max-h-72 overflow-y-auto pr-1">
                   {/* Demo / örnek cafe — her zaman görünür */}
-                  <div className="w-full flex items-center gap-3 px-2 py-2 rounded-lg bg-amber-500/5 border border-dashed border-amber-500/30">
+                  <Link
+                    to="/cadde/demo-it"
+                    className={`w-full flex items-center gap-3 px-2 py-2 rounded-lg border border-dashed border-amber-500/30 transition-colors ${cafeId === "demo-it" ? "bg-amber-500/10" : "bg-amber-500/5 hover:bg-amber-500/10"}`}
+                  >
                     <div className="h-8 w-8 rounded-full bg-amber-500/15 flex items-center justify-center shrink-0">
                       <Coffee className="h-4 w-4 text-amber-600" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="text-xs font-semibold truncate flex items-center gap-1">
-                        Berlin Türk Yazılımcılar ☕
-                        <Badge variant="secondary" className="text-[9px] h-3.5 px-1">Örnek</Badge>
+                        Berlin IT ☕
+                        <Badge variant="secondary" className="text-[9px] h-3.5 px-1">Demo</Badge>
                       </div>
-                      <div className="text-[10px] text-muted-foreground truncate">Berlin · Almanya · 👥 24/40</div>
+                      <div className="text-[10px] text-muted-foreground truncate">Berlin · 👥 24/40</div>
                     </div>
                     <Badge variant="outline" className="text-[9px] h-4 px-1 shrink-0">1s 23dk</Badge>
-                  </div>
+                  </Link>
                   <div className="px-2 pb-1">
                     <Link to={categoryAccountLink} className="block text-[10px] text-primary font-semibold hover:underline text-center py-1">
                       ☕ Kendi cafe'ni aç →
@@ -489,14 +544,22 @@ const Feed = () => {
                 )}
               </section>
 
-              {/* Diasporada İnsanları Ara */}
-              <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-                <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
+              {/* Diasporada İnsanları Ara — CTA card linking to LP */}
+              <Link
+                to="/diaspora-people"
+                className="block rounded-2xl border border-sky-500/30 bg-gradient-to-br from-sky-500/10 to-violet-500/10 p-4 shadow-sm hover:shadow-md hover:border-sky-500/50 transition-all"
+              >
+                <h3 className="text-sm font-bold mb-1 flex items-center gap-2">
                   <Users className="h-4 w-4 text-sky-500" />
                   Diasporada İnsanları Ara
                 </h3>
-                <DiasporaPeopleSearch />
-              </section>
+                <p className="text-[11px] text-muted-foreground mb-2 leading-snug">
+                  Ülke/şehir + iş arayan, taşınacak filtreleri ile tüm diasporayı keşfet.
+                </p>
+                <span className="text-[11px] font-semibold text-sky-600 hover:underline">
+                  Keşfet →
+                </span>
+              </Link>
 
 
               {/* Takip ettiklerin — gerçek veri */}
