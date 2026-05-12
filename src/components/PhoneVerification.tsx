@@ -88,8 +88,7 @@ const PhoneVerification = () => {
         <div className="rounded-md border border-amber-500/30 bg-amber-500/5 p-2 text-[11px] text-amber-700 leading-snug">
           <strong>Öneri:</strong> Yurt dışı (TR dışı) telefon numarası ile doğrulanan üyeler{" "}
           <span className="inline-flex items-center font-semibold">CorteQS / Diaspora Pasaport</span> rozeti kazanır
-          ve Cadde'de cafe açma gibi premium özelliklere erişir. Dilerseniz şimdi TR numarası girip{" "}
-          <em>daha sonra</em> yurt dışı numarayla yeniden doğrulayabilirsiniz.
+          ve Cadde'de cafe açma gibi premium özelliklere erişir. Daha sonra telefon değişikliği yapabilirsiniz.
         </div>
       )}
       <div className="flex gap-2">
