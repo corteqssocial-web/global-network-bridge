@@ -4,6 +4,8 @@ import { Bell, UserPlus, Calendar, MessageSquare, Briefcase, Inbox, CheckCheck }
 import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from "date-fns";
 import { tr } from "date-fns/locale";
+import ConnectionRequestsInline from "./connections/ConnectionRequestsInline";
+import ConnectionsFollowersStats from "./connections/ConnectionsFollowersStats";
 
 interface NotificationRow {
   id: string;
@@ -72,12 +74,16 @@ const NotificationsList = ({ accent = "primary" }: { accent?: "primary" | "gold"
 
   if (items.length === 0) {
     return (
-      <div className="text-center py-12">
-        <Bell className={`h-10 w-10 mx-auto mb-3 ${accent === "gold" ? "text-gold/40" : "text-primary/40"}`} />
-        <p className="text-sm font-semibold text-foreground">Henüz bildiriminiz yok</p>
-        <p className="text-xs text-muted-foreground mt-1">
-          Yeni teklif talepleri, etkinlik güncellemeleri ve takip bildirimleri burada görünecek.
-        </p>
+      <div className="space-y-4">
+        <ConnectionsFollowersStats />
+        <ConnectionRequestsInline />
+        <div className="text-center py-12">
+          <Bell className={`h-10 w-10 mx-auto mb-3 ${accent === "gold" ? "text-gold/40" : "text-primary/40"}`} />
+          <p className="text-sm font-semibold text-foreground">Henüz bildiriminiz yok</p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Yeni teklif talepleri, etkinlik güncellemeleri ve takip bildirimleri burada görünecek.
+          </p>
+        </div>
       </div>
     );
   }
@@ -86,6 +92,8 @@ const NotificationsList = ({ accent = "primary" }: { accent?: "primary" | "gold"
 
   return (
     <div className="space-y-3">
+      <ConnectionsFollowersStats />
+      <ConnectionRequestsInline />
       {unread > 0 && (
         <div className="flex justify-end">
           <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs" onClick={markAllRead}>

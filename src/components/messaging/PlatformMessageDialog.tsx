@@ -14,7 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { useFollow } from "@/hooks/useFollow";
+import { useConnections } from "@/hooks/useConnections";
 import { supabase } from "@/integrations/supabase/client";
 
 export type RecipientKind =
@@ -49,16 +49,20 @@ const PlatformMessageDialog = ({
 }: Props) => {
   const { user, profile, accountType } = useAuth();
   const { toast } = useToast();
-  const { isFollowed, isFollowAccepted, toggle } = useFollow();
+  const { canMessage, statusWith, requestConnection } = useConnections();
   const navigate = useNavigate();
   const [subject, setSubject] = useState(defaultSubject ?? "");
   const [body, setBody] = useState("");
   const [sending, setSending] = useState(false);
 
-  const following = isFollowed(recipientKind, recipientSlug);
-  const accepted = isFollowAccepted(recipientKind, recipientSlug);
   const isAdmin = accountType === "admin";
-  const canSend = isAdmin || (following && accepted);
+  const status = recipientUserId ? statusWith(recipientUserId) : "none";
+  const isPending = status === "pending";
+  const isAccepted = status === "accepted";
+  const isBlocked = status === "blocked" || status === "declined";
+  // Without a real recipient user id we cannot enforce DB-level connection (mock profile);
+  // in that case fall back to allowing send for admins only.
+  const canSend = isAdmin || isAccepted || (!recipientUserId && false);
 
   const goToAuth = () => {
     const redirect = encodeURIComponent(window.location.pathname + window.location.search);
@@ -136,19 +140,27 @@ const PlatformMessageDialog = ({
             </DialogHeader>
             {!canSend && (
               <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-sm text-foreground flex items-start gap-2">
-                {following ? (
+                {isPending ? (
                   <Clock className="h-4 w-4 text-amber-600 mt-0.5 shrink-0" />
                 ) : (
                   <Lock className="h-4 w-4 text-amber-600 mt-0.5 shrink-0" />
                 )}
                 <div className="min-w-0">
-                  {following ? (
+                  {isPending ? (
                     <p>
-                      <strong>Takip onayı bekleniyor.</strong> {recipientName} isteğini onayladığında mesaj gönderebilirsin.
+                      <strong>Bağlantı onayı bekleniyor.</strong> {recipientName} isteğini onayladığında mesaj gönderebilirsin.
+                    </p>
+                  ) : isBlocked ? (
+                    <p>
+                      Bu kullanıcıyla bağlantı kurulamıyor. Mesaj göndermek mümkün değil.
+                    </p>
+                  ) : !recipientUserId ? (
+                    <p>
+                      Bu profil henüz platforma katılmamış. Mesajlaşma için kullanıcının kayıt olması gerekir.
                     </p>
                   ) : (
                     <p>
-                      Mesaj gönderebilmek için önce <strong>{recipientName}</strong>'i takip etmen ve takibinin onaylanması gerekiyor.
+                      Mesaj gönderebilmek için önce <strong>{recipientName}</strong> ile <strong>bağlantı</strong> kurman ve karşı tarafın isteği onaylaması gerekir.
                     </p>
                   )}
                 </div>
@@ -163,7 +175,7 @@ const PlatformMessageDialog = ({
                 disabled={!canSend}
               />
               <Textarea
-                placeholder={canSend ? "Mesajını yaz..." : "Takip onayından sonra yazabilirsin..."}
+                placeholder={canSend ? "Mesajını yaz..." : "Bağlantı onayından sonra yazabilirsin..."}
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
                 rows={5}
@@ -173,9 +185,9 @@ const PlatformMessageDialog = ({
             </div>
             <DialogFooter className="gap-2 sm:gap-2">
               <Button variant="outline" onClick={() => onOpenChange(false)}>İptal</Button>
-              {!following ? (
-                <Button onClick={() => toggle(recipientKind, recipientSlug, recipientName)} className="gap-2">
-                  <UserPlus className="h-4 w-4" /> Takip İsteği Gönder
+              {!canSend && status === "none" && recipientUserId ? (
+                <Button onClick={() => requestConnection(recipientUserId, recipientName)} className="gap-2">
+                  <UserPlus className="h-4 w-4" /> Bağlantı İsteği Gönder
                 </Button>
               ) : (
                 <Button onClick={send} disabled={!body.trim() || sending || !canSend} className="gap-2">

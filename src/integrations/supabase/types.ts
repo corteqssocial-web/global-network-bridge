@@ -1243,6 +1243,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_connections: {
+        Row: {
+          block_reason: string | null
+          created_at: string
+          decided_at: string | null
+          id: string
+          recipient_id: string
+          requester_id: string
+          status: string
+        }
+        Insert: {
+          block_reason?: string | null
+          created_at?: string
+          decided_at?: string | null
+          id?: string
+          recipient_id: string
+          requester_id: string
+          status?: string
+        }
+        Update: {
+          block_reason?: string | null
+          created_at?: string
+          decided_at?: string | null
+          id?: string
+          recipient_id?: string
+          requester_id?: string
+          status?: string
+        }
+        Relationships: []
+      }
       user_follows: {
         Row: {
           created_at: string
