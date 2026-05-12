@@ -19,8 +19,11 @@ import CreatePostForm from "@/components/feed/CreatePostForm";
 import { mockPosts, mockAuthors, mockCafeITPosts } from "@/data/mockFeedPosts";
 import { useFeedSocial } from "@/hooks/useFeedSocial";
 import CaddeProfileGate from "@/components/CaddeProfileGate";
+import { useConnections } from "@/hooks/useConnections";
 
 const PAGE_SIZE = 20;
+// Türkiye merkezli paylaşımların Global akışa "sızması" için minimum etkileşim eşiği
+const TR_GLOBAL_THRESHOLD = 25;
 
 interface FeedPost {
   id: string;
