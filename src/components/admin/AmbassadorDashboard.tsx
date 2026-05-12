@@ -369,14 +369,15 @@ const AmbassadorDashboard = () => {
         <CardContent className="p-0">
           <ScrollArea className="h-[480px]">
             {/* Header Row */}
-            <div className="grid grid-cols-9 gap-2 px-4 py-2 text-[10px] font-semibold text-muted-foreground border-b border-border bg-muted/30 sticky top-0">
+            <div className="grid grid-cols-10 gap-2 px-4 py-2 text-[10px] font-semibold text-muted-foreground border-b border-border bg-muted/30 sticky top-0">
               <span>İsim</span>
               <span>Şehir</span>
               <span>Ülke</span>
               <span className="text-center">Etkinlik</span>
+              <span className="text-center">Onboarding</span>
               <span className="text-center">Katılımcı</span>
-              <span className="text-right">T. Gelir</span>
-              <span className="text-right">CQ Geliri</span>
+              <span className="text-right">Ciro</span>
+              <span className="text-right">CQ Kazancı</span>
               <span className="text-center">Kupon Sub.</span>
               <span className="text-right">Sub. Share</span>
             </div>
@@ -384,11 +385,12 @@ const AmbassadorDashboard = () => {
               {filtered.map((amb) => {
                 const share = getSubscriptionShare(amb);
                 return (
-                  <div key={amb.id} className="grid grid-cols-9 gap-2 px-4 py-3 hover:bg-muted/30 transition-colors items-center text-xs">
+                  <div key={amb.id} className="grid grid-cols-10 gap-2 px-4 py-3 hover:bg-muted/30 transition-colors items-center text-xs">
                     <span className="font-medium text-foreground">{amb.name}</span>
                     <span className="text-muted-foreground">{amb.city}</span>
                     <span className="text-muted-foreground">{amb.country}</span>
                     <span className="text-center font-semibold text-foreground">{amb.events}</span>
+                    <span className="text-center font-semibold text-emerald-600">{amb.onboarded}</span>
                     <span className="text-center text-foreground">{amb.participants}</span>
                     <span className="text-right font-bold text-primary">€{amb.totalRevenue.toLocaleString()}</span>
                     <span className="text-right text-chart-3">€{amb.corteqsRevenue.toLocaleString()}</span>
