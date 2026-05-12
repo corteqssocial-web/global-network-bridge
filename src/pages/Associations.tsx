@@ -86,15 +86,6 @@ const Associations = () => {
                 {filtered.length} kuruluş bulundu
               </p>
             </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-foreground">Kuruluşlar</h1>
-              <p className="text-muted-foreground font-body mt-1">
-                {filtered.length} kuruluş bulundu
-              </p>
-            </div>
             <div className="shrink-0">
               <CountryCitySelector city={city} onCityChange={setCity} />
             </div>
