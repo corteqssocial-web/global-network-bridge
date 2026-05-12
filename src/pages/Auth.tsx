@@ -59,6 +59,14 @@ const Auth = () => {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!signupFirstName.trim() || !signupLastName.trim() || !signupBirthDate) {
+      toast({
+        title: "Eksik bilgi",
+        description: "İsim, soyisim ve doğum tarihi zorunludur.",
+        variant: "destructive",
+      });
+      return;
+    }
     if (!isConsentValid(consent)) {
       toast({
         title: "Onay gerekli",
@@ -73,7 +81,10 @@ const Auth = () => {
       password: signupPassword,
       options: {
         data: {
-          full_name: signupName,
+          full_name: `${signupFirstName.trim()} ${signupLastName.trim()}`,
+          first_name: signupFirstName.trim(),
+          last_name: signupLastName.trim(),
+          birth_date: signupBirthDate,
           consent_privacy: consent.privacy,
           consent_terms: consent.terms,
           consent_data_processing: consent.dataProcessing,
