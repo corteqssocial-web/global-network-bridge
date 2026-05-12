@@ -74,6 +74,7 @@ const AssociationDetail = () => {
         <div className="container mx-auto px-4">
           <Link to="/associations" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
             <ArrowLeft className="h-4 w-4" /> Kuruluşlara dön
+          </Link>
           <DetailAuthLock category="kuruluş" />
 
           {/* Header */}
