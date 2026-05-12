@@ -474,17 +474,9 @@ const Feed = () => {
                   <Sparkles className="h-4 w-4 text-amber-500" />
                   Platformda
                 </h3>
-                <div className="space-y-1">
-                  {platformLinks.map((l) => (
-                    <Link key={l.to} to={l.to} className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-muted/60 transition-colors">
-                      <div className={`h-8 w-8 rounded-full ${l.bg} flex items-center justify-center`}>
-                        <l.icon className={`h-4 w-4 ${l.color}`} />
-                      </div>
-                      <span className="text-sm font-medium">{l.label}</span>
-                    </Link>
-                  ))}
-                </div>
+                <CategorySearch links={platformLinks} />
               </section>
+
 
               {/* Takip ettiklerin — gerçek veri */}
               {user && (
