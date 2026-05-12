@@ -27,11 +27,11 @@ export const mockAuthors: Record<string, MockAuthor> = {
   "user-6": { id: "user-6", full_name: "Business Berlin GmbH", avatar_url: null },
   // Berlin IT Cafe — hardcore IT karakterleri
   "it-1": { id: "it-1", full_name: "Kerem Aydın · Staff SWE @ N26", avatar_url: null },
-  "it-2": { id: "it-2", full_name: "Lena Schulz · SRE @ Zalando", avatar_url: null },
+  "it-2": { id: "it-2", full_name: "Selin Kaya · SRE @ Zalando", avatar_url: null },
   "it-3": { id: "it-3", full_name: "Burak Demir · Platform Eng @ Trade Republic", avatar_url: null },
-  "it-4": { id: "it-4", full_name: "Anika Roy · ML Eng @ HuggingFace BER", avatar_url: null },
+  "it-4": { id: "it-4", full_name: "Ayşe Yıldız · ML Eng @ HuggingFace BER", avatar_url: null },
   "it-5": { id: "it-5", full_name: "Mert Çelik · Rust/Backend Freelancer", avatar_url: null },
-  "it-6": { id: "it-6", full_name: "Sven Hoffmann · Principal @ Delivery Hero", avatar_url: null },
+  "it-6": { id: "it-6", full_name: "Emre Şahin · Principal @ Delivery Hero", avatar_url: null },
   "it-7": { id: "it-7", full_name: "Zeynep Arslan · DevSecOps Lead", avatar_url: null },
 };
 
