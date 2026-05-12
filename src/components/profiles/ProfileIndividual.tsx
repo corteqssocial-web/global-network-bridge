@@ -53,7 +53,7 @@ const ProfileIndividual = () => {
   const [isJobSeeking, setIsJobSeeking] = useState(true);
   const [_showWelcomePack, _setShowWelcomePack] = useState(true); // kept for future use
   const [profileVisible, setProfileVisible] = useState(true);
-  const [linkedinUrl, setLinkedinUrl] = useState("https://linkedin.com/in/emreaydin");
+  const [linkedinUrl, setLinkedinUrl] = useState("");
   const [cvDoc, setCvDoc] = useState<{ path: string; name: string } | null>(null);
   const [pptDoc, setPptDoc] = useState<{ path: string; name: string } | null>(null);
   const [uploadingKind, setUploadingKind] = useState<null | "cv" | "presentation">(null);
