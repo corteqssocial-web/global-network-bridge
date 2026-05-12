@@ -97,7 +97,8 @@ const BusinessDetail = () => {
           </Link>
 
           {/* Header */}
-          <div className="bg-card rounded-2xl p-8 border border-border shadow-card mb-8">
+          <div className="bg-card rounded-2xl p-8 pt-10 border border-border shadow-card mb-8 relative overflow-hidden">
+            <DemoBadge variant="page" />
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-xl bg-secondary flex items-center justify-center text-secondary-foreground font-bold text-lg shrink-0">
