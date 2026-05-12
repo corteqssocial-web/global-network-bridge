@@ -847,6 +847,92 @@ const ProfileIndividual = () => {
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6">
+          {/* Genel Profil */}
+          <div className="bg-card rounded-2xl border border-border p-6 shadow-card mb-6">
+            <h2 className="text-xl font-bold text-foreground mb-1 flex items-center gap-2">
+              <User className="h-5 w-5 text-primary" /> Genel Profil
+            </h2>
+            <p className="text-sm text-muted-foreground mb-5">
+              Bu bilgiler diğer üyelerin gördüğü profilinde yer alır.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="md:col-span-2">
+                <Label>Tag Line (Kısa tanıtım)</Label>
+                <Input value={tagline} onChange={(e) => setTagline(e.target.value)} maxLength={120} placeholder="Örn: Berlin'de yazılım, kahve ve diaspora ☕" />
+              </div>
+              <div className="md:col-span-2">
+                <Label>Dünyaya Mesajım</Label>
+                <textarea
+                  value={worldMessage}
+                  onChange={(e) => setWorldMessage(e.target.value)}
+                  rows={2}
+                  maxLength={240}
+                  placeholder="Diasporaya, gelecek nesle veya dünyaya bırakmak istediğin kısa mesaj"
+                  className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+              </div>
+              <div>
+                <Label>Doğum Tarihi</Label>
+                <Input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
+              </div>
+              <div>
+                <Label>Ülke</Label>
+                <Select value={pCountry} onValueChange={(v) => { setPCountry(v); setPCity(""); }}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent className="max-h-[60vh]">
+                    {countryList.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Şehir</Label>
+                <Select value={pCity} onValueChange={setPCity}>
+                  <SelectTrigger><SelectValue placeholder={`Tüm Şehirler - ${pCountry}`} /></SelectTrigger>
+                  <SelectContent className="max-h-[60vh]">
+                    {cityChoices.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* CorteQS Pasaportu */}
+            <div className="mt-5 rounded-xl border border-amber-500/30 bg-amber-500/5 p-4">
+              <div className="flex items-start justify-between gap-3 flex-wrap">
+                <div className="flex items-start gap-2">
+                  <ShieldCheck className="h-5 w-5 text-amber-600 mt-0.5" />
+                  <div>
+                    <h3 className="font-semibold text-foreground flex items-center gap-2">
+                      CorteQS Pasaportu
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-xs">
+                            Yabancı telefon numarası ile kayıt olduysan otomatik verilir. Diaspora kimliğini doğrular,
+                            etkinlik & hizmet taleplerinde öncelik tanır, yurt dışı CorteQS topluluklarına erişim sağlar.
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </h3>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Öneri: Yurt dışı SIM/numara ile kayıt olan üyeler bu pasaportu otomatik kazanır.
+                      Profilinde rozet olarak görünür ve premium özelliklere erişim sağlar.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground">Aktif</span>
+                  <Switch checked={hasPassport} onCheckedChange={setHasPassport} />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end mt-5">
+              <Button onClick={savePublicProfile}>Kaydet</Button>
+            </div>
+          </div>
+
           {/* Volunteer Mentor settings */}
           <div id="mentor-settings" className="bg-card rounded-2xl border border-emerald-500/30 p-6 shadow-card mb-6">
             <div className="flex items-start justify-between gap-4 flex-wrap mb-4">
