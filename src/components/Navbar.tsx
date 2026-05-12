@@ -142,11 +142,7 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-            <Link to="/19-mayis">
-              <Button size="sm" className="gap-1.5 bg-rose-500 hover:bg-rose-600 text-white shadow-md shadow-rose-500/30">
-                <span className="text-base leading-none" role="img" aria-label="Türk Bayrağı">🇹🇷</span> 19Mayıs1919
-              </Button>
-            </Link>
+            {/* 19Mayıs butonu Cadde header'a taşındı */}
             {user ? (
               <>
                 <Link to="/profile">
