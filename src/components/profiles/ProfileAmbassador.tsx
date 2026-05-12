@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CreateCafeForm from "@/components/feed/CreateCafeForm";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { useEffect } from "react";
+
 import { supabase } from "@/integrations/supabase/client";
 import MessagesInbox from "@/components/messaging/MessagesInbox";
 import { Button } from "@/components/ui/button";
