@@ -17,7 +17,9 @@ const PhoneVerification = () => {
   const [verifying, setVerifying] = useState(false);
   const [sent, setSent] = useState(false);
   const [demoCode, setDemoCode] = useState<string | null>(null);
+  const [editing, setEditing] = useState(false);
   const verified = !!profile?.phone_verified;
+  const inputDisabled = verified && !editing;
 
   useEffect(() => {
     if (profile?.phone && !phone) setPhone(profile.phone);
