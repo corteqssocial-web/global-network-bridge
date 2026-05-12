@@ -159,6 +159,11 @@ const CreateCafeForm = ({ trigger, onCreated }: Props) => {
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-3">
+          {!canOpenCafe && (
+            <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-2.5 text-xs text-destructive">
+              Cafe açmak için <strong>Diaspora Pasaportu</strong> gerekli (yurt dışı telefon numarası ile doğrulama). TR (+90) numaralı kullanıcılar cafe açamaz.
+            </div>
+          )}
           <div>
             <Label className="text-xs">Cafe Adı *</Label>
             <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Örn: Berlin Devs Cafe" maxLength={60} />
