@@ -74,29 +74,38 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
         rows={3}
         className="resize-none"
       />
+      <p className="text-[11px] text-muted-foreground">
+        İstersen @Ülke veya @Şehir etiketleyerek o bölgenin akışında görün. Boş bırakırsan global yayınlanır.
+      </p>
       <div className="flex flex-wrap gap-2">
         <Select value={country} onValueChange={(v) => { setCountry(v); setCity(""); }}>
           <SelectTrigger className="h-9 text-xs w-44">
             <Globe className="h-3.5 w-3.5 text-primary mr-1" />
-            <SelectValue placeholder="Ülke (opsiyonel)" />
+            <SelectValue placeholder="@Ülke seç" />
           </SelectTrigger>
           <SelectContent className="max-h-60">
             {allCountries.map((c) => (
-              <SelectItem key={c} value={c}>{c}</SelectItem>
+              <SelectItem key={c} value={c}>@{c}</SelectItem>
             ))}
           </SelectContent>
         </Select>
         <Select value={city} onValueChange={setCity} disabled={!country}>
           <SelectTrigger className="h-9 text-xs w-44">
             <MapPin className="h-3.5 w-3.5 text-turquoise mr-1" />
-            <SelectValue placeholder="Şehir (opsiyonel)" />
+            <SelectValue placeholder="@Şehir seç" />
           </SelectTrigger>
           <SelectContent className="max-h-60">
             {cities.map((c) => (
-              <SelectItem key={c} value={c}>{c}</SelectItem>
+              <SelectItem key={c} value={c}>@{c}</SelectItem>
             ))}
           </SelectContent>
         </Select>
+        {(country || city) && (
+          <div className="flex items-center gap-1 text-[11px] flex-wrap">
+            {city && <span className="px-1.5 py-0.5 rounded-full bg-turquoise/10 text-turquoise font-semibold">@{city}</span>}
+            {country && <span className="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">@{country}</span>}
+          </div>
+        )}
         <Button
           onClick={submit}
           disabled={submitting || !content.trim()}
