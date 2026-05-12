@@ -10,12 +10,14 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DemoBadge from "@/components/DemoBadge";
 import InterestForm from "@/components/InterestForm";
+import CategorySearchBar from "@/components/CategorySearchBar";
 import { bloggers } from "@/data/mock";
 
 type MediaFilter = "all" | "blogger" | "influencer" | "youtuber";
 
 const Bloggers = () => {
   const [filter, setFilter] = useState<MediaFilter>("all");
+  const [search, setSearch] = useState("");
 
   const demoBlogger = bloggers.find((b) => b.type === "blogger");
   const demoVlogger = bloggers.find((b) => b.type === "influencer");
@@ -23,9 +25,14 @@ const Bloggers = () => {
   const baseDemo = [demoBlogger, demoVlogger, demoYoutuber].filter(Boolean) as typeof bloggers;
 
   const visible = useMemo(() => {
-    if (filter === "all") return baseDemo;
-    return bloggers.filter((b) => b.type === filter);
-  }, [filter, baseDemo]);
+    const base = filter === "all" ? baseDemo : bloggers.filter((b) => b.type === filter);
+    const q = search.trim().toLowerCase();
+    if (!q) return base;
+    return base.filter((b) =>
+      [b.name, b.city, b.country, b.region, ...(b.specialties ?? [])]
+        .filter(Boolean).join(" ").toLowerCase().includes(q)
+    );
+  }, [filter, baseDemo, search]);
 
   const demoList = visible;
 
@@ -63,6 +70,15 @@ const Bloggers = () => {
           <h2 className="text-xl font-bold mb-4 flex items-center justify-center gap-2 text-center">
             <Sparkles className="h-5 w-5 text-turquoise" /> Demo İçerik Üreticiler
           </h2>
+
+          <div className="max-w-xl mx-auto">
+            <CategorySearchBar
+              value={search}
+              onChange={setSearch}
+              placeholder="Yayıncı adı, şehir veya konu ile ara…"
+              resultsLabel={search ? `${demoList.length} sonuç` : undefined}
+            />
+          </div>
 
           {/* Kategori Filtresi */}
           <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
