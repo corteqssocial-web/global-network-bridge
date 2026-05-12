@@ -1013,6 +1013,7 @@ const Feed = () => {
         </DialogContent>
       </Dialog>
     </div>
+    </CaddeProfileGate>
   );
 };
 
