@@ -22,10 +22,28 @@ const ProfileAdmin = () => {
   const [ambassadorApps, setAmbassadorApps] = useState<any[]>([]);
   const [appsLoading, setAppsLoading] = useState(false);
   const [pendingApprovals, setPendingApprovals] = useState<any[]>([]);
+  const [foundingSignups, setFoundingSignups] = useState<any[]>([]);
+  const [contactMessages, setContactMessages] = useState<any[]>([]);
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    activeUsers: 0,
+    totalBusinesses: 0,
+    totalAssociations: 0,
+    totalConsultants: 0,
+    totalEvents: 0,
+    totalCafes: 0,
+    totalJobs: 0,
+    revenue: 0,
+    foundingCount: 0,
+    contactCount: 0,
+  });
 
   useEffect(() => {
     fetchAmbassadorApps();
     fetchApprovals();
+    fetchFounding();
+    fetchContacts();
+    fetchStats();
   }, []);
 
   const fetchAmbassadorApps = async () => {
@@ -43,53 +61,62 @@ const ProfileAdmin = () => {
     setPendingApprovals((data as any[]) || []);
   };
 
-  const decideApproval = async (item: any, approve: boolean) => {
-    const status = approve ? "approved" : "rejected";
-    const { error } = await (supabase.from("approval_requests" as any) as any)
-      .update({ status, decided_at: new Date().toISOString() })
-      .eq("id", item.id);
+  const fetchFounding = async () => {
+    const { data } = await (supabase.from("founding_1000_signups" as any) as any)
+      .select("*")
+      .order("created_at", { ascending: false });
+    setFoundingSignups((data as any[]) || []);
+  };
+
+  const fetchContacts = async () => {
+    const { data } = await (supabase.from("contact_messages" as any) as any)
+      .select("*")
+      .order("created_at", { ascending: false });
+    setContactMessages((data as any[]) || []);
+  };
+
+  const fetchStats = async () => {
+    const head = { count: "exact" as const, head: true };
+    const [users, biz, assoc, cons, ev, cf, jb, fnd, ctc] = await Promise.all([
+      supabase.from("profiles").select("*", head),
+      supabase.from("profiles").select("*", head).eq("account_type", "business"),
+      supabase.from("profiles").select("*", head).eq("account_type", "association"),
+      supabase.from("profiles").select("*", head).eq("account_type", "consultant"),
+      supabase.from("events" as any).select("*", head),
+      supabase.from("cafes" as any).select("*", head),
+      supabase.from("job_listings" as any).select("*", head),
+      supabase.from("founding_1000_signups" as any).select("*", head),
+      supabase.from("contact_messages" as any).select("*", head),
+    ]);
+    setStats((prev) => ({
+      ...prev,
+      totalUsers: users.count || 0,
+      activeUsers: users.count || 0,
+      totalBusinesses: biz.count || 0,
+      totalAssociations: assoc.count || 0,
+      totalConsultants: cons.count || 0,
+      totalEvents: ev.count || 0,
+      totalCafes: cf.count || 0,
+      totalJobs: jb.count || 0,
+      foundingCount: fnd.count || 0,
+      contactCount: ctc.count || 0,
+    }));
+  };
+
+  const updateFoundingStatus = async (id: string, status: string) => {
+    const { error } = await (supabase.from("founding_1000_signups" as any) as any)
+      .update({ status }).eq("id", id);
     if (error) { toast({ title: "Hata", description: error.message, variant: "destructive" }); return; }
-    if (approve) {
-      const patch = item.request_type === "verified_business" ? { is_verified: true } : item.request_type === "hiring_mode" ? { hiring_mode: true } : null;
-      if (patch) await (supabase.from("profiles") as any).update(patch).eq("id", item.user_id);
-    }
-    toast({ title: approve ? "Onaylandı ✓" : "Reddedildi", description: item.request_type });
-    fetchApprovals();
+    toast({ title: "Güncellendi", description: status });
+    fetchFounding();
   };
 
-  const updateAppStatus = async (id: string, status: string) => {
-    const { error } = await supabase.from("city_ambassador_applications" as any).update({ status } as any).eq("id", id);
-    if (error) {
-      toast({ title: "Hata", description: error.message, variant: "destructive" });
-    } else {
-      toast({ title: "Güncellendi", description: `Başvuru ${status === "approved" ? "onaylandı" : "reddedildi"}.` });
-      fetchAmbassadorApps();
-    }
+  const updateContactStatus = async (id: string, status: string) => {
+    const { error } = await (supabase.from("contact_messages" as any) as any)
+      .update({ status }).eq("id", id);
+    if (error) { toast({ title: "Hata", description: error.message, variant: "destructive" }); return; }
+    fetchContacts();
   };
-
-  const platformStats = {
-    totalUsers: 0,
-    activeUsers: 0,
-    totalBusinesses: 0,
-    totalAssociations: 0,
-    totalEvents: 0,
-    revenue: 0,
-    pendingApprovals: pendingApprovals.length,
-    reports: 0,
-  };
-
-  const recentReports = [
-    { id: 1, reporter: "Elif D.", target: "Spam Etkinlik", reason: "Sahte etkinlik ilanı", status: "Beklemede" },
-    { id: 2, reporter: "Can Ö.", target: "FakeConsult Ltd.", reason: "Yanıltıcı bilgi", status: "Beklemede" },
-    { id: 3, reporter: "Zeynep A.", target: "Kullanıcı #4521", reason: "Uygunsuz içerik", status: "İnceleniyor" },
-  ];
-
-  const recentTransactions = [
-    { user: "Anatolian Tech GmbH", type: "Etkinlik Boost", amount: 49, date: "08 Mar" },
-    { user: "Emre Aydın", type: "Para Yükleme", amount: 100, date: "07 Mar" },
-    { user: "ATT Derneği", type: "Öne Çıkan Dernek", amount: 29, date: "06 Mar" },
-    { user: "Zeynep Arslan", type: "AI Twin Seans", amount: 15, date: "05 Mar" },
-  ];
 
   return (
     <>
