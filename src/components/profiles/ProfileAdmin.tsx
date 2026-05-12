@@ -118,6 +118,38 @@ const ProfileAdmin = () => {
     fetchContacts();
   };
 
+  const decideApproval = async (item: any, approve: boolean) => {
+    const status = approve ? "approved" : "rejected";
+    const { error } = await (supabase.from("approval_requests" as any) as any)
+      .update({ status, decided_at: new Date().toISOString() })
+      .eq("id", item.id);
+    if (error) { toast({ title: "Hata", description: error.message, variant: "destructive" }); return; }
+    if (approve) {
+      const patch = item.request_type === "verified_business" ? { is_verified: true } : item.request_type === "hiring_mode" ? { hiring_mode: true } : null;
+      if (patch) await (supabase.from("profiles") as any).update(patch).eq("id", item.user_id);
+    }
+    toast({ title: approve ? "Onaylandı ✓" : "Reddedildi", description: item.request_type });
+    fetchApprovals();
+  };
+
+  const updateAppStatus = async (id: string, status: string) => {
+    const { error } = await supabase.from("city_ambassador_applications" as any).update({ status } as any).eq("id", id);
+    if (error) {
+      toast({ title: "Hata", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Güncellendi", description: `Başvuru ${status === "approved" ? "onaylandı" : "reddedildi"}.` });
+      fetchAmbassadorApps();
+    }
+  };
+
+  const platformStats = {
+    ...stats,
+    pendingApprovals: pendingApprovals.length,
+    reports: 0,
+  };
+
+  const recentReports: { id: number; reporter: string; target: string; reason: string; status: string }[] = [];
+  const recentTransactions: { user: string; type: string; amount: number; date: string }[] = [];
   return (
     <>
       {/* Admin header */}
