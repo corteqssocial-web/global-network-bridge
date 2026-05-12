@@ -352,6 +352,12 @@ const Consultants = () => {
               reviews: amb.usersOnboarded,
               specialties: amb.specialties?.slice(0, 2) || [],
               isAmbassador: true,
+              ambassadorScore: getAmbassadorScore({
+                usersOnboarded: amb.usersOnboarded,
+                eventsOrganized: amb.eventsOrganized,
+                activeAdvisors: amb.activeAdvisors,
+                rating: amb.rating,
+              }),
             }));
             const professionalCards = ["dr-hasan-turk", "dilek-aydin-psk", "mehmet-yilmaz", "ayse-kara"]
               .map((id) => consultants.find((c) => c.id === id))
