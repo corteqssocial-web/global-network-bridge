@@ -489,13 +489,13 @@ const Feed = () => {
                 )}
               </section>
 
-              {/* Kategoriler */}
+              {/* Diasporada İnsanları Ara */}
               <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
                 <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-amber-500" />
-                  Platformda
+                  <Users className="h-4 w-4 text-sky-500" />
+                  Diasporada İnsanları Ara
                 </h3>
-                <CategorySearch links={platformLinks} />
+                <DiasporaPeopleSearch />
               </section>
 
 
