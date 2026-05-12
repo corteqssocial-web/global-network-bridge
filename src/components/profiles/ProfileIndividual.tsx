@@ -30,6 +30,7 @@ import ServiceRequestsList from "@/components/ServiceRequestsList";
 import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
 import WelcomePack from "@/components/profiles/WelcomePack";
 import IndividualPublicCard from "@/components/profiles/IndividualPublicCard";
+import MyFollowsSection from "@/components/profiles/MyFollowsSection";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ShieldCheck } from "lucide-react";
 import { countryList } from "@/contexts/DiasporaContext";
@@ -812,28 +813,7 @@ const ProfileIndividual = () => {
 
         {/* FOLLOWING */}
         <TabsContent value="following" className="mt-6 space-y-6">
-          <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-            <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-              <Star className="h-5 w-5 text-gold" /> Takip Ettiğim Danışmanlar
-            </h2>
-            <div className="text-center py-8 border border-dashed border-border rounded-xl">
-              <Star className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">
-                Sadece takip ettiğiniz hesaplar burada listelenecek.
-              </p>
-            </div>
-          </div>
-          <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-            <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-              <Users className="h-5 w-5 text-turquoise" /> Takip Ettiğim Dernekler
-            </h2>
-            <div className="text-center py-8 border border-dashed border-border rounded-xl">
-              <Users className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">
-                Sadece takip ettiğiniz hesaplar burada listelenecek.
-              </p>
-            </div>
-          </div>
+          <MyFollowsSection />
         </TabsContent>
 
         {/* NOTIFICATIONS */}

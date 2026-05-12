@@ -3,7 +3,7 @@ import {
   Wallet, ArrowUpRight, ArrowDownRight, Clock, CreditCard,
   MessageSquare, Bell, Target, Star, Globe, Plus,
   Send, CheckCircle, XCircle, Eye, Settings, ExternalLink, Video, ArrowLeft,
-  Coffee
+  Coffee, Heart
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CreateCafeForm from "@/components/feed/CreateCafeForm";
@@ -12,6 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 import { supabase } from "@/integrations/supabase/client";
 import MessagesInbox from "@/components/messaging/MessagesInbox";
+import MyFollowsSection from "@/components/profiles/MyFollowsSection";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -172,6 +173,7 @@ const ProfileAmbassador = () => {
           <TabsTrigger value="performance" className="gap-1.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><TrendingUp className="h-4 w-4" /> Performans</TabsTrigger>
           <TabsTrigger value="community" className="gap-1.5 data-[state=active]:bg-turquoise data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Globe className="h-4 w-4" /> Topluluk</TabsTrigger>
           <NotificationsTabTrigger />
+          <TabsTrigger value="follows" className="gap-1.5 data-[state=active]:bg-pink-600 data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Heart className="h-4 w-4" /> Takip Ettiklerim</TabsTrigger>
           <TabsTrigger value="settings" className="gap-1.5 data-[state=active]:bg-foreground data-[state=active]:text-background data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Settings className="h-4 w-4" /> Profil Ayarları</TabsTrigger>
         </TabsList>
 
@@ -566,6 +568,10 @@ const ProfileAmbassador = () => {
               />
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="follows" className="mt-6">
+          <MyFollowsSection />
         </TabsContent>
 
         {/* SETTINGS */}

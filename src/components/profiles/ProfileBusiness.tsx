@@ -17,6 +17,8 @@ import CreateEventForm from "@/components/CreateEventForm";
 import SocialMediaCampaignDialog from "@/components/SocialMediaCampaignDialog";
 import CategoryShowcasePurchase from "@/components/CategoryShowcasePurchase";
 import BusinessOpportunitiesPanel from "@/components/business/BusinessOpportunitiesPanel";
+import MyFollowsSection from "@/components/profiles/MyFollowsSection";
+import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MessagesInbox from "@/components/messaging/MessagesInbox";
@@ -303,6 +305,7 @@ const ProfileBusiness = () => {
           <TabsTrigger value="opportunities" className="gap-1.5"><Handshake className="h-4 w-4" /> İş Fırsatları</TabsTrigger>
           <TabsTrigger value="messages" className="gap-1.5"><InboxIcon className="h-4 w-4" /> Mesaj Kutusu</TabsTrigger>
           <NotificationsTabTrigger />
+          <TabsTrigger value="follows" className="gap-1.5"><Heart className="h-4 w-4" /> Takip Ettiklerim</TabsTrigger>
           <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Profil Ayarları</TabsTrigger>
         </TabsList>
 
@@ -596,6 +599,10 @@ const ProfileBusiness = () => {
         {/* SETTINGS */}
         <TabsContent value="messages" className="space-y-4">
           <MessagesInbox />
+        </TabsContent>
+
+        <TabsContent value="follows" className="mt-6">
+          <MyFollowsSection />
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6 space-y-6">

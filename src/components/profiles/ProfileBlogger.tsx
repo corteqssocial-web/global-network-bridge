@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AppointmentManagePanel from "@/components/booking/AppointmentManagePanel";
 import MessagesInbox from "@/components/messaging/MessagesInbox";
+import MyFollowsSection from "@/components/profiles/MyFollowsSection";
 import { Inbox as InboxIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -178,6 +179,7 @@ const ProfileBlogger = () => {
           <TabsTrigger value="messages" className="gap-1.5"><InboxIcon className="h-4 w-4" /> Mesaj Kutusu</TabsTrigger>
           <TabsTrigger value="job-listings" className="gap-1.5"><Briefcase className="h-4 w-4" /> İş İlanları</TabsTrigger>
           <NotificationsTabTrigger />
+          <TabsTrigger value="follows" className="gap-1.5"><Heart className="h-4 w-4" /> Takip Ettiklerim</TabsTrigger>
           <TabsTrigger value="settings" className="gap-1.5"><Settings className="h-4 w-4" /> Profil Ayarları</TabsTrigger>
         </TabsList>
 
@@ -387,6 +389,10 @@ const ProfileBlogger = () => {
 
         <TabsContent value="job-listings" className="mt-6">
           <JobListingsManager />
+        </TabsContent>
+
+        <TabsContent value="follows" className="mt-6">
+          <MyFollowsSection />
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6 space-y-6">
