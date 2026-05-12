@@ -179,48 +179,6 @@ const ProfileAssociation = () => {
           )}
         </TabsContent>
 
-        {/* REQUESTS */}
-        <TabsContent value="requests" className="mt-6">
-          <ConsultantServiceRequests />
-        </TabsContent>
-
-        {/* MEMBERS */}
-        <TabsContent value="members" className="mt-6">
-          <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <Users className="h-5 w-5 text-primary" /> Üye Yönetimi
-              </h2>
-              <Button className="gap-2"><Plus className="h-4 w-4" /> Üye Ekle</Button>
-            </div>
-            {members.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-border bg-muted/30 p-8 text-center">
-                <Users className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
-                <p className="text-sm font-medium text-foreground">Henüz üye yok</p>
-                <p className="text-xs text-muted-foreground mt-0.5">"Üye Ekle" ile derneğinize üye eklemeye başlayın.</p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {members.map((member, i) => (
-                  <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm shrink-0">
-                      {member.name.split(" ").map(n => n[0]).join("")}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-foreground">{member.name}</h3>
-                      <p className="text-sm text-muted-foreground">{member.role} · {member.since}'den beri</p>
-                    </div>
-                    <Badge variant={member.active ? "default" : "secondary"} className="text-xs">
-                      {member.active ? "Aktif" : "Pasif"}
-                    </Badge>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </TabsContent>
-
         {/* COMMUNICATIONS */}
         <TabsContent value="communications" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
