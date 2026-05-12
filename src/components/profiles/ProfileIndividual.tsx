@@ -347,6 +347,8 @@ const ProfileIndividual = () => {
       <IndividualPublicCard
         name={user.name}
         avatarInitials={user.avatar}
+        email={user.email}
+        title={user.title}
         tagline={tagline}
         worldMessage={worldMessage}
         city={pCity || user.city}
@@ -354,52 +356,15 @@ const ProfileIndividual = () => {
         corteqsPassport={hasPassport}
         recentEvents={recentPublicEvents}
         relocating={relocating ? { country: relocCountry, city: relocCity } : null}
+        isJobSeeking={isJobSeeking}
+        profileVisible={profileVisible}
+        linkedinUrl={linkedinUrl}
+        linkedinVisible={linkedinVisible}
+        cvDoc={cvDoc}
+        pptDoc={pptDoc}
+        onOpenCv={() => handleDocOpen("cv")}
+        onOpenPpt={() => handleDocOpen("presentation")}
       />
-
-      {/* Profile header */}
-      <div className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-card mb-8">
-        <div className="flex flex-col sm:flex-row sm:items-start gap-6">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-primary flex items-center justify-center text-primary-foreground font-bold text-2xl shrink-0">
-            {user.avatar}
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-2xl font-bold text-foreground">{user.name}</h1>
-              {isJobSeeking && (
-                <Badge className="bg-turquoise/15 text-turquoise border-turquoise/30 gap-1">
-                  <Briefcase className="h-3 w-3" /> İş Arıyorum
-                </Badge>
-              )}
-              {profileVisible ? (
-                <Badge variant="outline" className="gap-1 text-xs"><Eye className="h-3 w-3" /> Profil Açık</Badge>
-              ) : (
-                <Badge variant="outline" className="gap-1 text-xs text-muted-foreground"><EyeOff className="h-3 w-3" /> Profil Gizli</Badge>
-              )}
-            </div>
-            <p className="text-muted-foreground">{user.title} · {user.email}</p>
-            <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
-              <MapPin className="h-3 w-3" /> {user.city}, {user.country}
-            </p>
-            <div className="flex items-center gap-3 mt-2">
-              {linkedinUrl && linkedinVisible && (
-                <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-sm text-primary hover:underline">
-                  <Linkedin className="h-4 w-4" /> LinkedIn
-                </a>
-              )}
-              {cvDoc && (
-                <button onClick={() => handleDocOpen("cv")} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
-                  <FileText className="h-4 w-4" /> CV
-                </button>
-              )}
-              {pptDoc && (
-                <button onClick={() => handleDocOpen("presentation")} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
-                  <Presentation className="h-4 w-4" /> Sunum
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Volunteer Mentor CTA */}
       <div className="bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/30 rounded-2xl p-5 md:p-6 mb-8 flex flex-col sm:flex-row sm:items-center gap-4">
