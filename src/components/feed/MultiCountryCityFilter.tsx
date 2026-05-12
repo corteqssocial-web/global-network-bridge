@@ -269,11 +269,6 @@ const MultiCountryCityFilter = ({
           </PopoverContent>
         </Popover>
 
-        {isGlobal && (
-          <Badge variant="secondary" className="gap-1">
-            <Globe className="h-3 w-3" /> Global Feed
-          </Badge>
-        )}
         {isPremium && (
           <Badge className="gap-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0">
             <Crown className="h-3 w-3" /> Premium · Sınırsız
