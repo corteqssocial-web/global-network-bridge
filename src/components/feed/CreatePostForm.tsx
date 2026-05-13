@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { Send, MapPin, Globe, Info, ImagePlus, Video, X, Loader2 } from "lucide-react";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { Send, MapPin, Info, ImagePlus, Video, X, Loader2, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { allCountries, countryCities } from "@/data/countryCities";
+import { countryCities } from "@/data/countryCities";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
@@ -17,6 +17,10 @@ import { toast } from "@/hooks/use-toast";
 interface Props {
   onCreated: () => void;
   cafeId?: string;
+  /** Active country selected from the feed filter — overrides profile country for the post. */
+  activeCountry?: string | null;
+  /** Active city selected from the feed filter (only used if it belongs to activeCountry). */
+  activeCity?: string | null;
 }
 
 interface MediaItem { type: "image" | "video"; url: string; path: string }
@@ -27,15 +31,13 @@ const isTRPhone = (p?: string | null) => {
   return x.startsWith("+90") || x.startsWith("0090");
 };
 
-const CreatePostForm = ({ onCreated, cafeId }: Props) => {
+const CreatePostForm = ({ onCreated, cafeId, activeCountry, activeCity }: Props) => {
   const { user, accountType, profile } = useAuth();
   const isTR = (profile?.country === "Türkiye") || isTRPhone(profile?.phone);
   const [content, setContent] = useState("");
   const [profileCountry, setProfileCountry] = useState<string>("");
   const [profileCity, setProfileCity] = useState<string>("");
-  const [country, setCountry] = useState<string>("");
   const [city, setCity] = useState<string>("");
-  const [globalOnly, setGlobalOnly] = useState(false);
   const [kopruOnly, setKopruOnly] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [media, setMedia] = useState<MediaItem[]>([]);
@@ -54,19 +56,38 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
       if (data) {
         setProfileCountry(data.country || "");
         setProfileCity(data.city || "");
-        setCountry((prev) => prev || data.country || "");
-        setCity((prev) => prev || data.city || "");
       }
     })();
   }, [user]);
 
-  const cities = country ? countryCities[country] || [] : [];
+  // The country a user posts to: feed's active country (if non-TR) overrides profile country.
+  // TR users are always locked to Türkiye unless they choose Köprü.
+  const postCountry = useMemo(() => {
+    if (kopruOnly) return "Köprü";
+    if (isTR) return "Türkiye";
+    return activeCountry || profileCountry || "";
+  }, [kopruOnly, isTR, activeCountry, profileCountry]);
+
+  const availableCities = useMemo(() => countryCities[postCountry] || [], [postCountry]);
+
+  // Reset city when post country changes; if active city belongs to that country use it,
+  // otherwise fall back to profile city when posting to profile country.
+  useEffect(() => {
+    if (kopruOnly) { setCity(""); return; }
+    if (activeCity && availableCities.includes(activeCity)) {
+      setCity(activeCity);
+    } else if (postCountry === profileCountry && profileCity) {
+      setCity(profileCity);
+    } else {
+      setCity("");
+    }
+  }, [postCountry, activeCity, profileCountry, profileCity, kopruOnly, availableCities]);
 
   const handleFiles = async (files: FileList | null, kind: "image" | "video") => {
     if (!files || !user) return;
     const arr = Array.from(files);
-    const maxImg = 8 * 1024 * 1024; // 8MB per image
-    const maxVid = 80 * 1024 * 1024; // 80MB per video
+    const maxImg = 8 * 1024 * 1024;
+    const maxVid = 80 * 1024 * 1024;
     setUploading(true);
     try {
       for (const f of arr) {
@@ -108,16 +129,22 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
     }
     if (!content.trim() && media.length === 0) return;
 
-    const finalCountry = kopruOnly ? "Köprü" : (isTR ? "Türkiye" : (globalOnly ? null : (country || null)));
-    const finalCity = kopruOnly ? null : (isTR ? (profileCity || city || null) : (globalOnly ? null : (city || null)));
+    if (!kopruOnly && !postCountry) {
+      toast({
+        title: "Önce ülke ayarla",
+        description: "Profil ülken yok ve menüden de ülke seçilmemiş. Sol menüden bir ülke seç.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     setSubmitting(true);
     const firstImg = media.find((m) => m.type === "image");
     const { error } = await supabase.from("feed_posts").insert({
       user_id: user.id,
       content: content.trim(),
-      country: finalCountry,
-      city: finalCity,
+      country: postCountry || null,
+      city: kopruOnly ? null : (city || null),
       author_role: accountType || "user",
       image_url: firstImg?.url || null,
       media: media.map(({ type, url }) => ({ type, url })) as any,
@@ -131,11 +158,8 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
     }
     setContent("");
     setMedia([]);
-    setCountry(profileCountry);
-    setCity(profileCity);
-    setGlobalOnly(false);
     setKopruOnly(false);
-    toast({ title: "Paylaşım yayınlandı" });
+    toast({ title: "Paylaşım yayınlandı", description: `@${kopruOnly ? "Köprü" : postCountry}${city ? " · @" + city : ""}` });
     onCreated();
   };
 
@@ -146,6 +170,8 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
       </div>
     );
   }
+
+  const usingActive = !!activeCountry && activeCountry !== profileCountry && !isTR && !kopruOnly;
 
   return (
     <div className="rounded-2xl border border-border bg-card p-4 space-y-3">
@@ -179,7 +205,15 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
         </div>
       )}
 
-      {isTR ? (
+      {/* Where this post will appear */}
+      {kopruOnly ? (
+        <div className="rounded-lg border border-rose-500/30 bg-gradient-to-r from-rose-500/5 via-amber-400/5 to-emerald-500/5 p-2.5 text-[11px] flex items-start gap-2">
+          <Info className="h-3.5 w-3.5 mt-0.5 shrink-0 text-rose-500" />
+          <span>
+            <strong>🌉 Köprü</strong> — Paylaşımın TR–Diaspora ortak akışında ve Global akışta görünür.
+          </span>
+        </div>
+      ) : isTR ? (
         <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-2.5 text-[11px] text-amber-700 dark:text-amber-300 flex items-start gap-2">
           <Info className="h-3.5 w-3.5 mt-0.5 shrink-0" />
           <span>
@@ -187,9 +221,36 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
           </span>
         </div>
       ) : (
-        <p className="text-[11px] text-muted-foreground">
-          Varsayılan olarak profilindeki <strong>{profileCity || "şehir"} · {profileCountry || "ülke"}</strong> akışında görünür. İstersen başka bir @Ülke / @Şehir seç ya da sadece global yayınla.
-        </p>
+        <div className={`rounded-lg border p-2.5 text-[11px] flex items-start gap-2 ${usingActive ? "border-primary/40 bg-primary/5" : "border-border bg-muted/30"}`}>
+          <Info className="h-3.5 w-3.5 mt-0.5 shrink-0 text-primary" />
+          <div className="flex-1 leading-snug">
+            Paylaşımın <strong>@{postCountry || "—"}{city ? ` · @${city}` : ""}</strong> caddesine düşer ve Global akışta da ülke/şehir etiketiyle görünür.
+            {usingActive && (
+              <span className="block mt-0.5 text-primary font-semibold">Sol menüden {activeCountry} seçtiğin için bu paylaşım orada yayınlanır.</span>
+            )}
+            {!activeCountry && profileCountry && (
+              <span className="block mt-0.5 text-muted-foreground">Başka bir ülkede paylaşmak için sol menüden o ülkeyi seç. Aynı anda yalnız 1 ülkede yayın yapabilirsin.</span>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Optional city pick within the chosen country */}
+      {!kopruOnly && !isTR && postCountry && availableCities.length > 0 && (
+        <div className="flex items-center gap-2">
+          <Select value={city || "__none"} onValueChange={(v) => setCity(v === "__none" ? "" : v)}>
+            <SelectTrigger className="h-9 text-xs w-56">
+              <MapPin className="h-3.5 w-3.5 text-turquoise mr-1" />
+              <SelectValue placeholder={`@Şehir — ${postCountry}`} />
+            </SelectTrigger>
+            <SelectContent className="max-h-60">
+              <SelectItem value="__none">Sadece @{postCountry} (şehir yok)</SelectItem>
+              {availableCities.map((c) => (
+                <SelectItem key={c} value={c}>@{c}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       )}
 
       <div className="flex flex-wrap gap-2 items-center">
@@ -215,58 +276,11 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
         >
           🌉 {kopruOnly ? "Köprü ✓" : "Köprü"}
         </button>
-        {!isTR && !kopruOnly && (
-          <>
-            <button
-              type="button"
-              onClick={() => setGlobalOnly((v) => !v)}
-              className={`h-9 px-3 rounded-md border text-xs font-semibold flex items-center gap-1.5 transition-colors ${
-                globalOnly
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-background border-border hover:bg-muted"
-              }`}
-            >
-              <Globe className="h-3.5 w-3.5" /> {globalOnly ? "Global'de yayınla ✓" : "Sadece Global"}
-            </button>
-            <Select
-              value={country}
-              onValueChange={(v) => { setCountry(v); setCity(""); setGlobalOnly(false); }}
-              disabled={globalOnly}
-            >
-              <SelectTrigger className="h-9 text-xs w-44">
-                <Globe className="h-3.5 w-3.5 text-primary mr-1" />
-                <SelectValue placeholder="@Ülke seç" />
-              </SelectTrigger>
-              <SelectContent className="max-h-60">
-                {allCountries.map((c) => (
-                  <SelectItem key={c} value={c}>@{c}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={city} onValueChange={(v) => { setCity(v); setGlobalOnly(false); }} disabled={!country || globalOnly}>
-              <SelectTrigger className="h-9 text-xs w-44">
-                <MapPin className="h-3.5 w-3.5 text-turquoise mr-1" />
-                <SelectValue placeholder="@Şehir seç" />
-              </SelectTrigger>
-              <SelectContent className="max-h-60">
-                {cities.map((c) => (
-                  <SelectItem key={c} value={c}>@{c}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {!globalOnly && (country || city) && (
-              <div className="flex items-center gap-1 text-[11px] flex-wrap">
-                {city && <span className="px-1.5 py-0.5 rounded-full bg-turquoise/10 text-turquoise font-semibold">@{city}</span>}
-                {country && <span className="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">@{country}</span>}
-              </div>
-            )}
-            {globalOnly && (
-              <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">🌍 Global</span>
-            )}
-          </>
-        )}
-        {isTR && !kopruOnly && (
-          <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">@Türkiye 🇹🇷</span>
+
+        {!kopruOnly && (
+          <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold inline-flex items-center gap-1">
+            <Globe className="h-3 w-3" /> @{postCountry || "—"}{city ? ` · @${city}` : ""}
+          </span>
         )}
         {kopruOnly && (
           <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 text-white font-semibold">🌉 Köprü — TR↔Diaspora</span>
