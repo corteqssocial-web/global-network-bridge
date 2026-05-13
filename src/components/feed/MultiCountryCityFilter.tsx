@@ -103,34 +103,6 @@ const MultiCountryCityFilter = ({
         </Button>
       </div>
       <div className="flex flex-wrap items-center gap-2">
-        {/* Continent picker */}
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline" size="sm" className="gap-1.5 h-9">
-              <Sparkles className="h-4 w-4 text-amber-500" />
-              {selectedContinent ?? "Kıta Seç"}
-              <ChevronDown className="h-3 w-3 text-muted-foreground" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent align="start" className="w-56 p-1">
-            <button
-              onClick={() => pickContinent(null)}
-              className={`w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent ${!selectedContinent ? "bg-accent/50 font-medium" : ""}`}
-            >
-              🌍 Tüm Kıtalar
-            </button>
-            {continentList.map((cont) => (
-              <button
-                key={cont}
-                onClick={() => pickContinent(cont)}
-                className={`w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent ${selectedContinent === cont ? "bg-accent/50 font-medium" : ""}`}
-              >
-                {cont}
-              </button>
-            ))}
-          </PopoverContent>
-        </Popover>
-
         {/* Countries */}
         <Popover>
           <PopoverTrigger asChild>
