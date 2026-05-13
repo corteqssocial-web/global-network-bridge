@@ -75,6 +75,13 @@ const PhoneVerification = () => {
       setCode("");
       setSent(false);
       setDemoCode(null);
+      // Auto-complete onboarding if location already set
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user && profile?.country && profile?.city) {
+          await supabase.from("profiles").update({ onboarding_completed: true }).eq("id", user.id);
+        }
+      } catch {}
       await refreshProfile();
     } catch (e: any) {
       toast({ title: "Doğrulanamadı", description: e?.message, variant: "destructive" });
