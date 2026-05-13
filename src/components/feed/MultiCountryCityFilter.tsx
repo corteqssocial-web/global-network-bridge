@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Globe, MapPin, X, ChevronDown, Crown, Sparkles, Pin } from "lucide-react";
+import { Globe, MapPin, X, ChevronDown, Sparkles, Pin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,8 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { allCountries, countryCities } from "@/data/countryCities";
 import { continents, continentList } from "@/data/continents";
-import { useIsPremium, FREE_COUNTRY_LIMIT } from "@/hooks/useIsPremium";
-import { toast } from "@/hooks/use-toast";
 
 interface Props {
   selectedCountries: string[];
@@ -28,7 +26,7 @@ const MultiCountryCityFilter = ({
   onCitiesChange,
   onContinentChange,
 }: Props) => {
-  const isPremium = useIsPremium();
+  
   const [countrySearch, setCountrySearch] = useState("");
   const [citySearch, setCitySearch] = useState("");
 
@@ -51,18 +49,14 @@ const MultiCountryCityFilter = ({
       .sort((a, b) => a.localeCompare(b, "tr"));
   }, [selectedContinent, selectedCountries, citySearch]);
 
+  // Single-country mode: only one country active at a time. Re-clicking the
+  // active country clears the selection.
   const toggleCountry = (val: string) => {
     const has = selectedCountries.includes(val);
-    if (!has && !isPremium && selectedCountries.length >= FREE_COUNTRY_LIMIT) {
-      toast({
-        title: `Ücretsiz planda en fazla ${FREE_COUNTRY_LIMIT} ülke seçilebilir`,
-        description: "Sınırsız seçim için Premium'a geçin veya bir kıta seçin.",
-      });
-      return;
-    }
-    // Choosing countries clears continent scope
     if (selectedContinent) onContinentChange(null);
-    onCountriesChange(has ? selectedCountries.filter((x) => x !== val) : [...selectedCountries, val]);
+    onCountriesChange(has ? [] : [val]);
+    // Clear cities when switching country to avoid stale city scope
+    if (!has) onCitiesChange([]);
   };
 
   const toggleCity = (val: string) => {
@@ -117,18 +111,11 @@ const MultiCountryCityFilter = ({
                 ? selectedContinent
                   ? "Kıta Aktif"
                   : "Ülke"
-                : `${selectedCountries.length}${isPremium ? "" : `/${FREE_COUNTRY_LIMIT}`} Ülke`}
+                : selectedCountries[0]}
               <ChevronDown className="h-3 w-3 text-muted-foreground" />
             </Button>
           </PopoverTrigger>
           <PopoverContent align="start" className="w-72 p-0">
-            {!isPremium && (
-              <div className="px-3 py-2 border-b border-border bg-amber-500/5 text-[11px] text-amber-700 dark:text-amber-400 flex items-center gap-1.5">
-                <Crown className="h-3 w-3" />
-                Ücretsiz: en fazla {FREE_COUNTRY_LIMIT} ülke ·
-                <Link to="/pricing" className="underline font-medium">Premium</Link>
-              </div>
-            )}
             <div className="p-2 border-b border-border">
               <Input
                 placeholder="Ülke ara..."
@@ -140,16 +127,17 @@ const MultiCountryCityFilter = ({
             <div className="max-h-72 overflow-y-auto p-1">
               {filteredCountries.map((c) => {
                 const checked = selectedCountries.includes(c);
-                const limitHit =
-                  !isPremium && !checked && selectedCountries.length >= FREE_COUNTRY_LIMIT;
                 return (
                   <button
                     key={c}
                     onClick={() => toggleCountry(c)}
-                    disabled={limitHit}
-                    className={`w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded hover:bg-accent text-left ${limitHit ? "opacity-40 cursor-not-allowed" : ""}`}
+                    className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded hover:bg-accent text-left"
                   >
-                    <Checkbox checked={checked} disabled={limitHit} />
+                    <span
+                      className={`h-3.5 w-3.5 rounded-full border-2 shrink-0 ${
+                        checked ? "border-primary bg-primary" : "border-muted-foreground/40"
+                      }`}
+                    />
                     <span className="flex-1 truncate">{c}</span>
                   </button>
                 );
@@ -237,11 +225,6 @@ const MultiCountryCityFilter = ({
           🌉 Köprü
         </Button>
 
-        {isPremium && (
-          <Badge className="gap-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0">
-            <Crown className="h-3 w-3" /> Premium · Sınırsız
-          </Badge>
-        )}
       </div>
 
       <p className="text-[10px] text-muted-foreground leading-snug px-0.5">
