@@ -617,6 +617,7 @@ const ProfileBusiness = () => {
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6 space-y-6">
+          <BusinessLicenseUpload contextLabel="İşletme hesabınız" />
           <ProfileLocationPhoneSettings />
           <ProfileCommonSettings role="business" />
           <ProfileSubcategoriesSettings accountTypeOverride="business" />
