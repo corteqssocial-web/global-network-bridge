@@ -114,6 +114,7 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
   const [presentationPath, setPresentationPath] = useState<string | null>(null);
   const [isVerified, setIsVerified] = useState(false);
   const [birthdayReminder, setBirthdayReminder] = useState(false);
+  const [giftAcceptance, setGiftAcceptance] = useState(false);
 
   useEffect(() => {
     if (!user) return;
