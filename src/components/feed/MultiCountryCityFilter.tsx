@@ -16,6 +16,8 @@ interface Props {
   onCountriesChange: (v: string[]) => void;
   onCitiesChange: (v: string[]) => void;
   onContinentChange: (v: string | null) => void;
+  /** TR'de yaşayan / TR numaralı kullanıcılar yalnızca Türkiye, Köprü ve Global akışı görüntüleyebilir. */
+  restrictTR?: boolean;
 }
 
 const MultiCountryCityFilter = ({
@@ -25,14 +27,18 @@ const MultiCountryCityFilter = ({
   onCountriesChange,
   onCitiesChange,
   onContinentChange,
+  restrictTR = false,
 }: Props) => {
   
   const [countrySearch, setCountrySearch] = useState("");
   const [citySearch, setCitySearch] = useState("");
 
   const filteredCountries = useMemo(
-    () => allCountries.filter((c) => c.toLowerCase().includes(countrySearch.toLowerCase())),
-    [countrySearch],
+    () => {
+      const base = restrictTR ? allCountries.filter((c) => c === "Türkiye") : allCountries;
+      return base.filter((c) => c.toLowerCase().includes(countrySearch.toLowerCase()));
+    },
+    [countrySearch, restrictTR],
   );
 
   const availableCities = useMemo(() => {
@@ -158,7 +164,8 @@ const MultiCountryCityFilter = ({
           </PopoverContent>
         </Popover>
 
-        {/* Cities */}
+        {/* Cities — TR kullanıcılar için gizli */}
+        {!restrictTR && (
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="outline" size="sm" className="gap-1.5 h-9">
@@ -212,6 +219,7 @@ const MultiCountryCityFilter = ({
             )}
           </PopoverContent>
         </Popover>
+        )}
 
         {/* Köprü — TR↔Diaspora ortak cadde */}
         <Button

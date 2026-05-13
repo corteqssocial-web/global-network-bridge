@@ -761,7 +761,13 @@ const Feed = () => {
                   onCountriesChange={setSelectedCountries}
                   onCitiesChange={setSelectedCities}
                   onContinentChange={setSelectedContinent}
+                  restrictTR={isTRUser}
                 />
+                {isTRUser && (
+                  <p className="text-[10px] text-amber-600 dark:text-amber-400 mt-2 px-0.5 leading-snug">
+                    🇹🇷 TR kullanıcı: yalnızca <strong>@Türkiye</strong>, <strong>🌉 Köprü</strong> ve <strong>Global</strong> akışlarını görüntüleyebilir; paylaşımların @Türkiye veya 🌉 Köprü'ye düşer.
+                  </p>
+                )}
               </section>
 
               {/* Cafe'ler — aktif topluluklar (DB) */}
