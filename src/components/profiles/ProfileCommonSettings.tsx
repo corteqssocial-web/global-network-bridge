@@ -37,6 +37,7 @@ interface RoleConfig {
   showBusinessSubtype: boolean;
   showVerifiedBadgeRequest: boolean;
   showCorteqsPasaportu: boolean;
+  showGiftAcceptance?: boolean;
 }
 
 const ROLE_CONFIG: Record<ProfileRole, RoleConfig> = {
