@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import {
-  Save, Loader2, Plus, X, Upload, BadgeCheck, ShieldCheck, MapPin, MessageCircle, FileText, Image as ImageIcon, Cake,
+  Save, Loader2, Plus, X, Upload, BadgeCheck, ShieldCheck, MapPin, MessageCircle, FileText, Image as ImageIcon, Cake, Gift,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -37,6 +37,7 @@ interface RoleConfig {
   showBusinessSubtype: boolean;
   showVerifiedBadgeRequest: boolean;
   showCorteqsPasaportu: boolean;
+  showGiftAcceptance?: boolean;
 }
 
 const ROLE_CONFIG: Record<ProfileRole, RoleConfig> = {
@@ -46,6 +47,7 @@ const ROLE_CONFIG: Record<ProfileRole, RoleConfig> = {
     showSector: false, showTheme: false, showAvatar: true, showWebsites: true,
     showShowOnMap: false, showWhatsAppCta: false, showPresentationUpload: false,
     showBusinessSubtype: false, showVerifiedBadgeRequest: true, showCorteqsPasaportu: true,
+    showGiftAcceptance: true,
   },
   consultant: {
     fullNameLabel: "Ad Soyad *",
@@ -112,13 +114,14 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
   const [presentationPath, setPresentationPath] = useState<string | null>(null);
   const [isVerified, setIsVerified] = useState(false);
   const [birthdayReminder, setBirthdayReminder] = useState(false);
+  const [giftAcceptance, setGiftAcceptance] = useState(false);
 
   useEffect(() => {
     if (!user) return;
     (async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("full_name, business_name, avatar_url, tag_line, bio, birth_date, founded_year, business_sector, theme, websites, show_on_map, whatsapp_cta_enabled, business_subtype, presentation_name, presentation_path, is_verified, birthday_reminder_enabled")
+        .select("full_name, business_name, avatar_url, tag_line, bio, birth_date, founded_year, business_sector, theme, websites, show_on_map, whatsapp_cta_enabled, business_subtype, presentation_name, presentation_path, is_verified, birthday_reminder_enabled, gift_acceptance_enabled")
         .eq("id", user.id)
         .maybeSingle();
       if (data) {
@@ -140,6 +143,7 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
         setPresentationPath(data.presentation_path ?? null);
         setIsVerified(!!data.is_verified);
         setBirthdayReminder(!!(data as any).birthday_reminder_enabled);
+        setGiftAcceptance(!!(data as any).gift_acceptance_enabled);
       }
       setEmail(user.email ?? "");
       setLoading(false);
@@ -224,6 +228,7 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
         payload.presentation_name = presentationName;
         payload.presentation_path = presentationPath;
       }
+      if (cfg.showGiftAcceptance) payload.gift_acceptance_enabled = giftAcceptance;
       const { error } = await supabase.from("profiles").update(payload).eq("id", user.id);
       if (error) throw error;
       toast({ title: "Profil bilgileri kaydedildi" });
@@ -343,6 +348,20 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
               </div>
               <Switch checked={birthdayReminder} onCheckedChange={setBirthdayReminder} disabled={!birthDate} />
             </div>
+            {cfg.showGiftAcceptance && (
+              <div className="mt-2 flex items-start justify-between gap-3 rounded-lg border border-border bg-muted/30 px-3 py-2">
+                <div className="flex items-start gap-2">
+                  <Gift className="h-4 w-4 text-amber-500 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium">Hediye Kabul Et</p>
+                    <p className="text-xs text-muted-foreground">
+                      Açıkken profil ön ve detay kartında “🎁 Discount Kupon Hediye Et” CTA görünür. (Yakında — buton kilitli açılır.)
+                    </p>
+                  </div>
+                </div>
+                <Switch checked={giftAcceptance} onCheckedChange={setGiftAcceptance} />
+              </div>
+            )}
           </div>
         )}
         {cfg.showFoundedYear && (

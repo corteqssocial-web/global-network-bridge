@@ -1091,6 +1091,7 @@ export type Database = {
           cv_path: string | null
           founded_year: number | null
           full_name: string | null
+          gift_acceptance_enabled: boolean
           hiring_mode: boolean
           id: string
           is_verified: boolean
@@ -1133,6 +1134,7 @@ export type Database = {
           cv_path?: string | null
           founded_year?: number | null
           full_name?: string | null
+          gift_acceptance_enabled?: boolean
           hiring_mode?: boolean
           id: string
           is_verified?: boolean
@@ -1175,6 +1177,7 @@ export type Database = {
           cv_path?: string | null
           founded_year?: number | null
           full_name?: string | null
+          gift_acceptance_enabled?: boolean
           hiring_mode?: boolean
           id?: string
           is_verified?: boolean
