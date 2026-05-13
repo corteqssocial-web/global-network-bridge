@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { countryFromPhone } from "@/lib/phoneCountry";
 
 const PhoneVerification = () => {
   const { profile, refreshProfile } = useAuth();
