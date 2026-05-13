@@ -42,6 +42,7 @@ import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
+import BusinessLicenseUpload from "@/components/profiles/BusinessLicenseUpload";
 import ProfileCommonSettings from "@/components/profiles/ProfileCommonSettings";
 import ProfileSubcategoriesSettings from "@/components/profiles/ProfileSubcategoriesSettings";
 
