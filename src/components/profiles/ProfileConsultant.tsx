@@ -560,6 +560,7 @@ const ProfileConsultant = () => {
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6 space-y-6">
+          <BusinessLicenseUpload contextLabel="Danışman hesabınız" />
           <ProfileLocationPhoneSettings />
           <ProfileCommonSettings role="consultant" />
           <ProfileSubcategoriesSettings accountTypeOverride="consultant" />
