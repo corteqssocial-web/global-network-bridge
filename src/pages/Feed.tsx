@@ -141,6 +141,9 @@ const Feed = () => {
     countries: selectedCountries,
     cities: selectedCities,
   });
+  // Unscoped list — used for the sidebar cafe search so users can find any cafe
+  // by country/city/keyword regardless of the active feed filter.
+  const { cafes: allActiveCafes } = useActiveCafes();
   const [showAllCafeCities, setShowAllCafeCities] = useState(false);
   const [cafeSearch, setCafeSearch] = useState("");
   const [storyOffset, setStoryOffset] = useState(0);
