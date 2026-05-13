@@ -1008,7 +1008,7 @@ const Feed = () => {
               {inCafe ? (
                 <>
                   <Link to="/cadde" className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline mb-2">
-                    <ArrowLeft className="h-3.5 w-3.5" /> Genel Cadde'ye Dön
+                    <ArrowLeft className="h-3.5 w-3.5" /> Caddeye Dön
                   </Link>
                   <header className="mb-4 rounded-2xl border border-border bg-card p-4">
                     <div className="flex items-start gap-3">

@@ -17,7 +17,22 @@ export interface FeedProfile {
 export interface Suggestion extends FeedProfile {
   score: number;
   reasons: string[];
+  tag_line?: string | null;
+  bio?: string | null;
 }
+
+const extractKeywords = (txt?: string | null): string[] => {
+  if (!txt) return [];
+  return Array.from(
+    new Set(
+      txt
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}\s]/gu, " ")
+        .split(/\s+/)
+        .filter((w) => w.length >= 4),
+    ),
+  );
+};
 
 export function useFeedSocial() {
   const { user } = useAuth();
@@ -36,7 +51,7 @@ export function useFeedSocial() {
     // 1) Current user profile (for similarity)
     const { data: me } = await supabase
       .from("profiles")
-      .select("id, full_name, avatar_url, city, country, profession, school, account_type")
+      .select("id, full_name, avatar_url, city, country, profession, school, account_type, tag_line, bio")
       .eq("id", user.id)
       .single();
 
@@ -59,38 +74,63 @@ export function useFeedSocial() {
       setFollowing([]);
     }
 
-    // 4) Suggestions via similarity (country/city/profession/school)
+    // 4) Suggestions ordered sequentially by: country → city → profession → profile keywords
     if (me) {
+      const myKeywords = [
+        ...extractKeywords((me as any).tag_line),
+        ...extractKeywords((me as any).bio),
+      ];
+
       const orParts: string[] = [];
       if (me.country) orParts.push(`country.eq.${me.country}`);
       if (me.city) orParts.push(`city.eq.${me.city}`);
       if (me.profession) orParts.push(`profession.eq.${me.profession}`);
       if (me.school) orParts.push(`school.eq.${me.school}`);
+      if (myKeywords.length > 0) {
+        const top = myKeywords.slice(0, 6);
+        top.forEach((k) => {
+          orParts.push(`tag_line.ilike.%${k}%`);
+          orParts.push(`bio.ilike.%${k}%`);
+        });
+      }
 
       if (orParts.length > 0) {
-        let q = supabase
+        const { data: candidates } = await supabase
           .from("profiles")
-          .select("id, full_name, avatar_url, city, country, profession, school, account_type")
+          .select("id, full_name, avatar_url, city, country, profession, school, account_type, tag_line, bio")
           .neq("id", user.id)
           .or(orParts.join(","))
-          .limit(50);
+          .limit(80);
 
-        const { data: candidates } = await q;
         const excluded = new Set([user.id, ...followingIds]);
         const scored: Suggestion[] = (candidates || [])
           .filter((p: any) => !excluded.has(p.id))
           .map((p: any) => {
-            let score = 0;
             const reasons: string[] = [];
-            if (me.country && p.country === me.country) { score += 1; reasons.push(`📍 ${p.country}`); }
-            if (me.city && p.city === me.city) { score += 2; reasons.push(`🏙 ${p.city}`); }
-            if (me.profession && p.profession === me.profession) { score += 3; reasons.push(`💼 ${p.profession}`); }
-            if (me.school && p.school === me.school) { score += 3; reasons.push(`🎓 ${p.school}`); }
+            // Sequential weights: country > city > profession > keywords
+            const countryMatch = !!(me.country && p.country === me.country);
+            const cityMatch = !!(me.city && p.city === me.city);
+            const professionMatch = !!(me.profession && p.profession === me.profession);
+            const schoolMatch = !!(me.school && p.school === me.school);
+            const candidateText = `${p.tag_line || ""} ${p.bio || ""}`.toLowerCase();
+            const keywordHits = myKeywords.filter((k) => candidateText.includes(k));
+            if (countryMatch) reasons.push(`📍 ${p.country}`);
+            if (cityMatch) reasons.push(`🏙 ${p.city}`);
+            if (professionMatch) reasons.push(`💼 ${p.profession}`);
+            if (schoolMatch) reasons.push(`🎓 ${p.school}`);
+            if (keywordHits.length > 0) reasons.push(`🔖 ${keywordHits.slice(0, 2).join(", ")}`);
+            // Sequential ordering: country (1000) > city (100) > profession (10) > keywords (1 each)
+            const score =
+              (countryMatch ? 1000 : 0) +
+              (cityMatch ? 100 : 0) +
+              (professionMatch ? 10 : 0) +
+              (schoolMatch ? 5 : 0) +
+              keywordHits.length;
             return { ...p, score, reasons };
           })
           .filter((p) => p.score > 0)
           .sort((a, b) => b.score - a.score)
-          .slice(0, 5);
+          .slice(0, 8);
         setSuggestions(scored);
       } else {
         setSuggestions([]);
