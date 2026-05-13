@@ -139,6 +139,7 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
         setPresentationName(data.presentation_name ?? null);
         setPresentationPath(data.presentation_path ?? null);
         setIsVerified(!!data.is_verified);
+        setBirthdayReminder(!!(data as any).birthday_reminder_enabled);
       }
       setEmail(user.email ?? "");
       setLoading(false);
