@@ -8,6 +8,7 @@ import AssociationsSection from "@/components/AssociationsSection";
 import BusinessesSection from "@/components/BusinessesSection";
 import Footer from "@/components/Footer";
 import SectionErrorBoundary from "@/components/SectionErrorBoundary";
+import RotatingProfilesShowcase from "@/components/RotatingProfilesShowcase";
 
 const Index = () => {
   return (
@@ -19,6 +20,9 @@ const Index = () => {
       </SectionErrorBoundary>
       <ConsultantCategories />
       <FeaturedConsultants />
+      <SectionErrorBoundary sectionName="RotatingProfilesShowcase">
+        <RotatingProfilesShowcase />
+      </SectionErrorBoundary>
       <AssociationsSection />
       <BusinessesSection />
       <FeaturedEvents />
