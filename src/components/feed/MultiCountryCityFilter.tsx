@@ -164,7 +164,8 @@ const MultiCountryCityFilter = ({
           </PopoverContent>
         </Popover>
 
-        {/* Cities */}
+        {/* Cities — TR kullanıcılar için gizli */}
+        {!restrictTR && (
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="outline" size="sm" className="gap-1.5 h-9">
@@ -218,6 +219,7 @@ const MultiCountryCityFilter = ({
             )}
           </PopoverContent>
         </Popover>
+        )}
 
         {/* Köprü — TR↔Diaspora ortak cadde */}
         <Button
