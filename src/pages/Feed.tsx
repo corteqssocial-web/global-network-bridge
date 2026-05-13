@@ -966,6 +966,12 @@ const Feed = () => {
                     <Badge variant="secondary" className="text-[10px] ml-auto">{activeCafes.length + 1}</Badge>
                   </div>
                   <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 snap-x">
+                    {user && (
+                      <Link to={categoryAccountLink} className="shrink-0 w-20 snap-start flex flex-col items-center gap-1 group">
+                        <div className="h-16 w-16 rounded-full border-2 border-dashed border-primary/40 flex items-center justify-center text-primary text-2xl font-bold">+</div>
+                        <div className="text-[10px] font-semibold text-center text-primary">Cafe Aç</div>
+                      </Link>
+                    )}
                     {/* Demo cafe story */}
                     <Link to="/cadde/demo-it" className="shrink-0 w-20 snap-start flex flex-col items-center gap-1 group">
                       <div className="p-[2px] rounded-full bg-gradient-to-br from-amber-400 via-rose-400 to-violet-500">
@@ -996,12 +1002,6 @@ const Feed = () => {
                         </Link>
                       );
                     })}
-                    {user && (
-                      <Link to={categoryAccountLink} className="shrink-0 w-20 snap-start flex flex-col items-center gap-1 group">
-                        <div className="h-16 w-16 rounded-full border-2 border-dashed border-primary/40 flex items-center justify-center text-primary text-2xl font-bold">+</div>
-                        <div className="text-[10px] font-semibold text-center text-primary">Cafe Aç</div>
-                      </Link>
-                    )}
                   </div>
                 </div>
               )}
