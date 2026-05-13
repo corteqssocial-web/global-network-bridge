@@ -151,18 +151,24 @@ const IndividualPublicCard = ({
             )}
           </div>
 
-          {birthdayDays !== null && (
-            <div className="mt-2 flex items-center justify-between gap-3 rounded-xl border border-pink-500/30 bg-gradient-to-r from-pink-500/10 to-amber-500/10 px-3 py-2">
+          {(acceptsGifts || birthdayDays !== null) && (
+            <div className="mt-2 flex items-center justify-between gap-3 rounded-xl border border-pink-500/30 bg-gradient-to-r from-pink-500/10 to-amber-500/10 px-3 py-2 flex-wrap">
               <div className="flex items-center gap-2 text-sm">
                 <Gift className="h-4 w-4 text-pink-600" />
                 <span className="text-foreground/90">
-                  {name.split(" ")[0]}'in doğum günü yaklaşıyor — bir sürpriz hazırla.
+                  {birthdayDays !== null
+                    ? `${name.split(" ")[0]}'in doğum günü yaklaşıyor — bir sürpriz hazırla.`
+                    : `${name.split(" ")[0]} hediye kabul ediyor.`}
                 </span>
               </div>
-              <Button asChild size="sm" className="gap-1.5 bg-gradient-to-r from-pink-500 to-amber-500 text-white hover:opacity-90">
-                <Link to={`/coupons/gift?to=${user?.id ?? ""}`}>
-                  <Gift className="h-3.5 w-3.5" /> Hediye Kupon Gönder
-                </Link>
+              <Button
+                size="sm"
+                disabled
+                title="Yakında aktif olacak"
+                className="gap-1.5 bg-gradient-to-r from-pink-500 to-amber-500 text-white opacity-80 cursor-not-allowed"
+              >
+                <Gift className="h-3.5 w-3.5" /> Discount Kupon Hediye Et
+                <span className="ml-1 text-[10px] bg-white/20 rounded px-1 py-0.5">Yakında</span>
               </Button>
             </div>
           )}
