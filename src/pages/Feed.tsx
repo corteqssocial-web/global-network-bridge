@@ -22,8 +22,23 @@ import CaddeProfileGate from "@/components/CaddeProfileGate";
 import { useConnections } from "@/hooks/useConnections";
 
 const PAGE_SIZE = 20;
-// Türkiye merkezli paylaşımların Global akışa "sızması" için minimum etkileşim eşiği
-const TR_GLOBAL_THRESHOLD = 25;
+
+// Global akış için dinamik like eşiği:
+// - Akış hızı < 1 post/sn ise eşik = 0 (her şey görünür)
+// - Akış hızı ≥ 1 post/sn olduğunda her tam birim için eşik 1 artar
+//   (ortalama akış hızı ~2sn/post seviyesinde tutulur)
+const computeGlobalLikeThreshold = async (): Promise<number> => {
+  const sinceIso = new Date(Date.now() - 60_000).toISOString();
+  const { count } = await supabase
+    .from("feed_posts")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "published")
+    .is("cafe_id", null)
+    .gte("created_at", sinceIso);
+  const rate = (count || 0) / 60; // posts/sn (son 60 sn)
+  if (rate < 1) return 0;
+  return Math.max(1, Math.round(rate));
+};
 
 interface FeedPost {
   id: string;
