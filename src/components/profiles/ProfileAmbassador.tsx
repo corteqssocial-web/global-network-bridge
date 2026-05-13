@@ -177,11 +177,11 @@ const ProfileAmbassador = () => {
           <TabsTrigger value="events" className="gap-1.5 data-[state=active]:bg-gold data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Calendar className="h-4 w-4" /> Etkinlikler</TabsTrigger>
           <TabsTrigger value="cadde" className="gap-1.5 data-[state=active]:bg-amber-600 data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Coffee className="h-4 w-4" /> Cadde'de Cafe</TabsTrigger>
           <TabsTrigger value="onboarding" className="gap-1.5 data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Users className="h-4 w-4" /> Onboarding</TabsTrigger>
-          <TabsTrigger value="messaging" className="gap-1.5 data-[state=active]:bg-turquoise data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><MessageSquare className="h-4 w-4" /> Mesajlar</TabsTrigger>
           <TabsTrigger value="performance" className="gap-1.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><TrendingUp className="h-4 w-4" /> Performans</TabsTrigger>
           <TabsTrigger value="community" className="gap-1.5 data-[state=active]:bg-turquoise data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Globe className="h-4 w-4" /> Topluluk</TabsTrigger>
-          <NotificationsTabTrigger />
           <TabsTrigger value="follows" className="gap-1.5 data-[state=active]:bg-pink-600 data-[state=active]:text-white data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Heart className="h-4 w-4" /> Takip Ettiklerim</TabsTrigger>
+          <NotificationsTabTrigger className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md text-foreground/80 hover:text-foreground" />
+          <TabsTrigger value="messaging" className="gap-1.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><MessageSquare className="h-4 w-4" /> Mesajlar</TabsTrigger>
           <TabsTrigger value="settings" className="gap-1.5 data-[state=active]:bg-foreground data-[state=active]:text-background data-[state=active]:shadow-md text-foreground/80 hover:text-foreground"><Settings className="h-4 w-4" /> Profil Ayarları</TabsTrigger>
         </TabsList>
 
