@@ -82,10 +82,20 @@ const IndividualPublicCard = ({
       if (!cancelled) setFollowers(count || 0);
       const { data: prof } = await supabase
         .from("profiles")
-        .select("is_verified")
+        .select("is_verified, birth_date, birthday_reminder_enabled")
         .eq("id", user.id)
         .maybeSingle();
       if (!cancelled && prof?.is_verified) setIsVerified(true);
+      if (!cancelled && prof?.birth_date && (prof as any).birthday_reminder_enabled) {
+        const bd = new Date(prof.birth_date as string);
+        const now = new Date();
+        const next = new Date(now.getFullYear(), bd.getMonth(), bd.getDate());
+        if (next.getTime() < new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()) {
+          next.setFullYear(now.getFullYear() + 1);
+        }
+        const days = Math.round((next.getTime() - now.getTime()) / 86400000);
+        if (days >= 0 && days <= 14) setBirthdayDays(days);
+      }
     })();
     return () => { cancelled = true; };
   }, [user?.id]);
