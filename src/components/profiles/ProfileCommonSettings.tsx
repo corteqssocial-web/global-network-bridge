@@ -210,7 +210,10 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
         websites: cleanWebsites,
       };
       if (cfg.showOrgName) payload.business_name = orgName.trim();
-      if (cfg.showBirthDate) payload.birth_date = birthDate || null;
+      if (cfg.showBirthDate) {
+        payload.birth_date = birthDate || null;
+        payload.birthday_reminder_enabled = birthdayReminder;
+      }
       if (cfg.showFoundedYear) payload.founded_year = foundedYear ? Number(foundedYear) : null;
       if (cfg.showSector) payload.business_sector = sector.trim() || null;
       if (cfg.showTheme) payload.theme = theme.trim() || null;
