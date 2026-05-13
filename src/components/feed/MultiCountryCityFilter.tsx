@@ -34,8 +34,11 @@ const MultiCountryCityFilter = ({
   const [citySearch, setCitySearch] = useState("");
 
   const filteredCountries = useMemo(
-    () => allCountries.filter((c) => c.toLowerCase().includes(countrySearch.toLowerCase())),
-    [countrySearch],
+    () => {
+      const base = restrictTR ? allCountries.filter((c) => c === "Türkiye") : allCountries;
+      return base.filter((c) => c.toLowerCase().includes(countrySearch.toLowerCase()));
+    },
+    [countrySearch, restrictTR],
   );
 
   const availableCities = useMemo(() => {
