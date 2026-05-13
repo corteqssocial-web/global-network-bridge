@@ -1067,7 +1067,7 @@ const Feed = () => {
                       <div className="text-[10px] font-semibold text-center truncate w-full">Berlin IT</div>
                       <div className="text-[9px] text-muted-foreground">⏰ 1s 23dk</div>
                     </Link>
-                    {activeCafes.map((c) => {
+                    {rotatedCafes.map((c) => {
                       const st = themeStyle(c.theme);
                       const Icon = st.icon;
                       const closeTime = new Date(c.closes_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
