@@ -39,9 +39,13 @@ interface Props {
   onCreated?: () => void;
   /** Ambassadors get an extended 6-hour slot with larger capacity */
   ambassadorMode?: boolean;
+  /** Pre-fill country (e.g. user's profile country or active feed country) */
+  defaultCountry?: string | null;
+  /** Pre-fill city if it belongs to defaultCountry */
+  defaultCity?: string | null;
 }
 
-const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false }: Props) => {
+const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCountry, defaultCity }: Props) => {
   const { user } = useAuth();
   const isPremium = useIsPremium();
   const navigate = useNavigate();
@@ -51,10 +55,14 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false }: Props) =
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [theme, setTheme] = useState("Genel");
-  const [audienceScope, setAudienceScope] = useState<AudienceScope>("everyone");
+  const [audienceScope, setAudienceScope] = useState<AudienceScope>(defaultCountry ? "geo" : "everyone");
   const [continent, setContinent] = useState("");
-  const [country, setCountry] = useState("");
-  const [city, setCity] = useState("");
+  const [country, setCountry] = useState(defaultCountry || "");
+  const [city, setCity] = useState(
+    defaultCountry && defaultCity && (countryCities[defaultCountry] || []).includes(defaultCity)
+      ? defaultCity
+      : ""
+  );
   const [referralCode, setReferralCode] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [extra, setExtra] = useState("");
