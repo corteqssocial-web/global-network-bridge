@@ -771,6 +771,59 @@ const Feed = () => {
                 <p className="text-[10px] text-muted-foreground mb-3 leading-snug">
                   Aktif cafe'ler — açılış 2 saat, Premium 4 saat. Günde 1 katılım.
                 </p>
+
+                {/* Search: ülke / şehir / anahtar kelime */}
+                <div className="relative mb-3">
+                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+                  <Input
+                    value={cafeSearch}
+                    onChange={(e) => setCafeSearch(e.target.value)}
+                    placeholder="Ülke, şehir veya cafe ara…"
+                    className="h-8 pl-8 pr-7 text-xs"
+                  />
+                  {cafeSearch && (
+                    <button
+                      type="button"
+                      onClick={() => setCafeSearch("")}
+                      className="absolute right-1.5 top-1/2 -translate-y-1/2 h-5 w-5 rounded hover:bg-muted flex items-center justify-center"
+                      aria-label="Temizle"
+                    >
+                      <X className="h-3 w-3 text-muted-foreground" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Top 3 popüler — her zaman görünür */}
+                {topPopularCafes.length > 0 && (
+                  <div className="mb-3">
+                    <div className="text-[10px] font-semibold text-amber-600 mb-1.5 px-1 flex items-center gap-1">
+                      🔥 En Popüler 3 Cafe
+                    </div>
+                    <div className="space-y-1">
+                      {topPopularCafes.map((c) => {
+                        const st = themeStyle(c.theme);
+                        const Icon = st.icon;
+                        return (
+                          <Link
+                            key={`top-${c.id}`}
+                            to={`/cadde/${c.id}`}
+                            className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg border border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 transition-colors"
+                          >
+                            <div className={`h-7 w-7 rounded-full ${st.bg} flex items-center justify-center shrink-0`}>
+                              <Icon className={`h-3.5 w-3.5 ${st.color}`} />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="text-xs font-semibold truncate">{c.name}</div>
+                              <div className="text-[10px] text-muted-foreground truncate">
+                                {[c.city, c.country].filter(Boolean).join(" · ") || c.theme} · 👥 {c.member_count}
+                              </div>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
                 {(() => {
                   // Group cafes by city, rank cities by total member_count
                   const cityMap = new Map<string, { city: string; country: string; total: number; cafes: typeof activeCafes }>();
