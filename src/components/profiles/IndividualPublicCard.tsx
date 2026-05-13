@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Coffee, Calendar, Info, ShieldCheck, Users, Heart, Plane, Briefcase, Eye, EyeOff, Linkedin, FileText, Presentation } from "lucide-react";
+import { MapPin, Coffee, Calendar, Info, ShieldCheck, Users, Heart, Plane, Briefcase, Eye, EyeOff, Linkedin, FileText, Presentation, BadgeCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
@@ -55,6 +55,7 @@ const IndividualPublicCard = ({
   const { list } = useFollow();
   const [activeCafe, setActiveCafe] = useState<{ id: string; name: string; theme?: string } | null>(null);
   const [followers, setFollowers] = useState<number>(0);
+  const [isVerified, setIsVerified] = useState(false);
   const followingCount = list("user").length;
 
   useEffect(() => {
@@ -77,6 +78,12 @@ const IndividualPublicCard = ({
         .select("*", { count: "exact", head: true })
         .eq("following_id", user.id);
       if (!cancelled) setFollowers(count || 0);
+      const { data: prof } = await supabase
+        .from("profiles")
+        .select("is_verified")
+        .eq("id", user.id)
+        .maybeSingle();
+      if (!cancelled && prof?.is_verified) setIsVerified(true);
     })();
     return () => { cancelled = true; };
   }, [user?.id]);
@@ -89,7 +96,10 @@ const IndividualPublicCard = ({
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-xl md:text-2xl font-bold text-foreground">{name}</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-foreground inline-flex items-center gap-1.5">
+              {name}
+              {isVerified && <BadgeCheck className="h-5 w-5 text-blue-500 fill-blue-500/20" aria-label="Onaylı Hesap" />}
+            </h2>
             {isJobSeeking && (
               <Badge className="bg-turquoise/15 text-turquoise border-turquoise/30 gap-1 text-[11px]">
                 <Briefcase className="h-3 w-3" /> İş Arıyorum

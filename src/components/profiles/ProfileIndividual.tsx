@@ -43,6 +43,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
+import ProfileCommonSettings from "@/components/profiles/ProfileCommonSettings";
 import ProfileSubcategoriesSettings from "@/components/profiles/ProfileSubcategoriesSettings";
 
 
@@ -811,6 +812,7 @@ const ProfileIndividual = () => {
 
         <TabsContent value="settings" className="mt-6 space-y-6">
           <ProfileLocationPhoneSettings />
+          <ProfileCommonSettings role="individual" />
           <ProfileSubcategoriesSettings accountTypeOverride="individual" />
           {/* Genel Profil */}
           <div className="bg-card rounded-2xl border border-border p-6 shadow-card mb-6">

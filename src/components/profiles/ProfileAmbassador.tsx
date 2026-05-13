@@ -31,6 +31,9 @@ import EmptyDashboardState from "@/components/EmptyDashboardState";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 import MyOpenCafesAsEvents from "@/components/profiles/MyOpenCafesAsEvents";
 import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
+import ProfileCommonSettings from "@/components/profiles/ProfileCommonSettings";
+import ConsultantFeatureToggles from "@/components/profiles/ConsultantFeatureToggles";
+import AppointmentManagePanel from "@/components/booking/AppointmentManagePanel";
 import AmbassadorReferralCard from "@/components/AmbassadorReferralCard";
 
 type AmbassadorEvent = {
@@ -587,7 +590,25 @@ const ProfileAmbassador = () => {
         {/* SETTINGS */}
         <TabsContent value="settings" className="mt-6 space-y-6">
           <ProfileLocationPhoneSettings />
+          <ProfileCommonSettings role="ambassador" />
           <AmbassadorReferralCard />
+
+          {user && (
+            <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+              <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
+                <Settings className="h-5 w-5 text-primary" /> Profil Özellik Toggle'ları
+              </h3>
+              <ConsultantFeatureToggles consultantId={user.id} />
+            </div>
+          )}
+
+          <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+            <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-primary" /> Takvim Yönetimi
+            </h3>
+            <AppointmentManagePanel />
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <Card className="border-border lg:col-span-2">
               <CardContent className="p-6">

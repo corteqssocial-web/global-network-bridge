@@ -1,44 +1,82 @@
-## Hedef
-İşletme paneli ve nav bar üzerinde 3 ana iş:
-1. İlanlar bölümünde filtreli "Daha fazla" görünümü
-2. Yeni kullanıcılar için tüm sekmelerden mock veriyi sıfırlamak (gerçek backend bağlantıları kalır)
-3. Ayarlar'dan profil fotoğrafı/profil detayları yönetimi + Nav bar'a "AI Twin · Yakında"
+## Revizyon Planı — Profil Ayarları (Owner Notları K & L)
 
-## 1. İş İlanları Filtreleri (`ProfileBusiness.tsx`)
-- İlanlar sekmesinin altına "Daha fazla" toggle butonu
-- Açılınca üstte 3 input/dropdown: **Ülke**, **Şehir** (ülkeye göre cascade — `countryCities.ts`), **Arama** (başlıkta `ilike`)
-- Filtreleme client-side; ilan listesi boşsa "Eşleşen ilan bulunamadı" mesajı
-- Mevcut listings state üzerinde çalışır (ileride DB tablosu eklenirse aynı UI kullanılabilir)
+Notlar 22 satırı kapsıyor; aşağıda her birini hangi dosyada nasıl uygulayacağımı listeliyorum. Onayınla hepsini sırayla işleyeceğim.
 
-## 2. Mock Verileri Sıfırlama (sıfır kullanıcı = boş)
-Şu sekmelerdeki hardcoded mock arrayleri kaldırıp gerçek backend / boş-state'e bağla:
-- **İlanlar**: `listings` başlangıç değeri `[]` (yeni kullanıcı boş görür)
-- **Etkinlikler**: `events` mock array yerine `supabase.from('events').eq('user_id', user.id)` çek
-- **Kuponlar**: `CouponManager` zaten kendi state'i varsa boş başlat (kontrol edilecek)
-- **Analitik**: Mock grafikler/sayılar yerine "Henüz veri yok" + gerçek `stats`
-- **Tanıtım**: Yakında badge'leri kalır, mock metrikleri kaldır
-- **WhatsApp / Mesajlar / Bildirimler / Teklif Talepleri**: Zaten DB-backed; doğrula
-- **Loyalty**: "Yakında" rozetiyle sade kalır (kullanıcı isteği)
-- Üst başlıktaki sahte `employees: 12`, `founded: 2019` değerleri kaldırılıp profil DB'sinden çekilir veya gizlenir
+### 1) Tüm rollere Tag Line (25 karakter)
+- `IdentityFields` benzeri ortak input bloğunu 6 profilde de göster (mevcutta sadece Individual'da var).
+- Etkilenen: `ProfileIndividual`, `ProfileConsultant`, `ProfileBusiness`, `ProfileAssociation`, `ProfileBlogger`, `ProfileAmbassador` ayar sekmeleri ve ilgili `*SettingsForm` dosyaları. Karakter sınırı 25.
 
-## 3. Ayarlar — Profil & Avatar
-`Ayarlar` tab içeriğine ekle:
-- Profil fotoğrafı yükleme (Supabase Storage `user-documents` veya yeni `avatars` public bucket — mevcut bucket kullanılacak)
-- Profil detayları formu: business_name, business_sector, business_description, business_website, address, phone, country/city
-- "Kaydet" → `profiles` tablosuna `update`
-- Header avatarı yüklenen foto ile değişir
+### 2) Ad Soyad — tüm kategorilerde zorunlu
+- Settings formlarına `required` + validasyon. İşletme/Kuruluş için "yetkili adı" olarak ek alan.
 
-## 4. Nav Bar — AI Twin
-`Navbar.tsx` içine "AI Twin" linki + `Yakında` rozeti (tıklanınca toast ya da disabled).
+### 3) İşletme/Kuruluş Adı — Business & Association zorunlu (zaten kısmen var; required işaretle)
 
-## Teknik Notlar
-- Yeni avatar bucket gerekirse migration ile public `avatars` bucket eklenir + RLS (kullanıcı kendi klasörüne yazar)
-- `profiles` tablosuna `avatar_url` zaten var, kullanılacak
-- Filtre UI'ı `Select` + `Input` ile shadcn pattern
-- Tüm renkler design token üzerinden
+### 4) Profil Fotoğrafı — tüm rollere isteğe bağlı upload
+- Ortak `AvatarUpload` bileşeni oluştur, 6 settings formuna yerleştir. (Storage bucket: `avatars`, RLS user-scope.)
 
-## Etkilenen Dosyalar
-- `src/components/profiles/ProfileBusiness.tsx` (büyük refactor)
-- `src/components/Navbar.tsx` (AI Twin linki)
-- Olası yeni: `src/components/profiles/BusinessSettingsForm.tsx`
-- Olası migration: `avatars` storage bucket
+### 5) Ünvan/Uzmanlık + "Tema"
+- Consultant ve Blogger formlarına `theme` alanı ekle.
+- Business kayıt formunda "İşletme Tipi" seçimi: `1 - Start-up`, `2 - Online İşletme` (mevcut sektör/altkategori ile birlikte).
+
+### 6) Bio / Hakkında — Individual'a da ekle (kısa, 500 char)
+
+### 7) Doğum Tarihi — Consultant'a da ekle
+
+### 8) Kuruluş Yılı — Consultant, Business, Association
+
+### 9) Sektör — Individual ve Blogger hariç tümünde
+
+### 10) Kuruluş Ana Kategori — `Dernek, Vakıf, Medya, Akademi, Eğitim`
+- `data/organizationCategories.ts` içine eksik olanları ekle (Akademi, Eğitim, Medya).
+
+### 11) E-posta + Telefon — tüm rollerde zorunlu
+- `ProfileLocationPhoneSettings` ve ilgili formlarda `required` + submit-time guard.
+
+### 12) Web Sitesi — Individual dahil tümü; çoklu link
+- `WebsiteLinksField` (dinamik liste, 1–5 link). Tüm settings formlarına ekle.
+
+### 13) Haritada Yer Al — Association için aç (zaten Consultant/Business'ta var)
+
+### 14) WhatsApp CTA — Business, Consultant, Association (Ambassador zaten var)
+- Doğrulanmış telefondan otomatik; toggle 4 rolde göster.
+
+### 15) Sunum / Tanıtım Yükleme — Business & Consultant
+- Storage `presentations` bucket; PDF/PPT/PPTX/KEY upload.
+
+### 16) CorteQS Pasaportu — tüm rollerde göster (status rozeti)
+
+### 17) "Onaylı Hesap" Mavi Tik — tüm kategoriler
+- "Onaylı İşletme Rozeti" → genel `verified_account` rozeti. Profil kart başlıklarında mavi tik.
+- `profiles.verified` kolonu ve admin onay akışı (admin paneli mevcut moderation kuyruğuna entry).
+
+### 18) Ambassador Referans Kodu akışı
+- Şehir elçisi kaydı tamamlandığında `ambassador_applications` kuyruğuna düşer (admin onay).
+- Admin onaylayınca trigger `referral_code` üretip `ambassadors` satırına yazar.
+- `AmbassadorReferralCard` durumu: `pending | approved (kod gösterir)`.
+
+### 19) Profil Özellik Toggle'ları — Ambassador'a da ver
+- `ConsultantFeatureToggles` deseninden `AmbassadorFeatureToggles` türet.
+
+### 20) Takvim Yönetimi — Ambassador'a da ver
+- `AppointmentManagePanel` Ambassador profilinde de mount edilsin.
+
+---
+
+### Teknik notlar
+- Şema değişiklikleri (migration):
+  - `profiles`: `tag_line text(25)`, `bio text`, `birth_date date`, `founded_year int`, `sector text`, `theme text`, `verified boolean default false`, `websites jsonb default '[]'`, `whatsapp_cta_enabled boolean`, `show_on_map boolean`.
+  - `businesses`: `business_subtype text` (`startup` | `online`).
+  - `ambassador_applications` tablosu (status: `pending|approved|rejected`, RLS: kullanıcı kendi başvurusu, admin tümü).
+  - Storage bucket: `presentations` (RLS: owner CRUD).
+- Validasyon: `zod` şemalarını her settings formunda güncelle.
+
+### Sıralama
+1. Migrationlar (şema + bucket).  
+2. Ortak bileşenler: `AvatarUpload`, `WebsiteLinksField`, `TagLineInput`, `VerifiedBadge`.  
+3. Org kategori listesi güncellemesi.  
+4. 6 profilin settings formuna alan ilaveleri + zorunluluklar.  
+5. Ambassador referral admin onay akışı.  
+6. Ambassador'a Toggle'lar + Takvim panelinin eklenmesi.  
+7. Profil kartlarına mavi tik gösterimi.
+
+Onaylarsan migrationla başlayıp listeyi sırasıyla uygulayacağım.
