@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import {
-  Save, Loader2, Plus, X, Upload, BadgeCheck, ShieldCheck, MapPin, MessageCircle, FileText, Image as ImageIcon,
+  Save, Loader2, Plus, X, Upload, BadgeCheck, ShieldCheck, MapPin, MessageCircle, FileText, Image as ImageIcon, Cake,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -111,13 +111,14 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
   const [presentationName, setPresentationName] = useState<string | null>(null);
   const [presentationPath, setPresentationPath] = useState<string | null>(null);
   const [isVerified, setIsVerified] = useState(false);
+  const [birthdayReminder, setBirthdayReminder] = useState(false);
 
   useEffect(() => {
     if (!user) return;
     (async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("full_name, business_name, avatar_url, tag_line, bio, birth_date, founded_year, business_sector, theme, websites, show_on_map, whatsapp_cta_enabled, business_subtype, presentation_name, presentation_path, is_verified")
+        .select("full_name, business_name, avatar_url, tag_line, bio, birth_date, founded_year, business_sector, theme, websites, show_on_map, whatsapp_cta_enabled, business_subtype, presentation_name, presentation_path, is_verified, birthday_reminder_enabled")
         .eq("id", user.id)
         .maybeSingle();
       if (data) {
@@ -138,6 +139,7 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
         setPresentationName(data.presentation_name ?? null);
         setPresentationPath(data.presentation_path ?? null);
         setIsVerified(!!data.is_verified);
+        setBirthdayReminder(!!(data as any).birthday_reminder_enabled);
       }
       setEmail(user.email ?? "");
       setLoading(false);
@@ -208,7 +210,10 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
         websites: cleanWebsites,
       };
       if (cfg.showOrgName) payload.business_name = orgName.trim();
-      if (cfg.showBirthDate) payload.birth_date = birthDate || null;
+      if (cfg.showBirthDate) {
+        payload.birth_date = birthDate || null;
+        payload.birthday_reminder_enabled = birthdayReminder;
+      }
       if (cfg.showFoundedYear) payload.founded_year = foundedYear ? Number(foundedYear) : null;
       if (cfg.showSector) payload.business_sector = sector.trim() || null;
       if (cfg.showTheme) payload.theme = theme.trim() || null;
@@ -326,6 +331,18 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
           <div>
             <Label>Doğum Tarihi</Label>
             <Input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
+            <div className="mt-2 flex items-start justify-between gap-3 rounded-lg border border-border bg-muted/30 px-3 py-2">
+              <div className="flex items-start gap-2">
+                <Cake className="h-4 w-4 text-pink-500 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium">Doğum günü hatırlatması</p>
+                  <p className="text-xs text-muted-foreground">
+                    Açıkken: doğum gününe 14 gün kala bağlantılarına “🎁 Hediye kupon gönder” CTA gösterilir.
+                  </p>
+                </div>
+              </div>
+              <Switch checked={birthdayReminder} onCheckedChange={setBirthdayReminder} disabled={!birthDate} />
+            </div>
           </div>
         )}
         {cfg.showFoundedYear && (

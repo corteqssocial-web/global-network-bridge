@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Coffee, Calendar, Info, ShieldCheck, Users, Heart, Plane, Briefcase, Eye, EyeOff, Linkedin, FileText, Presentation, BadgeCheck } from "lucide-react";
+import { MapPin, Coffee, Calendar, Info, ShieldCheck, Users, Heart, Plane, Briefcase, Eye, EyeOff, Linkedin, FileText, Presentation, BadgeCheck, Cake, Gift } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
@@ -56,6 +57,7 @@ const IndividualPublicCard = ({
   const [activeCafe, setActiveCafe] = useState<{ id: string; name: string; theme?: string } | null>(null);
   const [followers, setFollowers] = useState<number>(0);
   const [isVerified, setIsVerified] = useState(false);
+  const [birthdayDays, setBirthdayDays] = useState<number | null>(null);
   const followingCount = list("user").length;
 
   useEffect(() => {
@@ -80,10 +82,20 @@ const IndividualPublicCard = ({
       if (!cancelled) setFollowers(count || 0);
       const { data: prof } = await supabase
         .from("profiles")
-        .select("is_verified")
+        .select("is_verified, birth_date, birthday_reminder_enabled")
         .eq("id", user.id)
         .maybeSingle();
       if (!cancelled && prof?.is_verified) setIsVerified(true);
+      if (!cancelled && prof?.birth_date && (prof as any).birthday_reminder_enabled) {
+        const bd = new Date(prof.birth_date as string);
+        const now = new Date();
+        const next = new Date(now.getFullYear(), bd.getMonth(), bd.getDate());
+        if (next.getTime() < new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()) {
+          next.setFullYear(now.getFullYear() + 1);
+        }
+        const days = Math.round((next.getTime() - now.getTime()) / 86400000);
+        if (days >= 0 && days <= 14) setBirthdayDays(days);
+      }
     })();
     return () => { cancelled = true; };
   }, [user?.id]);
@@ -129,7 +141,29 @@ const IndividualPublicCard = ({
               </TooltipProvider>
             )}
             <CafeOpenCTA userId={user?.id} />
+            {birthdayDays !== null && (
+              <span className="inline-flex items-center gap-1 text-[11px] font-medium text-pink-600 bg-pink-500/10 border border-pink-500/30 rounded-full px-2 py-0.5">
+                <Cake className="h-3 w-3" />
+                {birthdayDays === 0 ? "Bugün doğum günü!" : `Doğum gününe ${birthdayDays} gün`}
+              </span>
+            )}
           </div>
+
+          {birthdayDays !== null && (
+            <div className="mt-2 flex items-center justify-between gap-3 rounded-xl border border-pink-500/30 bg-gradient-to-r from-pink-500/10 to-amber-500/10 px-3 py-2">
+              <div className="flex items-center gap-2 text-sm">
+                <Gift className="h-4 w-4 text-pink-600" />
+                <span className="text-foreground/90">
+                  {name.split(" ")[0]}'in doğum günü yaklaşıyor — bir sürpriz hazırla.
+                </span>
+              </div>
+              <Button asChild size="sm" className="gap-1.5 bg-gradient-to-r from-pink-500 to-amber-500 text-white hover:opacity-90">
+                <Link to={`/coupons/gift?to=${user?.id ?? ""}`}>
+                  <Gift className="h-3.5 w-3.5" /> Hediye Kupon Gönder
+                </Link>
+              </Button>
+            </div>
+          )}
 
           {(title || email) && (
             <p className="text-sm text-muted-foreground mt-0.5 truncate">
