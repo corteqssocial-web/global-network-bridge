@@ -31,6 +31,7 @@ import ConsultantCategoryManager from "@/components/ConsultantCategoryManager";
 import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
 import MapAddressBanner from "@/components/MapAddressBanner";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
+import MyOpenCafesAsEvents from "@/components/profiles/MyOpenCafesAsEvents";
 import NotificationsList from "@/components/NotificationsList";
 import SocialMediaInputs from "@/components/SocialMediaInputs";
 import ConsultantFeatureToggles from "@/components/profiles/ConsultantFeatureToggles";
@@ -340,6 +341,7 @@ const ProfileConsultant = () => {
           </div>
         </TabsContent>
         <TabsContent value="events" className="mt-6">
+          <div className="mb-4"><MyOpenCafesAsEvents /></div>
           {managingEvent ? (
             <EventManagePanel event={{ id: 0, title: managingEvent.title, date: managingEvent.event_date, attendees: managingEvent.max_attendees ?? 0, status: managingEvent.status }} onBack={() => setManagingEvent(null)} />
           ) : showCreateEvent ? (

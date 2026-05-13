@@ -29,6 +29,7 @@ import NotificationsList from "@/components/NotificationsList";
 import CorBotPromoBanner from "@/components/CorBotPromoBanner";
 import EmptyDashboardState from "@/components/EmptyDashboardState";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
+import MyOpenCafesAsEvents from "@/components/profiles/MyOpenCafesAsEvents";
 import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
 import AmbassadorReferralCard from "@/components/AmbassadorReferralCard";
 
@@ -278,6 +279,7 @@ const ProfileAmbassador = () => {
 
         {/* EVENTS */}
         <TabsContent value="events" className="mt-6">
+          <div className="mb-4"><MyOpenCafesAsEvents /></div>
           {managingEvent ? (
             <EventManagePanel event={managingEvent} onBack={() => setManagingEvent(null)} />
           ) : viewingEvent ? (

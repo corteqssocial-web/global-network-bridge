@@ -26,6 +26,7 @@ import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
 import CorBotPromoBanner from "@/components/CorBotPromoBanner";
 import MapAddressBanner from "@/components/MapAddressBanner";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
+import MyOpenCafesAsEvents from "@/components/profiles/MyOpenCafesAsEvents";
 import NotificationsList from "@/components/NotificationsList";
 import SocialMediaInputs from "@/components/SocialMediaInputs";
 
@@ -141,6 +142,7 @@ const ProfileAssociation = () => {
 
         {/* EVENTS */}
         <TabsContent value="events" className="mt-6">
+          <div className="mb-4"><MyOpenCafesAsEvents /></div>
           {managingEvent ? (
             <EventManagePanel event={managingEvent} onBack={() => setManagingEvent(null)} />
           ) : showCreateEvent ? (

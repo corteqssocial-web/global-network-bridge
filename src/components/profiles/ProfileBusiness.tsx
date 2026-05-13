@@ -35,6 +35,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import QRScannerMock from "@/components/QRScannerMock";
 import MapAddressBanner from "@/components/MapAddressBanner";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
+import MyOpenCafesAsEvents from "@/components/profiles/MyOpenCafesAsEvents";
 import NotificationsList from "@/components/NotificationsList";
 import SocialMediaInputs from "@/components/SocialMediaInputs";
 import { toast } from "@/hooks/use-toast";
@@ -463,6 +464,7 @@ const ProfileBusiness = () => {
 
         {/* EVENTS */}
         <TabsContent value="events" className="mt-6">
+          <div className="mb-4"><MyOpenCafesAsEvents /></div>
           {managingEvent ? (
             <EventManagePanel event={managingEvent} onBack={() => { setManagingEvent(null); loadEvents(); }} />
           ) : showCreateEvent ? (

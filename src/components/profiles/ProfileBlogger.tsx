@@ -27,6 +27,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import WhatsAppGroupsTab from "@/components/profiles/WhatsAppGroupsTab";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
+import MyOpenCafesAsEvents from "@/components/profiles/MyOpenCafesAsEvents";
 import NotificationsList from "@/components/NotificationsList";
 import { addDiasporaBlogLink, getDiasporaBlogLinksByAuthor, removeDiasporaBlogLink, type DiasporaBlogLink } from "@/lib/diasporaBlogLinks";
 import { toast } from "@/hooks/use-toast";
@@ -355,6 +356,7 @@ const ProfileBlogger = () => {
 
         {/* EVENTS */}
         <TabsContent value="events" className="mt-6">
+          <div className="mb-4"><MyOpenCafesAsEvents /></div>
           {managingEvent ? (
             <EventManagePanel event={managingEvent} onBack={() => setManagingEvent(null)} />
           ) : showCreateEvent ? (
