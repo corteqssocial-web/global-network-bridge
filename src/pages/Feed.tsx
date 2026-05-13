@@ -474,9 +474,15 @@ const Feed = () => {
     const role = p.author_role || "user";
     const ringGradient = roleStyles[role] || roleStyles.user;
     const initial = (author?.full_name || "?").slice(0, 1).toUpperCase();
-    const minis = p.mini_images && p.mini_images.length > 0
-      ? p.mini_images
-      : p.image_url ? [p.image_url] : [];
+    const mediaArr: MediaItem[] = (p.media && p.media.length > 0)
+      ? p.media
+      : (p.mini_images && p.mini_images.length > 0
+        ? p.mini_images.map((u) => ({ type: "image" as const, url: u }))
+        : (p.image_url ? [{ type: "image" as const, url: p.image_url }] : []));
+    const videos = mediaArr.filter((m) => m.type === "video");
+    const images = mediaArr.filter((m) => m.type === "image");
+    const isOwner = !!user && user.id === p.user_id && !demoMode;
+    const isEditing = editingId === p.id;
 
     return (
       <article key={p.id} className="py-4 group">
@@ -511,18 +517,59 @@ const Feed = () => {
               </div>
             )}
           </div>
+          {isOwner && (
+            <div className="relative">
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full" onClick={() => setMenuOpenId(menuOpenId === p.id ? null : p.id)}>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+              {menuOpenId === p.id && (
+                <div className="absolute right-0 top-9 z-20 w-36 rounded-lg border border-border bg-popover shadow-lg overflow-hidden">
+                  <button onClick={() => startEdit(p)} className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-muted text-left">
+                    <Pencil className="h-3.5 w-3.5" /> Düzenle
+                  </button>
+                  <button onClick={() => deletePost(p)} className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-muted text-left text-rose-500">
+                    <Trash2 className="h-3.5 w-3.5" /> Sil
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </header>
 
-        <p className="text-[15px] whitespace-pre-wrap leading-relaxed text-foreground/90 pl-[52px]">
-          {p.content}
-        </p>
+        {isEditing ? (
+          <div className="pl-[52px] space-y-2">
+            <Textarea value={editDraft} onChange={(e) => setEditDraft(e.target.value)} rows={3} className="text-sm" />
+            <div className="flex gap-2">
+              <Button size="sm" onClick={() => saveEdit(p)} className="h-7 text-xs">Kaydet</Button>
+              <Button size="sm" variant="ghost" onClick={() => setEditingId(null)} className="h-7 text-xs">Vazgeç</Button>
+            </div>
+          </div>
+        ) : (
+          <p className="text-[15px] whitespace-pre-wrap leading-relaxed text-foreground/90 pl-[52px]">
+            {p.content}
+          </p>
+        )}
 
-        {minis.length > 0 && (
+        {videos.length > 0 && (
+          <div className="pl-[52px] mt-2.5 space-y-2">
+            {videos.map((v, i) => (
+              <video
+                key={`v-${i}`}
+                src={v.url}
+                controls
+                playsInline
+                className="w-full max-h-[520px] rounded-xl bg-black ring-1 ring-border/60"
+              />
+            ))}
+          </div>
+        )}
+
+        {images.length > 0 && (
           <div className="pl-[52px] mt-2.5 flex gap-1.5 flex-wrap">
-            {minis.slice(0, 4).map((src, i) => (
-              <button key={i} type="button" className="relative overflow-hidden rounded-xl ring-1 ring-border/60 hover:ring-primary/40 transition-all">
-                <img src={src} alt="" loading="lazy" className="h-20 w-20 object-cover hover:scale-105 transition-transform" />
-              </button>
+            {images.slice(0, 6).map((m, i) => (
+              <a key={`i-${i}`} href={m.url} target="_blank" rel="noreferrer" className="relative overflow-hidden rounded-xl ring-1 ring-border/60 hover:ring-primary/40 transition-all">
+                <img src={m.url} alt="" loading="lazy" className="h-20 w-20 object-cover hover:scale-105 transition-transform" />
+              </a>
             ))}
           </div>
         )}
