@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import {
-  Save, Loader2, Plus, X, Upload, BadgeCheck, ShieldCheck, MapPin, MessageCircle, FileText, Image as ImageIcon,
+  Save, Loader2, Plus, X, Upload, BadgeCheck, ShieldCheck, MapPin, MessageCircle, FileText, Image as ImageIcon, Cake,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
