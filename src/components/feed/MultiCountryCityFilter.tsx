@@ -116,7 +116,7 @@ const MultiCountryCityFilter = ({
               {selectedCountries.length === 0
                 ? selectedContinent
                   ? "Kıta Aktif"
-                  : "Tüm Ülkeler"
+                  : "Ülke"
                 : `${selectedCountries.length}${isPremium ? "" : `/${FREE_COUNTRY_LIMIT}`} Ülke`}
               <ChevronDown className="h-3 w-3 text-muted-foreground" />
             </Button>
@@ -176,7 +176,7 @@ const MultiCountryCityFilter = ({
             <Button variant="outline" size="sm" className="gap-1.5 h-9">
               <MapPin className="h-4 w-4 text-turquoise" />
               {selectedCities.length === 0
-                ? "Tüm Şehirler"
+                ? "Şehir"
                 : `${selectedCities.length} Şehir`}
               <ChevronDown className="h-3 w-3 text-muted-foreground" />
             </Button>

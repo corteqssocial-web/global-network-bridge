@@ -142,6 +142,38 @@ const Feed = () => {
     cities: selectedCities,
   });
   const [showAllCafeCities, setShowAllCafeCities] = useState(false);
+  const [cafeSearch, setCafeSearch] = useState("");
+  const [storyOffset, setStoryOffset] = useState(0);
+
+  // Instagram-style auto-rotate of cafe stories every 4s
+  useEffect(() => {
+    if (activeCafes.length <= 1) return;
+    const id = setInterval(() => {
+      setStoryOffset((o) => (o + 1) % activeCafes.length);
+    }, 4000);
+    return () => clearInterval(id);
+  }, [activeCafes.length]);
+
+  // Top 3 popular cafes (always shown in sidebar)
+  const topPopularCafes = useMemo(
+    () => [...activeCafes].sort((a, b) => (b.member_count || 0) - (a.member_count || 0)).slice(0, 3),
+    [activeCafes],
+  );
+
+  // Filtered cafes for sidebar search (by country/city/name keyword)
+  const filteredCafes = useMemo(() => {
+    const q = cafeSearch.trim().toLocaleLowerCase("tr");
+    if (!q) return activeCafes;
+    return activeCafes.filter((c) =>
+      [c.name, c.country, c.city, c.theme].filter(Boolean).some((v) => v!.toLocaleLowerCase("tr").includes(q)),
+    );
+  }, [activeCafes, cafeSearch]);
+
+  // Rotated story list — instagram-like cycling window
+  const rotatedCafes = useMemo(() => {
+    if (activeCafes.length === 0) return activeCafes;
+    return [...activeCafes.slice(storyOffset), ...activeCafes.slice(0, storyOffset)];
+  }, [activeCafes, storyOffset]);
   const inCafe = !!cafeId && !!cafe;
   const cafeOpen = inCafe && new Date(cafe!.closes_at) > new Date();
 
@@ -739,10 +771,63 @@ const Feed = () => {
                 <p className="text-[10px] text-muted-foreground mb-3 leading-snug">
                   Aktif cafe'ler — açılış 2 saat, Premium 4 saat. Günde 1 katılım.
                 </p>
+
+                {/* Search: ülke / şehir / anahtar kelime */}
+                <div className="relative mb-3">
+                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+                  <Input
+                    value={cafeSearch}
+                    onChange={(e) => setCafeSearch(e.target.value)}
+                    placeholder="Ülke, şehir veya cafe ara…"
+                    className="h-8 pl-8 pr-7 text-xs"
+                  />
+                  {cafeSearch && (
+                    <button
+                      type="button"
+                      onClick={() => setCafeSearch("")}
+                      className="absolute right-1.5 top-1/2 -translate-y-1/2 h-5 w-5 rounded hover:bg-muted flex items-center justify-center"
+                      aria-label="Temizle"
+                    >
+                      <X className="h-3 w-3 text-muted-foreground" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Top 3 popüler — her zaman görünür */}
+                {topPopularCafes.length > 0 && (
+                  <div className="mb-3">
+                    <div className="text-[10px] font-semibold text-amber-600 mb-1.5 px-1 flex items-center gap-1">
+                      🔥 En Popüler 3 Cafe
+                    </div>
+                    <div className="space-y-1">
+                      {topPopularCafes.map((c) => {
+                        const st = themeStyle(c.theme);
+                        const Icon = st.icon;
+                        return (
+                          <Link
+                            key={`top-${c.id}`}
+                            to={`/cadde/${c.id}`}
+                            className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg border border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 transition-colors"
+                          >
+                            <div className={`h-7 w-7 rounded-full ${st.bg} flex items-center justify-center shrink-0`}>
+                              <Icon className={`h-3.5 w-3.5 ${st.color}`} />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="text-xs font-semibold truncate">{c.name}</div>
+                              <div className="text-[10px] text-muted-foreground truncate">
+                                {[c.city, c.country].filter(Boolean).join(" · ") || c.theme} · 👥 {c.member_count}
+                              </div>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
                 {(() => {
                   // Group cafes by city, rank cities by total member_count
                   const cityMap = new Map<string, { city: string; country: string; total: number; cafes: typeof activeCafes }>();
-                  for (const c of activeCafes) {
+                  for (const c of filteredCafes) {
                     const key = `${c.city || "Global"}|${c.country || ""}`;
                     const entry = cityMap.get(key) || { city: c.city || "Global", country: c.country || "", total: 0, cafes: [] };
                     entry.total += c.member_count || 0;
@@ -982,7 +1067,7 @@ const Feed = () => {
                       <div className="text-[10px] font-semibold text-center truncate w-full">Berlin IT</div>
                       <div className="text-[9px] text-muted-foreground">⏰ 1s 23dk</div>
                     </Link>
-                    {activeCafes.map((c) => {
+                    {rotatedCafes.map((c) => {
                       const st = themeStyle(c.theme);
                       const Icon = st.icon;
                       const closeTime = new Date(c.closes_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
