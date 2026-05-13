@@ -212,8 +212,12 @@ const Feed = () => {
         } else if (selectedCountries.length > 0) {
           query = query.in("country", selectedCountries);
         } else {
-          // Global akış: Türkiye paylaşımları yalnızca yüksek etkileşimde sızar
-          query = query.or(`country.is.null,country.neq.Türkiye,like_count.gte.${TR_GLOBAL_THRESHOLD}`);
+          // Global akış: Tüm ülkelerden paylaşımlar dahil. Akış hızı yüksekse
+          // yalnızca yeterli etkileşim alan paylaşımlar görünür (ortalama ~2sn/post).
+          const minLikes = await computeGlobalLikeThreshold();
+          if (minLikes > 0) {
+            query = query.gte("like_count", minLikes);
+          }
         }
       }
 
