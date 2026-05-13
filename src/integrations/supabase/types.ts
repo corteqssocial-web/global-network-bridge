@@ -549,6 +549,7 @@ export type Database = {
           id: string
           image_url: string | null
           like_count: number
+          media: Json
           status: string
           tags: string[] | null
           updated_at: string
@@ -565,6 +566,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           like_count?: number
+          media?: Json
           status?: string
           tags?: string[] | null
           updated_at?: string
@@ -581,6 +583,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           like_count?: number
+          media?: Json
           status?: string
           tags?: string[] | null
           updated_at?: string
