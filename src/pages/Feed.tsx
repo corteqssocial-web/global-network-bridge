@@ -829,7 +829,60 @@ const Feed = () => {
                     </div>
                   </div>
                 )}
-                {(() => {
+                {/* Active search → flat results list (overrides city grouping) */}
+                {cafeSearch.trim() && (
+                  <div className="mb-3">
+                    <div className="text-[10px] text-muted-foreground mb-1.5 px-1 flex items-center justify-between">
+                      <span>"{cafeSearch.trim()}" için {filteredCafes.length} sonuç</span>
+                      {filteredCafes.length > 0 && (
+                        <span className="text-[9px]">ülke / şehir / isim</span>
+                      )}
+                    </div>
+                    {filteredCafes.length === 0 ? (
+                      <div className="rounded-lg border border-dashed border-border p-3 text-center">
+                        <p className="text-[11px] text-muted-foreground mb-2">
+                          "{cafeSearch.trim()}" ile eşleşen aktif cafe yok.
+                        </p>
+                        {user && (
+                          <Link
+                            to={categoryAccountLink}
+                            className="inline-block text-[11px] font-semibold text-primary hover:underline"
+                          >
+                            ☕ İlk cafe'yi sen aç →
+                          </Link>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="space-y-1 max-h-72 overflow-y-auto pr-1">
+                        {[...filteredCafes]
+                          .sort((a, b) => (b.member_count || 0) - (a.member_count || 0))
+                          .map((c) => {
+                            const st = themeStyle(c.theme);
+                            const Icon = st.icon;
+                            return (
+                              <Link
+                                key={`s-${c.id}`}
+                                to={`/cadde/${c.id}`}
+                                className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/60 transition-colors"
+                              >
+                                <div className={`h-7 w-7 rounded-full ${st.bg} flex items-center justify-center shrink-0`}>
+                                  <Icon className={`h-3.5 w-3.5 ${st.color}`} />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <div className="text-xs font-semibold truncate">{c.name}</div>
+                                  <div className="text-[10px] text-muted-foreground truncate">
+                                    {[c.city, c.country].filter(Boolean).join(" · ") || c.theme} · 👥 {c.member_count}
+                                  </div>
+                                </div>
+                              </Link>
+                            );
+                          })}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {!cafeSearch.trim() && (() => {
                   // Group cafes by city, rank cities by total member_count
                   const cityMap = new Map<string, { city: string; country: string; total: number; cafes: typeof activeCafes }>();
                   for (const c of filteredCafes) {
