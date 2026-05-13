@@ -244,6 +244,10 @@ const MultiCountryCityFilter = ({
         )}
       </div>
 
+      <p className="text-[10px] text-muted-foreground leading-snug px-0.5">
+        🌉 <strong>Köprü</strong>: TR–Diaspora arasında <em>Taşınanlar / İş Yapanlar / Mentör Arayanlar</em> için ortak akış.
+      </p>
+
       {(selectedContinent || selectedCountries.length > 0 || selectedCities.length > 0) && (
         <div className="flex flex-wrap gap-1.5">
           {selectedContinent && (
