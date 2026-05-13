@@ -1108,6 +1108,7 @@ export type Database = {
           referred_by_code: string | null
           school: string | null
           show_on_map: boolean
+          social_links: Json
           tag_line: string | null
           theme: string | null
           updated_at: string
@@ -1151,6 +1152,7 @@ export type Database = {
           referred_by_code?: string | null
           school?: string | null
           show_on_map?: boolean
+          social_links?: Json
           tag_line?: string | null
           theme?: string | null
           updated_at?: string
@@ -1194,6 +1196,7 @@ export type Database = {
           referred_by_code?: string | null
           school?: string | null
           show_on_map?: boolean
+          social_links?: Json
           tag_line?: string | null
           theme?: string | null
           updated_at?: string
