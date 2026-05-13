@@ -103,34 +103,6 @@ const MultiCountryCityFilter = ({
         </Button>
       </div>
       <div className="flex flex-wrap items-center gap-2">
-        {/* Continent picker */}
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline" size="sm" className="gap-1.5 h-9">
-              <Sparkles className="h-4 w-4 text-amber-500" />
-              {selectedContinent ?? "Kıta Seç"}
-              <ChevronDown className="h-3 w-3 text-muted-foreground" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent align="start" className="w-56 p-1">
-            <button
-              onClick={() => pickContinent(null)}
-              className={`w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent ${!selectedContinent ? "bg-accent/50 font-medium" : ""}`}
-            >
-              🌍 Tüm Kıtalar
-            </button>
-            {continentList.map((cont) => (
-              <button
-                key={cont}
-                onClick={() => pickContinent(cont)}
-                className={`w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent ${selectedContinent === cont ? "bg-accent/50 font-medium" : ""}`}
-              >
-                {cont}
-              </button>
-            ))}
-          </PopoverContent>
-        </Popover>
-
         {/* Countries */}
         <Popover>
           <PopoverTrigger asChild>
@@ -253,13 +225,13 @@ const MultiCountryCityFilter = ({
           </PopoverContent>
         </Popover>
 
-        {/* Köprü — herkese açık ortak cadde */}
+        {/* Köprü — TR↔Diaspora ortak cadde */}
         <Button
           variant={isKopru ? "default" : "outline"}
           size="sm"
           onClick={pickKopru}
           className="gap-1.5 h-9"
-          title="Taşınacaklar & Diaspora ile İş Yapanlar"
+          title="TR-Diaspora arasında: Taşınanlar / İş Yapanlar / Mentör Arayanlar"
         >
           <Pin className="h-4 w-4" />
           🌉 Köprü
@@ -271,6 +243,10 @@ const MultiCountryCityFilter = ({
           </Badge>
         )}
       </div>
+
+      <p className="text-[10px] text-muted-foreground leading-snug px-0.5">
+        🌉 <strong>Köprü</strong>: TR–Diaspora arasında <em>Taşınanlar / İş Yapanlar / Mentör Arayanlar</em> için ortak akış.
+      </p>
 
       {(selectedContinent || selectedCountries.length > 0 || selectedCities.length > 0) && (
         <div className="flex flex-wrap gap-1.5">

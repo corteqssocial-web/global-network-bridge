@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Send, MapPin, Globe, Info } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Send, MapPin, Globe, Info, ImagePlus, Video, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -19,6 +19,8 @@ interface Props {
   cafeId?: string;
 }
 
+interface MediaItem { type: "image" | "video"; url: string; path: string }
+
 const isTRPhone = (p?: string | null) => {
   if (!p) return false;
   const x = p.replace(/\s|-/g, "");
@@ -36,8 +38,11 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
   const [globalOnly, setGlobalOnly] = useState(false);
   const [kopruOnly, setKopruOnly] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [media, setMedia] = useState<MediaItem[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const imgInputRef = useRef<HTMLInputElement>(null);
+  const vidInputRef = useRef<HTMLInputElement>(null);
 
-  // Load user's profile country/city as defaults
   useEffect(() => {
     if (!user) return;
     (async () => {
@@ -57,24 +62,65 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
 
   const cities = country ? countryCities[country] || [] : [];
 
+  const handleFiles = async (files: FileList | null, kind: "image" | "video") => {
+    if (!files || !user) return;
+    const arr = Array.from(files);
+    const maxImg = 8 * 1024 * 1024; // 8MB per image
+    const maxVid = 80 * 1024 * 1024; // 80MB per video
+    setUploading(true);
+    try {
+      for (const f of arr) {
+        if (kind === "image" && f.size > maxImg) {
+          toast({ title: `${f.name} çok büyük (max 8MB)`, variant: "destructive" });
+          continue;
+        }
+        if (kind === "video" && f.size > maxVid) {
+          toast({ title: `${f.name} çok büyük (max 80MB)`, variant: "destructive" });
+          continue;
+        }
+        const ext = f.name.split(".").pop() || (kind === "image" ? "jpg" : "mp4");
+        const path = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+        const { error } = await supabase.storage.from("post-archive").upload(path, f, { contentType: f.type });
+        if (error) {
+          toast({ title: "Yükleme başarısız", description: error.message, variant: "destructive" });
+          continue;
+        }
+        const { data: pub } = supabase.storage.from("post-archive").getPublicUrl(path);
+        setMedia((m) => [...m, { type: kind, url: pub.publicUrl, path }]);
+      }
+    } finally {
+      setUploading(false);
+      if (imgInputRef.current) imgInputRef.current.value = "";
+      if (vidInputRef.current) vidInputRef.current.value = "";
+    }
+  };
+
+  const removeMedia = async (idx: number) => {
+    const item = media[idx];
+    setMedia((m) => m.filter((_, i) => i !== idx));
+    if (item) await supabase.storage.from("post-archive").remove([item.path]);
+  };
+
   const submit = async () => {
     if (!user) {
       toast({ title: "Giriş yapmalısınız", variant: "destructive" });
       return;
     }
-    if (!content.trim()) return;
+    if (!content.trim() && media.length === 0) return;
 
-    // Köprü is the open all-access cadde; otherwise TR users are locked to Türkiye.
     const finalCountry = kopruOnly ? "Köprü" : (isTR ? "Türkiye" : (globalOnly ? null : (country || null)));
     const finalCity = kopruOnly ? null : (isTR ? (profileCity || city || null) : (globalOnly ? null : (city || null)));
 
     setSubmitting(true);
+    const firstImg = media.find((m) => m.type === "image");
     const { error } = await supabase.from("feed_posts").insert({
       user_id: user.id,
       content: content.trim(),
       country: finalCountry,
       city: finalCity,
       author_role: accountType || "user",
+      image_url: firstImg?.url || null,
+      media: media.map(({ type, url }) => ({ type, url })) as any,
       ...(cafeId ? { cafe_id: cafeId } : {}),
     } as any);
     setSubmitting(false);
@@ -84,6 +130,7 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
       return;
     }
     setContent("");
+    setMedia([]);
     setCountry(profileCountry);
     setCity(profileCity);
     setGlobalOnly(false);
@@ -109,6 +156,29 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
         rows={3}
         className="resize-none"
       />
+
+      {media.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {media.map((m, i) => (
+            <div key={i} className="relative group">
+              {m.type === "image" ? (
+                <img src={m.url} alt="" className="h-20 w-20 object-cover rounded-lg ring-1 ring-border" />
+              ) : (
+                <video src={m.url} className="h-20 w-32 object-cover rounded-lg ring-1 ring-border bg-black" muted />
+              )}
+              <button
+                type="button"
+                onClick={() => removeMedia(i)}
+                className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-rose-500 text-white flex items-center justify-center shadow"
+                aria-label="Kaldır"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
       {isTR ? (
         <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-2.5 text-[11px] text-amber-700 dark:text-amber-300 flex items-start gap-2">
           <Info className="h-3.5 w-3.5 mt-0.5 shrink-0" />
@@ -121,7 +191,18 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
           Varsayılan olarak profilindeki <strong>{profileCity || "şehir"} · {profileCountry || "ülke"}</strong> akışında görünür. İstersen başka bir @Ülke / @Şehir seç ya da sadece global yayınla.
         </p>
       )}
+
       <div className="flex flex-wrap gap-2 items-center">
+        <input ref={imgInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleFiles(e.target.files, "image")} />
+        <input ref={vidInputRef} type="file" accept="video/*" className="hidden" onChange={(e) => handleFiles(e.target.files, "video")} />
+        <Button type="button" variant="outline" size="sm" onClick={() => imgInputRef.current?.click()} disabled={uploading} className="h-9 gap-1.5">
+          <ImagePlus className="h-4 w-4 text-emerald-500" /> Fotoğraf
+        </Button>
+        <Button type="button" variant="outline" size="sm" onClick={() => vidInputRef.current?.click()} disabled={uploading} className="h-9 gap-1.5">
+          <Video className="h-4 w-4 text-violet-500" /> Video
+        </Button>
+        {uploading && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
+
         <button
           type="button"
           onClick={() => setKopruOnly((v) => !v)}
@@ -130,7 +211,7 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
               ? "bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 text-white border-transparent"
               : "bg-background border-border hover:bg-muted"
           }`}
-          title="Herkese açık ortak cadde"
+          title="TR-Diaspora arasında Taşınanlar / İş Yapanlar / Mentör Arayanlar"
         >
           🌉 {kopruOnly ? "Köprü ✓" : "Köprü"}
         </button>
@@ -188,11 +269,11 @@ const CreatePostForm = ({ onCreated, cafeId }: Props) => {
           <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">@Türkiye 🇹🇷</span>
         )}
         {kopruOnly && (
-          <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 text-white font-semibold">🌉 Köprü — herkese açık</span>
+          <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 text-white font-semibold">🌉 Köprü — TR↔Diaspora</span>
         )}
         <Button
           onClick={submit}
-          disabled={submitting || !content.trim()}
+          disabled={submitting || uploading || (!content.trim() && media.length === 0)}
           className="ml-auto gap-1.5"
           size="sm"
         >

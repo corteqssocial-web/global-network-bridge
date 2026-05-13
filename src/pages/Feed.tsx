@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { Heart, MapPin, Loader2, Newspaper, Play, MessageCircle, Smile, Share2, Users, Briefcase, Building2, Calendar, Flag, PenLine, Sparkles, UserPlus, Plane, Star, Coffee, Lock, Code2, Stethoscope, GraduationCap, ArrowLeft, Clock, LogIn, Check, X, Search } from "lucide-react";
+import { Heart, MapPin, Loader2, Newspaper, Play, MessageCircle, Smile, Share2, Users, Briefcase, Building2, Calendar, Flag, PenLine, Sparkles, UserPlus, Plane, Star, Coffee, Lock, Code2, Stethoscope, GraduationCap, ArrowLeft, Clock, LogIn, Check, X, Search, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -40,12 +40,14 @@ const computeGlobalLikeThreshold = async (): Promise<number> => {
   return Math.max(1, Math.round(rate));
 };
 
+interface MediaItem { type: "image" | "video"; url: string }
 interface FeedPost {
   id: string;
   user_id: string;
   content: string;
   image_url: string | null;
   mini_images?: string[];
+  media?: MediaItem[];
   country: string | null;
   city: string | null;
   author_role: string | null;
@@ -132,6 +134,9 @@ const Feed = () => {
   const [openComments, setOpenComments] = useState<Set<string>>(new Set());
   const [commentsMap, setCommentsMap] = useState<Record<string, { id: string; author: string; text: string; created_at: string }[]>>({});
   const [commentDrafts, setCommentDrafts] = useState<Record<string, string>>({});
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editDraft, setEditDraft] = useState("");
+  const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
   const { cafes: activeCafes, refresh: refreshCafes } = useActiveCafes({
     countries: selectedCountries,
     cities: selectedCities,
@@ -436,15 +441,48 @@ const Feed = () => {
 
   const { following, suggestions, follow } = useFeedSocial();
 
+  const startEdit = (p: FeedPost) => {
+    setEditingId(p.id);
+    setEditDraft(p.content);
+    setMenuOpenId(null);
+  };
+
+  const saveEdit = async (p: FeedPost) => {
+    const text = editDraft.trim();
+    if (!text) return;
+    setPosts((prev) => prev.map((x) => (x.id === p.id ? { ...x, content: text } : x)));
+    setEditingId(null);
+    if (demoMode) return;
+    const { error } = await supabase.from("feed_posts").update({ content: text }).eq("id", p.id);
+    if (error) toast({ title: "Düzenlenemedi", description: error.message, variant: "destructive" });
+    else toast({ title: "Paylaşım güncellendi" });
+  };
+
+  const deletePost = async (p: FeedPost) => {
+    if (!confirm("Bu paylaşımı silmek istediğinden emin misin?")) return;
+    setPosts((prev) => prev.filter((x) => x.id !== p.id));
+    setMenuOpenId(null);
+    if (demoMode) return;
+    const { error } = await supabase.from("feed_posts").delete().eq("id", p.id);
+    if (error) toast({ title: "Silinemedi", description: error.message, variant: "destructive" });
+    else toast({ title: "Paylaşım silindi" });
+  };
+
   const renderPost = (p: FeedPost) => {
     const author = authorMap[p.user_id];
     const liked = likedIds.has(p.id);
     const role = p.author_role || "user";
     const ringGradient = roleStyles[role] || roleStyles.user;
     const initial = (author?.full_name || "?").slice(0, 1).toUpperCase();
-    const minis = p.mini_images && p.mini_images.length > 0
-      ? p.mini_images
-      : p.image_url ? [p.image_url] : [];
+    const mediaArr: MediaItem[] = (p.media && p.media.length > 0)
+      ? p.media
+      : (p.mini_images && p.mini_images.length > 0
+        ? p.mini_images.map((u) => ({ type: "image" as const, url: u }))
+        : (p.image_url ? [{ type: "image" as const, url: p.image_url }] : []));
+    const videos = mediaArr.filter((m) => m.type === "video");
+    const images = mediaArr.filter((m) => m.type === "image");
+    const isOwner = !!user && user.id === p.user_id && !demoMode;
+    const isEditing = editingId === p.id;
 
     return (
       <article key={p.id} className="py-4 group">
@@ -479,18 +517,59 @@ const Feed = () => {
               </div>
             )}
           </div>
+          {isOwner && (
+            <div className="relative">
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full" onClick={() => setMenuOpenId(menuOpenId === p.id ? null : p.id)}>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+              {menuOpenId === p.id && (
+                <div className="absolute right-0 top-9 z-20 w-36 rounded-lg border border-border bg-popover shadow-lg overflow-hidden">
+                  <button onClick={() => startEdit(p)} className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-muted text-left">
+                    <Pencil className="h-3.5 w-3.5" /> Düzenle
+                  </button>
+                  <button onClick={() => deletePost(p)} className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-muted text-left text-rose-500">
+                    <Trash2 className="h-3.5 w-3.5" /> Sil
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </header>
 
-        <p className="text-[15px] whitespace-pre-wrap leading-relaxed text-foreground/90 pl-[52px]">
-          {p.content}
-        </p>
+        {isEditing ? (
+          <div className="pl-[52px] space-y-2">
+            <Textarea value={editDraft} onChange={(e) => setEditDraft(e.target.value)} rows={3} className="text-sm" />
+            <div className="flex gap-2">
+              <Button size="sm" onClick={() => saveEdit(p)} className="h-7 text-xs">Kaydet</Button>
+              <Button size="sm" variant="ghost" onClick={() => setEditingId(null)} className="h-7 text-xs">Vazgeç</Button>
+            </div>
+          </div>
+        ) : (
+          <p className="text-[15px] whitespace-pre-wrap leading-relaxed text-foreground/90 pl-[52px]">
+            {p.content}
+          </p>
+        )}
 
-        {minis.length > 0 && (
+        {videos.length > 0 && (
+          <div className="pl-[52px] mt-2.5 space-y-2">
+            {videos.map((v, i) => (
+              <video
+                key={`v-${i}`}
+                src={v.url}
+                controls
+                playsInline
+                className="w-full max-h-[520px] rounded-xl bg-black ring-1 ring-border/60"
+              />
+            ))}
+          </div>
+        )}
+
+        {images.length > 0 && (
           <div className="pl-[52px] mt-2.5 flex gap-1.5 flex-wrap">
-            {minis.slice(0, 4).map((src, i) => (
-              <button key={i} type="button" className="relative overflow-hidden rounded-xl ring-1 ring-border/60 hover:ring-primary/40 transition-all">
-                <img src={src} alt="" loading="lazy" className="h-20 w-20 object-cover hover:scale-105 transition-transform" />
-              </button>
+            {images.slice(0, 6).map((m, i) => (
+              <a key={`i-${i}`} href={m.url} target="_blank" rel="noreferrer" className="relative overflow-hidden rounded-xl ring-1 ring-border/60 hover:ring-primary/40 transition-all">
+                <img src={m.url} alt="" loading="lazy" className="h-20 w-20 object-cover hover:scale-105 transition-transform" />
+              </a>
             ))}
           </div>
         )}
@@ -875,6 +954,53 @@ const Feed = () => {
 
             {/* CENTER FEED */}
             <div className="min-w-0">
+              {!inCafe && (
+                <div className="mb-4">
+                  <div className="flex items-center gap-2 px-1 mb-2">
+                    <Coffee className="h-4 w-4 text-amber-600" />
+                    <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Aktif Cafe'ler</h2>
+                    <Badge variant="secondary" className="text-[10px] ml-auto">{activeCafes.length + 1}</Badge>
+                  </div>
+                  <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 snap-x">
+                    {/* Demo cafe story */}
+                    <Link to="/cadde/demo-it" className="shrink-0 w-20 snap-start flex flex-col items-center gap-1 group">
+                      <div className="p-[2px] rounded-full bg-gradient-to-br from-amber-400 via-rose-400 to-violet-500">
+                        <div className="h-16 w-16 rounded-full bg-card flex items-center justify-center">
+                          <Coffee className="h-7 w-7 text-amber-600" />
+                        </div>
+                      </div>
+                      <div className="text-[10px] font-semibold text-center truncate w-full">Berlin IT</div>
+                      <div className="text-[9px] text-muted-foreground">⏰ 1s 23dk</div>
+                    </Link>
+                    {activeCafes.map((c) => {
+                      const st = themeStyle(c.theme);
+                      const Icon = st.icon;
+                      const closeTime = new Date(c.closes_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
+                      return (
+                        <Link key={c.id} to={`/cadde/${c.id}`} className="shrink-0 w-20 snap-start flex flex-col items-center gap-1 group">
+                          <div className="p-[2px] rounded-full bg-gradient-to-br from-rose-400 via-amber-400 via-emerald-400 to-violet-500">
+                            <div className={`h-16 w-16 rounded-full bg-card flex items-center justify-center ${st.bg}`}>
+                              <Icon className={`h-7 w-7 ${st.color}`} />
+                            </div>
+                          </div>
+                          <div className="text-[10px] font-semibold text-center truncate w-full" title={c.name}>{c.name}</div>
+                          {c.kind === "community" ? (
+                            <div className="text-[9px] text-muted-foreground whitespace-nowrap">⏰ {closeTime}</div>
+                          ) : (
+                            <div className="text-[9px] text-muted-foreground">∞ açık</div>
+                          )}
+                        </Link>
+                      );
+                    })}
+                    {user && (
+                      <Link to={categoryAccountLink} className="shrink-0 w-20 snap-start flex flex-col items-center gap-1 group">
+                        <div className="h-16 w-16 rounded-full border-2 border-dashed border-primary/40 flex items-center justify-center text-primary text-2xl font-bold">+</div>
+                        <div className="text-[10px] font-semibold text-center text-primary">Cafe Aç</div>
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              )}
               {inCafe ? (
                 <>
                   <Link to="/cadde" className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline mb-2">
