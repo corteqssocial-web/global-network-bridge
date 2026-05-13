@@ -113,18 +113,11 @@ const MultiCountryCityFilter = ({
                 ? selectedContinent
                   ? "Kıta Aktif"
                   : "Ülke"
-                : `${selectedCountries.length}${isPremium ? "" : `/${FREE_COUNTRY_LIMIT}`} Ülke`}
+                : selectedCountries[0]}
               <ChevronDown className="h-3 w-3 text-muted-foreground" />
             </Button>
           </PopoverTrigger>
           <PopoverContent align="start" className="w-72 p-0">
-            {!isPremium && (
-              <div className="px-3 py-2 border-b border-border bg-amber-500/5 text-[11px] text-amber-700 dark:text-amber-400 flex items-center gap-1.5">
-                <Crown className="h-3 w-3" />
-                Ücretsiz: en fazla {FREE_COUNTRY_LIMIT} ülke ·
-                <Link to="/pricing" className="underline font-medium">Premium</Link>
-              </div>
-            )}
             <div className="p-2 border-b border-border">
               <Input
                 placeholder="Ülke ara..."
@@ -136,16 +129,17 @@ const MultiCountryCityFilter = ({
             <div className="max-h-72 overflow-y-auto p-1">
               {filteredCountries.map((c) => {
                 const checked = selectedCountries.includes(c);
-                const limitHit =
-                  !isPremium && !checked && selectedCountries.length >= FREE_COUNTRY_LIMIT;
                 return (
                   <button
                     key={c}
                     onClick={() => toggleCountry(c)}
-                    disabled={limitHit}
-                    className={`w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded hover:bg-accent text-left ${limitHit ? "opacity-40 cursor-not-allowed" : ""}`}
+                    className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded hover:bg-accent text-left"
                   >
-                    <Checkbox checked={checked} disabled={limitHit} />
+                    <span
+                      className={`h-3.5 w-3.5 rounded-full border-2 shrink-0 ${
+                        checked ? "border-primary bg-primary" : "border-muted-foreground/40"
+                      }`}
+                    />
                     <span className="flex-1 truncate">{c}</span>
                   </button>
                 );
