@@ -40,12 +40,14 @@ const computeGlobalLikeThreshold = async (): Promise<number> => {
   return Math.max(1, Math.round(rate));
 };
 
+interface MediaItem { type: "image" | "video"; url: string }
 interface FeedPost {
   id: string;
   user_id: string;
   content: string;
   image_url: string | null;
   mini_images?: string[];
+  media?: MediaItem[];
   country: string | null;
   city: string | null;
   author_role: string | null;
