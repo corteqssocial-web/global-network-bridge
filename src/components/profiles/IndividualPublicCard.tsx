@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Coffee, Calendar, Info, ShieldCheck, Users, Heart, Plane, Briefcase, Eye, EyeOff, Linkedin, FileText, Presentation, BadgeCheck } from "lucide-react";
+import { MapPin, Coffee, Calendar, Info, ShieldCheck, Users, Heart, Plane, Briefcase, Eye, EyeOff, Linkedin, FileText, Presentation, BadgeCheck, Cake, Gift } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
