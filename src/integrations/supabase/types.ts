@@ -1083,6 +1083,11 @@ export type Database = {
           birth_date: string | null
           birthday_reminder_enabled: boolean
           business_description: string | null
+          business_license_admin_note: string | null
+          business_license_name: string | null
+          business_license_path: string | null
+          business_license_status: string
+          business_license_uploaded_at: string | null
           business_name: string | null
           business_sector: string | null
           business_subtype: string | null
@@ -1127,6 +1132,11 @@ export type Database = {
           birth_date?: string | null
           birthday_reminder_enabled?: boolean
           business_description?: string | null
+          business_license_admin_note?: string | null
+          business_license_name?: string | null
+          business_license_path?: string | null
+          business_license_status?: string
+          business_license_uploaded_at?: string | null
           business_name?: string | null
           business_sector?: string | null
           business_subtype?: string | null
@@ -1171,6 +1181,11 @@ export type Database = {
           birth_date?: string | null
           birthday_reminder_enabled?: boolean
           business_description?: string | null
+          business_license_admin_note?: string | null
+          business_license_name?: string | null
+          business_license_path?: string | null
+          business_license_status?: string
+          business_license_uploaded_at?: string | null
           business_name?: string | null
           business_sector?: string | null
           business_subtype?: string | null
