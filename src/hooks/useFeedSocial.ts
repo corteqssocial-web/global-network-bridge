@@ -17,7 +17,22 @@ export interface FeedProfile {
 export interface Suggestion extends FeedProfile {
   score: number;
   reasons: string[];
+  tag_line?: string | null;
+  bio?: string | null;
 }
+
+const extractKeywords = (txt?: string | null): string[] => {
+  if (!txt) return [];
+  return Array.from(
+    new Set(
+      txt
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}\s]/gu, " ")
+        .split(/\s+/)
+        .filter((w) => w.length >= 4),
+    ),
+  );
+};
 
 export function useFeedSocial() {
   const { user } = useAuth();
