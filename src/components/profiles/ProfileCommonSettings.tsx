@@ -143,6 +143,7 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
         setPresentationPath(data.presentation_path ?? null);
         setIsVerified(!!data.is_verified);
         setBirthdayReminder(!!(data as any).birthday_reminder_enabled);
+        setGiftAcceptance(!!(data as any).gift_acceptance_enabled);
       }
       setEmail(user.email ?? "");
       setLoading(false);
