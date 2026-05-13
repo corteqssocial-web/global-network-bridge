@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { countryFromPhone } from "@/lib/phoneCountry";
 
 const PhoneVerification = () => {
   const { profile, refreshProfile } = useAuth();
@@ -33,6 +34,18 @@ const PhoneVerification = () => {
     }
     setSending(true);
     try {
+      // Auto-derive lived country from phone code if profile.country is empty
+      if (!profile?.country) {
+        const inferred = countryFromPhone(trimmed);
+        if (inferred) {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            await supabase.from("profiles").update({ country: inferred }).eq("id", user.id);
+            toast({ title: "Ülke otomatik ayarlandı", description: inferred });
+            await refreshProfile();
+          }
+        }
+      }
       const { data, error } = await supabase.functions.invoke("send-phone-otp", { body: { phone: trimmed } });
       if (error) throw error;
       setSent(true);
