@@ -838,11 +838,10 @@ const ProfileIndividual = () => {
                   className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
-              <div>
-                <Label>Doğum Tarihi</Label>
-                <Input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
-              </div>
             </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Doğum tarihi ve hediye/doğum günü ayarları yukarıdaki <strong>Profil Bilgileri</strong> bölümünden yönetilir.
+            </p>
 
             {/* CorteQS Pasaportu */}
             <div className="mt-5 rounded-xl border border-amber-500/30 bg-amber-500/5 p-4">

@@ -39,7 +39,10 @@ const ProfileLocationPhoneSettings = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Oturum bulunamadı");
-      const { error } = await supabase.from("profiles").update({ country, city }).eq("id", user.id);
+      // Mark onboarding complete if phone already verified
+      const updates: any = { country, city };
+      if (profile?.phone_verified) updates.onboarding_completed = true;
+      const { error } = await supabase.from("profiles").update(updates).eq("id", user.id);
       if (error) throw error;
       toast({ title: "Konum kaydedildi" });
       await refreshProfile();
