@@ -47,8 +47,7 @@ const ROLE_CONFIG: Record<ProfileRole, RoleConfig> = {
     showSector: false, showTheme: false, showAvatar: true, showWebsites: true,
     showShowOnMap: false, showWhatsAppCta: false, showPresentationUpload: false,
     showBusinessSubtype: false, showVerifiedBadgeRequest: true, showCorteqsPasaportu: true,
-  },
-  consultant: {
+    showGiftAcceptance: true,
     fullNameLabel: "Ad Soyad *",
     showTagLine: true, showBio: true, showBirthDate: true, showFoundedYear: true,
     showSector: true, showTheme: true, showAvatar: true, showWebsites: true,
