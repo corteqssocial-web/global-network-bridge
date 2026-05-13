@@ -441,6 +441,33 @@ const Feed = () => {
 
   const { following, suggestions, follow } = useFeedSocial();
 
+  const startEdit = (p: FeedPost) => {
+    setEditingId(p.id);
+    setEditDraft(p.content);
+    setMenuOpenId(null);
+  };
+
+  const saveEdit = async (p: FeedPost) => {
+    const text = editDraft.trim();
+    if (!text) return;
+    setPosts((prev) => prev.map((x) => (x.id === p.id ? { ...x, content: text } : x)));
+    setEditingId(null);
+    if (demoMode) return;
+    const { error } = await supabase.from("feed_posts").update({ content: text }).eq("id", p.id);
+    if (error) toast({ title: "Düzenlenemedi", description: error.message, variant: "destructive" });
+    else toast({ title: "Paylaşım güncellendi" });
+  };
+
+  const deletePost = async (p: FeedPost) => {
+    if (!confirm("Bu paylaşımı silmek istediğinden emin misin?")) return;
+    setPosts((prev) => prev.filter((x) => x.id !== p.id));
+    setMenuOpenId(null);
+    if (demoMode) return;
+    const { error } = await supabase.from("feed_posts").delete().eq("id", p.id);
+    if (error) toast({ title: "Silinemedi", description: error.message, variant: "destructive" });
+    else toast({ title: "Paylaşım silindi" });
+  };
+
   const renderPost = (p: FeedPost) => {
     const author = authorMap[p.user_id];
     const liked = likedIds.has(p.id);
