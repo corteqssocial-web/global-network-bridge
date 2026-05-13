@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Globe, MapPin, X, ChevronDown, Crown, Sparkles, Pin } from "lucide-react";
+import { Globe, MapPin, X, ChevronDown, Sparkles, Pin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,8 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { allCountries, countryCities } from "@/data/countryCities";
 import { continents, continentList } from "@/data/continents";
-import { useIsPremium, FREE_COUNTRY_LIMIT } from "@/hooks/useIsPremium";
-import { toast } from "@/hooks/use-toast";
 
 interface Props {
   selectedCountries: string[];
