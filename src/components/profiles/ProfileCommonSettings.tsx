@@ -336,18 +336,6 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
           <div>
             <Label>Doğum Tarihi</Label>
             <Input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
-            <div className="mt-2 flex items-start justify-between gap-3 rounded-lg border border-border bg-muted/30 px-3 py-2">
-              <div className="flex items-start gap-2">
-                <Cake className="h-4 w-4 text-pink-500 mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium">Doğum günü hatırlatması</p>
-                  <p className="text-xs text-muted-foreground">
-                    Açıkken: doğum gününe 14 gün kala bağlantılarına “🎁 Hediye kupon gönder” CTA gösterilir.
-                  </p>
-                </div>
-              </div>
-              <Switch checked={birthdayReminder} onCheckedChange={setBirthdayReminder} disabled={!birthDate} />
-            </div>
             {cfg.showGiftAcceptance && (
               <div className="mt-2 flex items-start justify-between gap-3 rounded-lg border border-border bg-muted/30 px-3 py-2">
                 <div className="flex items-start gap-2">
