@@ -225,13 +225,13 @@ const MultiCountryCityFilter = ({
           </PopoverContent>
         </Popover>
 
-        {/* Köprü — herkese açık ortak cadde */}
+        {/* Köprü — TR↔Diaspora ortak cadde */}
         <Button
           variant={isKopru ? "default" : "outline"}
           size="sm"
           onClick={pickKopru}
           className="gap-1.5 h-9"
-          title="Taşınacaklar & Diaspora ile İş Yapanlar"
+          title="TR-Diaspora arasında: Taşınanlar / İş Yapanlar / Mentör Arayanlar"
         >
           <Pin className="h-4 w-4" />
           🌉 Köprü
