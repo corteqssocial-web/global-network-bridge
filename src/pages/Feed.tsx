@@ -850,7 +850,11 @@ const Feed = () => {
                 })()}
                 {user ? (
                   <div className="mt-3">
-                    <CreateCafeForm onCreated={refreshCafes} />
+                    <CreateCafeForm
+                      onCreated={refreshCafes}
+                      defaultCountry={selectedCountries.length === 1 ? selectedCountries[0] : (profile?.country || null)}
+                      defaultCity={selectedCities.length === 1 ? selectedCities[0] : (profile?.city || null)}
+                    />
                   </div>
                 ) : (
                   <Link to={categoryAccountLink} className="mt-3 block text-[10px] text-primary font-semibold hover:underline">
