@@ -83,10 +83,11 @@ const IndividualPublicCard = ({
       if (!cancelled) setFollowers(count || 0);
       const { data: prof } = await supabase
         .from("profiles")
-        .select("is_verified, birth_date, birthday_reminder_enabled")
+        .select("is_verified, birth_date, birthday_reminder_enabled, gift_acceptance_enabled")
         .eq("id", user.id)
         .maybeSingle();
       if (!cancelled && prof?.is_verified) setIsVerified(true);
+      if (!cancelled && (prof as any)?.gift_acceptance_enabled) setAcceptsGifts(true);
       if (!cancelled && prof?.birth_date && (prof as any).birthday_reminder_enabled) {
         const bd = new Date(prof.birth_date as string);
         const now = new Date();
