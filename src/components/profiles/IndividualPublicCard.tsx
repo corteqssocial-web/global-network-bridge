@@ -57,6 +57,7 @@ const IndividualPublicCard = ({
   const [activeCafe, setActiveCafe] = useState<{ id: string; name: string; theme?: string } | null>(null);
   const [followers, setFollowers] = useState<number>(0);
   const [isVerified, setIsVerified] = useState(false);
+  const [birthdayDays, setBirthdayDays] = useState<number | null>(null);
   const followingCount = list("user").length;
 
   useEffect(() => {
