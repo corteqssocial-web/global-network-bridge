@@ -141,6 +141,9 @@ const Feed = () => {
     countries: selectedCountries,
     cities: selectedCities,
   });
+  // Unscoped list — used for the sidebar cafe search so users can find any cafe
+  // by country/city/keyword regardless of the active feed filter.
+  const { cafes: allActiveCafes } = useActiveCafes();
   const [showAllCafeCities, setShowAllCafeCities] = useState(false);
   const [cafeSearch, setCafeSearch] = useState("");
   const [storyOffset, setStoryOffset] = useState(0);
@@ -154,20 +157,22 @@ const Feed = () => {
     return () => clearInterval(id);
   }, [activeCafes.length]);
 
-  // Top 3 popular cafes (always shown in sidebar)
+  // Top 3 popular cafes (always shown in sidebar) — global, ignores feed filter
   const topPopularCafes = useMemo(
-    () => [...activeCafes].sort((a, b) => (b.member_count || 0) - (a.member_count || 0)).slice(0, 3),
-    [activeCafes],
+    () => [...allActiveCafes].sort((a, b) => (b.member_count || 0) - (a.member_count || 0)).slice(0, 3),
+    [allActiveCafes],
   );
 
-  // Filtered cafes for sidebar search (by country/city/name keyword)
+  // Sidebar cafe search — searches across ALL active cafes (country / city / name / theme),
+  // independent of the main feed filter. When search is empty, shows the
+  // currently-scoped activeCafes so the city grouping still reflects the user's filter.
   const filteredCafes = useMemo(() => {
     const q = cafeSearch.trim().toLocaleLowerCase("tr");
     if (!q) return activeCafes;
-    return activeCafes.filter((c) =>
+    return allActiveCafes.filter((c) =>
       [c.name, c.country, c.city, c.theme].filter(Boolean).some((v) => v!.toLocaleLowerCase("tr").includes(q)),
     );
-  }, [activeCafes, cafeSearch]);
+  }, [activeCafes, allActiveCafes, cafeSearch]);
 
   // Rotated story list — instagram-like cycling window
   const rotatedCafes = useMemo(() => {
