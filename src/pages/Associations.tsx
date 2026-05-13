@@ -115,8 +115,8 @@ const Associations = () => {
 
           <CategoryListingBanner categoryLabel="Kuruluşlar" formAnchorId="kayit-form" />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            {filtered.slice(0, 2).map((a) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {filtered.slice(0, 4).map((a) => (
               <Link
                 to={`/association/${a.id}`}
                 key={a.id}
