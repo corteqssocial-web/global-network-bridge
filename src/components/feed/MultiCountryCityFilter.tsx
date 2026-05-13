@@ -26,7 +26,7 @@ const MultiCountryCityFilter = ({
   onCitiesChange,
   onContinentChange,
 }: Props) => {
-  const isPremium = useIsPremium();
+  
   const [countrySearch, setCountrySearch] = useState("");
   const [citySearch, setCitySearch] = useState("");
 
