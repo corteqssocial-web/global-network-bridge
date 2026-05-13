@@ -118,7 +118,7 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
     (async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("full_name, business_name, avatar_url, tag_line, bio, birth_date, founded_year, business_sector, theme, websites, show_on_map, whatsapp_cta_enabled, business_subtype, presentation_name, presentation_path, is_verified")
+        .select("full_name, business_name, avatar_url, tag_line, bio, birth_date, founded_year, business_sector, theme, websites, show_on_map, whatsapp_cta_enabled, business_subtype, presentation_name, presentation_path, is_verified, birthday_reminder_enabled")
         .eq("id", user.id)
         .maybeSingle();
       if (data) {
