@@ -348,6 +348,20 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
               </div>
               <Switch checked={birthdayReminder} onCheckedChange={setBirthdayReminder} disabled={!birthDate} />
             </div>
+            {cfg.showGiftAcceptance && (
+              <div className="mt-2 flex items-start justify-between gap-3 rounded-lg border border-border bg-muted/30 px-3 py-2">
+                <div className="flex items-start gap-2">
+                  <Gift className="h-4 w-4 text-amber-500 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium">Hediye Kabul Et</p>
+                    <p className="text-xs text-muted-foreground">
+                      Açıkken profil ön ve detay kartında “🎁 Discount Kupon Hediye Et” CTA görünür. (Yakında — buton kilitli açılır.)
+                    </p>
+                  </div>
+                </div>
+                <Switch checked={giftAcceptance} onCheckedChange={setGiftAcceptance} />
+              </div>
+            )}
           </div>
         )}
         {cfg.showFoundedYear && (
