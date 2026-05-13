@@ -227,11 +227,6 @@ const MultiCountryCityFilter = ({
           🌉 Köprü
         </Button>
 
-        {isPremium && (
-          <Badge className="gap-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0">
-            <Crown className="h-3 w-3" /> Premium · Sınırsız
-          </Badge>
-        )}
       </div>
 
       <p className="text-[10px] text-muted-foreground leading-snug px-0.5">
