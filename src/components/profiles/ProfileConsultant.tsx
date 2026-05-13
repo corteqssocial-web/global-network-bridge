@@ -37,6 +37,7 @@ import SocialMediaInputs from "@/components/SocialMediaInputs";
 import ConsultantFeatureToggles from "@/components/profiles/ConsultantFeatureToggles";
 import { Sliders } from "lucide-react";
 import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
+import BusinessLicenseUpload from "@/components/profiles/BusinessLicenseUpload";
 import ProfileCommonSettings from "@/components/profiles/ProfileCommonSettings";
 import ProfileSubcategoriesSettings from "@/components/profiles/ProfileSubcategoriesSettings";
 
