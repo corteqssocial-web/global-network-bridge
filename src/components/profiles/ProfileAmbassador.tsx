@@ -31,6 +31,7 @@ import EmptyDashboardState from "@/components/EmptyDashboardState";
 import NotificationsTabTrigger from "@/components/NotificationsTabTrigger";
 import MyOpenCafesAsEvents from "@/components/profiles/MyOpenCafesAsEvents";
 import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
+import ProfileCommonSettings from "@/components/profiles/ProfileCommonSettings";
 import AmbassadorReferralCard from "@/components/AmbassadorReferralCard";
 
 type AmbassadorEvent = {
@@ -587,6 +588,7 @@ const ProfileAmbassador = () => {
         {/* SETTINGS */}
         <TabsContent value="settings" className="mt-6 space-y-6">
           <ProfileLocationPhoneSettings />
+          <ProfileCommonSettings role="ambassador" />
           <AmbassadorReferralCard />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <Card className="border-border lg:col-span-2">

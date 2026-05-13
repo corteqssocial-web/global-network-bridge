@@ -37,6 +37,7 @@ import SocialMediaInputs from "@/components/SocialMediaInputs";
 import ConsultantFeatureToggles from "@/components/profiles/ConsultantFeatureToggles";
 import { Sliders } from "lucide-react";
 import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
+import ProfileCommonSettings from "@/components/profiles/ProfileCommonSettings";
 import ProfileSubcategoriesSettings from "@/components/profiles/ProfileSubcategoriesSettings";
 
 const ProfileConsultant = () => {
@@ -559,6 +560,7 @@ const ProfileConsultant = () => {
 
         <TabsContent value="settings" className="mt-6 space-y-6">
           <ProfileLocationPhoneSettings />
+          <ProfileCommonSettings role="consultant" />
           <ProfileSubcategoriesSettings accountTypeOverride="consultant" />
           {/* Profile Feature Toggles */}
           <div className="bg-card rounded-2xl border border-border p-6 shadow-card mb-6">
