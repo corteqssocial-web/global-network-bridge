@@ -51,18 +51,14 @@ const MultiCountryCityFilter = ({
       .sort((a, b) => a.localeCompare(b, "tr"));
   }, [selectedContinent, selectedCountries, citySearch]);
 
+  // Single-country mode: only one country active at a time. Re-clicking the
+  // active country clears the selection.
   const toggleCountry = (val: string) => {
     const has = selectedCountries.includes(val);
-    if (!has && !isPremium && selectedCountries.length >= FREE_COUNTRY_LIMIT) {
-      toast({
-        title: `Ücretsiz planda en fazla ${FREE_COUNTRY_LIMIT} ülke seçilebilir`,
-        description: "Sınırsız seçim için Premium'a geçin veya bir kıta seçin.",
-      });
-      return;
-    }
-    // Choosing countries clears continent scope
     if (selectedContinent) onContinentChange(null);
-    onCountriesChange(has ? selectedCountries.filter((x) => x !== val) : [...selectedCountries, val]);
+    onCountriesChange(has ? [] : [val]);
+    // Clear cities when switching country to avoid stale city scope
+    if (!has) onCitiesChange([]);
   };
 
   const toggleCity = (val: string) => {
