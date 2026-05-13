@@ -142,6 +142,38 @@ const Feed = () => {
     cities: selectedCities,
   });
   const [showAllCafeCities, setShowAllCafeCities] = useState(false);
+  const [cafeSearch, setCafeSearch] = useState("");
+  const [storyOffset, setStoryOffset] = useState(0);
+
+  // Instagram-style auto-rotate of cafe stories every 4s
+  useEffect(() => {
+    if (activeCafes.length <= 1) return;
+    const id = setInterval(() => {
+      setStoryOffset((o) => (o + 1) % activeCafes.length);
+    }, 4000);
+    return () => clearInterval(id);
+  }, [activeCafes.length]);
+
+  // Top 3 popular cafes (always shown in sidebar)
+  const topPopularCafes = useMemo(
+    () => [...activeCafes].sort((a, b) => (b.member_count || 0) - (a.member_count || 0)).slice(0, 3),
+    [activeCafes],
+  );
+
+  // Filtered cafes for sidebar search (by country/city/name keyword)
+  const filteredCafes = useMemo(() => {
+    const q = cafeSearch.trim().toLocaleLowerCase("tr");
+    if (!q) return activeCafes;
+    return activeCafes.filter((c) =>
+      [c.name, c.country, c.city, c.theme].filter(Boolean).some((v) => v!.toLocaleLowerCase("tr").includes(q)),
+    );
+  }, [activeCafes, cafeSearch]);
+
+  // Rotated story list — instagram-like cycling window
+  const rotatedCafes = useMemo(() => {
+    if (activeCafes.length === 0) return activeCafes;
+    return [...activeCafes.slice(storyOffset), ...activeCafes.slice(0, storyOffset)];
+  }, [activeCafes, storyOffset]);
   const inCafe = !!cafeId && !!cafe;
   const cafeOpen = inCafe && new Date(cafe!.closes_at) > new Date();
 
