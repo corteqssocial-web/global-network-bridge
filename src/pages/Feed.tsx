@@ -990,7 +990,7 @@ const Feed = () => {
                 )}
                     </>
                   );
-                })())}
+                })()}
                 {user ? (
                   <div className="mt-3">
                     <CreateCafeForm
