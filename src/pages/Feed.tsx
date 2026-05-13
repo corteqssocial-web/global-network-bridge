@@ -827,7 +827,7 @@ const Feed = () => {
                 {(() => {
                   // Group cafes by city, rank cities by total member_count
                   const cityMap = new Map<string, { city: string; country: string; total: number; cafes: typeof activeCafes }>();
-                  for (const c of activeCafes) {
+                  for (const c of filteredCafes) {
                     const key = `${c.city || "Global"}|${c.country || ""}`;
                     const entry = cityMap.get(key) || { city: c.city || "Global", country: c.country || "", total: 0, cafes: [] };
                     entry.total += c.member_count || 0;
