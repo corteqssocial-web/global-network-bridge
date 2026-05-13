@@ -228,7 +228,7 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
         payload.presentation_name = presentationName;
         payload.presentation_path = presentationPath;
       }
-      const { error } = await supabase.from("profiles").update(payload).eq("id", user.id);
+      if (cfg.showGiftAcceptance) payload.gift_acceptance_enabled = giftAcceptance;
       if (error) throw error;
       toast({ title: "Profil bilgileri kaydedildi" });
       await refreshProfile();
