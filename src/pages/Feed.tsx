@@ -134,6 +134,9 @@ const Feed = () => {
   const [openComments, setOpenComments] = useState<Set<string>>(new Set());
   const [commentsMap, setCommentsMap] = useState<Record<string, { id: string; author: string; text: string; created_at: string }[]>>({});
   const [commentDrafts, setCommentDrafts] = useState<Record<string, string>>({});
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editDraft, setEditDraft] = useState("");
+  const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
   const { cafes: activeCafes, refresh: refreshCafes } = useActiveCafes({
     countries: selectedCountries,
     cities: selectedCities,
