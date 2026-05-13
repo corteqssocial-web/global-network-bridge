@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      ambassador_applications: {
+        Row: {
+          admin_note: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          email: string
+          full_name: string
+          id: string
+          motivation: string | null
+          phone: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_note?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          email: string
+          full_name: string
+          id?: string
+          motivation?: string | null
+          phone?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_note?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          motivation?: string | null
+          phone?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       appointments: {
         Row: {
           client_email: string | null
@@ -1025,15 +1076,19 @@ export type Database = {
           address: string | null
           ambassador_referral_code: string | null
           avatar_url: string | null
+          bio: string | null
+          birth_date: string | null
           business_description: string | null
           business_name: string | null
           business_sector: string | null
+          business_subtype: string | null
           business_website: string | null
           city: string | null
           country: string | null
           created_at: string
           cv_name: string | null
           cv_path: string | null
+          founded_year: number | null
           full_name: string | null
           hiring_mode: boolean
           id: string
@@ -1051,22 +1106,30 @@ export type Database = {
           referred_by_code: string | null
           school: string | null
           show_on_map: boolean
+          tag_line: string | null
+          theme: string | null
           updated_at: string
+          websites: Json
+          whatsapp_cta_enabled: boolean
         }
         Insert: {
           account_type?: string | null
           address?: string | null
           ambassador_referral_code?: string | null
           avatar_url?: string | null
+          bio?: string | null
+          birth_date?: string | null
           business_description?: string | null
           business_name?: string | null
           business_sector?: string | null
+          business_subtype?: string | null
           business_website?: string | null
           city?: string | null
           country?: string | null
           created_at?: string
           cv_name?: string | null
           cv_path?: string | null
+          founded_year?: number | null
           full_name?: string | null
           hiring_mode?: boolean
           id: string
@@ -1084,22 +1147,30 @@ export type Database = {
           referred_by_code?: string | null
           school?: string | null
           show_on_map?: boolean
+          tag_line?: string | null
+          theme?: string | null
           updated_at?: string
+          websites?: Json
+          whatsapp_cta_enabled?: boolean
         }
         Update: {
           account_type?: string | null
           address?: string | null
           ambassador_referral_code?: string | null
           avatar_url?: string | null
+          bio?: string | null
+          birth_date?: string | null
           business_description?: string | null
           business_name?: string | null
           business_sector?: string | null
+          business_subtype?: string | null
           business_website?: string | null
           city?: string | null
           country?: string | null
           created_at?: string
           cv_name?: string | null
           cv_path?: string | null
+          founded_year?: number | null
           full_name?: string | null
           hiring_mode?: boolean
           id?: string
@@ -1117,7 +1188,11 @@ export type Database = {
           referred_by_code?: string | null
           school?: string | null
           show_on_map?: boolean
+          tag_line?: string | null
+          theme?: string | null
           updated_at?: string
+          websites?: Json
+          whatsapp_cta_enabled?: boolean
         }
         Relationships: []
       }
