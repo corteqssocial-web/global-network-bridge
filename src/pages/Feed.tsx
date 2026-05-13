@@ -1084,7 +1084,12 @@ const Feed = () => {
 
               {(!inCafe || (cafeOpen && isMember && approved)) && (
                 <div className="mb-4">
-                  <CreatePostForm cafeId={inCafe ? cafeId : undefined} onCreated={() => { setPage(0); fetchPosts(true); }} />
+                  <CreatePostForm
+                    cafeId={inCafe ? cafeId : undefined}
+                    activeCountry={selectedCountries.length === 1 ? selectedCountries[0] : null}
+                    activeCity={selectedCities.length === 1 ? selectedCities[0] : null}
+                    onCreated={() => { setPage(0); fetchPosts(true); }}
+                  />
                 </div>
               )}
               {inCafe && cafeOpen && !isMember && user && (
