@@ -954,6 +954,53 @@ const Feed = () => {
 
             {/* CENTER FEED */}
             <div className="min-w-0">
+              {!inCafe && (
+                <div className="mb-4">
+                  <div className="flex items-center gap-2 px-1 mb-2">
+                    <Coffee className="h-4 w-4 text-amber-600" />
+                    <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Aktif Cafe'ler</h2>
+                    <Badge variant="secondary" className="text-[10px] ml-auto">{activeCafes.length + 1}</Badge>
+                  </div>
+                  <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 snap-x">
+                    {/* Demo cafe story */}
+                    <Link to="/cadde/demo-it" className="shrink-0 w-20 snap-start flex flex-col items-center gap-1 group">
+                      <div className="p-[2px] rounded-full bg-gradient-to-br from-amber-400 via-rose-400 to-violet-500">
+                        <div className="h-16 w-16 rounded-full bg-card flex items-center justify-center">
+                          <Coffee className="h-7 w-7 text-amber-600" />
+                        </div>
+                      </div>
+                      <div className="text-[10px] font-semibold text-center truncate w-full">Berlin IT</div>
+                      <div className="text-[9px] text-muted-foreground">⏰ 1s 23dk</div>
+                    </Link>
+                    {activeCafes.map((c) => {
+                      const st = themeStyle(c.theme);
+                      const Icon = st.icon;
+                      const closeTime = new Date(c.closes_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
+                      return (
+                        <Link key={c.id} to={`/cadde/${c.id}`} className="shrink-0 w-20 snap-start flex flex-col items-center gap-1 group">
+                          <div className="p-[2px] rounded-full bg-gradient-to-br from-rose-400 via-amber-400 via-emerald-400 to-violet-500">
+                            <div className={`h-16 w-16 rounded-full bg-card flex items-center justify-center ${st.bg}`}>
+                              <Icon className={`h-7 w-7 ${st.color}`} />
+                            </div>
+                          </div>
+                          <div className="text-[10px] font-semibold text-center truncate w-full" title={c.name}>{c.name}</div>
+                          {c.kind === "community" ? (
+                            <div className="text-[9px] text-muted-foreground whitespace-nowrap">⏰ {closeTime}</div>
+                          ) : (
+                            <div className="text-[9px] text-muted-foreground">∞ açık</div>
+                          )}
+                        </Link>
+                      );
+                    })}
+                    {user && (
+                      <Link to={categoryAccountLink} className="shrink-0 w-20 snap-start flex flex-col items-center gap-1 group">
+                        <div className="h-16 w-16 rounded-full border-2 border-dashed border-primary/40 flex items-center justify-center text-primary text-2xl font-bold">+</div>
+                        <div className="text-[10px] font-semibold text-center text-primary">Cafe Aç</div>
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              )}
               {inCafe ? (
                 <>
                   <Link to="/cadde" className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline mb-2">
