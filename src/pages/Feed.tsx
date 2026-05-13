@@ -1363,7 +1363,7 @@ const Feed = () => {
             {/* RIGHT SIDEBAR — Sponsorlu */}
             <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto pl-1 hidden lg:block">
               <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold px-1">
-                ÇIFIT <span className="text-muted-foreground/70 normal-case font-medium">(Sponsorlu)</span>
+                Billboard
               </div>
 
               {/* Sponsorlu Danışman */}
