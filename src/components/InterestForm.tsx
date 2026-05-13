@@ -340,7 +340,7 @@ const InterestForm = ({
           <div className="flex items-start gap-2 p-3 rounded-lg bg-orange-50 border border-orange-200">
             <Hourglass className="h-4 w-4 text-orange-600 shrink-0 mt-0.5" />
             <p className="text-xs text-foreground">
-              <span className="font-semibold">Yakında!</span> Platform açılır açılmaz size ilk haber vereceğiz. Erken kayıt olanlar avantajlı şartlarla yer alır.
+              <span className="font-semibold">Kaydını tamamla</span> Platform Betaya geçtiğinde haberin olsun!
             </p>
           </div>
 
