@@ -115,8 +115,11 @@ const Associations = () => {
 
           <CategoryListingBanner categoryLabel="Kuruluşlar" formAnchorId="kayit-form" />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {filtered.slice(0, 4).map((a) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {(() => {
+              const featuredIds = ["tc-washington-buyukelcilik", "dubai-is-konseyi", "londra-turk-yatirimcilar"];
+              return filtered.filter((a) => featuredIds.includes(a.id)).sort((a, b) => featuredIds.indexOf(a.id) - featuredIds.indexOf(b.id));
+            })().map((a) => (
               <Link
                 to={`/association/${a.id}`}
                 key={a.id}
