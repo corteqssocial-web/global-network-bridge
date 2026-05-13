@@ -316,6 +316,7 @@ const ProfileAssociation = () => {
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6 space-y-6">
+          <BusinessLicenseUpload contextLabel="Kuruluş hesabınız" />
           <ProfileLocationPhoneSettings />
           <ProfileCommonSettings role="association" />
           <AssociationSettingsForm onSaved={(d) => setProfileData(d)} />
