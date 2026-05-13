@@ -224,8 +224,12 @@ const CreatePostForm = ({ onCreated, cafeId, activeCountry, activeCity }: Props)
         <div className={`rounded-lg border p-2.5 text-[11px] flex items-start gap-2 ${usingActive ? "border-primary/40 bg-primary/5" : "border-border bg-muted/30"}`}>
           <Info className="h-3.5 w-3.5 mt-0.5 shrink-0 text-primary" />
           <div className="flex-1 leading-snug">
-            Paylaşımın <strong>@{postCountry || "—"}{city ? ` · @${city}` : ""}</strong> caddesine düşer ve Global akışta da ülke/şehir etiketiyle görünür.
-            {usingActive && (
+            {postCountry === "Köprü" ? (
+              <>Paylaşımın <strong>@Köprü</strong>'ye düşer ve Global akışta da <strong>@Köprü</strong> etiketiyle görünür.</>
+            ) : (
+              <>Paylaşımın <strong>@{postCountry || "—"}{city ? ` · @${city}` : ""}</strong> caddesine düşer ve Global akışta da ülke/şehir etiketiyle görünür.</>
+            )}
+            {usingActive && postCountry !== "Köprü" && (
               <span className="block mt-0.5 text-primary font-semibold">Sol menüden {activeCountry} seçtiğin için bu paylaşım orada yayınlanır.</span>
             )}
             {!activeCountry && profileCountry && (
