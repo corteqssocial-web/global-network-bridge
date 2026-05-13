@@ -118,6 +118,7 @@ const IndividualPublicCard = ({
                 </Tooltip>
               </TooltipProvider>
             )}
+            <CafeOpenCTA userId={user?.id} />
           </div>
 
           {(title || email) && (
