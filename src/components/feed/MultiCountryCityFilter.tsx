@@ -16,6 +16,8 @@ interface Props {
   onCountriesChange: (v: string[]) => void;
   onCitiesChange: (v: string[]) => void;
   onContinentChange: (v: string | null) => void;
+  /** TR'de yaşayan / TR numaralı kullanıcılar yalnızca Türkiye, Köprü ve Global akışı görüntüleyebilir. */
+  restrictTR?: boolean;
 }
 
 const MultiCountryCityFilter = ({
