@@ -21,7 +21,7 @@ const typeFilters = [
   { key: "akademik", label: "🎓 Akademik Birimler" },
   { key: "egitim", label: "📚 Eğitim Kuruluşları" },
   { key: "medya", label: "📺 Türk Medya Kuruluşları" },
-  { key: "hastane", label: "🏥 Sağlık Kuruluşları" },
+  
   { key: "dijital", label: "💬 Dijital Topluluklar" },
 ];
 
