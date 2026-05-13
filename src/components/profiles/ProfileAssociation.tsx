@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import EventManagePanel from "@/components/EventManagePanel";
 import AssociationSettingsForm, { loadAssociationProfile, type AssociationProfileData } from "@/components/profiles/AssociationSettingsForm";
 import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationPhoneSettings";
+import BusinessLicenseUpload from "@/components/profiles/BusinessLicenseUpload";
 import ProfileCommonSettings from "@/components/profiles/ProfileCommonSettings";
 import { findOrgCategory, findOrgSubcategory } from "@/data/organizationCategories";
 import {
