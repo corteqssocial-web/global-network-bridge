@@ -1078,6 +1078,7 @@ export type Database = {
           avatar_url: string | null
           bio: string | null
           birth_date: string | null
+          birthday_reminder_enabled: boolean
           business_description: string | null
           business_name: string | null
           business_sector: string | null
@@ -1119,6 +1120,7 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           birth_date?: string | null
+          birthday_reminder_enabled?: boolean
           business_description?: string | null
           business_name?: string | null
           business_sector?: string | null
@@ -1160,6 +1162,7 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           birth_date?: string | null
+          birthday_reminder_enabled?: boolean
           business_description?: string | null
           business_name?: string | null
           business_sector?: string | null
