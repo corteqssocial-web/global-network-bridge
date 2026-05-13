@@ -22,8 +22,23 @@ import CaddeProfileGate from "@/components/CaddeProfileGate";
 import { useConnections } from "@/hooks/useConnections";
 
 const PAGE_SIZE = 20;
-// Türkiye merkezli paylaşımların Global akışa "sızması" için minimum etkileşim eşiği
-const TR_GLOBAL_THRESHOLD = 25;
+
+// Global akış için dinamik like eşiği:
+// - Akış hızı < 1 post/sn ise eşik = 0 (her şey görünür)
+// - Akış hızı ≥ 1 post/sn olduğunda her tam birim için eşik 1 artar
+//   (ortalama akış hızı ~2sn/post seviyesinde tutulur)
+const computeGlobalLikeThreshold = async (): Promise<number> => {
+  const sinceIso = new Date(Date.now() - 60_000).toISOString();
+  const { count } = await supabase
+    .from("feed_posts")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "published")
+    .is("cafe_id", null)
+    .gte("created_at", sinceIso);
+  const rate = (count || 0) / 60; // posts/sn (son 60 sn)
+  if (rate < 1) return 0;
+  return Math.max(1, Math.round(rate));
+};
 
 interface FeedPost {
   id: string;
@@ -197,8 +212,12 @@ const Feed = () => {
         } else if (selectedCountries.length > 0) {
           query = query.in("country", selectedCountries);
         } else {
-          // Global akış: Türkiye paylaşımları yalnızca yüksek etkileşimde sızar
-          query = query.or(`country.is.null,country.neq.Türkiye,like_count.gte.${TR_GLOBAL_THRESHOLD}`);
+          // Global akış: Tüm ülkelerden paylaşımlar dahil. Akış hızı yüksekse
+          // yalnızca yeterli etkileşim alan paylaşımlar görünür (ortalama ~2sn/post).
+          const minLikes = await computeGlobalLikeThreshold();
+          if (minLikes > 0) {
+            query = query.gte("like_count", minLikes);
+          }
         }
       }
 
