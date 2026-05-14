@@ -341,7 +341,7 @@ const Consultants = () => {
               return okCountry && okCity;
             });
             const fallbackAmbassador = ambassadorsForArea[0] || cityAmbassadors[0];
-            const ambassadorCards = (ambassadorsForArea.length ? ambassadorsForArea : [fallbackAmbassador]).map((amb) => ({
+            const ambassadorCards = (ambassadorsForArea.length ? ambassadorsForArea : [fallbackAmbassador]).slice(0, 1).map((amb) => ({
               id: amb.id,
               name: amb.name,
               role: "Şehir Elçisi",
