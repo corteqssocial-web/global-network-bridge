@@ -177,8 +177,50 @@ const CreatePostForm = ({ onCreated, cafeId, activeCountry, activeCity }: Props)
 
   const usingActive = !!activeCountry && activeCountry !== profileCountry && !isTR && !kopruOnly;
 
+  // If user is not allowed to post anywhere, show a lock card.
+  if (!allowedCadde && !allowedKopru) {
+    return (
+      <div className="rounded-2xl border border-amber-500/40 bg-amber-500/5 p-4 text-sm">
+        <div className="flex items-start gap-3">
+          <Lock className="h-5 w-5 text-amber-600 mt-0.5 shrink-0" />
+          <div className="flex-1">
+            <p className="font-semibold mb-1">Cadde'de paylaşım yapmak için profilini tamamla</p>
+            <p className="text-xs text-muted-foreground mb-3">
+              Cadde paylaşımı için <strong>ülkeni</strong> ve <strong>telefon doğrulamanı</strong> tamamlamış olmalısın.
+              TR kullanıcıysan paylaşımların <strong>@Türkiye</strong> caddesinde, yurt dışındaysan yaşadığın ülke caddesinde yayınlanır.
+            </p>
+            <Button asChild size="sm">
+              <Link to="/profile?tab=settings">Profil ayarlarına git</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="rounded-2xl border border-border bg-card p-4 space-y-3">
+      {/* Cadde / Köprü seçici — yalnızca her ikisi de uygunsa görünür */}
+      {allowedKopru && allowedCadde && (
+        <div className="flex items-center gap-1 p-1 rounded-full bg-muted/60 w-fit text-[11px]">
+          <button
+            type="button"
+            onClick={() => setKopruOnly(false)}
+            className={`px-3 py-1 rounded-full font-semibold transition ${!kopruOnly ? "bg-card shadow text-foreground" : "text-muted-foreground"}`}
+          >
+            🛣️ Cadde
+          </button>
+          <button
+            type="button"
+            onClick={() => setKopruOnly(true)}
+            className={`px-3 py-1 rounded-full font-semibold transition ${kopruOnly ? "bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 text-white" : "text-muted-foreground"}`}
+          >
+            🌉 Köprü
+          </button>
+        </div>
+      )}
+      {allowedKopru && !allowedCadde && !kopruOnly && setKopruOnly(true) as any}
+
       <Textarea
         placeholder="Diaspora'ya bir şeyler paylaş..."
         value={content}
