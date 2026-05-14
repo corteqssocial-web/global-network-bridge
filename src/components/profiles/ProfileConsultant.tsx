@@ -185,6 +185,9 @@ const ProfileConsultant = () => {
           <TabsTrigger value="campaign" className="gap-1.5"><Megaphone className="h-4 w-4" /> Tanıtım</TabsTrigger>
           <TabsTrigger value="whatsapp" className="gap-1.5"><MessageSquare className="h-4 w-4" /> WhatsApp</TabsTrigger>
           <TabsTrigger value="job-listings" className="gap-1.5"><Briefcase className="h-4 w-4" /> İş İlanları</TabsTrigger>
+          {isRealEstate && (
+            <TabsTrigger value="real-estate" className="gap-1.5"><Home className="h-4 w-4" /> Emlak İlanları</TabsTrigger>
+          )}
           <TabsTrigger value="ai-twin" className="gap-1.5"><Bot className="h-4 w-4" /> AI Twin</TabsTrigger>
           <TabsTrigger value="follows" className="gap-1.5"><Heart className="h-4 w-4" /> Takip Ettiklerim</TabsTrigger>
           <NotificationsTabTrigger className="text-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground" />
