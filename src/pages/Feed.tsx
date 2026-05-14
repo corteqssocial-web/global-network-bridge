@@ -157,6 +157,18 @@ const Feed = () => {
     return () => clearInterval(id);
   }, [activeCafes.length]);
 
+  // Demo mode: auto-rotate feed posts every 1s for fast flow effect
+  useEffect(() => {
+    if (!demoMode) return;
+    const id = setInterval(() => {
+      setPosts((prev) => {
+        if (prev.length === 0) return prev;
+        return [...prev.slice(1), prev[0]];
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, [demoMode]);
+
   // Top 3 popular cafes (always shown in sidebar) — global, ignores feed filter
   const topPopularCafes = useMemo(
     () => [...allActiveCafes].sort((a, b) => (b.member_count || 0) - (a.member_count || 0)).slice(0, 3),
