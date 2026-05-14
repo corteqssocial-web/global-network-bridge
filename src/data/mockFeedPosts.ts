@@ -796,7 +796,7 @@ export const mockPosts: MockPost[] = [
     id: "post-37",
     user_id: "user-20",
     content:
-      "Viyana'da Türkçe kitap kafe açtık: hem kahve hem kütüphane. Orhan Pamuk, Elif Şafak ve klasikler. Üyelik 15 EUR/ay, öğrencilere %50 indirim. Mariahilfer Straße 112. Türk edebiyatı Viyana'da!")
+      "Viyana'da Türkçe kitap kafe açtık: hem kahve hem kütüphane. Orhan Pamuk, Elif Şafak ve klasikler. Üyelik 15 EUR/ay, öğrencilere %50 indirim. Mariahilfer Straße 112. Türk edebiyatı Viyana'da!",
     image_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
     country: "Avusturya",
     city: "Viyana",
