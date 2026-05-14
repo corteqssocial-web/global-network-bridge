@@ -20,26 +20,26 @@ export interface MockPost {
 
 export const mockAuthors: Record<string, MockAuthor> = {
   "user-1": { id: "user-1", full_name: "Ahmet Yılmaz", avatar_url: null },
-  "user-2": { id: "user-2", full_name: "Maria Schmidt", avatar_url: null },
-  "user-3": { id: "user-3", full_name: "Raj Patel", avatar_url: null },
-  "user-4": { id: "user-4", full_name: "Dr. Elif Kaya", avatar_url: null },
-  "user-5": { id: "user-5", full_name: "Chen Wei", avatar_url: null },
-  "user-6": { id: "user-6", full_name: "Business Berlin GmbH", avatar_url: null },
-  "user-7": { id: "user-7", full_name: "Sarah Johnson", avatar_url: null },
-  "user-8": { id: "user-8", full_name: "Ali Demir", avatar_url: null },
-  "user-9": { id: "user-9", full_name: "Priya Sharma", avatar_url: null },
-  "user-10": { id: "user-10", full_name: "Mehmet Can", avatar_url: null },
-  "user-11": { id: "user-11", full_name: "Lisa Müller", avatar_url: null },
-  "user-12": { id: "user-12", full_name: "Yusuf Akın", avatar_url: null },
-  "user-13": { id: "user-13", full_name: "Emma Wilson", avatar_url: null },
-  "user-14": { id: "user-14", full_name: "Canan Özdemir", avatar_url: null },
-  "user-15": { id: "user-15", full_name: "David Kim", avatar_url: null },
-  "user-16": { id: "user-16", full_name: "Aylin Yıldız", avatar_url: null },
-  "user-17": { id: "user-17", full_name: "Omar Hassan", avatar_url: null },
-  "user-18": { id: "user-18", full_name: "Nina Petrova", avatar_url: null },
-  "user-19": { id: "user-19", full_name: "Burak Şahin", avatar_url: null },
-  "user-20": { id: "user-20", full_name: "Sofia Rossi", avatar_url: null },
-  // Berlin IT Cafe — hardcore IT karakterleri
+  "user-2": { id: "user-2", full_name: "Ayşe Kaya", avatar_url: null },
+  "user-3": { id: "user-3", full_name: "Mehmet Demir", avatar_url: null },
+  "user-4": { id: "user-4", full_name: "Dr. Elif Şahin", avatar_url: null },
+  "user-5": { id: "user-5", full_name: "Hasan Özdemir", avatar_url: null },
+  "user-6": { id: "user-6", full_name: "Berlin Türk Marketi", avatar_url: null },
+  "user-7": { id: "user-7", full_name: "Fatma Akgün", avatar_url: null },
+  "user-8": { id: "user-8", full_name: "Ali Koç", avatar_url: null },
+  "user-9": { id: "user-9", full_name: "Zeynep Arslan", avatar_url: null },
+  "user-10": { id: "user-10", full_name: "Burak Çelik", avatar_url: null },
+  "user-11": { id: "user-11", full_name: "Seda Yıldız", avatar_url: null },
+  "user-12": { id: "user-12", full_name: "Kemal Akın", avatar_url: null },
+  "user-13": { id: "user-13", full_name: "Hülya Kara", avatar_url: null },
+  "user-14": { id: "user-14", full_name: "Canan Tuncel", avatar_url: null },
+  "user-15": { id: "user-15", full_name: "Ozan Korkmaz", avatar_url: null },
+  "user-16": { id: "user-16", full_name: "Nazlı Erbil", avatar_url: null },
+  "user-17": { id: "user-17", full_name: "Cem Yücel", avatar_url: null },
+  "user-18": { id: "user-18", full_name: "Derya Polat", avatar_url: null },
+  "user-19": { id: "user-19", full_name: "Murat Gül", avatar_url: null },
+  "user-20": { id: "user-20", full_name: "Pınar Tekin", avatar_url: null },
+  // Berlin IT Cafe — Türk IT profesyonelleri
   "it-1": { id: "it-1", full_name: "Kerem Aydın · Staff SWE @ N26", avatar_url: null },
   "it-2": { id: "it-2", full_name: "Selin Kaya · SRE @ Zalando", avatar_url: null },
   "it-3": { id: "it-3", full_name: "Burak Demir · Platform Eng @ Trade Republic", avatar_url: null },
@@ -49,13 +49,13 @@ export const mockAuthors: Record<string, MockAuthor> = {
   "it-7": { id: "it-7", full_name: "Zeynep Arslan · DevSecOps Lead", avatar_url: null },
 };
 
-// Berlin IT Cafe ☕ — hardcore IT sohbeti (mock)
+// Berlin IT Cafe — Türk diaspora IT sohbeti
 export const mockCafeITPosts: MockPost[] = [
   {
     id: "it-post-1",
     user_id: "it-1",
     content:
-      "☕ Bugün prod'da ilginç bir incident yaşadık: Postgres'te `pg_stat_activity` sürekli 3k+ idle-in-transaction connection gösteriyordu. Sebep: PgBouncer transaction pooling + Spring `@Transactional(readOnly=true)` ama prepared statement cache açık. Çözüm: `prepareThreshold=0` ve pool_mode=session → pool=transaction'a geri döndük ama prepared statements'ı kapattık. p99 latency 480ms → 70ms. Kimse bana bir daha 'ORM kara kutu değil' demesin.",
+      "☕ Berlin'deki Türk yazılımcı buluşmalarımızı tekrar başlatıyoruz! Kreuzberg'de her Çarşamba akşamı. Bu hafta konu: Almanya'da serbest meslek (Freiberufler) olarak çalışmak, vergi avantajları ve sigorta. Yeni gelenler özellikle bekleniyor!",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -68,7 +68,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-2",
     user_id: "it-2",
     content:
-      "Hot take: Kubernetes'te HPA + KEDA kombinasyonu olmadan event-driven workload ölçeklemek 2026'da masochism. Bizim Kafka consumer'lar lag bazlı KEDA ScaledObject ile ölçekleniyor, CPU bazlı HPA scale-down'a karışmasın diye `behavior.scaleDown.stabilizationWindowSeconds=600`. AWS faturası %38 düştü. PR linki commentlerde.",
+      "Almanya'da çalışan Türkler için önemli bir bilgi: Blue Card sahipleri 21 ay sonra Almanca B1 seviyesiyle kalıcı oturum izni alabiliyor. Ben geçen hafta aldım, süreç çok kolaydı. Gerekli evraklar: pasaport, çalışma sözleşmesi, maaş bordrosu (son 3 ay), dil sertifikası ve ev kira sözleşmesi.",
     image_url:
       "https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&q=80",
     country: "Almanya",
@@ -82,7 +82,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-3",
     user_id: "it-3",
     content:
-      "gRPC streaming vs SSE tartışması yine açıldı. Bizim broker tarafında 200k concurrent client için gRPC bidirectional stream → HTTP/2 multiplexing avantajı kayboluyor çünkü her client'a ayrı stream açıyorsun. SSE + nginx + Redis pubsub bizde memory'de 4× daha verimli çıktı. WebTransport olgunlaşana kadar `text/event-stream` underrated.",
+      "Hollanda'da çalışan Türk arkadaşlar, 30% ruling hakkınızı kullanıyor musunuz? İlk 5 yıl için %30 vergi muafiyeti sağlıyor. Ben 2 yıldır kullanıyorum, maaşımda ciddi fark var. Başvuru için işvereninizin Hollanda vergi dairesine (Belastingdienst) dilekçe vermesi gerekiyor.",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -95,7 +95,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-4",
     user_id: "it-4",
     content:
-      "🤖 Llama-3.1 70B'yi 8×H100'de vLLM ile serve ediyoruz, paged-attention + speculative decoding (draft model: Llama-3.2-1B) → 2.3× throughput. Ama EU AI Act compliance için her inference'ı log'lamak zorundayız, bu da S3'e ~12TB/gün. Sizde benzer GDPR + observability dengesini nasıl kuruyorsunuz? OpenTelemetry + Tempo yetiyor mu?",
+      "🤖 Berlin Türk Girişimciler Derneği'nin yapay zeka workshop'una katıldım. LLM'lerle Türkçe içerik üretimi, diaspora toplulukları için chatbot geliştirme ve otomatik çeviri araçları ele alındı. Önümüzdeki ay CorteQS entegrasyonu için demo hazırlıyoruz. İlgilenen Türk startup'lar DM atabilir.",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -108,7 +108,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-5",
     user_id: "it-5",
     content:
-      "Rust'ta `tokio::select!` ile cancellation safety'yi yanlış anlayan ekipler için PSA: bir `async fn` içinde state mutate ediyorsan ve future drop edilirse, partial state ile kalırsın. `tokio_util::sync::CancellationToken` + explicit checkpoint pattern hayat kurtarıyor. Bu hafta bir startup'ın ödeme servisinde tam olarak bu yüzden double-charge bug'ı buldum 🙃",
+      "Freelancer olarak Almanya'da çalışan Türkler için tavsiye: Kleinunternehmer statüsü (yıllık 22.000 EUR altı gelir) ile %19 KDV'den muaf olabilirsiniz. Ama dikkat: bu statüyü kullanırsanız işverenlerden alacağınız KDV'yi de talep edemezsiniz. Ben 3 yıldır bu şekilde çalışıyorum, soruları yanıtlarım 🙃",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -121,7 +121,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-6",
     user_id: "it-6",
     content:
-      "Monorepo migration update: 14 servisi Bazel + remote cache (BuildBuddy) ile birleştirdik. CI süresi 28dk → 4dk. Ama Bazel'in Go support'u hâlâ 2nd-class — `gazelle` her PR'da BUILD dosyalarını rewrite ediyor, devs kızıyor. Nx-style hybrid (Turborepo for TS, Bazel for JVM/Go) deneyen var mı? Mainstage'e çıkmadan önce ground truth lazım.",
+      "Delivery Hero'da çalışan Türk mühendisler grubu kurduk! Her ay bir araya gelip Türkiye'deki teknoloji gelişmelerini ve Almanya'daki kariyer fırsatlarını paylaşıyoruz. Yeni üyeler için Slack davet linkini DM'den atabilirim. Özellikle junior ve mid-level developer'lar bekleniyor.",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -134,7 +134,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-7",
     user_id: "it-7",
     content:
-      "🔐 Supply-chain saldırılarına karşı: SLSA Level 3 + Sigstore (cosign) + in-toto attestations zincirini Argo Workflows üzerine kurduk. Kicker: OPA Gatekeeper policy → sadece imzalı + provenance'lı image'lar cluster'a girebiliyor. NPM'de `eslint-config` typosquatting saldırısını bu hafta bu pipeline yakaladı. Setup gist'i drop edebilirim, isteyen 👇",
+      "🔐 Almanya'daki Türk kuruluşlar için siber güvenlik uyarısı: Son 2 ayda 3 Türk derneğinin web sitesi hacklendi. Önlem olarak: Cloudflare ücretsiz katmanı + Let's Encrypt SSL + düzenli yedekleme yeterli. WordPress kullananlar özellikle eklentileri güncel tutsun. Detaylı rehber hazırladım, isteyenler 👇",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -147,7 +147,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-8",
     user_id: "it-1",
     content:
-      "Cuma akşamı Kreuzberg'te `c-base`'de gayri-resmi system design jam: bu hafta konu 'Rate limiting at planet scale'. Token bucket vs leaky bucket vs sliding window log — kendi prod implementasyonunuzu getirin, whiteboard'ta yırtarız. Bira benden, redis instance'ı sizden 🍺",
+      "Cuma akşamı Kreuzberg'de Türk yazılımcı buluşması: bu hafta konu 'Almanya'da iş kurmak ve mavi karttan girişimci vizasına geçiş'. Kendi deneyimlerimizi paylaşacağız, yeni gelenlere mentorluk yapıyoruz. Lahmacun benden, fikirler sizden 🍺",
     image_url:
       "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=900&q=80",
     country: "Almanya",
@@ -162,7 +162,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-9",
     user_id: "it-2",
     content:
-      "Dün gece prod'da Datadog APM trace'lerinde garip bir N+1 yakaladım: Hibernate `@OneToMany` lazy fetch + Jackson serializer triggering loop. `@JsonIgnore` + DTO projection ile çözdüm ama gerçek soru: 2026'da hâlâ neden default fetch=LAZY üstüne reflection serialization yapıyoruz? Spring Modulith dünyaya gerçekten lazım mı?",
+      "Berlin'deki Türk anneler için çocuk bakım tavsiyesi: Kita (kreş) için bekleme listesi 8-12 ay sürüyor. Başvuruyu hamileyken yapın! Ayrıca Tagesmutter (gündüz bakıcı) alternatifini değerlendirin, daha hızlı yer bulunuyor. Bizim kız 2 yaşındayken Kita bulduk, tecrübeleri paylaşabilirim.",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -175,7 +175,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-10",
     user_id: "it-4",
     content:
-      "🧠 Embedding model benchmark: bge-m3 vs e5-mistral-7b vs Cohere embed-v3. Türkçe + İngilizce karışık corpus'ta (Berlin diaspora forumu) MTEB-TR skorları: bge-m3 0.71, e5-mistral 0.74, Cohere 0.78 — ama Cohere API maliyeti 12× daha yüksek. Self-hosted için sweet spot e5-mistral-7b + GTX A6000.",
+      "🧠 Türkçe- Almanca çift dilli yapay zeka modeli geliştiren bir startup ile tanıştım. CorteQS üzerinden diaspora topluluklarına özel chatbot hizmeti sunacaklar. İlk pilot: Berlin Türk Ticaret Odası. Gelişmeleri buradan paylaşacağım.",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -188,7 +188,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-11",
     user_id: "it-3",
     content:
-      "Trade Republic'te yeni event sourcing setup: Kafka + Debezium CDC → Flink stateful aggregations → ClickHouse cold storage. Throughput 1.2M event/s, p99 lag <800ms. En zor kısım: GDPR right-to-be-forgotten event log üzerinde tombstone pattern + crypto-shredding. Bunu yapan başka fintech var mı BER'de?",
+      "Trade Republic'te çalışan Türk arkadaşlarla finansal okuryazarlık grubu kurduk. Her ay bir araya gelip borsa, ETF ve emeklilik sistemini (Riester/Rürup) tartışıyoruz. Almanya'da yatırım yapmak isteyen Türkler için çok faydalı oluyor. İlk toplantı kaydını YouTube'a yükledim, link profilimde.",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -201,7 +201,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-12",
     user_id: "it-5",
     content:
-      "PSA: `cargo audit` + `cargo deny` CI'da zorunlu yapın. Geçen hafta bir startup'ın `actix-web` 3.x bağımlılığında 2 yıllık known CVE buldum, hâlâ patch'lenmemiş. Rust güvenli dil ama supply chain hâlâ insan hatası 🙃",
+      "PSA: Almanya'da çalışan Türkler için önemli! Arbeitsamt (İş Kurumu) üzerinden Weiterbildung (ileri eğitim) başvurusu yapabilirsiniz. B1 Almanca + mesleki kurs = devlet destekli. Ben yazılım geliştirme kursuna başvurdum, aylık 800 EUR destek + kurs ücreti bedava.",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -214,7 +214,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-13",
     user_id: "it-6",
     content:
-      "Delivery Hero post-mortem (anonim): 14 dakikalık global outage. Root cause: bir SRE'nin `kubectl drain` komutu cluster autoscaler ile race condition'a girdi ve 3 AZ'ın hepsindeki ingress controller pod'larını aynı anda evict etti. Lesson: PDB (PodDisruptionBudget) `maxUnavailable: 1` her zaman, hatta junior dev için de.",
+      "Delivery Hero post-mortem (anonim): Almanya'daki Türk kurye ağının yoğun saatlerde yaşadığı operasyonel sorunları çözdük. Yeni rota optimizasyonu ile Berlin bölgesinde teslimat süresi %35 azaldı. Türk kurye arkadaşların geri bildirimleri çok değerli, özellikle adres bulma konusunda.",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -227,7 +227,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-14",
     user_id: "it-7",
     content:
-      "🔐 Zero Trust deep dive: BeyondCorp benzeri internal app proxy kurarken Cloudflare Access vs Pomerium vs Pangolin denedim. Pomerium'un OPA integration'ı + per-route policy en esnek geldi. Cloudflare daha turnkey ama policy-as-code esnekliği yok. Pangolin OSS + self-hosted için sürpriz iyi.",
+      "🔐 Almanya'daki Türk STK'lar için dijital güvenlik eğitimi veriyoruz: Önümüzdeki ay Berlin Türk Dernekleri Birliği'nde ücretsiz workshop. Konular: güçlü parola yönetimi, 2FA kurulumu, phishing tespiti, sosyal mühendislik. Kayıt için DM.",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -240,7 +240,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-15",
     user_id: "it-1",
     content:
-      "Hot take #2: Microservices değil, 'right-sized services'. N26'da 12 ana domain → 12 servis. Her servisin bir tech lead'i, bir on-call rotation'ı, bir DB'si. Daha fazla bölmek = daha fazla coordination overhead. Conway's Law tam tersini söylüyor olsa da 200 servisi olan startup'ları görüyorum, içim cız ediyor.",
+      "Hot take: Almanya'daki Türk girişimciler çoğunlukla yanlış şirket türü seçiyor. GmbH yerine UG (haftungbeschränkt) ile başlamak çok daha mantıklı — kuruluş maliyeti 1 EUR, yıllık mali yükümlülük daha düşük. Tövciye geçiş de mümkün. Bu konuda danışmanlık veriyorum, soruları yanıtlarım.",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -253,7 +253,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-16",
     user_id: "it-2",
     content:
-      "Zalando SRE oncall haftası bitti, 73 alert, 4 incident, 1 prod deploy rollback. Pattern: en çok alert kapanan saat 03:00-05:00 CET — Asia traffic spike + bizim batch jobs çakışıyor. Çözüm geliyor: cross-region traffic shaping. Kim daha kötü oncall yaşadı? 😅",
+      "Zalando'da çalışan Türk kadınlar grubu kurduk! Her ay bir araya gelip kariyer gelişimi, iş-yaşam dengesi ve Almanya'da kadın olmak konularını tartışıyoruz. Bu ayın konuğu: Dr. Elif Şahin, göçmenlik hukuku danışmanı. Açık davet, katılmak isteyenler DM.",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -266,7 +266,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-17",
     user_id: "it-4",
     content:
-      "RAG pipeline'da chunking strategy karşılaştırması (Türkçe legal docs üzerinde): fixed 512 token vs semantic chunking (LangChain) vs hierarchical (LlamaIndex). MRR@10 sonuçları: fixed 0.42, semantic 0.58, hierarchical 0.67. Hierarchical'in retrieval latency'si 2.3× daha yüksek ama production-ready için değer.",
+      "RAG pipeline ile Türkçe diaspora hukuki dokümanları üzerinde çalışıyoruz. Almanya'daki Türkler için oturum izni, vatandaşlık ve sosyal haklar hakkında sorulara otomatik yanıt veren sistem geliştiriyoruz. İlk testler çok iyi gidiyor, hukuki danışmanlık maliyetini %70 azaltabilir.",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -279,7 +279,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-18",
     user_id: "it-3",
     content:
-      "Pazartesi sabahı, kahve sıfır, prod database migration. 47M row üzerinde `ALTER TABLE ... ADD COLUMN ... DEFAULT ...`. PG14'te metadata-only operation olduğunu unutup `pt-online-schema-change` ile 6 saat bekledik. RTFM önemli, özellikle Pazartesi 🙃",
+      "Pazartesi sabahı, kahve sıfır, prod sorunu. Almanya'daki Türk e-ticaret girişiminin ödeme sistemi çöktü. Sebep: Türkiye'den gelen kredi kartı ödemelerinde 3D Secure uyumsuzluğu. Çözüm: özel gateway entegrasyonu. Bu tür teknik detayları paylaşmak için CorteQS IT Cafe'yi kullanıyoruz 🙃",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -292,7 +292,7 @@ export const mockCafeITPosts: MockPost[] = [
     id: "it-post-19",
     user_id: "it-6",
     content:
-      "📚 Kitap önerisi: 'Designing Data-Intensive Applications' (Kleppmann) — 2026'da hâlâ gold standard. Yeni 2nd edition draft'ı GitHub'da: streaming systems chapter'ı genişletilmiş, RAFT/Paxos pratik örnekleri eklenmiş. Berlin'de okuma grubu kuruyorum, isteyen DM 📖",
+      "📚 Almanya'daki Türkler için kitap önerisi: 'Almanya'da Yaşam Rehberi' (Türkçe) — 2026 güncellemesiyle beraber tüm hukuki süreçler, okul sistemi, sağlık sigortası ve emeklilik detayları içinde. Berlin'de okuma grubu kuruyorum, isteyen DM 📖",
     image_url: null,
     country: "Almanya",
     city: "Berlin",
@@ -484,7 +484,7 @@ export const mockPosts: MockPost[] = [
     id: "post-13",
     user_id: "user-7",
     content:
-      "🇦🇺 Sydney Opera House önünde Türk kahvaltısı pop-up'ımızı açtık! Sucuklu yumurta, börek ve çay servisimiz var. Bu hafta sonuna kadar Bondi Beach'teyiz.",
+      "🇦🇺 Sydney'de Türk kahvaltısı pop-up'ımızı açtık! Sucuklu yumurta, börek ve çay servisimiz var. Bu hafta sonuna kadar Bondi Beach'teyiz.",
     image_url: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800&q=80",
     country: "Avustralya",
     city: "Sydney",
@@ -497,7 +497,7 @@ export const mockPosts: MockPost[] = [
     id: "post-14",
     user_id: "user-8",
     content:
-      "Dubai'de serbest bölge şirket kurulumu bu yıl çok kolaylaştı. IFZA'da 3 günde ticari lisans aldık. Vergi muafiyeti + %100 yabancı sermaye. Soruları yanıtlarım.",
+      "Dubai'de serbest bölge şirket kurulumu bu yıl çok kolaylaştı. IFZA'da 3 günde ticari lisans aldık. Vergi muafiyeti + %100 yabancı sermaye. Türk girişimcilere özel danışmanlık veriyorum, soruları yanıtlarım.",
     image_url: null,
     country: "Birleşik Arap Emirlikleri",
     city: "Dubai",
@@ -510,7 +510,7 @@ export const mockPosts: MockPost[] = [
     id: "post-15",
     user_id: "user-9",
     content:
-      "🇮🇳 Mumbai'den merhaba! Diwali etkinliğimiz için Türk-Hint dostluk gecesi düzenliyoruz. Dans, müzik ve füzyon mutfağı. Biletler Eventbrite'da.",
+      "🇮🇳 Mumbai'den merhaba! Türk-Hint dostluk gecesi düzenliyoruz. Dans, müzik ve füzyon mutfağı. Biletler Eventbrite'da. Mumbai'deki Türk topluluğu olarak her ay bir araya geliyoruz.",
     image_url: "https://images.unsplash.com/photo-1567333126229-db29274e6626?w=800&q=80",
     country: "Hindistan",
     city: "Mumbai",
@@ -523,7 +523,7 @@ export const mockPosts: MockPost[] = [
     id: "post-16",
     user_id: "user-10",
     content:
-      "Viyana'da öğrenci yurtlarında oda bulmak zorlaştı. OeAD'ın waitlist sistemi varmış, bilmeyenler için: 15 Şubat'ta başvurular açılıyor, erken başvuru şart.",
+      "Viyana'da öğrenci yurtlarında oda bulmak zorlaştı. OeAD'ın waitlist sistemi varmış, bilmeyenler için: 15 Şubat'ta başvurular açılıyor, erken başvuru şart. Türk öğrenci topluluğu olarak rehber hazırladık.",
     image_url: null,
     country: "Avusturya",
     city: "Viyana",
@@ -536,7 +536,7 @@ export const mockPosts: MockPost[] = [
     id: "post-17",
     user_id: "user-11",
     content:
-      "🇨🇭 Zürih'te yeni açılan coworking space'imizde Türk girişimcilere özel %30 indirim! İlk 3 ay sabit fiyat, sonra esnek. DM'den detay atıyorum.",
+      "🇨🇭 Zürih'te yeni açılan coworking space'imizde Türk girişimcilere özel %30 indirim! İlk 3 ay sabit fiyat, sonra esnek. DM'den detay atıyorum. Türk iş ağı kurmak isteyenler bekleniyor.",
     image_url: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
     country: "İsviçre",
     city: "Zürih",
@@ -549,7 +549,7 @@ export const mockPosts: MockPost[] = [
     id: "post-18",
     user_id: "user-12",
     content:
-      "Los Angeles'ta film sektöründe staj yapmak isteyenlere: WME ve CAA her yıl 20+ international intern alıyor. OPT süreciyle birlikte 12 aylık vizeler veriliyor. CV ve cover letter örnekleri için bağlantı kurun.",
+      "Los Angeles'ta film sektöründe staj yapmak isteyen Türk gençlere: WME ve CAA her yıl 20+ international intern alıyor. OPT süreciyle birlikte 12 aylık vizeler veriliyor. CV ve cover letter örnekleri için bağlantı kurun.",
     image_url: null,
     country: "ABD",
     city: "Los Angeles",
@@ -562,8 +562,8 @@ export const mockPosts: MockPost[] = [
     id: "post-19",
     user_id: "user-13",
     content:
-      "Cape Town'da Türk restoranı açmak için pazar araştırması yapıyoruz. Yerel yatırımcı arıyoruz, franchise modeliyle giriş yapacağız. Ilgilenene detaylı pitch deck hazır.",
-    image_url: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800&q=80",
+      "Cape Town'da Türk restoranı açmak için pazar araştırması yapıyoruz. Yerel yatırımcı arıyoruz, franchise modeliyle giriş yapacağız. Türk mutfağını Güney Afrika'ya taşımak isteyen girişimciler DM atabilir.",
+    image_url: "https://images.unsplash.com/photo-1580060839134-75c5edca2e99?w=800&q=80",
     country: "Güney Afrika",
     city: "Cape Town",
     author_role: "business",
@@ -575,7 +575,7 @@ export const mockPosts: MockPost[] = [
     id: "post-20",
     user_id: "user-14",
     content:
-      "🇳🇴 Oslo'da doğum izni 49 hafta (babalar için de 15 hafta ücretli). Türk aileler için çok önemli bir bilgi, özellikle ikinci çocuk planlayanlar. Nav'dan başvuru 2 haftada sonuçlanıyor.",
+      "🇳🇴 Oslo'da doğum izni 49 hafta (babalar için de 15 hafta ücretli). Türk aileler için çok önemli bir bilgi, özellikle ikinci çocuk planlayanlar. Nav'dan başvuru 2 haftada sonuçlanıyor. Deneyimlerimi paylaşabilirim.",
     image_url: null,
     country: "Norveç",
     city: "Oslo",
@@ -588,7 +588,7 @@ export const mockPosts: MockPost[] = [
     id: "post-21",
     user_id: "user-15",
     content:
-      "Seoul'de K-startup ekosistemine giriş yaptık. KOSDAQ listeleme danışmanlığı veriyoruz. Türk teknoloji firmaları için bridge programı hazırladık. İlk başvuru 15 Mayıs.",
+      "Seoul'de K-startup ekosistemine giriş yaptık. KOSDAQ listeleme danışmanlığı veriyoruz. Türk teknoloji firmaları için bridge programı hazırladık. İlk başvuru 15 Mayıs. Türk-Kore iş birlikleri için fırsat!",
     image_url: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=800&q=80",
     country: "Güney Kore",
     city: "Seul",
@@ -601,7 +601,7 @@ export const mockPosts: MockPost[] = [
     id: "post-22",
     user_id: "user-16",
     content:
-      "Brüksel'de AB stajı başvuruları açıldı! Schuman programıyla 5 aylık ücretli staj. Türkçe bilen departmanlar: DG NEAR ve DG ECHO. Son başvuru 30 Haziran.",
+      "Brüksel'de AB stajı başvuruları açıldı! Schuman programıyla 5 aylık ücretli staj. Türkçe bilen departmanlar: DG NEAR ve DG ECHO. Son başvuru 30 Haziran. Türk öğrencilere önemli fırsat!",
     image_url: null,
     country: "Belçika",
     city: "Brüksel",
@@ -614,7 +614,7 @@ export const mockPosts: MockPost[] = [
     id: "post-23",
     user_id: "user-17",
     content:
-      "Kahire'de Türk-Arap Ticaret Fuarı'ndayız. 200+ katılımcı, 15 Türk firması. İmzalanan MOU'lar: 12 milyon dolarlık ilk yıl hedefi. Yarın son gün, bekleriz.",
+      "Kahire'de Türk-Arap Ticaret Fuarı'ndayız. 200+ katlımcı, 15 Türk firması. İmzalanan MOU'lar: 12 milyon dolarlık ilk yıl hedefi. Yarın son gün, bekleriz. Türk iş dünyası Mısır pazarında büyüyor!",
     image_url: "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800&q=80",
     country: "Mısır",
     city: "Kahire",
@@ -627,7 +627,7 @@ export const mockPosts: MockPost[] = [
     id: "post-24",
     user_id: "user-18",
     content:
-      "🇷🇺 Moskova'da yeni vizre rejimi: Türk vatandaşlarına 6 aylık çok girişli turist vizesi. Başvuru 3 günde sonuçlanıyor. Rehberlik ve transfer hizmetlerimiz aktif.",
+      "🇷🇺 Moskova'da yeni vize rejimi: Türk vatandaşlarına 6 aylık çok girişli turist vizesi. Başvuru 3 günde sonuçlanıyor. Rehberlik ve transfer hizmetlerimiz aktif. Türk turistler için özel paketler hazırladık.",
     image_url: null,
     country: "Rusya",
     city: "Moskova",
@@ -640,7 +640,7 @@ export const mockPosts: MockPost[] = [
     id: "post-25",
     user_id: "user-19",
     content:
-      "Singapur Changi'de transit yolcular için 96 saatlik vizesiz tur programı varmış! Ben denedim, şehir turu + Marina Bay gezisi ücretsiz. Atatürk heykelini de gördüm Gardens by the Bay'de.",
+      "Singapur Changi'de transit yolcular için 96 saatlik vizesiz tur programı varmış! Ben denedim, şehir turu + Marina Bay gezisi ücretsiz. Atatürk heykelini de gördüm Gardens by the Bay'de. Türk turistler kaçırmayın!",
     image_url: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=800&q=80",
     country: "Singapur",
     city: "Singapur",
@@ -653,7 +653,7 @@ export const mockPosts: MockPost[] = [
     id: "post-26",
     user_id: "user-20",
     content:
-      "Roma'da La Sapienza'da Türkoloji bölümü açılıyor! Türkçe öğretmenliği ve çeviri alanında 30 kontenjan. Türkiye'den başvuru şartları: YÖS veya B2 Türkçe sertifikası.",
+      "Roma'da La Sapienza'da Türkoloji bölümü açılıyor! Türkçe öğretmenliği ve çeviri alanında 30 kontenjan. Türkiye'den başvuru şartları: YÖS veya B2 Türkçe sertifikası. Türk akademisyenler Roma'ya geliyor!",
     image_url: null,
     country: "İtalya",
     city: "Roma",
@@ -666,7 +666,7 @@ export const mockPosts: MockPost[] = [
     id: "post-27",
     user_id: "user-1",
     content:
-      "Mexico City'de Türk-Meksika mezze restoranı açtık. İlk hafta 450 müşteri! Yerel lezzetlerle füzyon menü: sucuklu taco, biber dolması burrito. Şubat sonuna kadar %20 indirim.",
+      "Mexico City'de Türk-Meksika mezze restoranı açtık. İlk hafta 450 müşteri! Yerel lezzetlerle füzyon menü: sucuklu taco, biber dolması burrito. Şubat sonuna kadar %20 indirim. Türk mutfağı dünyayı fethediyor!",
     image_url: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=800&q=80",
     country: "Meksika",
     city: "Mexico City",
@@ -679,7 +679,7 @@ export const mockPosts: MockPost[] = [
     id: "post-28",
     user_id: "user-7",
     content:
-      "🇳🇿 Auckland'da WWOOFing yapanlar için Türk çiftlik ağı kuruyoruz. Organik zeytinliklerde 3 hafta konaklama + yemek karşılığı İngilizce pratik. İlk 10 başvuruya ücretsiz transfer.",
+      "🇳🇿 Auckland'da WWOOFing yapanlar için Türk çiftlik ağı kuruyoruz. Organik zeytinliklerde 3 hafta konaklama + yemek karşılığı İngilizce pratik. İlk 10 başvuruya ücretsiz transfer. Türk çiftçilerle buluşma fırsatı!",
     image_url: null,
     country: "Yeni Zelanda",
     city: "Auckland",
@@ -692,7 +692,7 @@ export const mockPosts: MockPost[] = [
     id: "post-29",
     user_id: "user-3",
     content:
-      "Bangkok'ta dijital göçebe vizesi (Smart Visa) süreci tamamlandı. 4 yıllık, sınırsız giriş çıkış, vergi muafiyeti. Danışmanlık hizmetlerimiz başladı, profilimde detaylar.",
+      "Bangkok'ta dijital göçebe vizesi (Smart Visa) süreci tamamlandı. 4 yıllık, sınırsız giriş çıkış, vergi muafiyeti. Danışmanlık hizmetlerimiz başladı, profilimde detaylar. Türk dijital göçebeler Bangkok'u keşfediyor!",
     image_url: "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&q=80",
     country: "Tayland",
     city: "Bangkok",
@@ -705,7 +705,7 @@ export const mockPosts: MockPost[] = [
     id: "post-30",
     user_id: "user-11",
     content:
-      "Helsinki'de startup visa ile geldim, 2 ayda residence permit aldım. Finlandiya'da şirket kurulumu online, 150 EUR. Kışın -20°C ama girişimcilik ekosistemi çok sıcak!",
+      "Helsinki'de startup visa ile geldim, 2 ayda residence permit aldım. Finlandiya'da şirket kurulumu online, 150 EUR. Kışın -20°C ama girişimcilik ekosistemi çok sıcak! Türk girişimciler kuzeyi fethediyor.",
     image_url: null,
     country: "Finlandiya",
     city: "Helsinki",
@@ -718,7 +718,7 @@ export const mockPosts: MockPost[] = [
     id: "post-31",
     user_id: "user-14",
     content:
-      "🇵🇹 Lizbon'da golden visa alternatifi: D7 pasif gelir vizesi. Aylık 820 EUR gelir kanıtı yeterli. Bizim danışmanlık ofisimiz Rua Augusta'da, randevu için DM.",
+      "🇵🇹 Lizbon'da golden visa alternatifi: D7 pasif gelir vizesi. Aylık 820 EUR gelir kanıtı yeterli. Bizim danışmanlık ofisimiz Rua Augusta'da, randevu için DM. Türk emeklileri Lizbon'a akıyor!",
     image_url: "https://images.unsplash.com/photo-1555881400-74d7acaacd81?w=800&q=80",
     country: "Portekiz",
     city: "Lizbon",
@@ -731,7 +731,7 @@ export const mockPosts: MockPost[] = [
     id: "post-32",
     user_id: "user-8",
     content:
-      "Kuala Lumpur'da Türk ürünleri ithalat şirketimizin lansmanı! Gıda, tekstil ve inşaat malzemeleri. Yerel distribütörler arıyoruz. Bu hafta KLCC Convention Centre'da stand 42'deyiz.",
+      "Kuala Lumpur'da Türk ürünleri ithalat şirketimizin lansmanı! Gıda, tekstil ve inşaat malzemeleri. Yerel distribütörler arıyoruz. Bu hafta KLCC Convention Centre'da stand 42'deyiz. Türk ihracatçılar bekleniyor!",
     image_url: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800&q=80",
     country: "Malezya",
     city: "Kuala Lumpur",
@@ -744,7 +744,7 @@ export const mockPosts: MockPost[] = [
     id: "post-33",
     user_id: "user-10",
     content:
-      "Sao Paulo'da Türk-Brezilya Kültür Derneği'nin yıllık pilav günü! 500 kişilik kapasite, 8 farklı pilav tarifi. Biletler 50 BRL, geliri depremzedelere aktarıyoruz.",
+      "Sao Paulo'da Türk-Brezilya Kültür Derneği'nin yıllık pilav günü! 500 kişilik kapasite, 8 farklı pilav tarifi. Biletler 50 BRL, geliri depremzedelere aktarıyoruz. Türk dayanışması kıtaları aşıyor!",
     image_url: null,
     country: "Brezilya",
     city: "Sao Paulo",
@@ -757,7 +757,7 @@ export const mockPosts: MockPost[] = [
     id: "post-34",
     user_id: "user-16",
     content:
-      "Kopenhag'ta bisiklet kültürü inanılmaz. Ama kışın kar lastiği şart! İlk hafta 3 kez düştüm. Yerel Türk bisikletçi topluluğuna katıldım, her Pazar Amager'de buluşuyoruz.",
+      "Kopenhag'ta bisiklet kültürü inanılmaz. Ama kışın kar lastiği şart! İlk hafta 3 kez düştüm. Yerel Türk bisikletçi topluluğuna katıldım, her Pazar Amager'de buluşuyoruz. Türk sporcular Danimarka'yı keşfediyor!",
     image_url: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=80",
     country: "Danimarka",
     city: "Kopenhag",
@@ -770,7 +770,7 @@ export const mockPosts: MockPost[] = [
     id: "post-35",
     user_id: "user-12",
     content:
-      "Tel Aviv'de startup pitch competition'da finale kaldık! AI-driven logistics platformumuz 1. sırada. Ödül: 6 aylık WeWork ofisi + 50K USD yatırım. Teşekkürler diaspora desteği!",
+      "Tel Aviv'de startup pitch competition'da finale kaldık! AI-driven logistics platformumuz 1. sırada. Ödül: 6 aylık WeWork ofisi + 50K USD yatırım. Teşekkürler diaspora desteği! Türk girişimciler İsrail'de parlıyor.",
     image_url: null,
     country: "İsrail",
     city: "Tel Aviv",
@@ -783,7 +783,7 @@ export const mockPosts: MockPost[] = [
     id: "post-36",
     user_id: "user-18",
     content:
-      "🇮🇪 Dublin'de Google ve Meta ofislerine yakın Türk ev arkadaşı arıyorum. 3+1 daire, kira 2.400 EUR. Türk mutfağına düşkün, düzenli biriyle yaşamak istiyorum. DM atın.",
+      "🇮🇪 Dublin'de Google ve Meta ofislerine yakın Türk ev arkadaşı arıyorum. 3+1 daire, kira 2.400 EUR. Türk mutfağına düşkün, düzenli biriyle yaşamak istiyorum. DM atın. Türk öğrenciler Dublin'e!",
     image_url: null,
     country: "İrlanda",
     city: "Dublin",
@@ -796,7 +796,7 @@ export const mockPosts: MockPost[] = [
     id: "post-37",
     user_id: "user-20",
     content:
-      "Viyana'da Türkçe kitap kafe açtık: hem kahve hem kütüphane. Orhan Pamuk, Elif Şafak ve klasikler. Üyelik 15 EUR/ay, öğrencilere %50 indirim. Mariahilfer Straße 112.",
+      "Viyana'da Türkçe kitap kafe açtık: hem kahve hem kütüphane. Orhan Pamuk, Elif Şafak ve klasikler. Üyelik 15 EUR/ay, öğrencilere %50 indirim. Mariahilfer Straße 112. Türk edebiyatı Viyana'da!",
     image_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
     country: "Avusturya",
     city: "Viyana",
@@ -809,7 +809,7 @@ export const mockPosts: MockPost[] = [
     id: "post-38",
     user_id: "user-2",
     content:
-      "🇵🇱 Varşova'da Türk-Polonya dostluk konseri! Sezen Aksu ve Chopin eserlerinin füzyonu. 20 Mayıs, National Philharmonic. Biletler biletinim'de, ilk 50 kişiye özel meet&greet.",
+      "🇵🇱 Varşova'da Türk-Polonya dostluk konseri! Sezen Aksu ve Chopin eserlerinin füzyonu. 20 Mayıs, National Philharmonic. Biletler biletinim'de, ilk 50 kişiye özel meet&greet. Türk müziği Avrupa'da yankılanıyor!",
     image_url: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=800&q=80",
     country: "Polonya",
     city: "Varşova",
@@ -822,7 +822,7 @@ export const mockPosts: MockPost[] = [
     id: "post-39",
     user_id: "user-9",
     content:
-      "Dubai'den Türkiye'ye yatırım yapmak isteyenler için yeni fırsat: Antalya Serbest Bölge'de lojistik merkezi kurulumu. %100 yabancı sermaye + 20 yıl vergi muafiyeti. Pitch toplantısı yarın.",
+      "Dubai'den Türkiye'ye yatırım yapmak isteyenler için yeni fırsat: Antalya Serbest Bölge'de lojistik merkezi kurulumu. %100 yabancı sermaye + 20 yıl vergi muafiyeti. Pitch toplantısı yarın. Türk girişimciler yatırıma davetlisiniz!",
     image_url: null,
     country: "Birleşik Arap Emirlikleri",
     city: "Dubai",
@@ -835,7 +835,7 @@ export const mockPosts: MockPost[] = [
     id: "post-40",
     user_id: "user-4",
     content:
-      "Stockholm'de yeni göçmenler için hukuk danışmanlığı: iş sözleşmesi incelemesi, 500 SEK. İlk 10 kişiye ücretsiz. Noter onaylı çeviriler de yapıyoruz.",
+      "Stockholm'de yeni göçmenler için hukuk danışmanlığı: iş sözleşmesi incelemesi, 500 SEK. İlk 10 kişiye ücretsiz. Noter onaylı çeviriler de yapıyoruz. Türk göçmenlerin haklarını koruyoruz!",
     image_url: null,
     country: "İsveç",
     city: "Stockholm",
@@ -848,26 +848,26 @@ export const mockPosts: MockPost[] = [
     id: "post-41",
     user_id: "user-6",
     content:
-      "🇨🇦 Toronto'da Türk market zincirimizin 3. şubesini açtık! Etobicoke'de, Humber College yanında. Öğrencilere %10 indirim. Açılış haftası kayısılı baklava ikramımız var.",
+      "🇨🇦 Toronto'da Türk market zincirimizin 3. şubesini açtık! Etobicoke'de, Humber College yanında. Öğrencilere %10 indirim. Açılış haftası kayısılı baklava ikramımız var. Türk lezzetleri Kanada'ya yayılıyor!",
     image_url: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80",
     country: "Kanada",
     city: "Toronto",
     author_role: "business",
-    like_count: 134,
-    comment_count: 33,
+    like_count: 94,
+    comment_count: 26,
     created_at: new Date(Date.now() - 1000 * 60 * 182).toISOString(),
   },
   {
     id: "post-42",
-    user_id: "user-15",
+    user_id: "user-3",
     content:
-      "Taipei'de dijital göçebe vizesi (Gold Card) aldım! 3 yıllık, aile dahil, sağlık sigortası dahil. Başvuru tamamen online, 2 haftada sonuç. Detaylı rehber hazırladım, profilimde link.",
+      "Madrid'de Türkçe konuşan emlak danışmanı arayanlar için: Usera ve Tetuán bölgelerinde Türk mahalleleri oluşmaya başladı. Kiralar şehir merkezine göre %40 daha uygun. Türk aileler için ideal bölgeler.",
     image_url: null,
-    country: "Tayvan",
-    city: "Taipei",
+    country: "İspanya",
+    city: "Madrid",
     author_role: "user",
-    like_count: 203,
-    comment_count: 48,
-    created_at: new Date(Date.now() - 1000 * 60 * 189).toISOString(),
+    like_count: 63,
+    comment_count: 17,
+    created_at: new Date(Date.now() - 1000 * 60 * 188).toISOString(),
   },
 ];
