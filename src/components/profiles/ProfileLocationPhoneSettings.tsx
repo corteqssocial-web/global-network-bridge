@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { MapPin, Save, Loader2 } from "lucide-react";
+import { MapPin, Save, Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
@@ -9,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { countryCities } from "@/data/countryCities";
 import PhoneVerification from "@/components/PhoneVerification";
+import { isTRResident, getDigitalCommunityFlag, setDigitalCommunityFlag } from "@/lib/caddeRules";
 
 /**
  * Reusable settings block: required Country + City selectors (synced to profiles table)
