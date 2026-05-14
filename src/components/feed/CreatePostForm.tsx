@@ -268,19 +268,6 @@ const CreatePostForm = ({ onCreated, cafeId, activeCountry, activeCity }: Props)
         </Button>
         {uploading && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
 
-        <button
-          type="button"
-          onClick={() => setKopruOnly((v) => !v)}
-          className={`h-9 px-3 rounded-md border text-xs font-bold flex items-center gap-1.5 transition-colors ${
-            kopruOnly
-              ? "bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 text-white border-transparent"
-              : "bg-background border-border hover:bg-muted"
-          }`}
-          title="TR-Diaspora arasında Taşınanlar / İş Yapanlar / Mentör Arayanlar"
-        >
-          🌉 {kopruOnly ? "Köprü ✓" : "Köprü"}
-        </button>
-
         {!kopruOnly && (
           <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold inline-flex items-center gap-1">
             <Globe className="h-3 w-3" /> @{postCountry || "—"}{city ? ` · @${city}` : ""}
