@@ -6,13 +6,18 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { FileText, Settings, Save } from "lucide-react";
+import { FileText, Settings, Save, Users as UsersIcon, Plus, Trash2, Target } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { ORGANIZATION_CATEGORIES, findOrgCategory } from "@/data/organizationCategories";
 import { countryList } from "@/contexts/DiasporaContext";
 import { countryCities } from "@/data/countryCities";
 
 const STORAGE_KEY = "association_profile_v1";
+
+export interface BoardMember {
+  name: string;
+  role: string;
+}
 
 export interface AssociationProfileData {
   name: string;
@@ -26,6 +31,10 @@ export interface AssociationProfileData {
   city: string;
   address: string;
   founded: string;
+  mission: string;
+  vision: string;
+  activityAreas: string;
+  boardMembers: BoardMember[];
 }
 
 export const defaultAssociationProfile: AssociationProfileData = {
@@ -40,6 +49,10 @@ export const defaultAssociationProfile: AssociationProfileData = {
   city: "",
   address: "",
   founded: "",
+  mission: "",
+  vision: "",
+  activityAreas: "",
+  boardMembers: [],
 };
 
 export const loadAssociationProfile = (): AssociationProfileData => {
@@ -47,7 +60,12 @@ export const loadAssociationProfile = (): AssociationProfileData => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return defaultAssociationProfile;
-    return { ...defaultAssociationProfile, ...JSON.parse(raw) };
+    const parsed = JSON.parse(raw);
+    return {
+      ...defaultAssociationProfile,
+      ...parsed,
+      boardMembers: Array.isArray(parsed.boardMembers) ? parsed.boardMembers : [],
+    };
   } catch {
     return defaultAssociationProfile;
   }
@@ -68,6 +86,16 @@ const AssociationSettingsForm = ({ onSaved }: Props) => {
 
   const cat = findOrgCategory(data.categoryKey);
   const cities = data.country && countryCities[data.country] ? countryCities[data.country] : [];
+
+  const addBoardMember = () =>
+    update("boardMembers", [...(data.boardMembers || []), { name: "", role: "" }]);
+  const updateBoardMember = (i: number, k: keyof BoardMember, v: string) => {
+    const next = [...(data.boardMembers || [])];
+    next[i] = { ...next[i], [k]: v };
+    update("boardMembers", next);
+  };
+  const removeBoardMember = (i: number) =>
+    update("boardMembers", (data.boardMembers || []).filter((_, idx) => idx !== i));
 
   const handleSave = () => {
     if (!data.name.trim()) {
@@ -200,6 +228,97 @@ const AssociationSettingsForm = ({ onSaved }: Props) => {
             />
           </div>
         </div>
+      </div>
+
+      {/* Hakkında — Misyon / Vizyon / Faaliyet Alanları */}
+      <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+        <h2 className="text-xl font-bold text-foreground mb-2 flex items-center gap-2">
+          <Target className="h-5 w-5 text-turquoise" /> Hakkında
+        </h2>
+        <p className="text-xs text-muted-foreground mb-4">
+          Bu alanlar profil sayfanızın "Hakkında" sekmesinde gösterilir.
+        </p>
+        <div className="space-y-4">
+          <div>
+            <Label>Misyon</Label>
+            <Textarea
+              rows={3}
+              value={data.mission}
+              onChange={(e) => update("mission", e.target.value)}
+              placeholder="Diaspora kimliğini güçlendirmek, üyeler arası dayanışmayı artırmak."
+            />
+          </div>
+          <div>
+            <Label>Vizyon</Label>
+            <Textarea
+              rows={3}
+              value={data.vision}
+              onChange={(e) => update("vision", e.target.value)}
+              placeholder="Bölgenin en aktif ve referans alınan kuruluşu olmak."
+            />
+          </div>
+          <div>
+            <Label>Faaliyet Alanları</Label>
+            <Textarea
+              rows={3}
+              value={data.activityAreas}
+              onChange={(e) => update("activityAreas", e.target.value)}
+              placeholder="Eğitim, kültür-sanat, sosyal yardım, gençlik programları."
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Yönetim Kurulu */}
+      <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+            <UsersIcon className="h-5 w-5 text-turquoise" /> Yönetim Kurulu
+          </h2>
+          <Button variant="outline" size="sm" className="gap-1" onClick={addBoardMember}>
+            <Plus className="h-3.5 w-3.5" /> Üye Ekle
+          </Button>
+        </div>
+        <p className="text-xs text-muted-foreground mb-4">
+          Profil sayfanızdaki "Hakkında" sekmesinin yanında listelenir.
+        </p>
+
+        {(data.boardMembers || []).length === 0 ? (
+          <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
+            Henüz yönetim kurulu üyesi eklenmedi.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {data.boardMembers.map((m, i) => (
+              <div key={i} className="grid grid-cols-[1fr,1fr,auto] gap-2 items-end">
+                <div>
+                  <Label className="text-xs">İsim</Label>
+                  <Input
+                    value={m.name}
+                    onChange={(e) => updateBoardMember(i, "name", e.target.value)}
+                    placeholder="Mehmet Yıldız"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs">Görev</Label>
+                  <Input
+                    value={m.role}
+                    onChange={(e) => updateBoardMember(i, "role", e.target.value)}
+                    placeholder="Başkan"
+                  />
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => removeBoardMember(i)}
+                  aria-label="Üyeyi sil"
+                >
+                  <Trash2 className="h-4 w-4 text-destructive" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="lg:col-span-2">
