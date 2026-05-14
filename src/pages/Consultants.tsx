@@ -368,9 +368,9 @@ const Consultants = () => {
               .filter((c) => (country === "all" || c.country === country) && (city === "all" || c.city === city))
               .map((c) => ({ ...c, isAmbassador: false }));
             // Fallback: if no city-matching volunteer, show platform-wide volunteers
-            const volunteerCardsFinal = volunteerCards.length
+            const volunteerCardsFinal = (volunteerCards.length
               ? volunteerCards
-              : consultants.filter((c) => volunteerMentorIds.has(c.id)).map((c) => ({ ...c, isAmbassador: false }));
+              : consultants.filter((c) => volunteerMentorIds.has(c.id)).map((c) => ({ ...c, isAmbassador: false }))).slice(0, 1);
 
             return (
               <>
