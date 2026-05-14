@@ -51,8 +51,8 @@ export const useActiveCafes = (filters?: { countries?: string[]; cities?: string
 
 const parseJoinError = (msg: string | undefined): string => {
   if (!msg) return "Bilinmeyen hata.";
-  if (msg.includes("daily_cafe_limit"))
-    return "Cafe katılım limitine takıldın. (Bu kural kaldırılacak — yöneticiyle paylaş.)";
+  if (msg.includes("daily_cafe_open_limit"))
+    return "Günde en fazla 3 cafe açabilirsin. Yarın tekrar dene.";
   if (msg.includes("cafe_full")) return "Cafe dolu. Başka bir cafe deneyin.";
   if (msg.includes("tr_phone_restricted"))
     return "TR (+90) numaralı kullanıcılar yalnızca Relocation ve Expo cafelerine katılabilir.";
