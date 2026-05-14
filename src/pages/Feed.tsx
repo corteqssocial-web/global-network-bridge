@@ -272,11 +272,7 @@ const Feed = () => {
 
       const newPosts = (data as FeedPost[]) || [];
 
-      // Fallback: gerçek paylaşım yoksa mock akışı göster (ilk yüklemede)
-      if (reset && newPosts.length === 0 && !cafeId) {
-        loadDemoData();
-        return;
-      }
+      // Not: gerçek/demo akışı kullanıcı toggle ile seçer; otomatik fallback yok.
 
       setHasMore(newPosts.length === PAGE_SIZE);
       setPosts((prev) => (reset ? newPosts : [...prev, ...newPosts]));
@@ -721,39 +717,6 @@ const Feed = () => {
                   <h3 className="text-sm font-bold">Konum</h3>
                   <Badge variant="secondary" className="ml-auto text-[10px]">{scopeLabel}</Badge>
                 </div>
-                {/* Global — demo toggle: gerçek feed boşsa demo aç, doluysa demoyu kapat */}
-                <button
-                  onClick={() => {
-                    setSelectedContinent(null);
-                    setSelectedCountries([]);
-                    setSelectedCities([]);
-                    if (demoMode) {
-                      // Demo aktifse kapat ve gerçek feed'e dön
-                      setDemoMode(false);
-                      setPosts([]);
-                      setHasMore(true);
-                      setPage(0);
-                      fetchPosts(true);
-                      toast({ title: "Demo kapatıldı", description: "Gerçek akış yükleniyor." });
-                    } else if (posts.length === 0) {
-                      // Gerçek feed boşsa demoyu aç
-                      loadDemoData();
-                      toast({ title: "Demo açıldı", description: "Henüz gerçek akış yok — örnek içerik gösteriliyor." });
-                    } else {
-                      toast({ title: "Global akış", description: "Gerçek kullanıcı akışı zaten aktif." });
-                    }
-                  }}
-                  className={`w-full mb-3 flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-bold transition-all ${
-                    demoMode
-                      ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white border-transparent shadow-sm"
-                      : scopeLabel === "Global"
-                      ? "bg-gradient-to-r from-sky-500 to-violet-500 text-white border-transparent shadow-sm"
-                      : "bg-card text-foreground border-border hover:border-primary/40"
-                  }`}
-                  title={demoMode ? "Demoyu kapat" : "Global akış / boşsa demo aç"}
-                >
-                  🌍 {demoMode ? "Demo Aktif — Kapat" : "Global — Tüm Ülkeler"}
-                </button>
                 <MultiCountryCityFilter
                   selectedCountries={selectedCountries}
                   selectedCities={selectedCities}
@@ -762,6 +725,18 @@ const Feed = () => {
                   onCitiesChange={setSelectedCities}
                   onContinentChange={setSelectedContinent}
                   restrictTR={isTRUser}
+                  demoMode={demoMode}
+                  onDemoModeChange={(v) => {
+                    if (v) {
+                      loadDemoData();
+                    } else {
+                      setDemoMode(false);
+                      setPosts([]);
+                      setHasMore(true);
+                      setPage(0);
+                      fetchPosts(true);
+                    }
+                  }}
                 />
                 {isTRUser && (
                   <p className="text-[10px] text-amber-600 dark:text-amber-400 mt-2 px-0.5 leading-snug">
