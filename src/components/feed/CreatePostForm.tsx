@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Send, MapPin, Info, ImagePlus, Video, X, Loader2, Globe } from "lucide-react";
+import { Send, MapPin, Info, ImagePlus, Video, X, Loader2, Globe, Lock } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -13,6 +14,7 @@ import { countryCities } from "@/data/countryCities";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { canPostCadde, canPostKopru, isTRResident } from "@/lib/caddeRules";
 
 interface Props {
   onCreated: () => void;
@@ -33,7 +35,13 @@ const isTRPhone = (p?: string | null) => {
 
 const CreatePostForm = ({ onCreated, cafeId, activeCountry, activeCity }: Props) => {
   const { user, accountType, profile } = useAuth();
-  const isTR = (profile?.country === "Türkiye") || isTRPhone(profile?.phone);
+  const isTR = isTRResident(profile);
+  const allowedCadde = canPostCadde(profile);
+  const allowedKopru = canPostKopru(profile);
+  // Auto-lock to Köprü if user can only post there.
+  useEffect(() => {
+    if (allowedKopru && !allowedCadde) setKopruOnly(true);
+  }, [allowedKopru, allowedCadde]);
   const [content, setContent] = useState("");
   const [profileCountry, setProfileCountry] = useState<string>("");
   const [profileCity, setProfileCity] = useState<string>("");
@@ -173,8 +181,50 @@ const CreatePostForm = ({ onCreated, cafeId, activeCountry, activeCity }: Props)
 
   const usingActive = !!activeCountry && activeCountry !== profileCountry && !isTR && !kopruOnly;
 
+  // If user is not allowed to post anywhere, show a lock card.
+  if (!allowedCadde && !allowedKopru) {
+    return (
+      <div className="rounded-2xl border border-amber-500/40 bg-amber-500/5 p-4 text-sm">
+        <div className="flex items-start gap-3">
+          <Lock className="h-5 w-5 text-amber-600 mt-0.5 shrink-0" />
+          <div className="flex-1">
+            <p className="font-semibold mb-1">Cadde'de paylaşım yapmak için profilini tamamla</p>
+            <p className="text-xs text-muted-foreground mb-3">
+              Cadde paylaşımı için <strong>ülkeni</strong> ve <strong>telefon doğrulamanı</strong> tamamlamış olmalısın.
+              TR kullanıcıysan paylaşımların <strong>@Türkiye</strong> caddesinde, yurt dışındaysan yaşadığın ülke caddesinde yayınlanır.
+            </p>
+            <Button asChild size="sm">
+              <Link to="/profile?tab=settings">Profil ayarlarına git</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="rounded-2xl border border-border bg-card p-4 space-y-3">
+      {/* Cadde / Köprü seçici — yalnızca her ikisi de uygunsa görünür */}
+      {allowedKopru && allowedCadde && (
+        <div className="flex items-center gap-1 p-1 rounded-full bg-muted/60 w-fit text-[11px]">
+          <button
+            type="button"
+            onClick={() => setKopruOnly(false)}
+            className={`px-3 py-1 rounded-full font-semibold transition ${!kopruOnly ? "bg-card shadow text-foreground" : "text-muted-foreground"}`}
+          >
+            🛣️ Cadde
+          </button>
+          <button
+            type="button"
+            onClick={() => setKopruOnly(true)}
+            className={`px-3 py-1 rounded-full font-semibold transition ${kopruOnly ? "bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 text-white" : "text-muted-foreground"}`}
+          >
+            🌉 Köprü
+          </button>
+        </div>
+      )}
+      
+
       <Textarea
         placeholder="Diaspora'ya bir şeyler paylaş..."
         value={content}

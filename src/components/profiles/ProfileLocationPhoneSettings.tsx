@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { MapPin, Save, Loader2 } from "lucide-react";
+import { MapPin, Save, Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
@@ -9,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { countryCities } from "@/data/countryCities";
 import PhoneVerification from "@/components/PhoneVerification";
+import { isTRResident, getDigitalCommunityFlag, setDigitalCommunityFlag } from "@/lib/caddeRules";
 
 /**
  * Reusable settings block: required Country + City selectors (synced to profiles table)
@@ -91,8 +93,38 @@ const ProfileLocationPhoneSettings = () => {
       </div>
 
       <PhoneVerification />
+
+      <KopruDigitalCommunityToggle />
     </div>
   );
 };
+
+const KopruDigitalCommunityToggle = () => {
+  const { profile } = useAuth();
+  const [enabled, setEnabled] = useState<boolean>(() => getDigitalCommunityFlag());
+  const acc = (profile?.account_type || "").toLowerCase();
+  const isOrgLike = ["business", "consultant", "association", "ambassador"].includes(acc);
+  if (!isTRResident(profile) || !isOrgLike) return null;
+  return (
+    <div className="rounded-xl border border-rose-500/30 bg-gradient-to-r from-rose-500/5 via-amber-400/5 to-emerald-500/5 p-4">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex-1">
+          <Label className="flex items-center gap-1.5 text-sm font-semibold">
+            <Sparkles className="h-4 w-4 text-rose-500" /> Dijital Topluluk · Köprü erişimi
+          </Label>
+          <p className="text-[11px] text-muted-foreground mt-1 leading-snug">
+            Türkiye'den kayıtlı işletme / danışman / kuruluş olarak hesabını <strong>Dijital Topluluk</strong> olarak işaretlersen,
+            paylaşımlarını TR–Diaspora ortak akışı olan <strong>🌉 Köprü</strong>'de de yapabilirsin.
+          </p>
+        </div>
+        <Switch
+          checked={enabled}
+          onCheckedChange={(v) => { setEnabled(v); setDigitalCommunityFlag(v); }}
+        />
+      </div>
+    </div>
+  );
+};
+
 
 export default ProfileLocationPhoneSettings;
