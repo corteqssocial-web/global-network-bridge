@@ -170,7 +170,9 @@ const UserCard = ({ u }: { u: MockUser }) => (
       <Button variant="outline" size="sm" className="flex-1 gap-1 h-7 text-[11px]">
         <MessageSquare className="h-3 w-3" /> Mesaj
       </Button>
-      <Button variant="default" size="sm" className="flex-1 h-7 text-[11px]">Profili Gör</Button>
+      <Button asChild variant="default" size="sm" className="flex-1 h-7 text-[11px]">
+        <Link to={`/diaspora-people/${u.id}`}>Profili Gör</Link>
+      </Button>
     </div>
   </div>
 );
