@@ -359,7 +359,7 @@ const Consultants = () => {
                 rating: amb.rating,
               }),
             }));
-            const professionalCards = ["dr-hasan-turk", "dilek-aydin-psk", "mehmet-yilmaz", "ayse-kara"]
+            const professionalCards = ["ayse-kara", "mehmet-yilmaz", "dr-hasan-turk"]
               .map((id) => consultants.find((c) => c.id === id))
               .filter(Boolean)
               .map((c: any) => ({ ...c, isAmbassador: false }));
