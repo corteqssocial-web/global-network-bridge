@@ -14,6 +14,7 @@ import DemoPageBanner from "@/components/DemoPageBanner";
 import DetailAuthLock from "@/components/DetailAuthLock";
 import DemoTabPlaceholder from "@/components/DemoTabPlaceholder";
 import PublicEventsList from "@/components/PublicEventsList";
+import { loadAssociationProfile } from "@/components/profiles/AssociationSettingsForm";
 
 const AssociationDetail = () => {
   const { id } = useParams<{ id: string }>();
