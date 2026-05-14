@@ -43,7 +43,7 @@ export const moderateCafeName = (raw: string): CafeNameModerationResult => {
       return {
         ok: false,
         reason:
-          "Topluluk kurallarına aykırı: parti, siyasi/dini referanslar, lider isimleri, küfür ve hakaret içeren cafe adlarına izin verilmiyor.",
+          "Topluluk kurallarına aykırı: küfür, siyaset, ırkçılık ve nefret söylemi içeren cafe adlarına izin verilmiyor.",
       };
     }
   }
