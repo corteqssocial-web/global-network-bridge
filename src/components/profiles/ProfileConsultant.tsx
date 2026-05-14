@@ -11,7 +11,7 @@ import { Lock } from "lucide-react";
 import {
   User, MapPin, Globe, Star, Calendar, Users, Clock, Eye,
   TrendingUp, Settings, BarChart3, CreditCard, Plus, ChevronRight, Crown,
-  Video, Bot, Edit3, MessageSquare, ArrowLeft, Award, Heart,
+  Video, Bot, Edit3, MessageSquare, ArrowLeft, Award, Heart, Home,
   Phone, Mail, CheckCircle, Briefcase, BookOpen, Megaphone, ClipboardList
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
