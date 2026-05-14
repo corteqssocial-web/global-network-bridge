@@ -171,7 +171,7 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCou
             <Label className="text-xs">Cafe Adı *</Label>
             <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Örn: Berlin Devs Cafe" maxLength={60} />
             <p className="text-[10px] text-muted-foreground mt-1">
-              Parti, siyasi/dini referanslar, lider isimleri, küfür ve hakaret içeren adlar reddedilir.
+              Küfür, siyaset, ırkçılık ve nefret söylemi içeren adlar reddedilir.
             </p>
           </div>
           <div>
