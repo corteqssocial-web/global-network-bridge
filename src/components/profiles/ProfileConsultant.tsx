@@ -11,7 +11,7 @@ import { Lock } from "lucide-react";
 import {
   User, MapPin, Globe, Star, Calendar, Users, Clock, Eye,
   TrendingUp, Settings, BarChart3, CreditCard, Plus, ChevronRight, Crown,
-  Video, Bot, Edit3, MessageSquare, ArrowLeft, Award, Heart,
+  Video, Bot, Edit3, MessageSquare, ArrowLeft, Award, Heart, Home,
   Phone, Mail, CheckCircle, Briefcase, BookOpen, Megaphone, ClipboardList
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -40,6 +40,7 @@ import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationP
 import BusinessLicenseUpload from "@/components/profiles/BusinessLicenseUpload";
 import ProfileCommonSettings from "@/components/profiles/ProfileCommonSettings";
 import ProfileSubcategoriesSettings from "@/components/profiles/ProfileSubcategoriesSettings";
+import RealEstateListingsPanel from "@/components/profiles/RealEstateListingsPanel";
 
 const ProfileConsultant = () => {
   const { user } = useAuth();
@@ -86,6 +87,8 @@ const ProfileConsultant = () => {
     balance: 0,
     aiTwinEnabled: false,
   };
+
+  const isRealEstate = /gayrimenkul|emlak|real ?estate/i.test(profile?.business_sector || "");
 
   // Real session/review/earnings data will be wired to Supabase tables
   // (live_sessions, ai_twin_sessions, reviews, payouts) when those tables ship.
@@ -185,6 +188,9 @@ const ProfileConsultant = () => {
           <TabsTrigger value="campaign" className="gap-1.5"><Megaphone className="h-4 w-4" /> Tanıtım</TabsTrigger>
           <TabsTrigger value="whatsapp" className="gap-1.5"><MessageSquare className="h-4 w-4" /> WhatsApp</TabsTrigger>
           <TabsTrigger value="job-listings" className="gap-1.5"><Briefcase className="h-4 w-4" /> İş İlanları</TabsTrigger>
+          {isRealEstate && (
+            <TabsTrigger value="real-estate" className="gap-1.5"><Home className="h-4 w-4" /> Emlak İlanları</TabsTrigger>
+          )}
           <TabsTrigger value="ai-twin" className="gap-1.5"><Bot className="h-4 w-4" /> AI Twin</TabsTrigger>
           <TabsTrigger value="follows" className="gap-1.5"><Heart className="h-4 w-4" /> Takip Ettiklerim</TabsTrigger>
           <NotificationsTabTrigger className="text-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground" />
@@ -554,6 +560,12 @@ const ProfileConsultant = () => {
         <TabsContent value="job-listings" className="mt-6">
           <JobListingsManager />
         </TabsContent>
+
+        {isRealEstate && (
+          <TabsContent value="real-estate" className="mt-6">
+            <RealEstateListingsPanel city={consultant.city} country={consultant.country} />
+          </TabsContent>
+        )}
 
         <TabsContent value="follows" className="mt-6">
           <MyFollowsSection />
