@@ -219,7 +219,7 @@ const CreatePostForm = ({ onCreated, cafeId, activeCountry, activeCity }: Props)
           </button>
         </div>
       )}
-      {allowedKopru && !allowedCadde && !kopruOnly && setKopruOnly(true) as any}
+      
 
       <Textarea
         placeholder="Diaspora'ya bir şeyler paylaş..."
