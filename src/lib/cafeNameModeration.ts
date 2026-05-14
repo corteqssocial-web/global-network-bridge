@@ -20,8 +20,13 @@ const FORBIDDEN_PATTERNS: RegExp[] = [
   /\b(erdoğan|erdogan|kılıçdaroğlu|kilicdaroglu|bahçeli|bahceli|imamoğlu|imamoglu|davutoğlu|davutoglu|babacan|akşener|aksener|özel\b|atatürk|ataturk|inönü|inonu|menderes|özal|ozal|demirel|ecevit)\b/i,
   /\b(trump|biden|obama|putin|xi jinping|netanyahu|merkel|macron|orban|orbán|le pen|meloni|sunak|starmer|modi|zelensky)\b/i,
 
-  // Hate / extremism
-  /\b(nazi|hitler|mussolini|stalin|isis|işid|isid|pkk|pyd|fetö|feto|deaş|deas|taliban|hamas|hizbullah|hezbollah)\b/i,
+  // Hate / extremism / terror groups
+  /\b(nazi|hitler|mussolini|stalin|isis|işid|isid|pkk|pyd|fetö|feto|deaş|deas|taliban|hamas|hizbullah|hezbollah|kkk|ku klux|white power|whitepower|sieg heil|heil hitler|14\/?88|14 88)\b/i,
+
+  // Racism / ethnic slurs / hate speech
+  /\b(zenci|ç[ıi]ng[ée]ne|kıro|kiro|ırkç[ıi]|irkci|ırkçılık|irkcilik|faşist|fasist|fascist|faşizm|fasizm|soyk[ıi]r[ıi]m|genocide|aşağ[ıi] ırk|asagi irk|üstün ırk|ustun irk|öjeni|eugenics)\b/i,
+  /\b(nigger|nigga|chink|gook|spic|kike|wetback|towelhead|sandnigger|paki|coon|jigaboo|raghead)\b/i,
+  /\b(k[üu]rtler defolun|t[üu]rkler defolun|araplar defolun|ermeniler defolun|yahudiler defolun|suriyeliler defolun|g[öo]çmenler defolun|gocmenler defolun)\b/i,
 ];
 
 export type CafeNameModerationResult =
@@ -38,7 +43,7 @@ export const moderateCafeName = (raw: string): CafeNameModerationResult => {
       return {
         ok: false,
         reason:
-          "Topluluk kurallarına aykırı: parti, siyasi/dini referanslar, lider isimleri, küfür ve hakaret içeren cafe adlarına izin verilmiyor.",
+          "Topluluk kurallarına aykırı: küfür, siyaset, ırkçılık ve nefret söylemi içeren cafe adlarına izin verilmiyor.",
       };
     }
   }
