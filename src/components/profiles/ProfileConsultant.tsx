@@ -561,6 +561,12 @@ const ProfileConsultant = () => {
           <JobListingsManager />
         </TabsContent>
 
+        {isRealEstate && (
+          <TabsContent value="real-estate" className="mt-6">
+            <RealEstateListingsPanel city={consultant.city} country={consultant.country} />
+          </TabsContent>
+        )}
+
         <TabsContent value="follows" className="mt-6">
           <MyFollowsSection />
         </TabsContent>
