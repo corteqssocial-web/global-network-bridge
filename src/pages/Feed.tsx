@@ -768,7 +768,7 @@ const Feed = () => {
                   <Badge variant="secondary" className="text-[10px]">{activeCafes.length}</Badge>
                 </div>
                 <p className="text-[10px] text-muted-foreground mb-3 leading-snug">
-                  Aktif cafe'ler — açılış 2 saat, Premium 4 saat. Günde 1 katılım.
+                  Aktif cafe'ler — açılış 2 saat, Premium 4 saat. Katılım limitsiz; günde en fazla <strong>3 cafe açabilirsin</strong>.
                 </p>
 
                 {/* Search: ülke / şehir / anahtar kelime */}
