@@ -38,6 +38,10 @@ const CreatePostForm = ({ onCreated, cafeId, activeCountry, activeCity }: Props)
   const isTR = isTRResident(profile);
   const allowedCadde = canPostCadde(profile);
   const allowedKopru = canPostKopru(profile);
+  // Auto-lock to Köprü if user can only post there.
+  useEffect(() => {
+    if (allowedKopru && !allowedCadde) setKopruOnly(true);
+  }, [allowedKopru, allowedCadde]);
   const [content, setContent] = useState("");
   const [profileCountry, setProfileCountry] = useState<string>("");
   const [profileCity, setProfileCity] = useState<string>("");
