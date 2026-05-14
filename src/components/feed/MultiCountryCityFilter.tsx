@@ -18,6 +18,9 @@ interface Props {
   onContinentChange: (v: string | null) => void;
   /** TR'de yaşayan / TR numaralı kullanıcılar yalnızca Türkiye, Köprü ve Global akışı görüntüleyebilir. */
   restrictTR?: boolean;
+  /** Gerçek vs Demo akış toggle */
+  demoMode?: boolean;
+  onDemoModeChange?: (v: boolean) => void;
 }
 
 const MultiCountryCityFilter = ({
@@ -28,6 +31,8 @@ const MultiCountryCityFilter = ({
   onCitiesChange,
   onContinentChange,
   restrictTR = false,
+  demoMode = false,
+  onDemoModeChange,
 }: Props) => {
   
   const [countrySearch, setCountrySearch] = useState("");
