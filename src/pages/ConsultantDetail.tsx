@@ -237,12 +237,60 @@ const ConsultantDetail = () => {
 
               {isEnabled("bio_tab") && (
                 <TabsContent value="bio" className="mt-6">
-                  <DemoTabPlaceholder label="Biyografi — Demo" />
+                  <div className="bg-card rounded-2xl border border-border p-6 shadow-card space-y-4">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-bold text-foreground">Hakkında</h3>
+                      <span className="text-[10px] bg-muted text-muted-foreground rounded-full px-2 py-0.5 border border-border font-semibold">Demo</span>
+                    </div>
+                    <p className="text-sm text-foreground/90 font-body leading-relaxed">{consultant.bio}</p>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                      <div className="bg-muted/40 rounded-xl p-3 text-center">
+                        <p className="text-2xl font-bold text-primary">10+</p>
+                        <p className="text-[11px] text-muted-foreground">Yıl Deneyim</p>
+                      </div>
+                      <div className="bg-muted/40 rounded-xl p-3 text-center">
+                        <p className="text-2xl font-bold text-primary">{consultant.reviews}+</p>
+                        <p className="text-[11px] text-muted-foreground">Müşteri</p>
+                      </div>
+                      <div className="bg-muted/40 rounded-xl p-3 text-center">
+                        <p className="text-2xl font-bold text-primary">{consultant.languages.length}</p>
+                        <p className="text-[11px] text-muted-foreground">Dil</p>
+                      </div>
+                      <div className="bg-muted/40 rounded-xl p-3 text-center">
+                        <p className="text-2xl font-bold text-success">98%</p>
+                        <p className="text-[11px] text-muted-foreground">Memnuniyet</p>
+                      </div>
+                    </div>
+                    <div className="pt-2">
+                      <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Diller</p>
+                      <div className="flex flex-wrap gap-2">
+                        {consultant.languages.map((l) => (
+                          <span key={l} className="text-xs bg-muted text-foreground rounded-full px-3 py-1">{l}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </TabsContent>
               )}
               {isEnabled("specialties_tab") && (
                 <TabsContent value="specialties" className="mt-6">
-                  <DemoTabPlaceholder label="Uzmanlık Alanları — Demo" />
+                  <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+                    <div className="flex items-center gap-2 mb-4">
+                      <h3 className="font-bold text-foreground">Uzmanlık Alanları</h3>
+                      <span className="text-[10px] bg-muted text-muted-foreground rounded-full px-2 py-0.5 border border-border font-semibold">Demo</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {(consultant.specialties || []).map((s, i) => (
+                        <div key={s} className="flex items-start gap-3 p-3 rounded-xl border border-border bg-muted/30">
+                          <div className="bg-primary/10 text-primary rounded-lg w-8 h-8 flex items-center justify-center font-bold shrink-0">{i + 1}</div>
+                          <div>
+                            <p className="text-sm font-semibold text-foreground">{s}</p>
+                            <p className="text-xs text-muted-foreground font-body mt-0.5">Bireysel ve kurumsal müşterilere özel danışmanlık.</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </TabsContent>
               )}
               {isEnabled("events_tab") && (
@@ -252,7 +300,43 @@ const ConsultantDetail = () => {
               )}
               {isEnabled("contact_tab") && (
                 <TabsContent value="contact" className="mt-6">
-                  <DemoTabPlaceholder label="İletişim — Demo" />
+                  <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
+                    <div className="flex items-center gap-2 mb-4">
+                      <h3 className="font-bold text-foreground">İletişim</h3>
+                      <span className="text-[10px] bg-muted text-muted-foreground rounded-full px-2 py-0.5 border border-border font-semibold">Demo</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <a href={consultant.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-xl border border-border hover:border-primary/40 hover:bg-muted/40 transition">
+                        <div className="bg-primary/10 text-primary rounded-lg w-9 h-9 flex items-center justify-center"><GlobeIcon className="h-4 w-4" /></div>
+                        <div className="min-w-0">
+                          <p className="text-[11px] text-muted-foreground uppercase tracking-wide">Web Sitesi</p>
+                          <p className="text-sm font-semibold text-foreground truncate">{consultant.website?.replace(/^https?:\/\//, "")}</p>
+                        </div>
+                      </a>
+                      <a href={`https://wa.me/${(consultant.whatsapp || "").replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-xl border border-border hover:border-primary/40 hover:bg-muted/40 transition">
+                        <div className="bg-success/10 text-success rounded-lg w-9 h-9 flex items-center justify-center"><MessageSquare className="h-4 w-4" /></div>
+                        <div className="min-w-0">
+                          <p className="text-[11px] text-muted-foreground uppercase tracking-wide">WhatsApp</p>
+                          <p className="text-sm font-semibold text-foreground truncate">{consultant.whatsapp}</p>
+                        </div>
+                      </a>
+                      <div className="flex items-center gap-3 p-3 rounded-xl border border-border bg-muted/30">
+                        <div className="bg-primary/10 text-primary rounded-lg w-9 h-9 flex items-center justify-center"><MapPin className="h-4 w-4" /></div>
+                        <div className="min-w-0">
+                          <p className="text-[11px] text-muted-foreground uppercase tracking-wide">Konum</p>
+                          <p className="text-sm font-semibold text-foreground truncate">{consultant.city}, {consultant.country}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 p-3 rounded-xl border border-border bg-muted/30">
+                        <div className="bg-primary/10 text-primary rounded-lg w-9 h-9 flex items-center justify-center"><Clock className="h-4 w-4" /></div>
+                        <div className="min-w-0">
+                          <p className="text-[11px] text-muted-foreground uppercase tracking-wide">Yanıt Süresi</p>
+                          <p className="text-sm font-semibold text-foreground">Genelde 1 saat içinde</p>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground font-body mt-4">Bu bilgiler demo amaçlıdır — gerçek iletişim verileri danışman tarafından güncellenecektir.</p>
+                  </div>
                 </TabsContent>
               )}
             </Tabs>
