@@ -95,17 +95,40 @@ const MultiCountryCityFilter = ({
 
   return (
     <div className="flex flex-col gap-3">
-      {/* Caddeye Çık — global akış */}
-      <div className="flex">
+      {/* Caddeye Çık — global akış + Gerçek/Demo toggle */}
+      <div className="flex flex-col gap-1.5">
         <Button
           variant="outline"
           size="sm"
           onClick={() => { pickContinent(null); onCountriesChange([]); onCitiesChange([]); }}
-          className="gap-1.5 h-auto py-1.5 flex-col items-start"
+          className="gap-1.5 h-auto py-1.5 flex-col items-start self-start"
         >
           <span className="text-xs font-semibold leading-tight">Caddeye Çık →</span>
           <span className="text-[10px] text-muted-foreground leading-tight">global akış</span>
         </Button>
+        {onDemoModeChange && (
+          <div className="inline-flex items-center rounded-md border border-border bg-muted/30 p-0.5 self-start">
+            <button
+              type="button"
+              onClick={() => onDemoModeChange(false)}
+              className={`px-2.5 py-1 text-[10px] font-semibold rounded ${!demoMode ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              title="Veritabanındaki gerçek paylaşımları göster"
+            >
+              Gerçek
+            </button>
+            <button
+              type="button"
+              onClick={() => onDemoModeChange(true)}
+              className={`px-2.5 py-1 text-[10px] font-semibold rounded ${demoMode ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              title="Globaldeki kalabalık demo akışı göster"
+            >
+              Demo
+            </button>
+          </div>
+        )}
+        <span className="text-[10px] text-muted-foreground leading-tight px-0.5">
+          {demoMode ? "🎬 Demo: globaldeki kalabalık akış" : "📡 Gerçek: kullanıcı paylaşımları"}
+        </span>
       </div>
       <div className="flex flex-wrap items-center gap-2">
         {/* Countries */}
