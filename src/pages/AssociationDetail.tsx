@@ -24,6 +24,15 @@ const AssociationDetail = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const isFollowing = assoc ? isFollowed("association", assoc.id) : false;
+  const savedProfile = loadAssociationProfile();
+  const matchesSaved = !!assoc && !!savedProfile.name &&
+    savedProfile.name.trim().toLowerCase() === assoc.name.trim().toLowerCase();
+  const customMission = matchesSaved ? savedProfile.mission?.trim() : "";
+  const customVision = matchesSaved ? savedProfile.vision?.trim() : "";
+  const customActivities = matchesSaved ? savedProfile.activityAreas?.trim() : "";
+  const customBoard = matchesSaved && savedProfile.boardMembers?.length
+    ? savedProfile.boardMembers.filter((m) => m.name?.trim() || m.role?.trim())
+    : [];
 
   if (!assoc) {
     return (
