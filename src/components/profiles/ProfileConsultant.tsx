@@ -40,6 +40,7 @@ import ProfileLocationPhoneSettings from "@/components/profiles/ProfileLocationP
 import BusinessLicenseUpload from "@/components/profiles/BusinessLicenseUpload";
 import ProfileCommonSettings from "@/components/profiles/ProfileCommonSettings";
 import ProfileSubcategoriesSettings from "@/components/profiles/ProfileSubcategoriesSettings";
+import RealEstateListingsPanel from "@/components/profiles/RealEstateListingsPanel";
 
 const ProfileConsultant = () => {
   const { user } = useAuth();
