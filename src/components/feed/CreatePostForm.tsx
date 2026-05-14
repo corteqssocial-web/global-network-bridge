@@ -35,7 +35,9 @@ const isTRPhone = (p?: string | null) => {
 
 const CreatePostForm = ({ onCreated, cafeId, activeCountry, activeCity }: Props) => {
   const { user, accountType, profile } = useAuth();
-  const isTR = (profile?.country === "Türkiye") || isTRPhone(profile?.phone);
+  const isTR = isTRResident(profile);
+  const allowedCadde = canPostCadde(profile);
+  const allowedKopru = canPostKopru(profile);
   const [content, setContent] = useState("");
   const [profileCountry, setProfileCountry] = useState<string>("");
   const [profileCity, setProfileCity] = useState<string>("");
