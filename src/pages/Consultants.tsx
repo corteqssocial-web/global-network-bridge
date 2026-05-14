@@ -341,7 +341,7 @@ const Consultants = () => {
               return okCountry && okCity;
             });
             const fallbackAmbassador = ambassadorsForArea[0] || cityAmbassadors[0];
-            const ambassadorCards = (ambassadorsForArea.length ? ambassadorsForArea : [fallbackAmbassador]).map((amb) => ({
+            const ambassadorCards = (ambassadorsForArea.length ? ambassadorsForArea : [fallbackAmbassador]).slice(0, 1).map((amb) => ({
               id: amb.id,
               name: amb.name,
               role: "Şehir Elçisi",
@@ -359,7 +359,7 @@ const Consultants = () => {
                 rating: amb.rating,
               }),
             }));
-            const professionalCards = ["dr-hasan-turk", "dilek-aydin-psk", "mehmet-yilmaz", "ayse-kara"]
+            const professionalCards = ["ayse-kara", "mehmet-yilmaz", "dr-hasan-turk"]
               .map((id) => consultants.find((c) => c.id === id))
               .filter(Boolean)
               .map((c: any) => ({ ...c, isAmbassador: false }));
@@ -368,9 +368,9 @@ const Consultants = () => {
               .filter((c) => (country === "all" || c.country === country) && (city === "all" || c.city === city))
               .map((c) => ({ ...c, isAmbassador: false }));
             // Fallback: if no city-matching volunteer, show platform-wide volunteers
-            const volunteerCardsFinal = volunteerCards.length
+            const volunteerCardsFinal = (volunteerCards.length
               ? volunteerCards
-              : consultants.filter((c) => volunteerMentorIds.has(c.id)).map((c) => ({ ...c, isAmbassador: false }));
+              : consultants.filter((c) => volunteerMentorIds.has(c.id)).map((c) => ({ ...c, isAmbassador: false }))).slice(0, 1);
 
             return (
               <>
