@@ -1186,19 +1186,29 @@ const Feed = () => {
                           </div>
                         )}
                       </div>
-                      {cafeOpen && !isMember && user && (
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            if (cafe!.open_entry) joinCafe();
-                            else setJoinDialogOpen(true);
-                          }}
-                          className="gap-1.5"
-                        >
-                          <LogIn className="h-3.5 w-3.5" />
-                          {cafe!.open_entry ? "Cafe'ye Gir" : "Başvur"}
-                        </Button>
-                      )}
+                      {cafeOpen && !isMember && user && (() => {
+                        const reason = cafeAccessReason(profile, cafe);
+                        if (reason) {
+                          return (
+                            <div className="text-[10px] text-amber-600 dark:text-amber-400 max-w-[200px] text-right leading-snug">
+                              <Lock className="h-3 w-3 inline mr-1" />{reason}
+                            </div>
+                          );
+                        }
+                        return (
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              if (cafe!.open_entry) joinCafe();
+                              else setJoinDialogOpen(true);
+                            }}
+                            className="gap-1.5"
+                          >
+                            <LogIn className="h-3.5 w-3.5" />
+                            {cafe!.open_entry ? "Cafe'ye Gir" : "Başvur"}
+                          </Button>
+                        );
+                      })()}
                       {isMember && approved && <Badge className="bg-emerald-500/15 text-emerald-600 border-0">Üyesin</Badge>}
                       {isMember && !approved && <Badge variant="secondary" className="text-[10px]">Onay Bekliyor</Badge>}
                     </div>
