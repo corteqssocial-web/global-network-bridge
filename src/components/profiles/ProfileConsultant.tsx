@@ -88,6 +88,8 @@ const ProfileConsultant = () => {
     aiTwinEnabled: false,
   };
 
+  const isRealEstate = /gayrimenkul|emlak|real ?estate/i.test(profile?.business_sector || "");
+
   // Real session/review/earnings data will be wired to Supabase tables
   // (live_sessions, ai_twin_sessions, reviews, payouts) when those tables ship.
   const sessions = { live: [] as any[], aiTwin: [] as any[] };
