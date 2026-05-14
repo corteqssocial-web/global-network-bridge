@@ -93,8 +93,38 @@ const ProfileLocationPhoneSettings = () => {
       </div>
 
       <PhoneVerification />
+
+      <KopruDigitalCommunityToggle />
     </div>
   );
 };
+
+const KopruDigitalCommunityToggle = () => {
+  const { profile } = useAuth();
+  const [enabled, setEnabled] = useState<boolean>(() => getDigitalCommunityFlag());
+  const acc = (profile?.account_type || "").toLowerCase();
+  const isOrgLike = ["business", "consultant", "association", "ambassador"].includes(acc);
+  if (!isTRResident(profile) || !isOrgLike) return null;
+  return (
+    <div className="rounded-xl border border-rose-500/30 bg-gradient-to-r from-rose-500/5 via-amber-400/5 to-emerald-500/5 p-4">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex-1">
+          <Label className="flex items-center gap-1.5 text-sm font-semibold">
+            <Sparkles className="h-4 w-4 text-rose-500" /> Dijital Topluluk · Köprü erişimi
+          </Label>
+          <p className="text-[11px] text-muted-foreground mt-1 leading-snug">
+            Türkiye'den kayıtlı işletme / danışman / kuruluş olarak hesabını <strong>Dijital Topluluk</strong> olarak işaretlersen,
+            paylaşımlarını TR–Diaspora ortak akışı olan <strong>🌉 Köprü</strong>'de de yapabilirsin.
+          </p>
+        </div>
+        <Switch
+          checked={enabled}
+          onCheckedChange={(v) => { setEnabled(v); setDigitalCommunityFlag(v); }}
+        />
+      </div>
+    </div>
+  );
+};
+
 
 export default ProfileLocationPhoneSettings;
