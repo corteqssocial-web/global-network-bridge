@@ -245,24 +245,24 @@ const AssociationDetail = () => {
                     {assoc.name}, {assoc.founded} yılında {assoc.city} merkezli olarak kurulmuş, {assoc.country} genelinde diaspora topluluğuna hizmet veren bir {assoc.type.toLowerCase()}dir. Kültürel, sosyal ve eğitim faaliyetleriyle topluluğumuzu bir araya getirir.
                   </p>
                   <div className="grid sm:grid-cols-2 gap-3 text-sm">
-                    <div className="flex items-start gap-2"><Target className="h-4 w-4 text-turquoise mt-0.5" /><div><div className="font-semibold">Misyon</div><div className="text-muted-foreground">Diaspora kimliğini güçlendirmek, üyeler arası dayanışmayı artırmak.</div></div></div>
-                    <div className="flex items-start gap-2"><Award className="h-4 w-4 text-turquoise mt-0.5" /><div><div className="font-semibold">Vizyon</div><div className="text-muted-foreground">Bölgenin en aktif ve referans alınan kuruluşu olmak.</div></div></div>
-                    <div className="flex items-start gap-2"><Briefcase className="h-4 w-4 text-turquoise mt-0.5" /><div><div className="font-semibold">Faaliyet Alanları</div><div className="text-muted-foreground">Eğitim, kültür-sanat, sosyal yardım, gençlik programları.</div></div></div>
+                    <div className="flex items-start gap-2"><Target className="h-4 w-4 text-turquoise mt-0.5" /><div><div className="font-semibold">Misyon</div><div className="text-muted-foreground">{customMission || "Diaspora kimliğini güçlendirmek, üyeler arası dayanışmayı artırmak."}</div></div></div>
+                    <div className="flex items-start gap-2"><Award className="h-4 w-4 text-turquoise mt-0.5" /><div><div className="font-semibold">Vizyon</div><div className="text-muted-foreground">{customVision || "Bölgenin en aktif ve referans alınan kuruluşu olmak."}</div></div></div>
+                    <div className="flex items-start gap-2"><Briefcase className="h-4 w-4 text-turquoise mt-0.5" /><div><div className="font-semibold">Faaliyet Alanları</div><div className="text-muted-foreground">{customActivities || "Eğitim, kültür-sanat, sosyal yardım, gençlik programları."}</div></div></div>
                     <div className="flex items-start gap-2"><CalendarIcon className="h-4 w-4 text-turquoise mt-0.5" /><div><div className="font-semibold">Kuruluş Yılı</div><div className="text-muted-foreground">{assoc.founded}</div></div></div>
                   </div>
                 </div>
                 <div className="rounded-2xl border border-border bg-card p-6">
                   <h3 className="font-bold mb-3">Yönetim Kurulu</h3>
                   <ul className="space-y-3 text-sm">
-                    {[
+                    {(customBoard.length > 0 ? customBoard : [
                       { name: "Mehmet Yıldız", role: "Başkan" },
                       { name: "Ayşe Demir", role: "Başkan Yardımcısı" },
                       { name: "Ali Kaya", role: "Genel Sekreter" },
                       { name: "Zeynep Aksoy", role: "Sayman" },
-                    ].map((m) => (
-                      <li key={m.name} className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-full bg-turquoise/10 border border-turquoise/20 flex items-center justify-center text-xs font-bold text-turquoise">{m.name.split(" ").map(p=>p[0]).join("")}</div>
-                        <div><div className="font-semibold">{m.name}</div><div className="text-xs text-muted-foreground">{m.role}</div></div>
+                    ]).map((m, idx) => (
+                      <li key={`${m.name}-${idx}`} className="flex items-center gap-3">
+                        <div className="h-9 w-9 rounded-full bg-turquoise/10 border border-turquoise/20 flex items-center justify-center text-xs font-bold text-turquoise">{(m.name || "?").split(" ").map(p=>p[0]).filter(Boolean).slice(0,2).join("")}</div>
+                        <div><div className="font-semibold">{m.name || "—"}</div><div className="text-xs text-muted-foreground">{m.role || "—"}</div></div>
                       </li>
                     ))}
                   </ul>
