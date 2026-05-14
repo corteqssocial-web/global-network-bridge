@@ -20,6 +20,7 @@ import { mockPosts, mockAuthors, mockCafeITPosts } from "@/data/mockFeedPosts";
 import { useFeedSocial } from "@/hooks/useFeedSocial";
 import CaddeProfileGate from "@/components/CaddeProfileGate";
 import { useConnections } from "@/hooks/useConnections";
+import { cafeAccessReason } from "@/lib/caddeRules";
 
 const PAGE_SIZE = 20;
 
