@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Send, MapPin, Info, ImagePlus, Video, X, Loader2, Globe } from "lucide-react";
+import { Send, MapPin, Info, ImagePlus, Video, X, Loader2, Globe, Lock } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -13,6 +14,7 @@ import { countryCities } from "@/data/countryCities";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { canPostCadde, canPostKopru, isTRResident } from "@/lib/caddeRules";
 
 interface Props {
   onCreated: () => void;
