@@ -1128,6 +1128,9 @@ const Feed = () => {
                             </div>
                           </div>
                           <div className="text-[10px] font-semibold text-center truncate w-full" title={c.name}>{c.name}</div>
+                          {c.city && (
+                            <div className="text-[9px] text-primary font-semibold truncate w-full text-center">@{c.city}</div>
+                          )}
                           {c.kind === "community" ? (
                             <div className="text-[9px] text-muted-foreground whitespace-nowrap">⏰ {closeTime}</div>
                           ) : (
