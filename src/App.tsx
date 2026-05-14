@@ -53,6 +53,7 @@ const CookiePolicy = lazy(() => import("./pages/legal/CookiePolicy"));
 
 const Feed = lazy(() => import("./pages/Feed"));
 const DiasporaPeople = lazy(() => import("./pages/DiasporaPeople"));
+const DiasporaPersonDetail = lazy(() => import("./pages/DiasporaPersonDetail"));
 const May19 = lazy(() => import("./pages/May19"));
 const May19Map = lazy(() => import("./pages/May19Map"));
 const NotFound = lazy(() => import("./pages/NotFound"));
