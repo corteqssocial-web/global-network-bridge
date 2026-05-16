@@ -1586,71 +1586,230 @@ export type Database = {
           },
         ]
       }
+      whatsapp_landing_comments: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          landing_id: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          landing_id: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          landing_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_landing_comments_landing_id_fkey"
+            columns: ["landing_id"]
+            isOneToOne: false
+            referencedRelation: "whatsapp_landings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      whatsapp_landing_follows: {
+        Row: {
+          created_at: string
+          id: string
+          landing_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          landing_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          landing_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_landing_follows_landing_id_fkey"
+            columns: ["landing_id"]
+            isOneToOne: false
+            referencedRelation: "whatsapp_landings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      whatsapp_landing_likes: {
+        Row: {
+          created_at: string
+          id: string
+          landing_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          landing_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          landing_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_landing_likes_landing_id_fkey"
+            columns: ["landing_id"]
+            isOneToOne: false
+            referencedRelation: "whatsapp_landings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       whatsapp_landings: {
         Row: {
+          accept_form_enabled: boolean
+          accept_form_questions: string | null
           admin_contact: string | null
           admin_name: string | null
           call_to_action_text: string | null
           category: string
+          central_city: string | null
+          central_country: string | null
           city: string
           conditions: string | null
           country: string
           created_at: string
           description: string | null
+          founded_year: number | null
           group_name: string
           hero_image: string | null
           id: string
+          member_count: number | null
           mode: string
+          primary_language: string | null
           rejection_reason: string | null
           slug: string
           status: string
           tagline: string | null
+          theme: string | null
           updated_at: string
           user_id: string
           whatsapp_link: string
         }
         Insert: {
+          accept_form_enabled?: boolean
+          accept_form_questions?: string | null
           admin_contact?: string | null
           admin_name?: string | null
           call_to_action_text?: string | null
           category: string
+          central_city?: string | null
+          central_country?: string | null
           city: string
           conditions?: string | null
           country: string
           created_at?: string
           description?: string | null
+          founded_year?: number | null
           group_name: string
           hero_image?: string | null
           id?: string
+          member_count?: number | null
           mode?: string
+          primary_language?: string | null
           rejection_reason?: string | null
           slug: string
           status?: string
           tagline?: string | null
+          theme?: string | null
           updated_at?: string
           user_id: string
           whatsapp_link: string
         }
         Update: {
+          accept_form_enabled?: boolean
+          accept_form_questions?: string | null
           admin_contact?: string | null
           admin_name?: string | null
           call_to_action_text?: string | null
           category?: string
+          central_city?: string | null
+          central_country?: string | null
           city?: string
           conditions?: string | null
           country?: string
           created_at?: string
           description?: string | null
+          founded_year?: number | null
           group_name?: string
           hero_image?: string | null
           id?: string
+          member_count?: number | null
           mode?: string
+          primary_language?: string | null
           rejection_reason?: string | null
           slug?: string
           status?: string
           tagline?: string | null
+          theme?: string | null
           updated_at?: string
           user_id?: string
+          whatsapp_link?: string
+        }
+        Relationships: []
+      }
+      whatsapp_link_requests: {
+        Row: {
+          category: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          group_name: string | null
+          id: string
+          note: string | null
+          status: string
+          submitter_contact: string | null
+          submitter_name: string | null
+          user_id: string | null
+          whatsapp_link: string
+        }
+        Insert: {
+          category?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          group_name?: string | null
+          id?: string
+          note?: string | null
+          status?: string
+          submitter_contact?: string | null
+          submitter_name?: string | null
+          user_id?: string | null
+          whatsapp_link: string
+        }
+        Update: {
+          category?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          group_name?: string | null
+          id?: string
+          note?: string | null
+          status?: string
+          submitter_contact?: string | null
+          submitter_name?: string | null
+          user_id?: string | null
           whatsapp_link?: string
         }
         Relationships: []
