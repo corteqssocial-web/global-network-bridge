@@ -1097,6 +1097,7 @@ export type Database = {
           created_at: string
           cv_name: string | null
           cv_path: string | null
+          education_level: string | null
           founded_year: number | null
           full_name: string | null
           gift_acceptance_enabled: boolean
@@ -1146,6 +1147,7 @@ export type Database = {
           created_at?: string
           cv_name?: string | null
           cv_path?: string | null
+          education_level?: string | null
           founded_year?: number | null
           full_name?: string | null
           gift_acceptance_enabled?: boolean
@@ -1195,6 +1197,7 @@ export type Database = {
           created_at?: string
           cv_name?: string | null
           cv_path?: string | null
+          education_level?: string | null
           founded_year?: number | null
           full_name?: string | null
           gift_acceptance_enabled?: boolean
