@@ -175,7 +175,43 @@ export interface SaveLandingInput {
   adminName?: string;
   adminContact?: string;
   description?: string;
+  theme?: string;
+  memberCount?: number;
+  centralCountry?: string;
+  centralCity?: string;
+  primaryLanguage?: string;
+  foundedYear?: number;
+  acceptFormEnabled?: boolean;
+  acceptFormQuestions?: string;
 }
+
+/** Lightweight link-only submission (members). Notifies admins via DB trigger. */
+export interface LinkRequestInput {
+  whatsappLink: string;
+  groupName?: string;
+  category?: string;
+  country?: string;
+  city?: string;
+  note?: string;
+  submitterName?: string;
+  submitterContact?: string;
+}
+
+export const submitLinkRequest = async (input: LinkRequestInput) => {
+  const { data: userRes } = await supabase.auth.getUser();
+  const { error } = await supabase.from("whatsapp_link_requests" as any).insert({
+    user_id: userRes.user?.id ?? null,
+    whatsapp_link: input.whatsappLink,
+    group_name: input.groupName ?? null,
+    category: input.category ?? null,
+    country: input.country ?? null,
+    city: input.city ?? null,
+    note: input.note ?? null,
+    submitter_name: input.submitterName ?? null,
+    submitter_contact: input.submitterContact ?? null,
+  });
+  if (error) throw error;
+};
 
 export const submitLanding = async (
   input: SaveLandingInput,
