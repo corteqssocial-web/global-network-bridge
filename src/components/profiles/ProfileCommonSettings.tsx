@@ -148,6 +148,8 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
         setIsVerified(!!data.is_verified);
         setBirthdayReminder(!!(data as any).birthday_reminder_enabled);
         setGiftAcceptance(!!(data as any).gift_acceptance_enabled);
+        setEducationLevel((data as any).education_level ?? "");
+        setSchool((data as any).school ?? "");
       }
       setEmail(user.email ?? "");
       setLoading(false);
