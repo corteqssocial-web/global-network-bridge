@@ -222,7 +222,19 @@ const WhatsAppGroups = () => {
                 Diasporanın WhatsApp ve Telegram gruplarını ülke ve şehir bazında filtrele.
               </p>
             </div>
-            <CountryCitySelector city={filterCity} onCityChange={setFilterCity} />
+            <div className="flex flex-col gap-3 w-full lg:w-auto">
+              <CountryCitySelector city={filterCity} onCityChange={setFilterCity} />
+              <div className="relative w-full lg:w-[420px]">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Grup adı, kategori, şehir, ülke..."
+                  className="pl-9 h-10"
+                  aria-label="Gruplarda ara"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Hero */}
@@ -670,15 +682,9 @@ const WhatsAppGroups = () => {
               <h2 className="text-xl font-bold flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-turquoise" /> Yayında Olan Gruplar
               </h2>
-              <div className="relative w-full sm:w-80">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Grup adı, kategori, şehir, ülke..."
-                  className="pl-9 h-9"
-                />
-              </div>
+              {searchQuery && (
+                <p className="text-xs text-muted-foreground">Arama: <span className="font-medium text-foreground">"{searchQuery}"</span></p>
+              )}
             </div>
 
             {(() => {
