@@ -78,13 +78,67 @@ const WhatsAppGroups = () => {
   const [adminName, setAdminName] = useState("");
   const [adminContact, setAdminContact] = useState("");
 
+  // Admin-curated metadata
+  const [theme, setTheme] = useState("");
+  const [memberCount, setMemberCount] = useState<string>("");
+  const [centralCountry, setCentralCountry] = useState("");
+  const [centralCity, setCentralCity] = useState("");
+  const [primaryLanguage, setPrimaryLanguage] = useState("");
+  const [foundedYear, setFoundedYear] = useState<string>("");
+  const [acceptFormEnabled, setAcceptFormEnabled] = useState(true);
+  const [acceptFormQuestions, setAcceptFormQuestions] = useState("");
+
   const [openDialog, setOpenDialog] = useState(false);
   const [consent, setConsent] = useState<ConsentState>(emptyConsent);
+
+  // Member quick-link submission
+  const [openLinkDialog, setOpenLinkDialog] = useState(false);
+  const [quickLink, setQuickLink] = useState("");
+  const [quickGroupName, setQuickGroupName] = useState("");
+  const [quickCountry, setQuickCountry] = useState("");
+  const [quickCity, setQuickCity] = useState("");
+  const [quickNote, setQuickNote] = useState("");
+  const [quickSubmitting, setQuickSubmitting] = useState(false);
+
+  // Demo like/follow/comment state (frontend-only, marked DEMO)
+  const [demoLikes, setDemoLikes] = useState<Record<string, number>>({ d1: 24, d2: 41 });
+  const [demoLiked, setDemoLiked] = useState<Record<string, boolean>>({});
+  const [demoFollowed, setDemoFollowed] = useState<Record<string, boolean>>({});
 
   const resetForm = () => {
     setGroupName(""); setCountry(""); setCity(""); setWhatsappLink(""); setDescription("");
     setHeroImage(""); setTagline(""); setCallToActionText(""); setConditions("");
     setAdminName(""); setAdminContact(""); setMode("visual"); setCreateLanding(true);
+    setTheme(""); setMemberCount(""); setCentralCountry(""); setCentralCity("");
+    setPrimaryLanguage(""); setFoundedYear(""); setAcceptFormEnabled(true); setAcceptFormQuestions("");
+  };
+
+  const handleQuickLinkSubmit = async () => {
+    if (!quickLink.trim()) {
+      toast({ title: "Link gerekli", description: "WhatsApp grup linkini yapıştır.", variant: "destructive" });
+      return;
+    }
+    setQuickSubmitting(true);
+    try {
+      await submitLinkRequest({
+        whatsappLink: quickLink.trim(),
+        groupName: quickGroupName || undefined,
+        country: quickCountry || undefined,
+        city: quickCity || undefined,
+        note: quickNote || undefined,
+      });
+      toast({
+        title: "Talebin alındı 🎉",
+        description: "Yöneticilere bildirim gönderildi — grubunu listeleyip listelemeyeceklerini sana ileteceğiz.",
+      });
+      setOpenLinkDialog(false);
+      setQuickLink(""); setQuickGroupName(""); setQuickCountry(""); setQuickCity(""); setQuickNote("");
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Bilinmeyen hata";
+      toast({ title: "Gönderilemedi", description: msg, variant: "destructive" });
+    } finally {
+      setQuickSubmitting(false);
+    }
   };
 
   const handleSubmit = async () => {
