@@ -111,8 +111,11 @@ const WhatsAppGroups = () => {
   const [lpPreview, setLpPreview] = useState<null | {
     name: string; city: string; tagline: string; heroImage: string;
     theme: string; conditions: string[]; whatsappLink: string;
+    memberCount?: number; centralCountry?: string; centralCity?: string;
+    primaryLanguage?: string; foundedYear?: number;
+    adminName?: string; acceptFormQuestions?: string[];
   }>(null);
-  const [joinForm, setJoinForm] = useState({ name: "", email: "", note: "" });
+  const [joinForm, setJoinForm] = useState({ name: "", email: "", note: "", answers: "" });
 
   useEffect(() => {
     if (!redirectTarget) { setRedirectCountdown(3); return; }
@@ -593,6 +596,17 @@ const WhatsAppGroups = () => {
                   theme: "Yazılım & Relocation",
                   conditions: ["Tech/yazılım profili", "Spam/ilan paylaşımı yasak", "İngilizce CV önerilir"],
                   whatsappLink: "https://chat.whatsapp.com/demo-london-devs",
+                  memberCount: 312,
+                  centralCountry: "İngiltere",
+                  centralCity: "Londra",
+                  primaryLanguage: "Türkçe / İngilizce",
+                  foundedYear: 2022,
+                  adminName: "Mert A.",
+                  acceptFormQuestions: [
+                    "LinkedIn profilin?",
+                    "Hangi teknolojilerde çalışıyorsun?",
+                    "Şu an Londra'da mısın yoksa relocation aşamasında mı?",
+                  ],
                   comments: [
                     { name: "Mert A.", text: "Bu grup sayesinde 2 ay içinde iş buldum 🙌" },
                     { name: "Ece K.", text: "Vize avukatı tavsiyeleri çok değerli." },
@@ -678,6 +692,13 @@ const WhatsAppGroups = () => {
                               name: g.name, city: g.city, tagline: g.tagline,
                               heroImage: g.heroImage!, theme: g.theme!, conditions: g.conditions!,
                               whatsappLink: g.whatsappLink,
+                              memberCount: (g as any).memberCount,
+                              centralCountry: (g as any).centralCountry,
+                              centralCity: (g as any).centralCity,
+                              primaryLanguage: (g as any).primaryLanguage,
+                              foundedYear: (g as any).foundedYear,
+                              adminName: (g as any).adminName,
+                              acceptFormQuestions: (g as any).acceptFormQuestions,
                             })}
                           >
                             <Layout className="h-3.5 w-3.5" /> Landing'i Aç
@@ -842,6 +863,26 @@ const WhatsAppGroups = () => {
               <div className="p-6 space-y-4">
                 <p className="text-sm text-muted-foreground italic">{lpPreview.tagline}</p>
 
+                {/* Group metadata — collected at admin registration */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 rounded-lg bg-muted/40 p-3 text-xs">
+                  {lpPreview.memberCount != null && (
+                    <div><span className="text-muted-foreground">Üye:</span> <span className="font-semibold">{lpPreview.memberCount}</span></div>
+                  )}
+                  {(lpPreview.centralCity || lpPreview.centralCountry) && (
+                    <div><span className="text-muted-foreground">Merkez:</span> <span className="font-semibold">{[lpPreview.centralCity, lpPreview.centralCountry].filter(Boolean).join(", ")}</span></div>
+                  )}
+                  {lpPreview.primaryLanguage && (
+                    <div><span className="text-muted-foreground">Dil:</span> <span className="font-semibold">{lpPreview.primaryLanguage}</span></div>
+                  )}
+                  {lpPreview.foundedYear != null && (
+                    <div><span className="text-muted-foreground">Kuruluş:</span> <span className="font-semibold">{lpPreview.foundedYear}</span></div>
+                  )}
+                  {lpPreview.adminName && (
+                    <div><span className="text-muted-foreground">Yönetici:</span> <span className="font-semibold">{lpPreview.adminName}</span></div>
+                  )}
+                  <div><span className="text-muted-foreground">Tema:</span> <span className="font-semibold">{lpPreview.theme}</span></div>
+                </div>
+
                 <div>
                   <h3 className="text-sm font-semibold mb-2 flex items-center gap-1.5">
                     <ShieldCheck className="h-4 w-4 text-success" /> Grup Koşulları
@@ -873,11 +914,25 @@ const WhatsAppGroups = () => {
                     <Label className="text-xs">Kısa Tanıtım</Label>
                     <Textarea value={joinForm.note} onChange={(e) => setJoinForm((f) => ({ ...f, note: e.target.value }))} rows={2} placeholder="Kendinizden kısaca bahsedin..." />
                   </div>
+                  {lpPreview.acceptFormQuestions && lpPreview.acceptFormQuestions.length > 0 && (
+                    <div className="space-y-2">
+                      <Label className="text-xs font-semibold">Yöneticinin soruları</Label>
+                      {lpPreview.acceptFormQuestions.map((q, i) => (
+                        <div key={i} className="text-xs text-muted-foreground">• {q}</div>
+                      ))}
+                      <Textarea
+                        value={joinForm.answers}
+                        onChange={(e) => setJoinForm((f) => ({ ...f, answers: e.target.value }))}
+                        rows={3}
+                        placeholder="Soruları sırayla yanıtla..."
+                      />
+                    </div>
+                  )}
                   <Button
                     className="w-full gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white"
                     onClick={() => {
                       toast({ title: "Başvurun alındı 🎉", description: "Grup yöneticisi inceleyip seni WhatsApp'a yönlendirecek." });
-                      setJoinForm({ name: "", email: "", note: "" });
+                      setJoinForm({ name: "", email: "", note: "", answers: "" });
                       setLpPreview(null);
                       setRedirectTarget({ url: lpPreview.whatsappLink, name: lpPreview.name });
                     }}
