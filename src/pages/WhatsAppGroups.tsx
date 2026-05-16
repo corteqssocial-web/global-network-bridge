@@ -304,14 +304,14 @@ const WhatsAppGroups = () => {
                   </p>
                 </div>
               </div>
-              <ul className="text-xs text-muted-foreground space-y-1 mb-4 ml-1">
-                <li>• 30 saniyede tamamla</li>
-                <li>• Tasarım/yazı derdi yok</li>
-                <li>• Admin'e otomatik bildirim gider</li>
+              <ul className="text-[11px] text-muted-foreground flex flex-wrap gap-x-3 gap-y-1 mb-3 ml-0.5">
+                <li>• 30 sn</li>
+                <li>• Tasarım derdi yok</li>
+                <li>• Admin'e otomatik bildirim</li>
               </ul>
               <Dialog open={openLinkDialog} onOpenChange={setOpenLinkDialog}>
                 <DialogTrigger asChild>
-                  <Button size="lg" className="mt-auto w-full gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white">
+                  <Button size="sm" className="mt-auto w-full gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white">
                     <Link2 className="h-4 w-4" /> Link Gönder
                   </Button>
                 </DialogTrigger>
