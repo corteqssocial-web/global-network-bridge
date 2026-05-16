@@ -18,6 +18,7 @@ const VolunteerMentorDetail = lazy(() => import("./pages/VolunteerMentorDetail")
 const Associations = lazy(() => import("./pages/Associations"));
 const AssociationDetail = lazy(() => import("./pages/AssociationDetail"));
 const Businesses = lazy(() => import("./pages/Businesses"));
+const VentureHub = lazy(() => import("./pages/VentureHub"));
 const BusinessDetail = lazy(() => import("./pages/BusinessDetail"));
 const Profile = lazy(() => import("./pages/Profile"));
 const WhatsAppGroups = lazy(() => import("./pages/WhatsAppGroups"));
