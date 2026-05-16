@@ -178,6 +178,14 @@ const WhatsAppGroups = () => {
         whatsappLink,
         adminName,
         adminContact,
+        theme: theme || undefined,
+        memberCount: memberCount ? Number(memberCount) : undefined,
+        centralCountry: centralCountry || undefined,
+        centralCity: centralCity || undefined,
+        primaryLanguage: primaryLanguage || undefined,
+        foundedYear: foundedYear ? Number(foundedYear) : undefined,
+        acceptFormEnabled,
+        acceptFormQuestions: acceptFormQuestions || undefined,
         description: category === "diger" && otherCategory.trim()
           ? `[Kategori: ${otherCategory.trim()}] ${description}`
           : description,
