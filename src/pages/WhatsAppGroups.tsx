@@ -707,47 +707,6 @@ const WhatsAppGroups = () => {
             </div>
           </section>
 
-          {/* Blurred placeholder row — "Grubunuzu ekleyin" */}
-          <div className="relative mb-12 max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 select-none pointer-events-none blur-sm opacity-70">
-              {([
-                { cat: "alumni" as const, platform: "whatsapp" as const },
-                { cat: "doktor" as const, platform: "whatsapp" as const },
-                { cat: "hobi" as const, platform: "telegram" as const },
-              ]).map(({ cat, platform }) => {
-                const meta = categoryMeta[cat];
-                const Icon = meta.icon;
-                const isTg = platform === "telegram";
-                return (
-                  <div key={cat} className="bg-card rounded-2xl border border-border p-5 shadow-card flex flex-col">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className={`w-11 h-11 rounded-xl border ${meta.color} flex items-center justify-center`}>
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <Badge variant="outline" className={`text-[10px] ${isTg ? "border-[#229ED9]/40 text-[#229ED9] bg-[#229ED9]/10" : "border-[#25D366]/40 text-[#25D366] bg-[#25D366]/10"}`}>
-                        {isTg ? "✈️ Telegram" : "💬 WhatsApp"}
-                      </Badge>
-                    </div>
-                    <h3 className="font-bold text-foreground mb-1">{meta.label} Grubu</h3>
-                    <p className="text-xs text-muted-foreground mb-2">📍 Şehir, Ülke</p>
-                    <p className="text-sm text-muted-foreground mb-3">Grup açıklaması burada yer alacak.</p>
-                    <Button size="sm" className={`w-full text-white ${isTg ? "bg-[#229ED9]" : "bg-[#25D366]"}`}>Katıl</Button>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="bg-card/95 backdrop-blur border-2 border-dashed border-[#25D366]/50 rounded-2xl px-6 py-5 text-center shadow-lg max-w-md">
-                <PlusCircle className="h-8 w-8 text-[#25D366] mx-auto mb-2" />
-                <h3 className="font-bold text-lg mb-1">Grubunuzu ekleyin</h3>
-                <p className="text-sm text-muted-foreground mb-3">Alumni, Doktor, Hobi ve daha fazlası — kendi grubunu ücretsiz listele.</p>
-                <Button size="sm" className="gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white" onClick={() => setOpenDialog(true)}>
-                  <PlusCircle className="h-4 w-4" /> Grubunu Listele
-                </Button>
-              </div>
-            </div>
-          </div>
-
           {/* Approved (cloud) landings — populated as you add groups */}
           <section className="mt-2">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
