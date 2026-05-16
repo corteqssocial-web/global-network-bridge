@@ -105,6 +105,32 @@ const WhatsAppGroups = () => {
   const [demoLiked, setDemoLiked] = useState<Record<string, boolean>>({});
   const [demoFollowed, setDemoFollowed] = useState<Record<string, boolean>>({});
 
+  // Redirect dialog (link-only flow) + LP preview dialog (LP flow)
+  const [redirectTarget, setRedirectTarget] = useState<{ url: string; name: string } | null>(null);
+  const [redirectCountdown, setRedirectCountdown] = useState(3);
+  const [lpPreview, setLpPreview] = useState<null | {
+    name: string; city: string; tagline: string; heroImage: string;
+    theme: string; conditions: string[]; whatsappLink: string;
+  }>(null);
+  const [joinForm, setJoinForm] = useState({ name: "", email: "", note: "" });
+
+  useEffect(() => {
+    if (!redirectTarget) { setRedirectCountdown(3); return; }
+    setRedirectCountdown(3);
+    const tick = setInterval(() => {
+      setRedirectCountdown((c) => {
+        if (c <= 1) {
+          clearInterval(tick);
+          window.open(redirectTarget.url, "_blank", "noopener,noreferrer");
+          setRedirectTarget(null);
+          return 3;
+        }
+        return c - 1;
+      });
+    }, 1000);
+    return () => clearInterval(tick);
+  }, [redirectTarget]);
+
   const resetForm = () => {
     setGroupName(""); setCountry(""); setCity(""); setWhatsappLink(""); setDescription("");
     setHeroImage(""); setTagline(""); setCallToActionText(""); setConditions("");
