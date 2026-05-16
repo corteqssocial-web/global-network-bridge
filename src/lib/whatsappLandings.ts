@@ -252,7 +252,15 @@ export const submitLanding = async (
       admin_name: input.adminName || null,
       admin_contact: input.adminContact || null,
       description: input.description || null,
-    })
+      theme: input.theme || null,
+      member_count: input.memberCount ?? null,
+      central_country: input.centralCountry || null,
+      central_city: input.centralCity || null,
+      primary_language: input.primaryLanguage || null,
+      founded_year: input.foundedYear ?? null,
+      accept_form_enabled: input.acceptFormEnabled ?? true,
+      accept_form_questions: input.acceptFormQuestions || null,
+    } as any)
     .select("id, slug")
     .single();
 
