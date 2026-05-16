@@ -11,7 +11,7 @@ const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-6 text-xs">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-2">
-              <img src={corteqsLogo} alt="CorteQS" className="h-6 w-auto" />
+              <img src={corteqsLogo} alt="CorteQS" className="w-auto h-[3.75rem]" />
             </div>
             <p className="text-xs text-secondary-foreground/60 font-body leading-snug">
               Türk diasporasını birleştiren global platform.
