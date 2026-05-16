@@ -53,7 +53,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between py-2" style={{ minHeight: '4rem' }}>
           <div className="flex items-center gap-2 min-w-0 shrink-0">
             <Link to="/" className="flex items-center gap-2 shrink-0">
-              <img src={corteqsLogo} alt="CorteQS" className="w-auto" style={{ height: '4rem' }} />
+              <img src={corteqsLogo} alt="CorteQS" className="w-auto" style={{ height: '8rem' }} />
             </Link>
 
             {/* Diaspora selector kaldırıldı — yalnızca Türk Diasporası aktif */}
