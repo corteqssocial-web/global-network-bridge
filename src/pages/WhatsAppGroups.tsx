@@ -789,29 +789,39 @@ const WhatsAppGroups = () => {
                 {filteredLandings.map((g) => {
                   const meta = categoryMeta[g.category];
                   const Icon = meta.icon;
+                  const hasLp = !!(g.heroImage || g.tagline || g.callToActionText || g.conditions);
                   return (
                     <div key={g.id} className="rounded-xl border border-border bg-card p-4 flex flex-col">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className={`w-8 h-8 rounded-lg border ${meta.color} flex items-center justify-center`}>
-                          <Icon className="h-4 w-4" />
+                      <div className="flex items-center justify-between gap-2 mb-2">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className={`w-8 h-8 rounded-lg border ${meta.color} flex items-center justify-center shrink-0`}>
+                            <Icon className="h-4 w-4" />
+                          </div>
+                          <h4 className="font-semibold text-sm leading-tight truncate">{g.groupName}</h4>
                         </div>
-                        <h4 className="font-semibold text-sm leading-tight">{g.groupName}</h4>
+                        <Badge variant="outline" className={`shrink-0 text-[10px] ${hasLp ? "border-turquoise/40 text-turquoise bg-turquoise/10" : "border-[#25D366]/40 text-[#25D366] bg-[#25D366]/10"}`}>
+                          {hasLp ? "📄 LP" : "🔗 Link"}
+                        </Badge>
                       </div>
                       <p className="text-xs text-muted-foreground mb-2">📍 {g.city}, {g.country}</p>
                       {g.tagline && (
                         <p className="text-xs text-muted-foreground font-body mb-3 line-clamp-2">{g.tagline}</p>
                       )}
                       <div className="mt-auto flex gap-2">
-                        <Link to={`/whatsapp-groups/${g.id}`} className="flex-1">
-                          <Button size="sm" variant="outline" className="w-full gap-1 text-xs">
-                            <Layout className="h-3 w-3" /> Landing
-                          </Button>
-                        </Link>
-                        <a href={g.whatsappLink} target="_blank" rel="noopener noreferrer" className="flex-1">
-                          <Button size="sm" className="w-full gap-1 text-xs bg-[#25D366] hover:bg-[#20bd5a] text-white">
-                            <MessageSquare className="h-3 w-3" /> Katıl
-                          </Button>
-                        </a>
+                        {hasLp && (
+                          <Link to={`/whatsapp-groups/${g.id}`} className="flex-1">
+                            <Button size="sm" variant="outline" className="w-full gap-1 text-xs">
+                              <Layout className="h-3 w-3" /> Landing
+                            </Button>
+                          </Link>
+                        )}
+                        <Button
+                          size="sm"
+                          className={`${hasLp ? "flex-1" : "w-full"} gap-1 text-xs bg-[#25D366] hover:bg-[#20bd5a] text-white`}
+                          onClick={() => setRedirectTarget({ url: g.whatsappLink, name: g.groupName })}
+                        >
+                          <MessageSquare className="h-3 w-3" /> Katıl
+                        </Button>
                       </div>
                     </div>
                   );
