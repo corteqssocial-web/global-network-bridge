@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   MessageSquare, Users, GraduationCap, Heart, PlusCircle, Sparkles, Stethoscope,
-  ShieldCheck, Layout, FileText, Send,
-  TrendingUp, Rocket, BookOpen, HandHeart, Search,
+  ShieldCheck, Layout, FileText, Send, Link2,
+  TrendingUp, Rocket, BookOpen, HandHeart, Search, ThumbsUp, Bell, MessageCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,13 +14,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CountryCitySelector from "@/components/CountryCitySelector";
 import { useDiaspora } from "@/contexts/DiasporaContext";
 
 import { useToast } from "@/hooks/use-toast";
-import { submitLanding, listLandings, type LandingMode, type WhatsAppLanding } from "@/lib/whatsappLandings";
+import { submitLanding, submitLinkRequest, listLandings, type LandingMode, type WhatsAppLanding } from "@/lib/whatsappLandings";
 import { useAuth } from "@/contexts/AuthContext";
 import ConsentCheckboxes, { emptyConsent, isConsentValid, type ConsentState } from "@/components/ConsentCheckboxes";
 
