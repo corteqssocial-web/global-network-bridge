@@ -108,7 +108,7 @@ const WhatsAppGroups = () => {
   const resetForm = () => {
     setGroupName(""); setCountry(""); setCity(""); setWhatsappLink(""); setDescription("");
     setHeroImage(""); setTagline(""); setCallToActionText(""); setConditions("");
-    setAdminName(""); setAdminContact(""); setMode("visual"); setCreateLanding(true);
+    setAdminName(""); setAdminContact(""); setMode("visual");
     setTheme(""); setMemberCount(""); setCentralCountry(""); setCentralCity("");
     setPrimaryLanguage(""); setFoundedYear(""); setAcceptFormEnabled(true); setAcceptFormQuestions("");
   };
