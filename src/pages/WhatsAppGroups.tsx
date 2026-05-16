@@ -192,9 +192,7 @@ const WhatsAppGroups = () => {
       });
       toast({
         title: "Başvurun alındı! 🎉",
-        description: createLanding
-          ? "Landing sayfan admin onayından sonra herkese görünür olacak."
-          : "Grubun admin onayından sonra listede yayınlanacak.",
+        description: "Landing sayfan admin onayından sonra herkese görünür olacak.",
       });
       setOpenDialog(false);
       resetForm();
