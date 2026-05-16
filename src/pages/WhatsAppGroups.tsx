@@ -832,6 +832,106 @@ const WhatsAppGroups = () => {
           </section>
         </div>
       </main>
+
+      {/* Redirect dialog — link-only flow */}
+      <Dialog open={!!redirectTarget} onOpenChange={(v) => !v && setRedirectTarget(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <ExternalLink className="h-5 w-5 text-[#25D366]" /> WhatsApp'a yönlendiriliyorsunuz
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 mt-2 text-center">
+            <p className="text-sm text-muted-foreground">
+              <span className="font-semibold text-foreground">{redirectTarget?.name}</span> grubunun WhatsApp linkine
+              <span className="font-bold text-[#25D366]"> {redirectCountdown} </span>
+              saniye içinde yönlendirileceksiniz.
+            </p>
+            <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 text-xs text-amber-900 text-left">
+              ⚠️ CorteQS, üçüncü taraf WhatsApp gruplarının içeriğinden sorumlu değildir. Grup kurallarına uyduğunuzdan emin olun.
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" className="flex-1" onClick={() => setRedirectTarget(null)}>Vazgeç</Button>
+              <Button
+                className="flex-1 gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white"
+                onClick={() => {
+                  if (redirectTarget) window.open(redirectTarget.url, "_blank", "noopener,noreferrer");
+                  setRedirectTarget(null);
+                }}
+              >
+                <ArrowRight className="h-4 w-4" /> Şimdi Git
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* LP preview dialog — landing page flow */}
+      <Dialog open={!!lpPreview} onOpenChange={(v) => !v && setLpPreview(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-0">
+          {lpPreview && (
+            <div>
+              <div className="relative h-48 overflow-hidden rounded-t-lg">
+                <img src={lpPreview.heroImage} alt={lpPreview.name} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                <Badge className="absolute top-3 left-3 bg-gold/30 text-white border-gold/50">DEMO LANDING</Badge>
+                <div className="absolute bottom-3 left-4 right-4 text-white">
+                  <h2 className="text-xl font-bold leading-tight">{lpPreview.name}</h2>
+                  <p className="text-xs opacity-90">📍 {lpPreview.city} · 🎯 {lpPreview.theme}</p>
+                </div>
+              </div>
+              <div className="p-6 space-y-4">
+                <p className="text-sm text-muted-foreground italic">{lpPreview.tagline}</p>
+
+                <div>
+                  <h3 className="text-sm font-semibold mb-2 flex items-center gap-1.5">
+                    <ShieldCheck className="h-4 w-4 text-success" /> Grup Koşulları
+                  </h3>
+                  <ul className="space-y-1">
+                    {lpPreview.conditions.map((c, i) => (
+                      <li key={i} className="text-xs text-muted-foreground flex gap-2">
+                        <span className="text-success">✓</span> {c}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="rounded-xl border-2 border-turquoise/30 bg-turquoise/5 p-4 space-y-3">
+                  <h3 className="text-sm font-bold flex items-center gap-1.5">
+                    <FileText className="h-4 w-4 text-turquoise" /> Kayıt Formu
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs">Ad Soyad</Label>
+                      <Input value={joinForm.name} onChange={(e) => setJoinForm((f) => ({ ...f, name: e.target.value }))} placeholder="Adınız" className="h-9" />
+                    </div>
+                    <div>
+                      <Label className="text-xs">E-posta</Label>
+                      <Input value={joinForm.email} onChange={(e) => setJoinForm((f) => ({ ...f, email: e.target.value }))} placeholder="ornek@mail.com" className="h-9" />
+                    </div>
+                  </div>
+                  <div>
+                    <Label className="text-xs">Kısa Tanıtım</Label>
+                    <Textarea value={joinForm.note} onChange={(e) => setJoinForm((f) => ({ ...f, note: e.target.value }))} rows={2} placeholder="Kendinizden kısaca bahsedin..." />
+                  </div>
+                  <Button
+                    className="w-full gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white"
+                    onClick={() => {
+                      toast({ title: "Başvurun alındı 🎉", description: "Grup yöneticisi inceleyip seni WhatsApp'a yönlendirecek." });
+                      setJoinForm({ name: "", email: "", note: "" });
+                      setLpPreview(null);
+                      setRedirectTarget({ url: lpPreview.whatsappLink, name: lpPreview.name });
+                    }}
+                  >
+                    <Send className="h-4 w-4" /> Başvuruyu Gönder & WhatsApp'a Git
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
       <Footer />
     </div>
   );
