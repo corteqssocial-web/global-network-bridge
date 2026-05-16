@@ -291,16 +291,16 @@ const WhatsAppGroups = () => {
           {/* Two side-by-side submission cards — compact */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
             {/* LEFT — Member: link only */}
-            <div className="rounded-2xl border-2 border-[#25D366]/30 bg-gradient-to-br from-[#25D366]/5 via-card to-card p-5 md:p-6 flex flex-col">
-              <div className="flex items-start gap-3 mb-3">
-                <div className="w-11 h-11 rounded-xl bg-[#25D366]/15 text-[#25D366] flex items-center justify-center shrink-0">
-                  <Link2 className="h-5 w-5" />
+            <div className="rounded-xl border-2 border-[#25D366]/30 bg-gradient-to-br from-[#25D366]/5 via-card to-card p-3.5 flex flex-col">
+              <div className="flex items-start gap-2.5 mb-2">
+                <div className="w-9 h-9 rounded-lg bg-[#25D366]/15 text-[#25D366] flex items-center justify-center shrink-0">
+                  <Link2 className="h-4 w-4" />
                 </div>
-                <div>
-                  <Badge className="bg-[#25D366]/15 text-[#25D366] border-0 mb-1">Üyeler için • Hızlı</Badge>
-                  <h3 className="text-lg font-bold">Sadece Link Paylaş</h3>
-                  <p className="text-sm text-muted-foreground mt-0.5">
-                    Landing sayfasıyla uğraşma — sadece WhatsApp grup linkini gönder. Yöneticilerimiz inceler ve gerekirse senin adına listeler.
+                <div className="min-w-0">
+                  <Badge className="bg-[#25D366]/15 text-[#25D366] border-0 text-[10px] mb-0.5">Üyeler • Hızlı</Badge>
+                  <h3 className="text-base font-bold leading-tight">Sadece Link Paylaş</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                    30 sn'de gönder, admin senin için listelesin.
                   </p>
                 </div>
               </div>
