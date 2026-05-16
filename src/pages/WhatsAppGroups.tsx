@@ -288,9 +288,8 @@ const WhatsAppGroups = () => {
             </div>
           </section>
 
-          {/* Banner: Listing + Landing CTA */}
-          {/* Two side-by-side submission cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          {/* Two side-by-side submission cards — compact */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
             {/* LEFT — Member: link only */}
             <div className="rounded-2xl border-2 border-[#25D366]/30 bg-gradient-to-br from-[#25D366]/5 via-card to-card p-5 md:p-6 flex flex-col">
               <div className="flex items-start gap-3 mb-3">
