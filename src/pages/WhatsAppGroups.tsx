@@ -617,8 +617,13 @@ const WhatsAppGroups = () => {
                 const followed = !!demoFollowed[g.id];
                 return (
                   <div key={g.id} className="relative rounded-2xl border border-border bg-card p-5 shadow-card">
-                    <Badge className="absolute top-3 right-3 bg-gold/20 text-foreground border-gold/40 text-[10px]">DEMO</Badge>
-                    <div className="flex items-start gap-3 mb-3">
+                    <div className="absolute top-3 right-3 flex flex-col items-end gap-1">
+                      <Badge className="bg-gold/20 text-foreground border-gold/40 text-[10px]">DEMO</Badge>
+                      <Badge variant="outline" className={`text-[10px] ${g.hasLp ? "border-turquoise/40 text-turquoise bg-turquoise/10" : "border-[#25D366]/40 text-[#25D366] bg-[#25D366]/10"}`}>
+                        {g.hasLp ? "📄 Landing Page'li" : "🔗 Sadece Link"}
+                      </Badge>
+                    </div>
+                    <div className="flex items-start gap-3 mb-3 pr-20">
                       <div className={`w-10 h-10 rounded-lg border ${meta.color} flex items-center justify-center shrink-0`}>
                         <Icon className="h-4 w-4" />
                       </div>
@@ -654,13 +659,47 @@ const WhatsAppGroups = () => {
                       </Button>
                     </div>
 
-                    <div className="rounded-lg bg-muted/40 p-3 space-y-2">
+                    <div className="rounded-lg bg-muted/40 p-3 space-y-2 mb-3">
                       {g.comments.map((c, i) => (
                         <div key={i} className="text-xs">
                           <span className="font-semibold">{c.name}:</span>{" "}
                           <span className="text-muted-foreground">{c.text}</span>
                         </div>
                       ))}
+                    </div>
+
+                    <div className="flex gap-2">
+                      {g.hasLp ? (
+                        <>
+                          <Button
+                            size="sm"
+                            className="flex-1 gap-1.5 bg-turquoise hover:bg-turquoise/90 text-white"
+                            onClick={() => setLpPreview({
+                              name: g.name, city: g.city, tagline: g.tagline,
+                              heroImage: g.heroImage!, theme: g.theme!, conditions: g.conditions!,
+                              whatsappLink: g.whatsappLink,
+                            })}
+                          >
+                            <Layout className="h-3.5 w-3.5" /> Landing'i Aç
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="gap-1.5"
+                            onClick={() => setRedirectTarget({ url: g.whatsappLink, name: g.name })}
+                          >
+                            <ExternalLink className="h-3.5 w-3.5" />
+                          </Button>
+                        </>
+                      ) : (
+                        <Button
+                          size="sm"
+                          className="flex-1 gap-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-white"
+                          onClick={() => setRedirectTarget({ url: g.whatsappLink, name: g.name })}
+                        >
+                          <MessageSquare className="h-3.5 w-3.5" /> WhatsApp'a Katıl
+                        </Button>
+                      )}
                     </div>
                   </div>
                 );
