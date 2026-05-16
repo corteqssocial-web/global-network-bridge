@@ -588,6 +588,11 @@ const WhatsAppGroups = () => {
                   cat: "is" as const,
                   city: "Londra, İngiltere",
                   tagline: "Relocation, vize, mülakat — birlikte çözüyoruz.",
+                  hasLp: true,
+                  heroImage: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200&h=500&fit=crop",
+                  theme: "Yazılım & Relocation",
+                  conditions: ["Tech/yazılım profili", "Spam/ilan paylaşımı yasak", "İngilizce CV önerilir"],
+                  whatsappLink: "https://chat.whatsapp.com/demo-london-devs",
                   comments: [
                     { name: "Mert A.", text: "Bu grup sayesinde 2 ay içinde iş buldum 🙌" },
                     { name: "Ece K.", text: "Vize avukatı tavsiyeleri çok değerli." },
@@ -599,6 +604,8 @@ const WhatsAppGroups = () => {
                   cat: "dayanisma" as const,
                   city: "Berlin, Almanya",
                   tagline: "Kreş, okul, çocuk doktoru — gerçek deneyimler.",
+                  hasLp: false,
+                  whatsappLink: "https://chat.whatsapp.com/demo-berlin-parents",
                   comments: [
                     { name: "Selin Y.", text: "Kita başvurularında çok yardımcı oldular." },
                   ],
