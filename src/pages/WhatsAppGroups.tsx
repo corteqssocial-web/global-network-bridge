@@ -250,170 +250,380 @@ const WhatsAppGroups = () => {
           </section>
 
           {/* Banner: Listing + Landing CTA */}
-          <div className="rounded-2xl border border-turquoise/30 bg-gradient-to-br from-turquoise/5 via-card to-orange-50/40 p-5 md:p-6 mb-8">
-            <div className="flex items-start gap-3 mb-4">
-              <Sparkles className="h-5 w-5 text-turquoise shrink-0 mt-1" />
-              <div>
-                <h2 className="text-lg md:text-xl font-bold">WhatsApp Gruplarımıza başvurularımız devam etmektedir</h2>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Aşağıda gördüğün kartlar örnek (DEMO) gruplardır. Sen de grubunu hem listele hem de istersen profesyonel bir landing sayfasıyla paylaş.
-                </p>
-              </div>
-            </div>
-            <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-              <DialogTrigger asChild>
-                <Button size="lg" className="w-full sm:w-auto gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white">
-                  <PlusCircle className="h-4 w-4" /> Grubunu Listele + Landing Page Oluştur
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>Grubunu Paylaş</DialogTitle>
-                </DialogHeader>
-
-                <div className="space-y-5 mt-4">
-                  {/* Step 1 — Grup bilgisi */}
-                  <div className="space-y-3">
-                    <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">1. Grup Bilgileri</h3>
-                    <div>
-                      <Label>Grup Adı *</Label>
-                      <Input value={groupName} onChange={(e) => setGroupName(e.target.value)} placeholder="Örn: Berlin Türk Girişimciler" />
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <Label>Kategori *</Label>
-                        <Select value={category} onValueChange={(v) => setCategory(v as keyof typeof categoryMeta)}>
-                          <SelectTrigger><SelectValue /></SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="alumni">Alumni</SelectItem>
-                            <SelectItem value="doktor">Doktor / Sağlık</SelectItem>
-                            <SelectItem value="hobi">Hobi</SelectItem>
-                            <SelectItem value="is">İş Grubu</SelectItem>
-                            <SelectItem value="yatirim">Yatırım & Girişim</SelectItem>
-                            <SelectItem value="akademik">Akademik</SelectItem>
-                            <SelectItem value="dayanisma">Dayanışma</SelectItem>
-                            <SelectItem value="diger">Diğer (kendin yaz)</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {category === "diger" && (
-                          <Input
-                            value={otherCategory}
-                            onChange={(e) => setOtherCategory(e.target.value)}
-                            placeholder="Kategori adını yaz (örn: Spor, Müzik)"
-                            className="mt-2"
-                          />
-                        )}
-                      </div>
-                      <div>
-                        <Label>WhatsApp Linki *</Label>
-                        <Input value={whatsappLink} onChange={(e) => setWhatsappLink(e.target.value)} placeholder="https://chat.whatsapp.com/..." />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <Label>Ülke *</Label>
-                        <Input value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Almanya" />
-                      </div>
-                      <div>
-                        <Label>Şehir *</Label>
-                        <Input value={city} onChange={(e) => setCity(e.target.value)} placeholder="Berlin" />
-                      </div>
-                    </div>
-                    <div>
-                      <Label>Kısa Açıklama</Label>
-                      <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Grup hakkında 1-2 cümle" rows={2} />
-                    </div>
-                  </div>
-
-                  {/* Step 2 — Landing page opsiyonu */}
-                  <div className="rounded-xl border border-border p-4 bg-muted/30">
-                    <label className="flex items-start gap-3 cursor-pointer">
-                      <Checkbox checked={createLanding} onCheckedChange={(v) => setCreateLanding(!!v)} className="mt-0.5" />
-                      <div>
-                        <p className="font-semibold text-sm">Profesyonel landing sayfası da oluştur</p>
-                        <p className="text-xs text-muted-foreground">
-                          Linkini paylaştığında insanlar önce çağrını ve grup koşullarını görsün, sonra katılsın.
-                        </p>
-                      </div>
-                    </label>
-
-                    {createLanding && (
-                      <div className="mt-5 space-y-4">
-                        <div>
-                          <Label className="mb-2 block">Landing Stili</Label>
-                          <RadioGroup value={mode} onValueChange={(v) => setMode(v as LandingMode)} className="grid grid-cols-2 gap-3">
-                            <label className={`rounded-lg border p-3 cursor-pointer flex items-start gap-2 ${mode === "visual" ? "border-primary bg-primary/5" : "border-border"}`}>
-                              <RadioGroupItem value="visual" className="mt-0.5" />
-                              <div>
-                                <div className="flex items-center gap-1.5 font-semibold text-sm"><Layout className="h-3.5 w-3.5" /> Görsel + CTA</div>
-                                <p className="text-xs text-muted-foreground">Hero görseli ve büyük CTA butonu ile.</p>
-                              </div>
-                            </label>
-                            <label className={`rounded-lg border p-3 cursor-pointer flex items-start gap-2 ${mode === "text" ? "border-primary bg-primary/5" : "border-border"}`}>
-                              <RadioGroupItem value="text" className="mt-0.5" />
-                              <div>
-                                <div className="flex items-center gap-1.5 font-semibold text-sm"><FileText className="h-3.5 w-3.5" /> Sade Yazı</div>
-                                <p className="text-xs text-muted-foreground">Sadece çağrı yazısı + grup koşulları.</p>
-                              </div>
-                            </label>
-                          </RadioGroup>
-                        </div>
-
-                        {mode === "visual" && (
-                          <div>
-                            <Label>Hero Görsel URL</Label>
-                            <Input value={heroImage} onChange={(e) => setHeroImage(e.target.value)} placeholder="https://..." />
-                            <p className="text-[11px] text-muted-foreground mt-1">Boş bırakırsan gradient arka plan kullanılır.</p>
-                          </div>
-                        )}
-
-                        <div>
-                          <Label>Tagline (kısa pitch)</Label>
-                          <Input value={tagline} onChange={(e) => setTagline(e.target.value)} placeholder="Tek cümlede grubunu anlat" />
-                        </div>
-
-                        <div>
-                          <Label>Çağrı Metni</Label>
-                          <Textarea value={callToActionText} onChange={(e) => setCallToActionText(e.target.value)} placeholder="Topluluğa neden katılmalı? Ne sunuyorsun?" rows={4} />
-                        </div>
-
-                        <div>
-                          <Label>Grup Koşulları (her satıra bir madde)</Label>
-                          <Textarea value={conditions} onChange={(e) => setConditions(e.target.value)} placeholder={"Sadece mezunlar\nReklam yasak\n..."} rows={4} />
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <Label>Yönetici Adı</Label>
-                            <Input value={adminName} onChange={(e) => setAdminName(e.target.value)} placeholder="Adın" />
-                          </div>
-                          <div>
-                            <Label>Yönetici İletişim</Label>
-                            <Input value={adminContact} onChange={(e) => setAdminContact(e.target.value)} placeholder="E-posta veya telefon" />
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 text-xs text-amber-900">
-                    🛡️ Başvurun admin onayından sonra herkese görünür olacak. (Spam ve sahte grupları önlemek için.)
-                  </div>
-
-                  <ConsentCheckboxes compact value={consent} onChange={setConsent} />
-
-                  <Button
-                    className="w-full gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white"
-                    onClick={handleSubmit}
-                    disabled={submitting || !isConsentValid(consent)}
-                  >
-                    <MessageSquare className="h-4 w-4" />
-                    {submitting ? "Gönderiliyor..." : (createLanding ? "Landing Sayfası Oluştur ve Onaya Gönder" : "Grubu Onaya Gönder")}
-                  </Button>
+          {/* Two side-by-side submission cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            {/* LEFT — Member: link only */}
+            <div className="rounded-2xl border-2 border-[#25D366]/30 bg-gradient-to-br from-[#25D366]/5 via-card to-card p-5 md:p-6 flex flex-col">
+              <div className="flex items-start gap-3 mb-3">
+                <div className="w-11 h-11 rounded-xl bg-[#25D366]/15 text-[#25D366] flex items-center justify-center shrink-0">
+                  <Link2 className="h-5 w-5" />
                 </div>
-              </DialogContent>
-            </Dialog>
+                <div>
+                  <Badge className="bg-[#25D366]/15 text-[#25D366] border-0 mb-1">Üyeler için • Hızlı</Badge>
+                  <h3 className="text-lg font-bold">Sadece Link Paylaş</h3>
+                  <p className="text-sm text-muted-foreground mt-0.5">
+                    Landing sayfasıyla uğraşma — sadece WhatsApp grup linkini gönder. Yöneticilerimiz inceler ve gerekirse senin adına listeler.
+                  </p>
+                </div>
+              </div>
+              <ul className="text-xs text-muted-foreground space-y-1 mb-4 ml-1">
+                <li>• 30 saniyede tamamla</li>
+                <li>• Tasarım/yazı derdi yok</li>
+                <li>• Admin'e otomatik bildirim gider</li>
+              </ul>
+              <Dialog open={openLinkDialog} onOpenChange={setOpenLinkDialog}>
+                <DialogTrigger asChild>
+                  <Button size="lg" className="mt-auto w-full gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white">
+                    <Link2 className="h-4 w-4" /> Link Gönder
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Hızlı Link Gönder</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-3 mt-2">
+                    <div>
+                      <Label>WhatsApp Grup Linki *</Label>
+                      <Input value={quickLink} onChange={(e) => setQuickLink(e.target.value)} placeholder="https://chat.whatsapp.com/..." />
+                    </div>
+                    <div>
+                      <Label>Grup Adı (opsiyonel)</Label>
+                      <Input value={quickGroupName} onChange={(e) => setQuickGroupName(e.target.value)} placeholder="Örn: Berlin Türk Doktorlar" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label>Ülke</Label>
+                        <Input value={quickCountry} onChange={(e) => setQuickCountry(e.target.value)} placeholder="Almanya" />
+                      </div>
+                      <div>
+                        <Label>Şehir</Label>
+                        <Input value={quickCity} onChange={(e) => setQuickCity(e.target.value)} placeholder="Berlin" />
+                      </div>
+                    </div>
+                    <div>
+                      <Label>Not (opsiyonel)</Label>
+                      <Textarea value={quickNote} onChange={(e) => setQuickNote(e.target.value)} rows={2} placeholder="Yöneticiye kısa bir not bırak..." />
+                    </div>
+                    <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-2.5 text-xs text-emerald-900">
+                      🔔 Talebin yöneticilere otomatik iletilecek: <em>"Böyle bir talep var — Grubunu Listelemek ister misin?"</em>
+                    </div>
+                    <Button onClick={handleQuickLinkSubmit} disabled={quickSubmitting} className="w-full gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white">
+                      <Send className="h-4 w-4" />
+                      {quickSubmitting ? "Gönderiliyor..." : "Yöneticiye Gönder"}
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+
+            {/* RIGHT — Admin / power user: full landing page */}
+            <div className="rounded-2xl border-2 border-turquoise/30 bg-gradient-to-br from-turquoise/5 via-card to-orange-50/40 p-5 md:p-6 flex flex-col">
+              <div className="flex items-start gap-3 mb-3">
+                <div className="w-11 h-11 rounded-xl bg-turquoise/15 text-turquoise flex items-center justify-center shrink-0">
+                  <Layout className="h-5 w-5" />
+                </div>
+                <div>
+                  <Badge className="bg-turquoise/15 text-turquoise border-0 mb-1">Yöneticiler için • Detaylı</Badge>
+                  <h3 className="text-lg font-bold">Landing Page ile Listele</h3>
+                  <p className="text-sm text-muted-foreground mt-0.5">
+                    Profesyonel landing sayfası + kabul kayıt formu. Grup teması, üye sayısı, merkez şehir vb. bilgileri sen yönetirsin.
+                  </p>
+                </div>
+              </div>
+              <ul className="text-xs text-muted-foreground space-y-1 mb-4 ml-1">
+                <li>• Hero görsel + tagline + koşullar</li>
+                <li>• Düzenlenebilir kabul formu (istersen kapat)</li>
+                <li>• Like, follow ve yorum açık</li>
+              </ul>
+              <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+                <DialogTrigger asChild>
+                  <Button size="lg" className="mt-auto w-full gap-2 bg-turquoise hover:bg-turquoise/90 text-white">
+                    <Layout className="h-4 w-4" /> Landing Page Oluştur
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>Landing Page ile Grup Listele</DialogTitle>
+                  </DialogHeader>
+
+                  <div className="space-y-5 mt-4">
+                    {/* Step 1 — Grup bilgisi */}
+                    <div className="space-y-3">
+                      <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">1. Grup Bilgileri</h3>
+                      <div>
+                        <Label>Grup Adı *</Label>
+                        <Input value={groupName} onChange={(e) => setGroupName(e.target.value)} placeholder="Örn: Berlin Türk Girişimciler" />
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <Label>Kategori *</Label>
+                          <Select value={category} onValueChange={(v) => setCategory(v as keyof typeof categoryMeta)}>
+                            <SelectTrigger><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="alumni">Alumni</SelectItem>
+                              <SelectItem value="doktor">Doktor / Sağlık</SelectItem>
+                              <SelectItem value="hobi">Hobi</SelectItem>
+                              <SelectItem value="is">İş Grubu</SelectItem>
+                              <SelectItem value="yatirim">Yatırım & Girişim</SelectItem>
+                              <SelectItem value="akademik">Akademik</SelectItem>
+                              <SelectItem value="dayanisma">Dayanışma</SelectItem>
+                              <SelectItem value="diger">Diğer (kendin yaz)</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          {category === "diger" && (
+                            <Input
+                              value={otherCategory}
+                              onChange={(e) => setOtherCategory(e.target.value)}
+                              placeholder="Kategori adını yaz (örn: Spor, Müzik)"
+                              className="mt-2"
+                            />
+                          )}
+                        </div>
+                        <div>
+                          <Label>WhatsApp Linki *</Label>
+                          <Input value={whatsappLink} onChange={(e) => setWhatsappLink(e.target.value)} placeholder="https://chat.whatsapp.com/..." />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <Label>Ülke *</Label>
+                          <Input value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Almanya" />
+                        </div>
+                        <div>
+                          <Label>Şehir *</Label>
+                          <Input value={city} onChange={(e) => setCity(e.target.value)} placeholder="Berlin" />
+                        </div>
+                      </div>
+                      <div>
+                        <Label>Kısa Açıklama</Label>
+                        <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Grup hakkında 1-2 cümle" rows={2} />
+                      </div>
+                    </div>
+
+                    {/* Step 1b — Admin metadata */}
+                    <div className="space-y-3 rounded-xl border border-border p-4 bg-muted/30">
+                      <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">2. Grup Detayları (Yönetici)</h3>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <Label>Grup Teması</Label>
+                          <Input value={theme} onChange={(e) => setTheme(e.target.value)} placeholder="Örn: Kariyer & Mentorluk" />
+                        </div>
+                        <div>
+                          <Label>Üye Sayısı (tahmini)</Label>
+                          <Input type="number" value={memberCount} onChange={(e) => setMemberCount(e.target.value)} placeholder="350" />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <Label>Merkez Ülke</Label>
+                          <Input value={centralCountry} onChange={(e) => setCentralCountry(e.target.value)} placeholder="Almanya" />
+                        </div>
+                        <div>
+                          <Label>Merkez Şehir</Label>
+                          <Input value={centralCity} onChange={(e) => setCentralCity(e.target.value)} placeholder="Berlin" />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <Label>Grup Dili</Label>
+                          <Input value={primaryLanguage} onChange={(e) => setPrimaryLanguage(e.target.value)} placeholder="Türkçe / İngilizce" />
+                        </div>
+                        <div>
+                          <Label>Kuruluş Yılı</Label>
+                          <Input type="number" value={foundedYear} onChange={(e) => setFoundedYear(e.target.value)} placeholder="2022" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Step 2 — Landing details */}
+                    <div className="rounded-xl border border-border p-4 bg-muted/30 space-y-4">
+                      <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">3. Landing Sayfası</h3>
+                      <div>
+                        <Label className="mb-2 block">Landing Stili</Label>
+                        <RadioGroup value={mode} onValueChange={(v) => setMode(v as LandingMode)} className="grid grid-cols-2 gap-3">
+                          <label className={`rounded-lg border p-3 cursor-pointer flex items-start gap-2 ${mode === "visual" ? "border-primary bg-primary/5" : "border-border"}`}>
+                            <RadioGroupItem value="visual" className="mt-0.5" />
+                            <div>
+                              <div className="flex items-center gap-1.5 font-semibold text-sm"><Layout className="h-3.5 w-3.5" /> Görsel + CTA</div>
+                              <p className="text-xs text-muted-foreground">Hero görseli ve büyük CTA butonu ile.</p>
+                            </div>
+                          </label>
+                          <label className={`rounded-lg border p-3 cursor-pointer flex items-start gap-2 ${mode === "text" ? "border-primary bg-primary/5" : "border-border"}`}>
+                            <RadioGroupItem value="text" className="mt-0.5" />
+                            <div>
+                              <div className="flex items-center gap-1.5 font-semibold text-sm"><FileText className="h-3.5 w-3.5" /> Sade Yazı</div>
+                              <p className="text-xs text-muted-foreground">Sadece çağrı yazısı + grup koşulları.</p>
+                            </div>
+                          </label>
+                        </RadioGroup>
+                      </div>
+
+                      {mode === "visual" && (
+                        <div>
+                          <Label>Hero Görsel URL</Label>
+                          <Input value={heroImage} onChange={(e) => setHeroImage(e.target.value)} placeholder="https://..." />
+                          <p className="text-[11px] text-muted-foreground mt-1">Boş bırakırsan gradient arka plan kullanılır.</p>
+                        </div>
+                      )}
+
+                      <div>
+                        <Label>Tagline (kısa pitch)</Label>
+                        <Input value={tagline} onChange={(e) => setTagline(e.target.value)} placeholder="Tek cümlede grubunu anlat" />
+                      </div>
+
+                      <div>
+                        <Label>Çağrı Metni</Label>
+                        <Textarea value={callToActionText} onChange={(e) => setCallToActionText(e.target.value)} placeholder="Topluluğa neden katılmalı? Ne sunuyorsun?" rows={4} />
+                      </div>
+
+                      <div>
+                        <Label>Grup Koşulları (her satıra bir madde)</Label>
+                        <Textarea value={conditions} onChange={(e) => setConditions(e.target.value)} placeholder={"Sadece mezunlar\nReklam yasak\n..."} rows={4} />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <Label>Yönetici Adı</Label>
+                          <Input value={adminName} onChange={(e) => setAdminName(e.target.value)} placeholder="Adın" />
+                        </div>
+                        <div>
+                          <Label>Yönetici İletişim</Label>
+                          <Input value={adminContact} onChange={(e) => setAdminContact(e.target.value)} placeholder="E-posta veya telefon" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Step 4 — Accept form */}
+                    <div className="rounded-xl border border-border p-4 bg-card space-y-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <h3 className="text-sm font-semibold">Kabul Kayıt Formu</h3>
+                          <p className="text-xs text-muted-foreground">Landing'de "Katıl" diyenlerden bilgi toplansın mı? İstemezsen tamamen kapatabilirsin.</p>
+                        </div>
+                        <Switch checked={acceptFormEnabled} onCheckedChange={setAcceptFormEnabled} />
+                      </div>
+                      {acceptFormEnabled && (
+                        <div>
+                          <Label>Form Soruları (her satıra bir soru, opsiyonel)</Label>
+                          <Textarea
+                            value={acceptFormQuestions}
+                            onChange={(e) => setAcceptFormQuestions(e.target.value)}
+                            rows={3}
+                            placeholder={"Mezuniyet yılın?\nNeden katılmak istiyorsun?\nLinkedIn profilin?"}
+                          />
+                          <p className="text-[11px] text-muted-foreground mt-1">Boş bırakırsan sadece ad, e-posta, telefon ve not alınır. Form sonrası başvurular admin panelinde görünür ve istediğin zaman düzenleyebilir veya iptal edebilirsin.</p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 text-xs text-amber-900">
+                      🛡️ Başvurun admin onayından sonra herkese görünür olacak.
+                    </div>
+
+                    <ConsentCheckboxes compact value={consent} onChange={setConsent} />
+
+                    <Button
+                      className="w-full gap-2 bg-turquoise hover:bg-turquoise/90 text-white"
+                      onClick={handleSubmit}
+                      disabled={submitting || !isConsentValid(consent)}
+                    >
+                      <Layout className="h-4 w-4" />
+                      {submitting ? "Gönderiliyor..." : "Landing Sayfası Oluştur ve Onaya Gönder"}
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
+
+          {/* DEMO mocks — interaction preview (like / follow / comment) */}
+          <section className="mb-10">
+            <div className="flex items-center gap-2 mb-3">
+              <Badge className="bg-gold/20 text-foreground border-gold/40">DEMO</Badge>
+              <h3 className="text-sm font-semibold text-muted-foreground">
+                Üyeler bu gruplarda beğeni, takip ve yorum yapabilir — örnek önizleme (gerçek gruplar gelince kaldırılacak)
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[
+                {
+                  id: "d1",
+                  name: "İstanbul→Londra Yazılımcılar (DEMO)",
+                  cat: "is" as const,
+                  city: "Londra, İngiltere",
+                  tagline: "Relocation, vize, mülakat — birlikte çözüyoruz.",
+                  comments: [
+                    { name: "Mert A.", text: "Bu grup sayesinde 2 ay içinde iş buldum 🙌" },
+                    { name: "Ece K.", text: "Vize avukatı tavsiyeleri çok değerli." },
+                  ],
+                },
+                {
+                  id: "d2",
+                  name: "Berlin Türk Anne–Baba Topluluğu (DEMO)",
+                  cat: "dayanisma" as const,
+                  city: "Berlin, Almanya",
+                  tagline: "Kreş, okul, çocuk doktoru — gerçek deneyimler.",
+                  comments: [
+                    { name: "Selin Y.", text: "Kita başvurularında çok yardımcı oldular." },
+                  ],
+                },
+              ].map((g) => {
+                const meta = categoryMeta[g.cat];
+                const Icon = meta.icon;
+                const liked = !!demoLiked[g.id];
+                const followed = !!demoFollowed[g.id];
+                return (
+                  <div key={g.id} className="relative rounded-2xl border border-border bg-card p-5 shadow-card">
+                    <Badge className="absolute top-3 right-3 bg-gold/20 text-foreground border-gold/40 text-[10px]">DEMO</Badge>
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className={`w-10 h-10 rounded-lg border ${meta.color} flex items-center justify-center shrink-0`}>
+                        <Icon className="h-4 w-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="font-bold text-foreground leading-tight">{g.name}</h4>
+                        <p className="text-xs text-muted-foreground mt-0.5">📍 {g.city}</p>
+                        <p className="text-sm text-muted-foreground font-body mt-1">{g.tagline}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 mb-3 flex-wrap">
+                      <Button
+                        size="sm"
+                        variant={liked ? "default" : "outline"}
+                        className={`gap-1.5 ${liked ? "bg-[#25D366] hover:bg-[#20bd5a] text-white" : ""}`}
+                        onClick={() => {
+                          setDemoLiked((s) => ({ ...s, [g.id]: !s[g.id] }));
+                          setDemoLikes((s) => ({ ...s, [g.id]: (s[g.id] || 0) + (liked ? -1 : 1) }));
+                        }}
+                      >
+                        <ThumbsUp className="h-3.5 w-3.5" /> {demoLikes[g.id]}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={followed ? "default" : "outline"}
+                        className={`gap-1.5 ${followed ? "bg-primary text-primary-foreground" : ""}`}
+                        onClick={() => setDemoFollowed((s) => ({ ...s, [g.id]: !s[g.id] }))}
+                      >
+                        <Bell className="h-3.5 w-3.5" /> {followed ? "Takip ediliyor" : "Takip Et"}
+                      </Button>
+                      <Button size="sm" variant="outline" className="gap-1.5">
+                        <MessageCircle className="h-3.5 w-3.5" /> {g.comments.length} yorum
+                      </Button>
+                    </div>
+
+                    <div className="rounded-lg bg-muted/40 p-3 space-y-2">
+                      {g.comments.map((c, i) => (
+                        <div key={i} className="text-xs">
+                          <span className="font-semibold">{c.name}:</span>{" "}
+                          <span className="text-muted-foreground">{c.text}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
 
           {/* Blurred placeholder row — "Grubunuzu ekleyin" */}
           <div className="relative mb-12 max-w-5xl mx-auto">
