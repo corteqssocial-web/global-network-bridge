@@ -235,6 +235,10 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
         payload.presentation_path = presentationPath;
       }
       if (cfg.showGiftAcceptance) payload.gift_acceptance_enabled = giftAcceptance;
+      if (cfg.showEducation) {
+        payload.education_level = educationLevel || null;
+        payload.school = school.trim() || null;
+      }
       const { error } = await supabase.from("profiles").update(payload).eq("id", user.id);
       if (error) throw error;
       toast({ title: "Profil bilgileri kaydedildi" });
