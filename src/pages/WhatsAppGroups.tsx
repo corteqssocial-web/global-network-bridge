@@ -69,7 +69,7 @@ const WhatsAppGroups = () => {
   const [whatsappLink, setWhatsappLink] = useState("");
   const [description, setDescription] = useState("");
 
-  const [createLanding, setCreateLanding] = useState(true);
+  
   const [mode, setMode] = useState<LandingMode>("visual");
   const [heroImage, setHeroImage] = useState("");
   const [tagline, setTagline] = useState("");
