@@ -394,6 +394,32 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
             </select>
           </div>
         )}
+        {cfg.showEducation && (
+          <>
+            <div>
+              <Label>Öğrenim Durumu</Label>
+              <select
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                value={educationLevel}
+                onChange={(e) => setEducationLevel(e.target.value)}
+              >
+                <option value="">Seçiniz</option>
+                <option value="ilkokul">İlkokul</option>
+                <option value="ortaokul">Ortaokul</option>
+                <option value="lise">Lise</option>
+                <option value="onlisans">Ön Lisans</option>
+                <option value="lisans">Lisans</option>
+                <option value="yuksek_lisans">Yüksek Lisans</option>
+                <option value="doktora">Doktora</option>
+                <option value="diger">Diğer</option>
+              </select>
+            </div>
+            <div>
+              <Label>Kurum (Okul / Üniversite)</Label>
+              <Input value={school} onChange={(e) => setSchool(e.target.value)} placeholder="Örn: Boğaziçi Üniversitesi" />
+            </div>
+          </>
+        )}
       </div>
 
       {cfg.showBio && (
