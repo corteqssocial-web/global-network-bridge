@@ -48,7 +48,7 @@ const ROLE_CONFIG: Record<ProfileRole, RoleConfig> = {
     showSector: false, showTheme: false, showAvatar: true, showWebsites: true,
     showShowOnMap: false, showWhatsAppCta: false, showPresentationUpload: false,
     showBusinessSubtype: false, showVerifiedBadgeRequest: true, showCorteqsPasaportu: true,
-    showGiftAcceptance: true,
+    showGiftAcceptance: true, showEducation: true,
   },
   consultant: {
     fullNameLabel: "Ad Soyad *",
@@ -56,6 +56,7 @@ const ROLE_CONFIG: Record<ProfileRole, RoleConfig> = {
     showSector: true, showTheme: true, showAvatar: true, showWebsites: true,
     showShowOnMap: true, showWhatsAppCta: true, showPresentationUpload: true,
     showBusinessSubtype: false, showVerifiedBadgeRequest: true, showCorteqsPasaportu: true,
+    showEducation: true,
   },
   business: {
     fullNameLabel: "Yetkili Ad Soyad *",
