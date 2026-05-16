@@ -38,6 +38,7 @@ interface RoleConfig {
   showVerifiedBadgeRequest: boolean;
   showCorteqsPasaportu: boolean;
   showGiftAcceptance?: boolean;
+  showEducation?: boolean;
 }
 
 const ROLE_CONFIG: Record<ProfileRole, RoleConfig> = {
