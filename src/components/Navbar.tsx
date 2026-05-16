@@ -114,6 +114,11 @@ const Navbar = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  <Link to="/venture-hub" className="flex items-center gap-2 cursor-pointer">
+                    <Rocket className="h-3.5 w-3.5 text-emerald-600" />Venture Hub
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link to="/is-ilanlari" className="flex items-center gap-2 cursor-pointer">
                     <Briefcase className="h-3.5 w-3.5 text-primary" />İş İlanları
                   </Link>
