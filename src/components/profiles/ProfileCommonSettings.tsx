@@ -38,6 +38,7 @@ interface RoleConfig {
   showVerifiedBadgeRequest: boolean;
   showCorteqsPasaportu: boolean;
   showGiftAcceptance?: boolean;
+  showEducation?: boolean;
 }
 
 const ROLE_CONFIG: Record<ProfileRole, RoleConfig> = {
@@ -47,7 +48,7 @@ const ROLE_CONFIG: Record<ProfileRole, RoleConfig> = {
     showSector: false, showTheme: false, showAvatar: true, showWebsites: true,
     showShowOnMap: false, showWhatsAppCta: false, showPresentationUpload: false,
     showBusinessSubtype: false, showVerifiedBadgeRequest: true, showCorteqsPasaportu: true,
-    showGiftAcceptance: true,
+    showGiftAcceptance: true, showEducation: true,
   },
   consultant: {
     fullNameLabel: "Ad Soyad *",
@@ -55,6 +56,7 @@ const ROLE_CONFIG: Record<ProfileRole, RoleConfig> = {
     showSector: true, showTheme: true, showAvatar: true, showWebsites: true,
     showShowOnMap: true, showWhatsAppCta: true, showPresentationUpload: true,
     showBusinessSubtype: false, showVerifiedBadgeRequest: true, showCorteqsPasaportu: true,
+    showEducation: true,
   },
   business: {
     fullNameLabel: "Yetkili Ad Soyad *",
@@ -115,13 +117,15 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
   const [isVerified, setIsVerified] = useState(false);
   const [birthdayReminder, setBirthdayReminder] = useState(false);
   const [giftAcceptance, setGiftAcceptance] = useState(false);
+  const [educationLevel, setEducationLevel] = useState("");
+  const [school, setSchool] = useState("");
 
   useEffect(() => {
     if (!user) return;
     (async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("full_name, business_name, avatar_url, tag_line, bio, birth_date, founded_year, business_sector, theme, websites, show_on_map, whatsapp_cta_enabled, business_subtype, presentation_name, presentation_path, is_verified, birthday_reminder_enabled, gift_acceptance_enabled")
+        .select("full_name, business_name, avatar_url, tag_line, bio, birth_date, founded_year, business_sector, theme, websites, show_on_map, whatsapp_cta_enabled, business_subtype, presentation_name, presentation_path, is_verified, birthday_reminder_enabled, gift_acceptance_enabled, education_level, school")
         .eq("id", user.id)
         .maybeSingle();
       if (data) {
@@ -144,6 +148,8 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
         setIsVerified(!!data.is_verified);
         setBirthdayReminder(!!(data as any).birthday_reminder_enabled);
         setGiftAcceptance(!!(data as any).gift_acceptance_enabled);
+        setEducationLevel((data as any).education_level ?? "");
+        setSchool((data as any).school ?? "");
       }
       setEmail(user.email ?? "");
       setLoading(false);
@@ -229,6 +235,10 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
         payload.presentation_path = presentationPath;
       }
       if (cfg.showGiftAcceptance) payload.gift_acceptance_enabled = giftAcceptance;
+      if (cfg.showEducation) {
+        payload.education_level = educationLevel || null;
+        payload.school = school.trim() || null;
+      }
       const { error } = await supabase.from("profiles").update(payload).eq("id", user.id);
       if (error) throw error;
       toast({ title: "Profil bilgileri kaydedildi" });
@@ -383,6 +393,32 @@ const ProfileCommonSettings = ({ role }: { role: ProfileRole }) => {
               <option value="online">2 - Online İşletme</option>
             </select>
           </div>
+        )}
+        {cfg.showEducation && (
+          <>
+            <div>
+              <Label>Öğrenim Durumu</Label>
+              <select
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                value={educationLevel}
+                onChange={(e) => setEducationLevel(e.target.value)}
+              >
+                <option value="">Seçiniz</option>
+                <option value="ilkokul">İlkokul</option>
+                <option value="ortaokul">Ortaokul</option>
+                <option value="lise">Lise</option>
+                <option value="onlisans">Ön Lisans</option>
+                <option value="lisans">Lisans</option>
+                <option value="yuksek_lisans">Yüksek Lisans</option>
+                <option value="doktora">Doktora</option>
+                <option value="diger">Diğer</option>
+              </select>
+            </div>
+            <div>
+              <Label>Kurum (Okul / Üniversite)</Label>
+              <Input value={school} onChange={(e) => setSchool(e.target.value)} placeholder="Örn: Boğaziçi Üniversitesi" />
+            </div>
+          </>
         )}
       </div>
 
