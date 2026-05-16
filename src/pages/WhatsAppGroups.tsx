@@ -596,6 +596,17 @@ const WhatsAppGroups = () => {
                   theme: "Yazılım & Relocation",
                   conditions: ["Tech/yazılım profili", "Spam/ilan paylaşımı yasak", "İngilizce CV önerilir"],
                   whatsappLink: "https://chat.whatsapp.com/demo-london-devs",
+                  memberCount: 312,
+                  centralCountry: "İngiltere",
+                  centralCity: "Londra",
+                  primaryLanguage: "Türkçe / İngilizce",
+                  foundedYear: 2022,
+                  adminName: "Mert A.",
+                  acceptFormQuestions: [
+                    "LinkedIn profilin?",
+                    "Hangi teknolojilerde çalışıyorsun?",
+                    "Şu an Londra'da mısın yoksa relocation aşamasında mı?",
+                  ],
                   comments: [
                     { name: "Mert A.", text: "Bu grup sayesinde 2 ay içinde iş buldum 🙌" },
                     { name: "Ece K.", text: "Vize avukatı tavsiyeleri çok değerli." },
