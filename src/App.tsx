@@ -18,6 +18,7 @@ const VolunteerMentorDetail = lazy(() => import("./pages/VolunteerMentorDetail")
 const Associations = lazy(() => import("./pages/Associations"));
 const AssociationDetail = lazy(() => import("./pages/AssociationDetail"));
 const Businesses = lazy(() => import("./pages/Businesses"));
+const VentureHub = lazy(() => import("./pages/VentureHub"));
 const BusinessDetail = lazy(() => import("./pages/BusinessDetail"));
 const Profile = lazy(() => import("./pages/Profile"));
 const WhatsAppGroups = lazy(() => import("./pages/WhatsAppGroups"));
@@ -132,6 +133,7 @@ const App = () => (
                   <Route path="/association/:id" element={<AssociationDetail />} />
                   <Route path="/businesses" element={<Businesses />} />
                   <Route path="/business/:id" element={<BusinessDetail />} />
+                  <Route path="/venture-hub" element={<VentureHub />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/whatsapp-groups" element={<WhatsAppGroups />} />
                   <Route path="/whatsapp-groups/:id" element={<WhatsAppGroupLanding />} />

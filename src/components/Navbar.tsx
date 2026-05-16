@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Globe, User, LogIn, LogOut, MapPin, PenLine, ChevronDown, Users, Briefcase, Building2, Shield, Flag, Newspaper, MoreHorizontal, MessageCircle, Calendar } from "lucide-react";
+import { Menu, X, Globe, User, LogIn, LogOut, MapPin, PenLine, ChevronDown, Users, Briefcase, Building2, Shield, Flag, Newspaper, MoreHorizontal, MessageCircle, Calendar, Rocket } from "lucide-react";
 import corteqsLogo from "@/assets/corteqs-logo.png";
 import { Button } from "@/components/ui/button";
 import {
@@ -111,6 +111,11 @@ const Navbar = () => {
                 <DropdownMenuItem asChild>
                   <Link to="/businesses" className="flex items-center gap-2 cursor-pointer">
                     <Building2 className="h-3.5 w-3.5 text-primary" />{t.nav.businesses}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/venture-hub" className="flex items-center gap-2 cursor-pointer">
+                    <Rocket className="h-3.5 w-3.5 text-emerald-600" />Venture Hub
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>

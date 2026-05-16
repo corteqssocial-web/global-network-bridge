@@ -266,53 +266,52 @@ const WhatsAppGroups = () => {
             </div>
           </div>
 
-          {/* Hero */}
-          <section className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-[#25D366]/10 via-[#229ED9]/10 to-primary/10 p-6 md:p-10 mb-8 text-center">
-            <div className="flex items-center justify-center gap-2 mb-4 flex-wrap">
-              <Badge className="bg-[#25D366]/15 text-[#25D366] border-0">
-                <MessageSquare className="h-3 w-3 mr-1" /> WhatsApp
+          {/* Hero — compact */}
+          <section className="relative overflow-hidden rounded-xl border border-border bg-gradient-to-br from-[#25D366]/10 via-[#229ED9]/10 to-primary/10 px-4 py-4 md:px-6 md:py-5 mb-5">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                  <Badge className="bg-[#25D366]/15 text-[#25D366] border-0 text-[10px]"><MessageSquare className="h-3 w-3 mr-1" /> WhatsApp</Badge>
+                  <Badge className="bg-[#229ED9]/15 text-[#229ED9] border-0 text-[10px]"><Send className="h-3 w-3 mr-1" /> Telegram</Badge>
+                  <Badge className="bg-primary/10 text-primary border-0 text-[10px]">Diaspora Ağı</Badge>
+                </div>
+                <h2 className="text-lg md:text-xl font-bold leading-tight">
+                  Diasporanın WhatsApp & Telegram Gruplarını <span className="text-gradient-primary">Tek Çatı Altında</span>
+                </h2>
+                <p className="text-xs md:text-sm text-muted-foreground font-body mt-0.5">
+                  Alumni, doktor, hobi, iş gruplarına saniyeler içinde katıl ya da kendi grubunu ücretsiz listele.
+                </p>
+              </div>
+              <Badge className="bg-success/15 text-success border-0 text-xs px-2.5 py-1 shrink-0 self-start md:self-center">
+                <ShieldCheck className="h-3 w-3 mr-1" /> Listeleme ücretsiz
               </Badge>
-              <Badge className="bg-[#229ED9]/15 text-[#229ED9] border-0">
-                <Send className="h-3 w-3 mr-1" /> Telegram
-              </Badge>
-              <Badge className="bg-primary/10 text-primary border-0">Diaspora Ağı</Badge>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-3">
-              Diasporanın WhatsApp & Telegram Gruplarını <span className="text-gradient-primary">Tek Çatı Altında</span> Bul
-            </h1>
-            <p className="text-base md:text-lg text-muted-foreground font-body max-w-3xl mx-auto mb-2">
-              Alumni, doktor, hobi ve iş gruplarına saniyeler içinde katıl — ya da kendi WhatsApp/Telegram grubun için ücretsiz bir landing sayfası yayınla.
-            </p>
-            <Badge className="bg-success/15 text-success border-0 text-sm px-3 py-1 mt-2">
-              <ShieldCheck className="h-3.5 w-3.5 mr-1.5" /> Grup listeleme ve landing page tamamen ücretsiz
-            </Badge>
           </section>
 
-          {/* Banner: Listing + Landing CTA */}
-          {/* Two side-by-side submission cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          {/* Two side-by-side submission cards — compact */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
             {/* LEFT — Member: link only */}
-            <div className="rounded-2xl border-2 border-[#25D366]/30 bg-gradient-to-br from-[#25D366]/5 via-card to-card p-5 md:p-6 flex flex-col">
-              <div className="flex items-start gap-3 mb-3">
-                <div className="w-11 h-11 rounded-xl bg-[#25D366]/15 text-[#25D366] flex items-center justify-center shrink-0">
-                  <Link2 className="h-5 w-5" />
+            <div className="rounded-xl border-2 border-[#25D366]/30 bg-gradient-to-br from-[#25D366]/5 via-card to-card p-3.5 flex flex-col">
+              <div className="flex items-start gap-2.5 mb-2">
+                <div className="w-9 h-9 rounded-lg bg-[#25D366]/15 text-[#25D366] flex items-center justify-center shrink-0">
+                  <Link2 className="h-4 w-4" />
                 </div>
-                <div>
-                  <Badge className="bg-[#25D366]/15 text-[#25D366] border-0 mb-1">Üyeler için • Hızlı</Badge>
-                  <h3 className="text-lg font-bold">Sadece Link Paylaş</h3>
-                  <p className="text-sm text-muted-foreground mt-0.5">
-                    Landing sayfasıyla uğraşma — sadece WhatsApp grup linkini gönder. Yöneticilerimiz inceler ve gerekirse senin adına listeler.
+                <div className="min-w-0">
+                  <Badge className="bg-[#25D366]/15 text-[#25D366] border-0 text-[10px] mb-0.5">Üyeler • Hızlı</Badge>
+                  <h3 className="text-base font-bold leading-tight">Sadece Link Paylaş</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                    30 sn'de gönder, admin senin için listelesin.
                   </p>
                 </div>
               </div>
-              <ul className="text-xs text-muted-foreground space-y-1 mb-4 ml-1">
-                <li>• 30 saniyede tamamla</li>
-                <li>• Tasarım/yazı derdi yok</li>
-                <li>• Admin'e otomatik bildirim gider</li>
+              <ul className="text-[11px] text-muted-foreground flex flex-wrap gap-x-3 gap-y-1 mb-3 ml-0.5">
+                <li>• 30 sn</li>
+                <li>• Tasarım derdi yok</li>
+                <li>• Admin'e otomatik bildirim</li>
               </ul>
               <Dialog open={openLinkDialog} onOpenChange={setOpenLinkDialog}>
                 <DialogTrigger asChild>
-                  <Button size="lg" className="mt-auto w-full gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white">
+                  <Button size="sm" className="mt-auto w-full gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white">
                     <Link2 className="h-4 w-4" /> Link Gönder
                   </Button>
                 </DialogTrigger>
@@ -356,27 +355,27 @@ const WhatsAppGroups = () => {
             </div>
 
             {/* RIGHT — Admin / power user: full landing page */}
-            <div className="rounded-2xl border-2 border-turquoise/30 bg-gradient-to-br from-turquoise/5 via-card to-orange-50/40 p-5 md:p-6 flex flex-col">
-              <div className="flex items-start gap-3 mb-3">
-                <div className="w-11 h-11 rounded-xl bg-turquoise/15 text-turquoise flex items-center justify-center shrink-0">
-                  <Layout className="h-5 w-5" />
+            <div className="rounded-xl border-2 border-turquoise/30 bg-gradient-to-br from-turquoise/5 via-card to-orange-50/40 p-3.5 flex flex-col">
+              <div className="flex items-start gap-2.5 mb-2">
+                <div className="w-9 h-9 rounded-lg bg-turquoise/15 text-turquoise flex items-center justify-center shrink-0">
+                  <Layout className="h-4 w-4" />
                 </div>
-                <div>
-                  <Badge className="bg-turquoise/15 text-turquoise border-0 mb-1">Yöneticiler için • Detaylı</Badge>
-                  <h3 className="text-lg font-bold">Landing Page ile Listele</h3>
-                  <p className="text-sm text-muted-foreground mt-0.5">
-                    Profesyonel landing sayfası + kabul kayıt formu. Grup teması, üye sayısı, merkez şehir vb. bilgileri sen yönetirsin.
+                <div className="min-w-0">
+                  <Badge className="bg-turquoise/15 text-turquoise border-0 text-[10px] mb-0.5">Yöneticiler • Detaylı</Badge>
+                  <h3 className="text-base font-bold leading-tight">Landing Page ile Listele</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                    Profesyonel LP + kabul formu. Tema, üye sayısı, merkez şehir senin.
                   </p>
                 </div>
               </div>
-              <ul className="text-xs text-muted-foreground space-y-1 mb-4 ml-1">
-                <li>• Hero görsel + tagline + koşullar</li>
-                <li>• Düzenlenebilir kabul formu (istersen kapat)</li>
-                <li>• Like, follow ve yorum açık</li>
+              <ul className="text-[11px] text-muted-foreground flex flex-wrap gap-x-3 gap-y-1 mb-3 ml-0.5">
+                <li>• Hero + tagline + koşullar</li>
+                <li>• Kabul formu (kapatılabilir)</li>
+                <li>• Like / follow / yorum</li>
               </ul>
               <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                 <DialogTrigger asChild>
-                  <Button size="lg" className="mt-auto w-full gap-2 bg-turquoise hover:bg-turquoise/90 text-white">
+                  <Button size="sm" className="mt-auto w-full gap-2 bg-turquoise hover:bg-turquoise/90 text-white">
                     <Layout className="h-4 w-4" /> Landing Page Oluştur
                   </Button>
                 </DialogTrigger>
