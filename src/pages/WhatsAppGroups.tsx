@@ -266,26 +266,26 @@ const WhatsAppGroups = () => {
             </div>
           </div>
 
-          {/* Hero */}
-          <section className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-[#25D366]/10 via-[#229ED9]/10 to-primary/10 p-6 md:p-10 mb-8 text-center">
-            <div className="flex items-center justify-center gap-2 mb-4 flex-wrap">
-              <Badge className="bg-[#25D366]/15 text-[#25D366] border-0">
-                <MessageSquare className="h-3 w-3 mr-1" /> WhatsApp
+          {/* Hero — compact */}
+          <section className="relative overflow-hidden rounded-xl border border-border bg-gradient-to-br from-[#25D366]/10 via-[#229ED9]/10 to-primary/10 px-4 py-4 md:px-6 md:py-5 mb-5">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                  <Badge className="bg-[#25D366]/15 text-[#25D366] border-0 text-[10px]"><MessageSquare className="h-3 w-3 mr-1" /> WhatsApp</Badge>
+                  <Badge className="bg-[#229ED9]/15 text-[#229ED9] border-0 text-[10px]"><Send className="h-3 w-3 mr-1" /> Telegram</Badge>
+                  <Badge className="bg-primary/10 text-primary border-0 text-[10px]">Diaspora Ağı</Badge>
+                </div>
+                <h2 className="text-lg md:text-xl font-bold leading-tight">
+                  Diasporanın WhatsApp & Telegram Gruplarını <span className="text-gradient-primary">Tek Çatı Altında</span>
+                </h2>
+                <p className="text-xs md:text-sm text-muted-foreground font-body mt-0.5">
+                  Alumni, doktor, hobi, iş gruplarına saniyeler içinde katıl ya da kendi grubunu ücretsiz listele.
+                </p>
+              </div>
+              <Badge className="bg-success/15 text-success border-0 text-xs px-2.5 py-1 shrink-0 self-start md:self-center">
+                <ShieldCheck className="h-3 w-3 mr-1" /> Listeleme ücretsiz
               </Badge>
-              <Badge className="bg-[#229ED9]/15 text-[#229ED9] border-0">
-                <Send className="h-3 w-3 mr-1" /> Telegram
-              </Badge>
-              <Badge className="bg-primary/10 text-primary border-0">Diaspora Ağı</Badge>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-3">
-              Diasporanın WhatsApp & Telegram Gruplarını <span className="text-gradient-primary">Tek Çatı Altında</span> Bul
-            </h1>
-            <p className="text-base md:text-lg text-muted-foreground font-body max-w-3xl mx-auto mb-2">
-              Alumni, doktor, hobi ve iş gruplarına saniyeler içinde katıl — ya da kendi WhatsApp/Telegram grubun için ücretsiz bir landing sayfası yayınla.
-            </p>
-            <Badge className="bg-success/15 text-success border-0 text-sm px-3 py-1 mt-2">
-              <ShieldCheck className="h-3.5 w-3.5 mr-1.5" /> Grup listeleme ve landing page tamamen ücretsiz
-            </Badge>
           </section>
 
           {/* Banner: Listing + Landing CTA */}
