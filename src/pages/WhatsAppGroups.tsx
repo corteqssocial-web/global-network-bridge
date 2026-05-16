@@ -111,8 +111,11 @@ const WhatsAppGroups = () => {
   const [lpPreview, setLpPreview] = useState<null | {
     name: string; city: string; tagline: string; heroImage: string;
     theme: string; conditions: string[]; whatsappLink: string;
+    memberCount?: number; centralCountry?: string; centralCity?: string;
+    primaryLanguage?: string; foundedYear?: number;
+    adminName?: string; acceptFormQuestions?: string[];
   }>(null);
-  const [joinForm, setJoinForm] = useState({ name: "", email: "", note: "" });
+  const [joinForm, setJoinForm] = useState({ name: "", email: "", note: "", answers: "" });
 
   useEffect(() => {
     if (!redirectTarget) { setRedirectCountdown(3); return; }
