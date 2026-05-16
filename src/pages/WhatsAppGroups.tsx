@@ -692,6 +692,13 @@ const WhatsAppGroups = () => {
                               name: g.name, city: g.city, tagline: g.tagline,
                               heroImage: g.heroImage!, theme: g.theme!, conditions: g.conditions!,
                               whatsappLink: g.whatsappLink,
+                              memberCount: (g as any).memberCount,
+                              centralCountry: (g as any).centralCountry,
+                              centralCity: (g as any).centralCity,
+                              primaryLanguage: (g as any).primaryLanguage,
+                              foundedYear: (g as any).foundedYear,
+                              adminName: (g as any).adminName,
+                              acceptFormQuestions: (g as any).acceptFormQuestions,
                             })}
                           >
                             <Layout className="h-3.5 w-3.5" /> Landing'i Aç
