@@ -355,27 +355,27 @@ const WhatsAppGroups = () => {
             </div>
 
             {/* RIGHT — Admin / power user: full landing page */}
-            <div className="rounded-2xl border-2 border-turquoise/30 bg-gradient-to-br from-turquoise/5 via-card to-orange-50/40 p-5 md:p-6 flex flex-col">
-              <div className="flex items-start gap-3 mb-3">
-                <div className="w-11 h-11 rounded-xl bg-turquoise/15 text-turquoise flex items-center justify-center shrink-0">
-                  <Layout className="h-5 w-5" />
+            <div className="rounded-xl border-2 border-turquoise/30 bg-gradient-to-br from-turquoise/5 via-card to-orange-50/40 p-3.5 flex flex-col">
+              <div className="flex items-start gap-2.5 mb-2">
+                <div className="w-9 h-9 rounded-lg bg-turquoise/15 text-turquoise flex items-center justify-center shrink-0">
+                  <Layout className="h-4 w-4" />
                 </div>
-                <div>
-                  <Badge className="bg-turquoise/15 text-turquoise border-0 mb-1">Yöneticiler için • Detaylı</Badge>
-                  <h3 className="text-lg font-bold">Landing Page ile Listele</h3>
-                  <p className="text-sm text-muted-foreground mt-0.5">
-                    Profesyonel landing sayfası + kabul kayıt formu. Grup teması, üye sayısı, merkez şehir vb. bilgileri sen yönetirsin.
+                <div className="min-w-0">
+                  <Badge className="bg-turquoise/15 text-turquoise border-0 text-[10px] mb-0.5">Yöneticiler • Detaylı</Badge>
+                  <h3 className="text-base font-bold leading-tight">Landing Page ile Listele</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                    Profesyonel LP + kabul formu. Tema, üye sayısı, merkez şehir senin.
                   </p>
                 </div>
               </div>
-              <ul className="text-xs text-muted-foreground space-y-1 mb-4 ml-1">
-                <li>• Hero görsel + tagline + koşullar</li>
-                <li>• Düzenlenebilir kabul formu (istersen kapat)</li>
-                <li>• Like, follow ve yorum açık</li>
+              <ul className="text-[11px] text-muted-foreground flex flex-wrap gap-x-3 gap-y-1 mb-3 ml-0.5">
+                <li>• Hero + tagline + koşullar</li>
+                <li>• Kabul formu (kapatılabilir)</li>
+                <li>• Like / follow / yorum</li>
               </ul>
               <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                 <DialogTrigger asChild>
-                  <Button size="lg" className="mt-auto w-full gap-2 bg-turquoise hover:bg-turquoise/90 text-white">
+                  <Button size="sm" className="mt-auto w-full gap-2 bg-turquoise hover:bg-turquoise/90 text-white">
                     <Layout className="h-4 w-4" /> Landing Page Oluştur
                   </Button>
                 </DialogTrigger>
