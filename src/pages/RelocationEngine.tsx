@@ -661,7 +661,7 @@ const RelocationEngine = () => {
                 variant="hero"
                 size="lg"
               >
-                🚀 Relocation Planımı Oluştur
+                🚀 Taşınma Planımı Oluştur
               </Button>
 
               {/* Welcome Pack CTA */}
