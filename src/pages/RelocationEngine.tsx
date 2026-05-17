@@ -478,13 +478,13 @@ const RelocationEngine = () => {
 
   if (step === "survey") {
     return (
-      <div className="min-h-screen bg-background flex flex-col">
+      <div className="min-h-screen bg-background flex flex-col pt-16">
         <Navbar />
       <div className="container mx-auto px-4 py-4 max-w-2xl flex-1 overflow-y-auto">
           <div className="text-center mb-4">
             <span className="text-3xl mb-1 block">🌍</span>
             <h1 className="text-2xl font-extrabold text-foreground mb-1">
-              Relocation <span className="text-primary">Engine</span>
+              Taşınma <span className="text-primary">Motoru</span>
             </h1>
             <p className="text-sm text-muted-foreground font-body">
               Taşınma planınızı oluşturmak için birkaç soruya cevap verin
