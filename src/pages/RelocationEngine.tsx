@@ -694,16 +694,16 @@ const RelocationEngine = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="h-screen bg-background flex flex-col pt-16">
       <Navbar />
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden min-h-0">
         {/* LEFT: Chat Panel */}
         <div className="w-[380px] min-w-[340px] border-r border-border flex flex-col bg-card">
           <div className="p-4 border-b border-border bg-primary/5">
             <div className="flex items-center gap-2">
               <span className="text-2xl">🌍</span>
               <div>
-                <h2 className="text-sm font-bold text-foreground">Relocation Engine</h2>
+                <h2 className="text-sm font-bold text-foreground">Taşınma Motoru</h2>
                 <p className="text-xs text-muted-foreground">{survey.targetCountry} {survey.targetCity && `• ${survey.targetCity}`}</p>
               </div>
             </div>
