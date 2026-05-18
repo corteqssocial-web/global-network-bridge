@@ -5,6 +5,7 @@ import {
   HandCoins, Briefcase, Megaphone, Search, Send, ShieldCheck, Eye,
   Calendar, MapPin, ExternalLink, MessageSquare, Star, ArrowRight,
   FileText, Presentation, FileSpreadsheet, Download, UserPlus, Heart, CalendarCheck, Globe,
+  Play, Volume2, VolumeX, Pause,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -32,11 +33,11 @@ type DemoUser = {
   rating: number;
   followers: number;
   initials: string;
-  attachments: { kind: "deck" | "onepager" | "bp"; label: string; size: string }[];
+  attachments: { kind: "deck" | "onepager" | "bp" | "video"; label: string; size: string }[];
 };
 
 const demoUsers: Record<string, DemoUser> = {
-  girisimci: { name: "Ayşe Demir", title: "Co-Founder & CEO · FinPath", city: "Berlin", country: "Germany", bio: "B2B SaaS — Avrupa'daki Türk işletmeleri için akıllı muhasebe & ödeme altyapısı. €450K ARR, 1.2K aktif müşteri.", tags: ["FinTech", "SaaS", "Seed Round Açık"], rating: 4.9, followers: 1820, initials: "AD", attachments: [{ kind: "deck", label: "FinPath Pitch Deck v3", size: "4.2 MB" }, { kind: "onepager", label: "Investor One-Pager", size: "180 KB" }, { kind: "bp", label: "Business Plan 2026", size: "2.1 MB" }] },
+  girisimci: { name: "Ayşe Demir", title: "Co-Founder & CEO · FinPath", city: "Berlin", country: "Germany", bio: "B2B SaaS — Avrupa'daki Türk işletmeleri için akıllı muhasebe & ödeme altyapısı. €450K ARR, 1.2K aktif müşteri.", tags: ["FinTech", "SaaS", "Seed Round Açık"], rating: 4.9, followers: 1820, initials: "AD", attachments: [{ kind: "deck", label: "FinPath Pitch Deck v3", size: "4.2 MB" }, { kind: "onepager", label: "Investor One-Pager", size: "180 KB" }, { kind: "bp", label: "Business Plan 2026", size: "2.1 MB" }, { kind: "video", label: "Product Teaser", size: "1:24" }, { kind: "video", label: "Founder Intro", size: "2:15" }] },
   melek: { name: "Murat Kaya", title: "Angel Investor · Ex-Founder (exit 2022)", city: "Amsterdam", country: "Netherlands", bio: "Pre-seed & seed yatırımcı. Ticket size €25K–€100K. Odak: SaaS, marketplace, climate tech. 18 portföy şirketi.", tags: ["Pre-Seed", "Seed", "B2B SaaS"], rating: 4.8, followers: 3420, initials: "MK", attachments: [{ kind: "onepager", label: "Investment Thesis 2026", size: "240 KB" }] },
   vc: { name: "Zeynep Arslan", title: "Partner · Bosphorus Ventures", city: "London", country: "United Kingdom", bio: "Series A/B odaklı €120M fon. Türk kurucuların global çıkışına yatırım. Ortalama ticket €2M–€8M.", tags: ["Series A", "Series B", "Global"], rating: 4.9, followers: 5210, initials: "ZA", attachments: [{ kind: "deck", label: "Fund II Overview", size: "3.8 MB" }, { kind: "onepager", label: "Investment Criteria", size: "190 KB" }] },
   kulucka: { name: "TR-Hub Berlin", title: "Akselatör Programı · Cohort 7", city: "Berlin", country: "Germany", bio: "12 haftalık intensive program. €50K SAFE + mentor ağı + Avrupa pazarına soft-landing. Başvurular açık.", tags: ["Accelerator", "€50K SAFE", "Cohort 7"], rating: 4.7, followers: 2840, initials: "TH", attachments: [{ kind: "deck", label: "Program Overview", size: "2.6 MB" }, { kind: "onepager", label: "Application Brief", size: "210 KB" }] },
@@ -68,6 +69,117 @@ const segments: { key: SegmentKey; label: string; icon: any; color: string; desc
   { key: "medya", label: "Medya & İçerik", icon: Megaphone, color: "text-pink-600 bg-pink-500/10 border-pink-500/30", desc: "Startup gazeteciliği, podcast ve içerik üreticileri" },
   { key: "scout", label: "Startup Scout'lar", icon: Eye, color: "text-purple-600 bg-purple-500/10 border-purple-500/30", desc: "Yatırım fonları adına deal scout'luğu yapanlar" },
 ];
+
+/* -------------------- Founder Teaser Banner -------------------- */
+
+const FounderTeaserBanner = () => {
+  const [playing, setPlaying] = useState(false);
+  const [muted, setMuted] = useState(true);
+  const { toast } = useToast();
+
+  const handlePlay = () => {
+    setPlaying(!playing);
+    if (!playing) {
+      toast({ title: "Teaser oynatılıyor (DEMO)", description: "Gerçek profilde video içeriği aktif çalışır." });
+    }
+  };
+
+  const videos = [
+    { label: "Product Teaser", duration: "1:24" },
+    { label: "Founder Intro", duration: "2:15" },
+    { label: "Demo Day Pitch", duration: "3:05" },
+  ];
+
+  return (
+    <section className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 via-primary/10 to-turquoise/10 p-5 md:p-6 mb-6">
+      {/* Decorative banner background elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl" />
+        <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-primary/10 rounded-full blur-2xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-turquoise/5 rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-5 items-center">
+        {/* Text & CTA */}
+        <div>
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
+            <Badge className="bg-emerald-500/15 text-emerald-700 border-0"><Rocket className="h-3 w-3 mr-1" /> Girişimciler</Badge>
+            <Badge className="bg-amber-500/15 text-amber-700 border-0">DEMO</Badge>
+          </div>
+          <h2 className="text-xl md:text-2xl font-bold leading-tight mb-2">
+            Fikrini <span className="text-gradient-primary">dünyaya duyur</span> — teaser'ınla yatırımcıları cezbe.
+          </h2>
+          <p className="text-sm text-muted-foreground mb-4 max-w-md">
+            CorteQS Venture Hub'da her girişimci profiline teaser video, pitch kaydı ve founder intro ekleyebilirsin.
+            Yatırımcılar ve mentörler seni görmeden önce seni tanısın.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <Button size="sm" className="gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => toast({ title: "Profil oluştur (DEMO)", description: "Kayıt olduktan sonra girişimci profilini tamamla." })}>
+              <Rocket className="h-3.5 w-3.5" /> Girişimci Profili Oluştur
+            </Button>
+            <Button size="sm" variant="outline" className="gap-1.5" onClick={() => toast({ title: "Videoları keşfet (DEMO)", description: "Tüm girişimci teaser videolarına göz at." })}>
+              <Play className="h-3.5 w-3.5" /> Teaser'ları Keşfet
+            </Button>
+          </div>
+
+          {/* Mini video list */}
+          <div className="mt-4 flex flex-wrap gap-2">
+            {videos.map((v) => (
+              <button
+                key={v.label}
+                onClick={() => toast({ title: `${v.label} (DEMO)`, description: "Video içeriği seçildi — mock oynatma." })}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border bg-card/80 hover:border-primary/40 hover:bg-primary/5 transition-colors text-xs"
+              >
+                <Play className="h-3 w-3 text-emerald-600" />
+                <span className="font-medium text-foreground">{v.label}</span>
+                <span className="text-muted-foreground">{v.duration}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Mock Video Player */}
+        <div className="relative rounded-xl overflow-hidden border border-border bg-black aspect-video shadow-lg group">
+          {/* Background banner mock frame */}
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/80 via-primary/40 to-slate-900/90" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
+            <div className="w-14 h-14 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+              <button onClick={handlePlay}>
+                {playing ? <Pause className="h-6 w-6 text-white" /> : <Play className="h-6 w-6 text-white ml-0.5" />}
+              </button>
+            </div>
+            <p className="text-white/90 font-semibold text-sm text-center">
+              {playing ? "Teaser oynatılıyor…" : "FinPath Product Teaser"}
+            </p>
+            <p className="text-white/50 text-xs text-center mt-1">
+              {playing ? "1:24 · 720p · DEMO" : "Tıkla ve izle · DEMO"}
+            </p>
+          </div>
+
+          {/* Player controls overlay */}
+          <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/70 to-transparent flex items-center gap-2">
+            <button onClick={handlePlay} className="text-white/80 hover:text-white">
+              {playing ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+            </button>
+            <div className="flex-1 h-1 bg-white/20 rounded-full overflow-hidden">
+              <div className={`h-full bg-emerald-400 rounded-full ${playing ? "animate-pulse" : ""}`} style={{ width: playing ? "42%" : "0%" }} />
+            </div>
+            <span className="text-[10px] text-white/70 font-mono">1:24</span>
+            <button onClick={() => setMuted(!muted)} className="text-white/80 hover:text-white">
+              {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+            </button>
+            <Badge className="bg-amber-500/80 text-white border-0 text-[9px] px-1 py-0">DEMO</Badge>
+          </div>
+
+          {/* Floating badge */}
+          <div className="absolute top-2 right-2">
+            <Badge className="bg-black/50 text-white border-0 text-[10px] backdrop-blur-sm">Teaser Video</Badge>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const VentureHub = () => {
   const { toast } = useToast();
@@ -163,6 +275,9 @@ const VentureHub = () => {
               Yatırım, mentor, ekip, pazar, müşteri ve global bağlantı ihtiyaçlarını doğru kişilerle eşleştirir.
             </p>
           </section>
+
+          {/* Girişimciler Teaser Banner + Mock Video */}
+          <FounderTeaserBanner />
 
           {/* Filters */}
           <div className="flex flex-col lg:flex-row lg:items-center gap-3 mb-5">
@@ -323,10 +438,10 @@ const SegmentDetailBody = ({ segmentKey, segmentLabel, country, city, contact, s
     toast({ title: `${label} (DEMO)`, description: "Bu aksiyon mock — gerçek profilde aktif çalışır." });
   };
 
-  const attachmentIcon = (kind: "deck" | "onepager" | "bp") =>
-    kind === "deck" ? Presentation : kind === "bp" ? FileSpreadsheet : FileText;
-  const attachmentColor = (kind: "deck" | "onepager" | "bp") =>
-    kind === "deck" ? "text-purple-600 bg-purple-500/10" : kind === "bp" ? "text-emerald-600 bg-emerald-500/10" : "text-blue-600 bg-blue-500/10";
+  const attachmentIcon = (kind: "deck" | "onepager" | "bp" | "video") =>
+    kind === "video" ? Play : kind === "deck" ? Presentation : kind === "bp" ? FileSpreadsheet : FileText;
+  const attachmentColor = (kind: "deck" | "onepager" | "bp" | "video") =>
+    kind === "video" ? "text-rose-600 bg-rose-500/10" : kind === "deck" ? "text-purple-600 bg-purple-500/10" : kind === "bp" ? "text-emerald-600 bg-emerald-500/10" : "text-blue-600 bg-blue-500/10";
 
   return (
     <div className="space-y-3">
