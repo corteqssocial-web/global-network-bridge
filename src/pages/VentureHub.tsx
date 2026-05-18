@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useDiaspora } from "@/contexts/DiasporaContext";
@@ -69,6 +70,22 @@ const segments: { key: SegmentKey; label: string; icon: any; color: string; desc
   { key: "medya", label: "Medya & İçerik", icon: Megaphone, color: "text-pink-600 bg-pink-500/10 border-pink-500/30", desc: "Startup gazeteciliği, podcast ve içerik üreticileri" },
   { key: "scout", label: "Startup Scout'lar", icon: Eye, color: "text-purple-600 bg-purple-500/10 border-purple-500/30", desc: "Yatırım fonları adına deal scout'luğu yapanlar" },
 ];
+
+/* -------------------- Segment → subcategory taxonomy -------------------- */
+const SEGMENT_SUBCATEGORIES: Record<SegmentKey, string[]> = {
+  girisimci: ["Pre-Seed / Idea", "MVP / Prototip", "Seed Aşaması", "Series A+", "Bootstrapped", "Solo Founder", "Co-founder Arıyorum"],
+  melek: ["Pre-Seed (≤€25K)", "Seed (€25K–€100K)", "Follow-on Investor", "Syndicate Lead", "Sector Agnostic", "Vertical Specialist"],
+  vc: ["Pre-Seed Fund", "Seed Fund", "Series A Fund", "Series B+ Fund", "Growth / Late Stage", "Sector-Focused (FinTech/Health/AI)", "Corporate VC"],
+  kulucka: ["Akselatör Programı", "İnkübatör", "Teknopark", "Üniversite Programı", "Soft-Landing Programı", "Vertical Accelerator"],
+  mentor: ["Growth & Marketing", "Ürün & Tasarım", "Teknoloji & Mühendislik", "Satış & İş Geliştirme", "Fundraising & Strateji", "Operasyon & İK", "Uluslararasılaşma"],
+  servis: ["Hukuk & KVKK", "Muhasebe & Vergi", "Pazarlama & İçerik", "Dev Shop / Yazılım Geliştirme", "Tasarım & Branding", "PR & İletişim", "HR / Recruitment"],
+  fon: ["EU Horizon / EIC", "Devlet Hibesi (TR)", "Bölgesel Fonlar", "Yarışma & Ödüller", "Crowdfunding", "Impact / ESG Fonu"],
+  corp: ["CVC (Corporate VC)", "Venture Client / POC", "Open Innovation", "Stratejik Ortaklık", "M&A", "Innovation Lab"],
+  talent: ["Yazılım Geliştirici", "Ürün & Tasarım", "Growth & Pazarlama", "Satış", "Operasyon", "Veri & AI", "Yönetici / C-Level"],
+  etkinlik: ["Demo Day", "Pitch Gecesi", "Konferans / Zirve", "Meetup / Networking", "Hackathon", "Workshop"],
+  medya: ["Podcast", "YouTube / Vlog", "Newsletter", "Blog / Yazılı Medya", "Sosyal Medya İçeriği", "Basın & PR"],
+  scout: ["VC Scout", "Angel Network Scout", "Sektör Scout (FinTech/Health/AI)", "Coğrafi Scout (MENA/EU/US)", "M&A Scout"],
+};
 
 /* -------------------- Founder Teaser Banner -------------------- */
 
@@ -187,7 +204,7 @@ const VentureHub = () => {
   const [filterCity, setFilterCity] = useState("all");
   const [activeSegment, setActiveSegment] = useState<SegmentKey | "all">("all");
   const [search, setSearch] = useState("");
-  const [form, setForm] = useState({ name: "", email: "", segment: "", note: "" });
+  const [form, setForm] = useState<{ name: string; email: string; segment: SegmentKey | ""; subcategory: string; note: string }>({ name: "", email: "", segment: "", subcategory: "", note: "" });
   const [submitting, setSubmitting] = useState(false);
   const [openSegment, setOpenSegment] = useState<SegmentKey | null>(null);
   const [contact, setContact] = useState({ name: "", email: "", note: "" });
@@ -208,16 +225,17 @@ const VentureHub = () => {
     }
     setSubmitting(true);
     try {
+      const segmentLabel = form.segment ? segments.find((s) => s.key === form.segment)?.label : null;
       await supabase.from("interest_registrations").insert({
         category: "venture_hub",
         name: form.name || null,
         email: form.email,
-        role: form.segment || null,
-        message: form.note || null,
+        role: segmentLabel || null,
+        message: [form.subcategory ? `Alt kategori: ${form.subcategory}` : null, form.note || null].filter(Boolean).join("\n") || null,
         source: "venture-hub-page",
       });
       toast({ title: "Kaydın alındı 🚀", description: "Venture Hub açıldığında ilk sen haberdar olacaksın." });
-      setForm({ name: "", email: "", segment: "", note: "" });
+      setForm({ name: "", email: "", segment: "", subcategory: "", note: "" });
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Bilinmeyen hata";
       toast({ title: "Gönderilemedi", description: msg, variant: "destructive" });
@@ -351,9 +369,36 @@ const VentureHub = () => {
                 <Label className="text-xs">E-posta *</Label>
                 <Input value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} placeholder="ornek@mail.com" />
               </div>
-              <div className="md:col-span-2">
+              <div>
                 <Label className="text-xs">Hangi segment?</Label>
-                <Input value={form.segment} onChange={(e) => setForm((f) => ({ ...f, segment: e.target.value }))} placeholder="Örn: Melek Yatırımcı, VC, Kurucu, Mentor..." />
+                <Select
+                  value={form.segment || undefined}
+                  onValueChange={(v) => setForm((f) => ({ ...f, segment: v as SegmentKey, subcategory: "" }))}
+                >
+                  <SelectTrigger><SelectValue placeholder="Segment seç..." /></SelectTrigger>
+                  <SelectContent className="max-h-72">
+                    {segments.map((s) => (
+                      <SelectItem key={s.key} value={s.key}>{s.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-xs">Alt kategori</Label>
+                <Select
+                  value={form.subcategory || undefined}
+                  onValueChange={(v) => setForm((f) => ({ ...f, subcategory: v }))}
+                  disabled={!form.segment}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={form.segment ? "Alt kategori seç..." : "Önce segment seç"} />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-72">
+                    {(form.segment ? SEGMENT_SUBCATEGORIES[form.segment] : []).map((opt) => (
+                      <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="md:col-span-2">
                 <Label className="text-xs">Kısa not</Label>
