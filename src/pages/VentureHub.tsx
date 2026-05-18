@@ -5,6 +5,7 @@ import {
   HandCoins, Briefcase, Megaphone, Search, Send, ShieldCheck, Eye,
   Calendar, MapPin, ExternalLink, MessageSquare, Star, ArrowRight,
   FileText, Presentation, FileSpreadsheet, Download, UserPlus, Heart, CalendarCheck, Globe,
+  Play, Volume2, VolumeX, Pause,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
