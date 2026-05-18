@@ -33,7 +33,7 @@ type DemoUser = {
   rating: number;
   followers: number;
   initials: string;
-  attachments: { kind: "deck" | "onepager" | "bp"; label: string; size: string }[];
+  attachments: { kind: "deck" | "onepager" | "bp" | "video"; label: string; size: string }[];
 };
 
 const demoUsers: Record<string, DemoUser> = {
