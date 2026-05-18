@@ -369,9 +369,36 @@ const VentureHub = () => {
                 <Label className="text-xs">E-posta *</Label>
                 <Input value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} placeholder="ornek@mail.com" />
               </div>
-              <div className="md:col-span-2">
+              <div>
                 <Label className="text-xs">Hangi segment?</Label>
-                <Input value={form.segment} onChange={(e) => setForm((f) => ({ ...f, segment: e.target.value }))} placeholder="Örn: Melek Yatırımcı, VC, Kurucu, Mentor..." />
+                <Select
+                  value={form.segment || undefined}
+                  onValueChange={(v) => setForm((f) => ({ ...f, segment: v as SegmentKey, subcategory: "" }))}
+                >
+                  <SelectTrigger><SelectValue placeholder="Segment seç..." /></SelectTrigger>
+                  <SelectContent className="max-h-72">
+                    {segments.map((s) => (
+                      <SelectItem key={s.key} value={s.key}>{s.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-xs">Alt kategori</Label>
+                <Select
+                  value={form.subcategory || undefined}
+                  onValueChange={(v) => setForm((f) => ({ ...f, subcategory: v }))}
+                  disabled={!form.segment}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={form.segment ? "Alt kategori seç..." : "Önce segment seç"} />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-72">
+                    {(form.segment ? SEGMENT_SUBCATEGORIES[form.segment] : []).map((opt) => (
+                      <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="md:col-span-2">
                 <Label className="text-xs">Kısa not</Label>
