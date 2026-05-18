@@ -4,6 +4,7 @@ import {
   Rocket, Sparkles, TrendingUp, Users, Building2, GraduationCap, Lightbulb,
   HandCoins, Briefcase, Megaphone, Search, Send, ShieldCheck, Eye,
   Calendar, MapPin, ExternalLink, MessageSquare, Star, ArrowRight,
+  FileText, Presentation, FileSpreadsheet, Download, UserPlus, Heart, CalendarCheck, Globe,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -19,6 +20,35 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useDiaspora } from "@/contexts/DiasporaContext";
 import { bloggers } from "@/data/mock";
+
+/* -------------------- Demo users per segment -------------------- */
+type DemoUser = {
+  name: string;
+  title: string;
+  city: string;
+  country: string;
+  bio: string;
+  tags: string[];
+  rating: number;
+  followers: number;
+  initials: string;
+  attachments: { kind: "deck" | "onepager" | "bp"; label: string; size: string }[];
+};
+
+const demoUsers: Record<string, DemoUser> = {
+  girisimci: { name: "Ayşe Demir", title: "Co-Founder & CEO · FinPath", city: "Berlin", country: "Germany", bio: "B2B SaaS — Avrupa'daki Türk işletmeleri için akıllı muhasebe & ödeme altyapısı. €450K ARR, 1.2K aktif müşteri.", tags: ["FinTech", "SaaS", "Seed Round Açık"], rating: 4.9, followers: 1820, initials: "AD", attachments: [{ kind: "deck", label: "FinPath Pitch Deck v3", size: "4.2 MB" }, { kind: "onepager", label: "Investor One-Pager", size: "180 KB" }, { kind: "bp", label: "Business Plan 2026", size: "2.1 MB" }] },
+  melek: { name: "Murat Kaya", title: "Angel Investor · Ex-Founder (exit 2022)", city: "Amsterdam", country: "Netherlands", bio: "Pre-seed & seed yatırımcı. Ticket size €25K–€100K. Odak: SaaS, marketplace, climate tech. 18 portföy şirketi.", tags: ["Pre-Seed", "Seed", "B2B SaaS"], rating: 4.8, followers: 3420, initials: "MK", attachments: [{ kind: "onepager", label: "Investment Thesis 2026", size: "240 KB" }] },
+  vc: { name: "Zeynep Arslan", title: "Partner · Bosphorus Ventures", city: "London", country: "United Kingdom", bio: "Series A/B odaklı €120M fon. Türk kurucuların global çıkışına yatırım. Ortalama ticket €2M–€8M.", tags: ["Series A", "Series B", "Global"], rating: 4.9, followers: 5210, initials: "ZA", attachments: [{ kind: "deck", label: "Fund II Overview", size: "3.8 MB" }, { kind: "onepager", label: "Investment Criteria", size: "190 KB" }] },
+  kulucka: { name: "TR-Hub Berlin", title: "Akselatör Programı · Cohort 7", city: "Berlin", country: "Germany", bio: "12 haftalık intensive program. €50K SAFE + mentor ağı + Avrupa pazarına soft-landing. Başvurular açık.", tags: ["Accelerator", "€50K SAFE", "Cohort 7"], rating: 4.7, followers: 2840, initials: "TH", attachments: [{ kind: "deck", label: "Program Overview", size: "2.6 MB" }, { kind: "onepager", label: "Application Brief", size: "210 KB" }] },
+  mentor: { name: "Dr. Emre Yıldız", title: "Growth Mentor · Ex-VP Spotify", city: "Stockholm", country: "Sweden", bio: "B2C growth, retention & monetization. 60+ kurucuya mentörlük. İlk seans ücretsiz, sonrası €180/saat.", tags: ["Growth", "B2C", "Mentor"], rating: 5.0, followers: 1240, initials: "EY", attachments: [{ kind: "onepager", label: "Mentor Profile", size: "120 KB" }] },
+  servis: { name: "LegalBridge", title: "Hukuk & KVKK Servisi · Türk girişimler", city: "Paris", country: "France", bio: "Şirket kuruluşu, SAFE/term-sheet, IP, GDPR. 200+ Türk startup'a hizmet. Sabit paket: €490/ay.", tags: ["Legal", "GDPR", "SAFE"], rating: 4.8, followers: 980, initials: "LB", attachments: [{ kind: "onepager", label: "Hizmet Paketleri", size: "150 KB" }] },
+  fon: { name: "EU Horizon Desk · Çiğdem K.", title: "Grant Advisor · EU & Horizon Europe", city: "Brussels", country: "Belgium", bio: "EIC Accelerator, Horizon Europe, EUREKA fonlarına özel başvuru desteği. 14 onaylı dosya, toplam €11M hibe.", tags: ["EU Grants", "EIC", "Horizon"], rating: 4.9, followers: 1670, initials: "ÇK", attachments: [{ kind: "deck", label: "EIC Hazırlık Rehberi", size: "5.1 MB" }, { kind: "onepager", label: "Hibe Takvimi 2026", size: "200 KB" }] },
+  corp: { name: "Hakan Öztürk", title: "Head of CVC · GlobalTek AG", city: "Munich", country: "Germany", bio: "Kurumsal venture client & CVC. Otomotiv, enerji, lojistik startup'larıyla POC & yatırım. Ticket €500K–€3M.", tags: ["CVC", "POC", "Enterprise"], rating: 4.7, followers: 2100, initials: "HÖ", attachments: [{ kind: "onepager", label: "CVC Mandate", size: "230 KB" }, { kind: "bp", label: "Partnership Framework", size: "1.4 MB" }] },
+  talent: { name: "Selin Aydın", title: "Senior Product Designer · Startup-ready", city: "Lisbon", country: "Portugal", bio: "8 yıl B2B SaaS deneyimi. Remote / hybrid arıyor. Equity + maaş kombinasyonuna açık. Portfolio mevcut.", tags: ["Product Design", "Remote", "Senior"], rating: 4.9, followers: 540, initials: "SA", attachments: [{ kind: "onepager", label: "CV & Portfolio", size: "1.8 MB" }] },
+  etkinlik: { name: "Diaspora Demo Day '26", title: "Pitch & Networking · 8 Haziran 2026", city: "Berlin", country: "Germany", bio: "20 startup pitch, 60+ yatırımcı, after-party. Erken bilet €49, kapıda €89. Yer: betahaus Kreuzberg.", tags: ["Demo Day", "Pitch", "Networking"], rating: 4.8, followers: 3210, initials: "DD", attachments: [{ kind: "onepager", label: "Sponsor Kit", size: "320 KB" }] },
+  medya: { name: "Startup Diaspora Podcast", title: "Haftalık Podcast · 24K dinleyici", city: "Istanbul", country: "Turkey", bio: "Global Türk kurucularıyla derin sohbetler. Spotify Top 50 Business TR. Sponsorluk & röportaj başvuruları açık.", tags: ["Podcast", "Media", "Sponsorship"], rating: 4.9, followers: 24000, initials: "SD", attachments: [{ kind: "onepager", label: "Media Kit 2026", size: "1.1 MB" }] },
+  scout: { name: "Burak Şahin", title: "Deal Scout · 4 fon için kaynak", city: "Dubai", country: "UAE", bio: "MENA & Avrupa arası deal flow. Erken aşama Türk girişimlerini fonlara yönlendiriyor. Komisyon bazlı.", tags: ["Deal Flow", "MENA", "Scout"], rating: 4.6, followers: 890, initials: "BŞ", attachments: [{ kind: "onepager", label: "Scout Brief", size: "140 KB" }] },
+};
 
 type SegmentKey =
   | "girisimci" | "melek" | "vc" | "kulucka" | "mentor" | "servis"
