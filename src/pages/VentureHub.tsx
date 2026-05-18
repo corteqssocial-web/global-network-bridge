@@ -71,6 +71,22 @@ const segments: { key: SegmentKey; label: string; icon: any; color: string; desc
   { key: "scout", label: "Startup Scout'lar", icon: Eye, color: "text-purple-600 bg-purple-500/10 border-purple-500/30", desc: "Yatırım fonları adına deal scout'luğu yapanlar" },
 ];
 
+/* -------------------- Segment → subcategory taxonomy -------------------- */
+const SEGMENT_SUBCATEGORIES: Record<SegmentKey, string[]> = {
+  girisimci: ["Pre-Seed / Idea", "MVP / Prototip", "Seed Aşaması", "Series A+", "Bootstrapped", "Solo Founder", "Co-founder Arıyorum"],
+  melek: ["Pre-Seed (≤€25K)", "Seed (€25K–€100K)", "Follow-on Investor", "Syndicate Lead", "Sector Agnostic", "Vertical Specialist"],
+  vc: ["Pre-Seed Fund", "Seed Fund", "Series A Fund", "Series B+ Fund", "Growth / Late Stage", "Sector-Focused (FinTech/Health/AI)", "Corporate VC"],
+  kulucka: ["Akselatör Programı", "İnkübatör", "Teknopark", "Üniversite Programı", "Soft-Landing Programı", "Vertical Accelerator"],
+  mentor: ["Growth & Marketing", "Ürün & Tasarım", "Teknoloji & Mühendislik", "Satış & İş Geliştirme", "Fundraising & Strateji", "Operasyon & İK", "Uluslararasılaşma"],
+  servis: ["Hukuk & KVKK", "Muhasebe & Vergi", "Pazarlama & İçerik", "Dev Shop / Yazılım Geliştirme", "Tasarım & Branding", "PR & İletişim", "HR / Recruitment"],
+  fon: ["EU Horizon / EIC", "Devlet Hibesi (TR)", "Bölgesel Fonlar", "Yarışma & Ödüller", "Crowdfunding", "Impact / ESG Fonu"],
+  corp: ["CVC (Corporate VC)", "Venture Client / POC", "Open Innovation", "Stratejik Ortaklık", "M&A", "Innovation Lab"],
+  talent: ["Yazılım Geliştirici", "Ürün & Tasarım", "Growth & Pazarlama", "Satış", "Operasyon", "Veri & AI", "Yönetici / C-Level"],
+  etkinlik: ["Demo Day", "Pitch Gecesi", "Konferans / Zirve", "Meetup / Networking", "Hackathon", "Workshop"],
+  medya: ["Podcast", "YouTube / Vlog", "Newsletter", "Blog / Yazılı Medya", "Sosyal Medya İçeriği", "Basın & PR"],
+  scout: ["VC Scout", "Angel Network Scout", "Sektör Scout (FinTech/Health/AI)", "Coğrafi Scout (MENA/EU/US)", "M&A Scout"],
+};
+
 /* -------------------- Founder Teaser Banner -------------------- */
 
 const FounderTeaserBanner = () => {
