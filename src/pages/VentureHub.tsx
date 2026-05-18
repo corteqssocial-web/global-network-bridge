@@ -1,7 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Rocket, Sparkles, TrendingUp, Users, Building2, GraduationCap, Lightbulb,
   HandCoins, Briefcase, Megaphone, Search, Send, ShieldCheck, Eye,
+  Calendar, MapPin, ExternalLink, MessageSquare, Star, ArrowRight,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -12,8 +14,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useDiaspora } from "@/contexts/DiasporaContext";
+import { bloggers } from "@/data/mock";
 
 type SegmentKey =
   | "girisimci" | "melek" | "vc" | "kulucka" | "mentor" | "servis"
