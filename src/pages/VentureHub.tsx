@@ -204,7 +204,7 @@ const VentureHub = () => {
   const [filterCity, setFilterCity] = useState("all");
   const [activeSegment, setActiveSegment] = useState<SegmentKey | "all">("all");
   const [search, setSearch] = useState("");
-  const [form, setForm] = useState({ name: "", email: "", segment: "", note: "" });
+  const [form, setForm] = useState<{ name: string; email: string; segment: SegmentKey | ""; subcategory: string; note: string }>({ name: "", email: "", segment: "", subcategory: "", note: "" });
   const [submitting, setSubmitting] = useState(false);
   const [openSegment, setOpenSegment] = useState<SegmentKey | null>(null);
   const [contact, setContact] = useState({ name: "", email: "", note: "" });
