@@ -335,10 +335,10 @@ const SegmentDetailBody = ({ segmentKey, segmentLabel, country, city, contact, s
 const segmentCtas = (key: SegmentKey): { icon: any; label: string; desc: string; href: string }[] => {
   const base = [
     { icon: Calendar, label: "Etkinlikleri Gör", desc: "Bu segmente ait demo day, pitch ve toplulukları gör.", href: "/events" },
-    { icon: Briefcase, label: "İş Fırsatları", desc: "Startup pozisyonları ve iş ilanları.", href: "/jobs" },
+    { icon: Briefcase, label: "İş Fırsatları", desc: "Startup pozisyonları ve iş ilanları.", href: "/is-ilanlari" },
   ];
   if (key === "talent") return [
-    { icon: Briefcase, label: "Açık Pozisyonlar", desc: "Türk startup'larındaki ilanları keşfet.", href: "/jobs" },
+    { icon: Briefcase, label: "Açık Pozisyonlar", desc: "Türk startup'larındaki ilanları keşfet.", href: "/is-ilanlari" },
     { icon: Users, label: "Topluluk", desc: "Startup yeteneklerinin buluştuğu akışa katıl.", href: "/feed" },
   ];
   if (key === "mentor") return [
@@ -421,7 +421,7 @@ const EventsByLocation = ({ country, city }: { country: string; city: string }) 
           const day = String(dt.getDate()).padStart(2, "0");
           const mon = dt.toLocaleString("tr-TR", { month: "short" });
           return (
-            <Link key={ev.id} to={`/events/${ev.id}`} className="flex gap-3 p-3 rounded-lg border border-border hover:border-primary/30 transition-colors">
+            <Link key={ev.id} to={`/event/${ev.id}`} className="flex gap-3 p-3 rounded-lg border border-border hover:border-primary/30 transition-colors">
               <div className="text-center w-12 shrink-0">
                 <div className="text-xl font-bold text-primary leading-none">{day}</div>
                 <div className="text-[10px] text-muted-foreground uppercase">{mon}</div>
@@ -479,7 +479,7 @@ const MediaByLocation = ({ country, city }: { country: string; city: string }) =
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {list.map((b) => (
-            <Link key={b.id} to={`/bloggers/${b.id}`} className="flex gap-3 p-3 rounded-lg border border-border hover:border-primary/30 transition-colors">
+            <Link key={b.id} to={`/blogger/${b.id}`} className="flex gap-3 p-3 rounded-lg border border-border hover:border-primary/30 transition-colors">
               <img src={b.photo} alt={b.name} className="w-12 h-12 rounded-full object-cover shrink-0" />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
