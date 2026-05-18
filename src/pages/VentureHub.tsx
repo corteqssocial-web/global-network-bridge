@@ -4,6 +4,7 @@ import {
   Rocket, Sparkles, TrendingUp, Users, Building2, GraduationCap, Lightbulb,
   HandCoins, Briefcase, Megaphone, Search, Send, ShieldCheck, Eye,
   Calendar, MapPin, ExternalLink, MessageSquare, Star, ArrowRight,
+  FileText, Presentation, FileSpreadsheet, Download, UserPlus, Heart, CalendarCheck, Globe,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -19,6 +20,35 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useDiaspora } from "@/contexts/DiasporaContext";
 import { bloggers } from "@/data/mock";
+
+/* -------------------- Demo users per segment -------------------- */
+type DemoUser = {
+  name: string;
+  title: string;
+  city: string;
+  country: string;
+  bio: string;
+  tags: string[];
+  rating: number;
+  followers: number;
+  initials: string;
+  attachments: { kind: "deck" | "onepager" | "bp"; label: string; size: string }[];
+};
+
+const demoUsers: Record<string, DemoUser> = {
+  girisimci: { name: "Ayşe Demir", title: "Co-Founder & CEO · FinPath", city: "Berlin", country: "Germany", bio: "B2B SaaS — Avrupa'daki Türk işletmeleri için akıllı muhasebe & ödeme altyapısı. €450K ARR, 1.2K aktif müşteri.", tags: ["FinTech", "SaaS", "Seed Round Açık"], rating: 4.9, followers: 1820, initials: "AD", attachments: [{ kind: "deck", label: "FinPath Pitch Deck v3", size: "4.2 MB" }, { kind: "onepager", label: "Investor One-Pager", size: "180 KB" }, { kind: "bp", label: "Business Plan 2026", size: "2.1 MB" }] },
+  melek: { name: "Murat Kaya", title: "Angel Investor · Ex-Founder (exit 2022)", city: "Amsterdam", country: "Netherlands", bio: "Pre-seed & seed yatırımcı. Ticket size €25K–€100K. Odak: SaaS, marketplace, climate tech. 18 portföy şirketi.", tags: ["Pre-Seed", "Seed", "B2B SaaS"], rating: 4.8, followers: 3420, initials: "MK", attachments: [{ kind: "onepager", label: "Investment Thesis 2026", size: "240 KB" }] },
+  vc: { name: "Zeynep Arslan", title: "Partner · Bosphorus Ventures", city: "London", country: "United Kingdom", bio: "Series A/B odaklı €120M fon. Türk kurucuların global çıkışına yatırım. Ortalama ticket €2M–€8M.", tags: ["Series A", "Series B", "Global"], rating: 4.9, followers: 5210, initials: "ZA", attachments: [{ kind: "deck", label: "Fund II Overview", size: "3.8 MB" }, { kind: "onepager", label: "Investment Criteria", size: "190 KB" }] },
+  kulucka: { name: "TR-Hub Berlin", title: "Akselatör Programı · Cohort 7", city: "Berlin", country: "Germany", bio: "12 haftalık intensive program. €50K SAFE + mentor ağı + Avrupa pazarına soft-landing. Başvurular açık.", tags: ["Accelerator", "€50K SAFE", "Cohort 7"], rating: 4.7, followers: 2840, initials: "TH", attachments: [{ kind: "deck", label: "Program Overview", size: "2.6 MB" }, { kind: "onepager", label: "Application Brief", size: "210 KB" }] },
+  mentor: { name: "Dr. Emre Yıldız", title: "Growth Mentor · Ex-VP Spotify", city: "Stockholm", country: "Sweden", bio: "B2C growth, retention & monetization. 60+ kurucuya mentörlük. İlk seans ücretsiz, sonrası €180/saat.", tags: ["Growth", "B2C", "Mentor"], rating: 5.0, followers: 1240, initials: "EY", attachments: [{ kind: "onepager", label: "Mentor Profile", size: "120 KB" }] },
+  servis: { name: "LegalBridge", title: "Hukuk & KVKK Servisi · Türk girişimler", city: "Paris", country: "France", bio: "Şirket kuruluşu, SAFE/term-sheet, IP, GDPR. 200+ Türk startup'a hizmet. Sabit paket: €490/ay.", tags: ["Legal", "GDPR", "SAFE"], rating: 4.8, followers: 980, initials: "LB", attachments: [{ kind: "onepager", label: "Hizmet Paketleri", size: "150 KB" }] },
+  fon: { name: "EU Horizon Desk · Çiğdem K.", title: "Grant Advisor · EU & Horizon Europe", city: "Brussels", country: "Belgium", bio: "EIC Accelerator, Horizon Europe, EUREKA fonlarına özel başvuru desteği. 14 onaylı dosya, toplam €11M hibe.", tags: ["EU Grants", "EIC", "Horizon"], rating: 4.9, followers: 1670, initials: "ÇK", attachments: [{ kind: "deck", label: "EIC Hazırlık Rehberi", size: "5.1 MB" }, { kind: "onepager", label: "Hibe Takvimi 2026", size: "200 KB" }] },
+  corp: { name: "Hakan Öztürk", title: "Head of CVC · GlobalTek AG", city: "Munich", country: "Germany", bio: "Kurumsal venture client & CVC. Otomotiv, enerji, lojistik startup'larıyla POC & yatırım. Ticket €500K–€3M.", tags: ["CVC", "POC", "Enterprise"], rating: 4.7, followers: 2100, initials: "HÖ", attachments: [{ kind: "onepager", label: "CVC Mandate", size: "230 KB" }, { kind: "bp", label: "Partnership Framework", size: "1.4 MB" }] },
+  talent: { name: "Selin Aydın", title: "Senior Product Designer · Startup-ready", city: "Lisbon", country: "Portugal", bio: "8 yıl B2B SaaS deneyimi. Remote / hybrid arıyor. Equity + maaş kombinasyonuna açık. Portfolio mevcut.", tags: ["Product Design", "Remote", "Senior"], rating: 4.9, followers: 540, initials: "SA", attachments: [{ kind: "onepager", label: "CV & Portfolio", size: "1.8 MB" }] },
+  etkinlik: { name: "Diaspora Demo Day '26", title: "Pitch & Networking · 8 Haziran 2026", city: "Berlin", country: "Germany", bio: "20 startup pitch, 60+ yatırımcı, after-party. Erken bilet €49, kapıda €89. Yer: betahaus Kreuzberg.", tags: ["Demo Day", "Pitch", "Networking"], rating: 4.8, followers: 3210, initials: "DD", attachments: [{ kind: "onepager", label: "Sponsor Kit", size: "320 KB" }] },
+  medya: { name: "Startup Diaspora Podcast", title: "Haftalık Podcast · 24K dinleyici", city: "Istanbul", country: "Turkey", bio: "Global Türk kurucularıyla derin sohbetler. Spotify Top 50 Business TR. Sponsorluk & röportaj başvuruları açık.", tags: ["Podcast", "Media", "Sponsorship"], rating: 4.9, followers: 24000, initials: "SD", attachments: [{ kind: "onepager", label: "Media Kit 2026", size: "1.1 MB" }] },
+  scout: { name: "Burak Şahin", title: "Deal Scout · 4 fon için kaynak", city: "Dubai", country: "UAE", bio: "MENA & Avrupa arası deal flow. Erken aşama Türk girişimlerini fonlara yönlendiriyor. Komisyon bazlı.", tags: ["Deal Flow", "MENA", "Scout"], rating: 4.6, followers: 890, initials: "BŞ", attachments: [{ kind: "onepager", label: "Scout Brief", size: "140 KB" }] },
+};
 
 type SegmentKey =
   | "girisimci" | "melek" | "vc" | "kulucka" | "mentor" | "servis"
@@ -282,49 +312,127 @@ interface SegmentDetailBodyProps {
 }
 
 const SegmentDetailBody = ({ segmentKey, segmentLabel, country, city, contact, setContact, onSubmit }: SegmentDetailBodyProps) => {
+  const { toast } = useToast();
   if (segmentKey === "etkinlik") return <EventsByLocation country={country} city={city} />;
   if (segmentKey === "medya") return <MediaByLocation country={country} city={city} />;
 
-  // Default CTA panel for the other segments
-  return (
-    <div className="space-y-4">
-      <Card className="p-3 bg-muted/30 border-dashed">
-        <div className="flex items-center gap-2 text-xs text-muted-foreground flex-wrap">
-          <MapPin className="h-3.5 w-3.5 text-primary" />
-          <span>Filtre:</span>
-          <Badge variant="outline" className="text-[10px]">{country === "all" ? "Tüm Ülkeler" : country}</Badge>
-          <Badge variant="outline" className="text-[10px]">{city === "all" ? "Tüm Şehirler" : city}</Badge>
-        </div>
-      </Card>
+  const user = demoUsers[segmentKey];
+  const ctas = segmentCtas(segmentKey);
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-        {segmentCtas(segmentKey).map((c, i) => (
-          <a key={i} href={c.href} className="flex items-start gap-2 p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 transition-colors">
-            <c.icon className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+  const handleMockAction = (label: string) => {
+    toast({ title: `${label} (DEMO)`, description: "Bu aksiyon mock — gerçek profilde aktif çalışır." });
+  };
+
+  const attachmentIcon = (kind: "deck" | "onepager" | "bp") =>
+    kind === "deck" ? Presentation : kind === "bp" ? FileSpreadsheet : FileText;
+  const attachmentColor = (kind: "deck" | "onepager" | "bp") =>
+    kind === "deck" ? "text-purple-600 bg-purple-500/10" : kind === "bp" ? "text-emerald-600 bg-emerald-500/10" : "text-blue-600 bg-blue-500/10";
+
+  return (
+    <div className="space-y-3">
+      {/* Demo user profile card — compact */}
+      {user && (
+        <Card className="p-3.5 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+          <div className="flex items-start gap-3">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-turquoise text-white flex items-center justify-center font-bold text-sm shrink-0">
+              {user.initials}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <h4 className="font-bold text-sm truncate">{user.name}</h4>
+                  <p className="text-[11px] text-muted-foreground truncate">{user.title}</p>
+                </div>
+                <Badge className="bg-amber-500/15 text-amber-700 border-0 text-[9px] shrink-0">DEMO</Badge>
+              </div>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1 text-[11px] text-muted-foreground">
+                <span className="inline-flex items-center gap-0.5"><MapPin className="h-2.5 w-2.5" />{user.city}, {user.country}</span>
+                <span className="inline-flex items-center gap-0.5 text-amber-600"><Star className="h-2.5 w-2.5 fill-amber-500" /> {user.rating}</span>
+                <span>{user.followers.toLocaleString()} takipçi</span>
+                <span className="inline-flex items-center gap-0.5"><Globe className="h-2.5 w-2.5" /> Google Rating</span>
+              </div>
+              <p className="text-xs text-foreground/80 mt-2 leading-relaxed">{user.bio}</p>
+              <div className="flex flex-wrap gap-1 mt-2">
+                {user.tags.map((t) => (
+                  <Badge key={t} variant="secondary" className="text-[9px] px-1.5 py-0">{t}</Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Platform CTAs */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 mt-3">
+            <Button size="sm" variant="default" className="h-8 text-xs gap-1" onClick={() => handleMockAction("Mesaj Gönder")}>
+              <MessageSquare className="h-3 w-3" /> Mesaj
+            </Button>
+            <Button size="sm" variant="outline" className="h-8 text-xs gap-1" onClick={() => handleMockAction("Bağlantı İste")}>
+              <UserPlus className="h-3 w-3" /> Bağlan
+            </Button>
+            <Button size="sm" variant="outline" className="h-8 text-xs gap-1" onClick={() => handleMockAction("Takip Et")}>
+              <Heart className="h-3 w-3" /> Takip
+            </Button>
+            <Button size="sm" variant="outline" className="h-8 text-xs gap-1" onClick={() => handleMockAction("Randevu Al")}>
+              <CalendarCheck className="h-3 w-3" /> Randevu
+            </Button>
+          </div>
+
+          {/* Attachments */}
+          {user.attachments.length > 0 && (
+            <div className="mt-3 pt-3 border-t border-border">
+              <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Profil Dosyaları</div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                {user.attachments.map((a, i) => {
+                  const Icon = attachmentIcon(a.kind);
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => handleMockAction(`İndir: ${a.label}`)}
+                      className="flex items-center gap-2 p-2 rounded-md border border-border hover:border-primary/40 hover:bg-primary/5 transition-colors text-left"
+                    >
+                      <span className={`w-7 h-7 rounded-md flex items-center justify-center shrink-0 ${attachmentColor(a.kind)}`}>
+                        <Icon className="h-3.5 w-3.5" />
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-medium truncate">{a.label}</div>
+                        <div className="text-[10px] text-muted-foreground">{a.size}</div>
+                      </div>
+                      <Download className="h-3 w-3 text-muted-foreground shrink-0" />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </Card>
+      )}
+
+      {/* Related platform shortcuts */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+        {ctas.map((c, i) => (
+          <a key={i} href={c.href} className="flex items-start gap-2 p-2.5 rounded-md border border-border hover:border-primary/40 hover:bg-primary/5 transition-colors">
+            <c.icon className="h-3.5 w-3.5 text-primary mt-0.5 shrink-0" />
             <div className="min-w-0">
-              <div className="text-sm font-medium">{c.label}</div>
-              <div className="text-[11px] text-muted-foreground line-clamp-2">{c.desc}</div>
+              <div className="text-xs font-medium">{c.label}</div>
+              <div className="text-[10px] text-muted-foreground line-clamp-1">{c.desc}</div>
             </div>
           </a>
         ))}
       </div>
 
-      <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-4">
-        <div className="flex items-center gap-2 mb-2">
-          <Send className="h-4 w-4 text-emerald-600" />
-          <h4 className="font-semibold text-sm">{segmentLabel} için ilgini bildir</h4>
+      {/* Interest mini form */}
+      <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-3">
+        <div className="flex items-center gap-2 mb-1.5">
+          <Send className="h-3.5 w-3.5 text-emerald-600" />
+          <h4 className="font-semibold text-xs">{segmentLabel} için ilgini bildir</h4>
         </div>
-        <p className="text-xs text-muted-foreground mb-3">
-          Açıldığında bu kategoride sana özel eşleşmeleri ve davetleri gönderelim.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <Input placeholder="Ad Soyad / Şirket" value={contact.name} onChange={(e) => setContact((c) => ({ ...c, name: e.target.value }))} />
-          <Input placeholder="E-posta *" value={contact.email} onChange={(e) => setContact((c) => ({ ...c, email: e.target.value }))} />
-          <Textarea className="sm:col-span-2" rows={2} placeholder="Kısa not: ne arıyorsun, ne sunuyorsun?" value={contact.note} onChange={(e) => setContact((c) => ({ ...c, note: e.target.value }))} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+          <Input className="h-8 text-xs" placeholder="Ad Soyad / Şirket" value={contact.name} onChange={(e) => setContact((c) => ({ ...c, name: e.target.value }))} />
+          <Input className="h-8 text-xs" placeholder="E-posta *" value={contact.email} onChange={(e) => setContact((c) => ({ ...c, email: e.target.value }))} />
+          <Textarea className="sm:col-span-2 text-xs" rows={2} placeholder="Kısa not: ne arıyorsun, ne sunuyorsun?" value={contact.note} onChange={(e) => setContact((c) => ({ ...c, note: e.target.value }))} />
         </div>
-        <div className="flex justify-end mt-3">
-          <Button size="sm" className="gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white" onClick={onSubmit}>
-            <Send className="h-3.5 w-3.5" /> Gönder
+        <div className="flex justify-end mt-2">
+          <Button size="sm" className="h-8 text-xs gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white" onClick={onSubmit}>
+            <Send className="h-3 w-3" /> Gönder
           </Button>
         </div>
       </div>
