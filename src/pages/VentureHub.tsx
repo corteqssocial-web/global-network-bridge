@@ -225,16 +225,17 @@ const VentureHub = () => {
     }
     setSubmitting(true);
     try {
+      const segmentLabel = form.segment ? segments.find((s) => s.key === form.segment)?.label : null;
       await supabase.from("interest_registrations").insert({
         category: "venture_hub",
         name: form.name || null,
         email: form.email,
-        role: form.segment || null,
-        message: form.note || null,
+        role: segmentLabel || null,
+        message: [form.subcategory ? `Alt kategori: ${form.subcategory}` : null, form.note || null].filter(Boolean).join("\n") || null,
         source: "venture-hub-page",
       });
       toast({ title: "Kaydın alındı 🚀", description: "Venture Hub açıldığında ilk sen haberdar olacaksın." });
-      setForm({ name: "", email: "", segment: "", note: "" });
+      setForm({ name: "", email: "", segment: "", subcategory: "", note: "" });
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Bilinmeyen hata";
       toast({ title: "Gönderilemedi", description: msg, variant: "destructive" });
