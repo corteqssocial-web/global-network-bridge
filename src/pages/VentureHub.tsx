@@ -70,6 +70,117 @@ const segments: { key: SegmentKey; label: string; icon: any; color: string; desc
   { key: "scout", label: "Startup Scout'lar", icon: Eye, color: "text-purple-600 bg-purple-500/10 border-purple-500/30", desc: "Yatırım fonları adına deal scout'luğu yapanlar" },
 ];
 
+/* -------------------- Founder Teaser Banner -------------------- */
+
+const FounderTeaserBanner = () => {
+  const [playing, setPlaying] = useState(false);
+  const [muted, setMuted] = useState(true);
+  const { toast } = useToast();
+
+  const handlePlay = () => {
+    setPlaying(!playing);
+    if (!playing) {
+      toast({ title: "Teaser oynatılıyor (DEMO)", description: "Gerçek profilde video içeriği aktif çalışır." });
+    }
+  };
+
+  const videos = [
+    { label: "Product Teaser", duration: "1:24" },
+    { label: "Founder Intro", duration: "2:15" },
+    { label: "Demo Day Pitch", duration: "3:05" },
+  ];
+
+  return (
+    <section className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 via-primary/10 to-turquoise/10 p-5 md:p-6 mb-6">
+      {/* Decorative banner background elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl" />
+        <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-primary/10 rounded-full blur-2xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-turquoise/5 rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-5 items-center">
+        {/* Text & CTA */}
+        <div>
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
+            <Badge className="bg-emerald-500/15 text-emerald-700 border-0"><Rocket className="h-3 w-3 mr-1" /> Girişimciler</Badge>
+            <Badge className="bg-amber-500/15 text-amber-700 border-0">DEMO</Badge>
+          </div>
+          <h2 className="text-xl md:text-2xl font-bold leading-tight mb-2">
+            Fikrini <span className="text-gradient-primary">dünyaya duyur</span> — teaser'ınla yatırımcıları cezbe.
+          </h2>
+          <p className="text-sm text-muted-foreground mb-4 max-w-md">
+            CorteQS Venture Hub'da her girişimci profiline teaser video, pitch kaydı ve founder intro ekleyebilirsin.
+            Yatırımcılar ve mentörler seni görmeden önce seni tanısın.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <Button size="sm" className="gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => toast({ title: "Profil oluştur (DEMO)", description: "Kayıt olduktan sonra girişimci profilini tamamla." })}>
+              <Rocket className="h-3.5 w-3.5" /> Girişimci Profili Oluştur
+            </Button>
+            <Button size="sm" variant="outline" className="gap-1.5" onClick={() => toast({ title: "Videoları keşfet (DEMO)", description: "Tüm girişimci teaser videolarına göz at." })}>
+              <Play className="h-3.5 w-3.5" /> Teaser'ları Keşfet
+            </Button>
+          </div>
+
+          {/* Mini video list */}
+          <div className="mt-4 flex flex-wrap gap-2">
+            {videos.map((v) => (
+              <button
+                key={v.label}
+                onClick={() => toast({ title: `${v.label} (DEMO)`, description: "Video içeriği seçildi — mock oynatma." })}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border bg-card/80 hover:border-primary/40 hover:bg-primary/5 transition-colors text-xs"
+              >
+                <Play className="h-3 w-3 text-emerald-600" />
+                <span className="font-medium text-foreground">{v.label}</span>
+                <span className="text-muted-foreground">{v.duration}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Mock Video Player */}
+        <div className="relative rounded-xl overflow-hidden border border-border bg-black aspect-video shadow-lg group">
+          {/* Background banner mock frame */}
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/80 via-primary/40 to-slate-900/90" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
+            <div className="w-14 h-14 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+              <button onClick={handlePlay}>
+                {playing ? <Pause className="h-6 w-6 text-white" /> : <Play className="h-6 w-6 text-white ml-0.5" />}
+              </button>
+            </div>
+            <p className="text-white/90 font-semibold text-sm text-center">
+              {playing ? "Teaser oynatılıyor…" : "FinPath Product Teaser"}
+            </p>
+            <p className="text-white/50 text-xs text-center mt-1">
+              {playing ? "1:24 · 720p · DEMO" : "Tıkla ve izle · DEMO"}
+            </p>
+          </div>
+
+          {/* Player controls overlay */}
+          <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/70 to-transparent flex items-center gap-2">
+            <button onClick={handlePlay} className="text-white/80 hover:text-white">
+              {playing ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+            </button>
+            <div className="flex-1 h-1 bg-white/20 rounded-full overflow-hidden">
+              <div className={`h-full bg-emerald-400 rounded-full ${playing ? "animate-pulse" : ""}`} style={{ width: playing ? "42%" : "0%" }} />
+            </div>
+            <span className="text-[10px] text-white/70 font-mono">1:24</span>
+            <button onClick={() => setMuted(!muted)} className="text-white/80 hover:text-white">
+              {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+            </button>
+            <Badge className="bg-amber-500/80 text-white border-0 text-[9px] px-1 py-0">DEMO</Badge>
+          </div>
+
+          {/* Floating badge */}
+          <div className="absolute top-2 right-2">
+            <Badge className="bg-black/50 text-white border-0 text-[10px] backdrop-blur-sm">Teaser Video</Badge>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const VentureHub = () => {
   const { toast } = useToast();
   const { selectedCountry } = useDiaspora();
