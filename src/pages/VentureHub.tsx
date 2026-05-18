@@ -164,7 +164,11 @@ const VentureHub = () => {
           {/* Segment grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 mb-8">
             {visibleSegments.map((s) => (
-              <Card key={s.key} className="p-4 hover:shadow-card transition-shadow relative">
+              <Card
+                key={s.key}
+                onClick={() => { setOpenSegment(s.key); setContact({ name: "", email: "", note: "" }); }}
+                className="p-4 hover:shadow-card hover:border-primary/40 transition-all relative cursor-pointer group"
+              >
                 <Badge className="absolute top-2 right-2 bg-amber-500/15 text-amber-700 border-0 text-[10px]">DEMO</Badge>
                 <div className={`w-10 h-10 rounded-lg border ${s.color} flex items-center justify-center mb-3`}>
                   <s.icon className="h-5 w-5" />
@@ -173,7 +177,9 @@ const VentureHub = () => {
                 <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{s.desc}</p>
                 <div className="flex items-center justify-between text-[11px] text-muted-foreground">
                   <span>⭐ Google Rating</span>
-                  <span>0 profil</span>
+                  <span className="inline-flex items-center gap-0.5 text-primary group-hover:translate-x-0.5 transition-transform">
+                    Detay <ArrowRight className="h-3 w-3" />
+                  </span>
                 </div>
               </Card>
             ))}
