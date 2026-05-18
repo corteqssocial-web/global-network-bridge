@@ -165,6 +165,9 @@ const VentureHub = () => {
             </p>
           </section>
 
+          {/* Girişimciler Teaser Banner + Mock Video */}
+          <FounderTeaserBanner />
+
           {/* Filters */}
           <div className="flex flex-col lg:flex-row lg:items-center gap-3 mb-5">
             <div className="flex-1 min-w-0">
