@@ -84,6 +84,35 @@ const VentureHub = () => {
     }
   };
 
+  const activeSeg = openSegment ? segments.find((s) => s.key === openSegment) : null;
+
+  const handleSegmentContact = async () => {
+    if (!openSegment) return;
+    if (!contact.email) {
+      toast({ title: "E-posta gerekli", variant: "destructive" });
+      return;
+    }
+    try {
+      await supabase.from("interest_registrations").insert({
+        category: "venture_hub",
+        name: contact.name || null,
+        email: contact.email,
+        role: activeSeg?.label || openSegment,
+        message: contact.note || null,
+        country: selectedCountry !== "all" ? selectedCountry : null,
+        city: filterCity !== "all" ? filterCity : null,
+        source: `venture-hub:${openSegment}`,
+      });
+      toast({ title: "İlgi bildirimin alındı 🚀", description: `${activeSeg?.label} kategorisinde sana ulaşacağız.` });
+      setContact({ name: "", email: "", note: "" });
+      setOpenSegment(null);
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Bilinmeyen hata";
+      toast({ title: "Gönderilemedi", description: msg, variant: "destructive" });
+    }
+  };
+
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
