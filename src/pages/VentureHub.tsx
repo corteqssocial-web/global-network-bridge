@@ -230,12 +230,14 @@ const VentureHub = () => {
       {/* Segment detail dialog */}
       <Dialog open={openSegment !== null} onOpenChange={(o) => !o && setOpenSegment(null)}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-          {activeSeg && (
+          {activeSeg && (() => {
+            const SegIcon = activeSeg.icon;
+            return (
             <>
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <span className={`w-8 h-8 rounded-lg border ${activeSeg.color} inline-flex items-center justify-center`}>
-                    <activeSeg.icon className="h-4 w-4" />
+                    <SegIcon className="h-4 w-4" />
                   </span>
                   {activeSeg.label}
                   <Badge className="ml-2 bg-amber-500/15 text-amber-700 border-0 text-[10px]">DEMO</Badge>
@@ -257,7 +259,8 @@ const VentureHub = () => {
                 <ShieldCheck className="h-3.5 w-3.5 mr-1" /> KVKK / GDPR uyumlu — istediğin zaman silebilirsin.
               </DialogFooter>
             </>
-          )}
+            );
+          })()}
         </DialogContent>
       </Dialog>
 
