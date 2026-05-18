@@ -41,11 +41,14 @@ const segments: { key: SegmentKey; label: string; icon: any; color: string; desc
 
 const VentureHub = () => {
   const { toast } = useToast();
+  const { selectedCountry } = useDiaspora();
   const [filterCity, setFilterCity] = useState("all");
   const [activeSegment, setActiveSegment] = useState<SegmentKey | "all">("all");
   const [search, setSearch] = useState("");
   const [form, setForm] = useState({ name: "", email: "", segment: "", note: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [openSegment, setOpenSegment] = useState<SegmentKey | null>(null);
+  const [contact, setContact] = useState({ name: "", email: "", note: "" });
 
   const visibleSegments = useMemo(
     () => segments.filter((s) =>
