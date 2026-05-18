@@ -324,10 +324,10 @@ const SegmentDetailBody = ({ segmentKey, segmentLabel, country, city, contact, s
     toast({ title: `${label} (DEMO)`, description: "Bu aksiyon mock — gerçek profilde aktif çalışır." });
   };
 
-  const attachmentIcon = (kind: "deck" | "onepager" | "bp") =>
-    kind === "deck" ? Presentation : kind === "bp" ? FileSpreadsheet : FileText;
-  const attachmentColor = (kind: "deck" | "onepager" | "bp") =>
-    kind === "deck" ? "text-purple-600 bg-purple-500/10" : kind === "bp" ? "text-emerald-600 bg-emerald-500/10" : "text-blue-600 bg-blue-500/10";
+  const attachmentIcon = (kind: "deck" | "onepager" | "bp" | "video") =>
+    kind === "video" ? Play : kind === "deck" ? Presentation : kind === "bp" ? FileSpreadsheet : FileText;
+  const attachmentColor = (kind: "deck" | "onepager" | "bp" | "video") =>
+    kind === "video" ? "text-rose-600 bg-rose-500/10" : kind === "deck" ? "text-purple-600 bg-purple-500/10" : kind === "bp" ? "text-emerald-600 bg-emerald-500/10" : "text-blue-600 bg-blue-500/10";
 
   return (
     <div className="space-y-3">
