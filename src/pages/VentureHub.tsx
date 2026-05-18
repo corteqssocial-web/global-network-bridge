@@ -312,49 +312,127 @@ interface SegmentDetailBodyProps {
 }
 
 const SegmentDetailBody = ({ segmentKey, segmentLabel, country, city, contact, setContact, onSubmit }: SegmentDetailBodyProps) => {
+  const { toast } = useToast();
   if (segmentKey === "etkinlik") return <EventsByLocation country={country} city={city} />;
   if (segmentKey === "medya") return <MediaByLocation country={country} city={city} />;
 
-  // Default CTA panel for the other segments
-  return (
-    <div className="space-y-4">
-      <Card className="p-3 bg-muted/30 border-dashed">
-        <div className="flex items-center gap-2 text-xs text-muted-foreground flex-wrap">
-          <MapPin className="h-3.5 w-3.5 text-primary" />
-          <span>Filtre:</span>
-          <Badge variant="outline" className="text-[10px]">{country === "all" ? "Tüm Ülkeler" : country}</Badge>
-          <Badge variant="outline" className="text-[10px]">{city === "all" ? "Tüm Şehirler" : city}</Badge>
-        </div>
-      </Card>
+  const user = demoUsers[segmentKey];
+  const ctas = segmentCtas(segmentKey);
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-        {segmentCtas(segmentKey).map((c, i) => (
-          <a key={i} href={c.href} className="flex items-start gap-2 p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 transition-colors">
-            <c.icon className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+  const handleMockAction = (label: string) => {
+    toast({ title: `${label} (DEMO)`, description: "Bu aksiyon mock — gerçek profilde aktif çalışır." });
+  };
+
+  const attachmentIcon = (kind: "deck" | "onepager" | "bp") =>
+    kind === "deck" ? Presentation : kind === "bp" ? FileSpreadsheet : FileText;
+  const attachmentColor = (kind: "deck" | "onepager" | "bp") =>
+    kind === "deck" ? "text-purple-600 bg-purple-500/10" : kind === "bp" ? "text-emerald-600 bg-emerald-500/10" : "text-blue-600 bg-blue-500/10";
+
+  return (
+    <div className="space-y-3">
+      {/* Demo user profile card — compact */}
+      {user && (
+        <Card className="p-3.5 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+          <div className="flex items-start gap-3">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-turquoise text-white flex items-center justify-center font-bold text-sm shrink-0">
+              {user.initials}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <h4 className="font-bold text-sm truncate">{user.name}</h4>
+                  <p className="text-[11px] text-muted-foreground truncate">{user.title}</p>
+                </div>
+                <Badge className="bg-amber-500/15 text-amber-700 border-0 text-[9px] shrink-0">DEMO</Badge>
+              </div>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1 text-[11px] text-muted-foreground">
+                <span className="inline-flex items-center gap-0.5"><MapPin className="h-2.5 w-2.5" />{user.city}, {user.country}</span>
+                <span className="inline-flex items-center gap-0.5 text-amber-600"><Star className="h-2.5 w-2.5 fill-amber-500" /> {user.rating}</span>
+                <span>{user.followers.toLocaleString()} takipçi</span>
+                <span className="inline-flex items-center gap-0.5"><Globe className="h-2.5 w-2.5" /> Google Rating</span>
+              </div>
+              <p className="text-xs text-foreground/80 mt-2 leading-relaxed">{user.bio}</p>
+              <div className="flex flex-wrap gap-1 mt-2">
+                {user.tags.map((t) => (
+                  <Badge key={t} variant="secondary" className="text-[9px] px-1.5 py-0">{t}</Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Platform CTAs */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 mt-3">
+            <Button size="sm" variant="default" className="h-8 text-xs gap-1" onClick={() => handleMockAction("Mesaj Gönder")}>
+              <MessageSquare className="h-3 w-3" /> Mesaj
+            </Button>
+            <Button size="sm" variant="outline" className="h-8 text-xs gap-1" onClick={() => handleMockAction("Bağlantı İste")}>
+              <UserPlus className="h-3 w-3" /> Bağlan
+            </Button>
+            <Button size="sm" variant="outline" className="h-8 text-xs gap-1" onClick={() => handleMockAction("Takip Et")}>
+              <Heart className="h-3 w-3" /> Takip
+            </Button>
+            <Button size="sm" variant="outline" className="h-8 text-xs gap-1" onClick={() => handleMockAction("Randevu Al")}>
+              <CalendarCheck className="h-3 w-3" /> Randevu
+            </Button>
+          </div>
+
+          {/* Attachments */}
+          {user.attachments.length > 0 && (
+            <div className="mt-3 pt-3 border-t border-border">
+              <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Profil Dosyaları</div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                {user.attachments.map((a, i) => {
+                  const Icon = attachmentIcon(a.kind);
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => handleMockAction(`İndir: ${a.label}`)}
+                      className="flex items-center gap-2 p-2 rounded-md border border-border hover:border-primary/40 hover:bg-primary/5 transition-colors text-left"
+                    >
+                      <span className={`w-7 h-7 rounded-md flex items-center justify-center shrink-0 ${attachmentColor(a.kind)}`}>
+                        <Icon className="h-3.5 w-3.5" />
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-medium truncate">{a.label}</div>
+                        <div className="text-[10px] text-muted-foreground">{a.size}</div>
+                      </div>
+                      <Download className="h-3 w-3 text-muted-foreground shrink-0" />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </Card>
+      )}
+
+      {/* Related platform shortcuts */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+        {ctas.map((c, i) => (
+          <a key={i} href={c.href} className="flex items-start gap-2 p-2.5 rounded-md border border-border hover:border-primary/40 hover:bg-primary/5 transition-colors">
+            <c.icon className="h-3.5 w-3.5 text-primary mt-0.5 shrink-0" />
             <div className="min-w-0">
-              <div className="text-sm font-medium">{c.label}</div>
-              <div className="text-[11px] text-muted-foreground line-clamp-2">{c.desc}</div>
+              <div className="text-xs font-medium">{c.label}</div>
+              <div className="text-[10px] text-muted-foreground line-clamp-1">{c.desc}</div>
             </div>
           </a>
         ))}
       </div>
 
-      <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-4">
-        <div className="flex items-center gap-2 mb-2">
-          <Send className="h-4 w-4 text-emerald-600" />
-          <h4 className="font-semibold text-sm">{segmentLabel} için ilgini bildir</h4>
+      {/* Interest mini form */}
+      <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-3">
+        <div className="flex items-center gap-2 mb-1.5">
+          <Send className="h-3.5 w-3.5 text-emerald-600" />
+          <h4 className="font-semibold text-xs">{segmentLabel} için ilgini bildir</h4>
         </div>
-        <p className="text-xs text-muted-foreground mb-3">
-          Açıldığında bu kategoride sana özel eşleşmeleri ve davetleri gönderelim.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <Input placeholder="Ad Soyad / Şirket" value={contact.name} onChange={(e) => setContact((c) => ({ ...c, name: e.target.value }))} />
-          <Input placeholder="E-posta *" value={contact.email} onChange={(e) => setContact((c) => ({ ...c, email: e.target.value }))} />
-          <Textarea className="sm:col-span-2" rows={2} placeholder="Kısa not: ne arıyorsun, ne sunuyorsun?" value={contact.note} onChange={(e) => setContact((c) => ({ ...c, note: e.target.value }))} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+          <Input className="h-8 text-xs" placeholder="Ad Soyad / Şirket" value={contact.name} onChange={(e) => setContact((c) => ({ ...c, name: e.target.value }))} />
+          <Input className="h-8 text-xs" placeholder="E-posta *" value={contact.email} onChange={(e) => setContact((c) => ({ ...c, email: e.target.value }))} />
+          <Textarea className="sm:col-span-2 text-xs" rows={2} placeholder="Kısa not: ne arıyorsun, ne sunuyorsun?" value={contact.note} onChange={(e) => setContact((c) => ({ ...c, note: e.target.value }))} />
         </div>
-        <div className="flex justify-end mt-3">
-          <Button size="sm" className="gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white" onClick={onSubmit}>
-            <Send className="h-3.5 w-3.5" /> Gönder
+        <div className="flex justify-end mt-2">
+          <Button size="sm" className="h-8 text-xs gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white" onClick={onSubmit}>
+            <Send className="h-3 w-3" /> Gönder
           </Button>
         </div>
       </div>
