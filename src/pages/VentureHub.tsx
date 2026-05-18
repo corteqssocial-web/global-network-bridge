@@ -226,7 +226,276 @@ const VentureHub = () => {
           </section>
         </div>
       </main>
+
+      {/* Segment detail dialog */}
+      <Dialog open={openSegment !== null} onOpenChange={(o) => !o && setOpenSegment(null)}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          {activeSeg && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <span className={`w-8 h-8 rounded-lg border ${activeSeg.color} inline-flex items-center justify-center`}>
+                    <activeSeg.icon className="h-4 w-4" />
+                  </span>
+                  {activeSeg.label}
+                  <Badge className="ml-2 bg-amber-500/15 text-amber-700 border-0 text-[10px]">DEMO</Badge>
+                </DialogTitle>
+                <DialogDescription>{activeSeg.desc}</DialogDescription>
+              </DialogHeader>
+
+              <SegmentDetailBody
+                segmentKey={openSegment!}
+                segmentLabel={activeSeg.label}
+                country={selectedCountry}
+                city={filterCity}
+                contact={contact}
+                setContact={setContact}
+                onSubmit={handleSegmentContact}
+              />
+
+              <DialogFooter className="text-[11px] text-muted-foreground flex sm:justify-start">
+                <ShieldCheck className="h-3.5 w-3.5 mr-1" /> KVKK / GDPR uyumlu — istediğin zaman silebilirsin.
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
       <Footer />
+    </div>
+  );
+};
+
+/* -------------------- Segment detail body -------------------- */
+
+interface SegmentDetailBodyProps {
+  segmentKey: SegmentKey;
+  segmentLabel: string;
+  country: string;
+  city: string;
+  contact: { name: string; email: string; note: string };
+  setContact: React.Dispatch<React.SetStateAction<{ name: string; email: string; note: string }>>;
+  onSubmit: () => void;
+}
+
+const SegmentDetailBody = ({ segmentKey, segmentLabel, country, city, contact, setContact, onSubmit }: SegmentDetailBodyProps) => {
+  if (segmentKey === "etkinlik") return <EventsByLocation country={country} city={city} />;
+  if (segmentKey === "medya") return <MediaByLocation country={country} city={city} />;
+
+  // Default CTA panel for the other segments
+  return (
+    <div className="space-y-4">
+      <Card className="p-3 bg-muted/30 border-dashed">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground flex-wrap">
+          <MapPin className="h-3.5 w-3.5 text-primary" />
+          <span>Filtre:</span>
+          <Badge variant="outline" className="text-[10px]">{country === "all" ? "Tüm Ülkeler" : country}</Badge>
+          <Badge variant="outline" className="text-[10px]">{city === "all" ? "Tüm Şehirler" : city}</Badge>
+        </div>
+      </Card>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        {segmentCtas(segmentKey).map((c, i) => (
+          <a key={i} href={c.href} className="flex items-start gap-2 p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 transition-colors">
+            <c.icon className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+            <div className="min-w-0">
+              <div className="text-sm font-medium">{c.label}</div>
+              <div className="text-[11px] text-muted-foreground line-clamp-2">{c.desc}</div>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-4">
+        <div className="flex items-center gap-2 mb-2">
+          <Send className="h-4 w-4 text-emerald-600" />
+          <h4 className="font-semibold text-sm">{segmentLabel} için ilgini bildir</h4>
+        </div>
+        <p className="text-xs text-muted-foreground mb-3">
+          Açıldığında bu kategoride sana özel eşleşmeleri ve davetleri gönderelim.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <Input placeholder="Ad Soyad / Şirket" value={contact.name} onChange={(e) => setContact((c) => ({ ...c, name: e.target.value }))} />
+          <Input placeholder="E-posta *" value={contact.email} onChange={(e) => setContact((c) => ({ ...c, email: e.target.value }))} />
+          <Textarea className="sm:col-span-2" rows={2} placeholder="Kısa not: ne arıyorsun, ne sunuyorsun?" value={contact.note} onChange={(e) => setContact((c) => ({ ...c, note: e.target.value }))} />
+        </div>
+        <div className="flex justify-end mt-3">
+          <Button size="sm" className="gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white" onClick={onSubmit}>
+            <Send className="h-3.5 w-3.5" /> Gönder
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const segmentCtas = (key: SegmentKey): { icon: any; label: string; desc: string; href: string }[] => {
+  const base = [
+    { icon: Calendar, label: "Etkinlikleri Gör", desc: "Bu segmente ait demo day, pitch ve toplulukları gör.", href: "/events" },
+    { icon: Briefcase, label: "İş Fırsatları", desc: "Startup pozisyonları ve iş ilanları.", href: "/jobs" },
+  ];
+  if (key === "talent") return [
+    { icon: Briefcase, label: "Açık Pozisyonlar", desc: "Türk startup'larındaki ilanları keşfet.", href: "/jobs" },
+    { icon: Users, label: "Topluluk", desc: "Startup yeteneklerinin buluştuğu akışa katıl.", href: "/feed" },
+  ];
+  if (key === "mentor") return [
+    { icon: GraduationCap, label: "Mentor Profilleri", desc: "Gönüllü mentorlar ve danışmanlar.", href: "/consultants" },
+    { icon: MessageSquare, label: "Mentor Talebi Aç", desc: "AI destekli hizmet talebi oluştur.", href: "/relocation" },
+  ];
+  if (key === "servis") return [
+    { icon: Briefcase, label: "Danışmanlar", desc: "Hukuk, finans, pazarlama, ürün danışmanları.", href: "/consultants" },
+    { icon: Building2, label: "Türk İşletmeleri", desc: "Servis sağlayan global Türk şirketleri.", href: "/businesses" },
+  ];
+  if (key === "kulucka") return [
+    { icon: Building2, label: "Kuluçka & Hızlandırıcılar", desc: "Kuruluşlar dizininde inkübatörleri gör.", href: "/associations" },
+    ...base,
+  ];
+  if (key === "vc" || key === "melek" || key === "fon" || key === "scout") return [
+    { icon: TrendingUp, label: "Yatırımcı Topluluğu", desc: "Yatırımcılarla doğrudan iletişime geç.", href: "/diaspora-people" },
+    ...base,
+  ];
+  if (key === "corp") return [
+    { icon: Building2, label: "Kurumsal Diziniş", desc: "Kurumsal inovasyon ekiplerini incele.", href: "/businesses" },
+    ...base,
+  ];
+  return [
+    { icon: Rocket, label: "Girişimciler", desc: "Diaspora kurucularının profilleri.", href: "/diaspora-people" },
+    ...base,
+  ];
+};
+
+/* -------------------- Events pulled from main events table -------------------- */
+
+const EventsByLocation = ({ country, city }: { country: string; city: string }) => {
+  const [events, setEvents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setLoading(true);
+      let q = supabase
+        .from("events")
+        .select("id,title,description,event_date,start_time,city,country,location,online_url,type,category,registration_url,price")
+        .eq("status", "published")
+        .gte("event_date", new Date().toISOString().slice(0, 10))
+        .order("event_date", { ascending: true })
+        .limit(20);
+      if (country !== "all") q = q.eq("country", country);
+      if (city !== "all") q = q.eq("city", city);
+      const { data } = await q;
+      if (!cancelled) {
+        setEvents(data || []);
+        setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [country, city]);
+
+  return (
+    <div className="space-y-3">
+      <Card className="p-3 bg-muted/30 border-dashed flex items-center gap-2 text-xs text-muted-foreground flex-wrap">
+        <MapPin className="h-3.5 w-3.5 text-primary" />
+        <span>Platformdaki etkinliklerden çekiliyor:</span>
+        <Badge variant="outline" className="text-[10px]">{country === "all" ? "Tüm Ülkeler" : country}</Badge>
+        <Badge variant="outline" className="text-[10px]">{city === "all" ? "Tüm Şehirler" : city}</Badge>
+        <Link to="/events" className="ml-auto text-primary text-[11px] inline-flex items-center gap-0.5">
+          Tümünü Gör <ArrowRight className="h-3 w-3" />
+        </Link>
+      </Card>
+
+      {loading ? (
+        <p className="text-sm text-muted-foreground py-6 text-center">Yükleniyor…</p>
+      ) : events.length === 0 ? (
+        <div className="text-center py-8 border border-dashed rounded-lg">
+          <Calendar className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+          <p className="text-sm text-muted-foreground">Bu lokasyonda yakın etkinlik bulunamadı.</p>
+          <Link to="/events"><Button size="sm" variant="outline" className="mt-3 gap-1.5"><Calendar className="h-3.5 w-3.5" /> Etkinlik Takvimini Aç</Button></Link>
+        </div>
+      ) : (
+        events.map((ev) => {
+          const dt = new Date(ev.event_date);
+          const day = String(dt.getDate()).padStart(2, "0");
+          const mon = dt.toLocaleString("tr-TR", { month: "short" });
+          return (
+            <Link key={ev.id} to={`/events/${ev.id}`} className="flex gap-3 p-3 rounded-lg border border-border hover:border-primary/30 transition-colors">
+              <div className="text-center w-12 shrink-0">
+                <div className="text-xl font-bold text-primary leading-none">{day}</div>
+                <div className="text-[10px] text-muted-foreground uppercase">{mon}</div>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-2">
+                  <h4 className="font-semibold text-sm">{ev.title}</h4>
+                  <Badge variant="secondary" className="text-[10px] shrink-0">{ev.category}</Badge>
+                </div>
+                <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{ev.description}</p>
+                <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1 text-[11px] text-muted-foreground">
+                  {(ev.city || ev.country) && (
+                    <span className="inline-flex items-center gap-1"><MapPin className="h-2.5 w-2.5" />{[ev.city, ev.country].filter(Boolean).join(", ")}</span>
+                  )}
+                  {ev.price ? <span className="font-medium text-foreground">€{ev.price}</span> : <span className="text-success font-medium">Ücretsiz</span>}
+                </div>
+              </div>
+            </Link>
+          );
+        })
+      )}
+    </div>
+  );
+};
+
+/* -------------------- Media pulled from main bloggers section -------------------- */
+
+const MediaByLocation = ({ country, city }: { country: string; city: string }) => {
+  const list = useMemo(() => {
+    return bloggers.filter((b) => {
+      if (country !== "all" && b.country !== country) return false;
+      if (city !== "all" && b.city !== city) return false;
+      return true;
+    }).slice(0, 12);
+  }, [country, city]);
+
+  return (
+    <div className="space-y-3">
+      <Card className="p-3 bg-muted/30 border-dashed flex items-center gap-2 text-xs text-muted-foreground flex-wrap">
+        <MapPin className="h-3.5 w-3.5 text-primary" />
+        <span>Diaspora medya kütüphanesinden çekiliyor:</span>
+        <Badge variant="outline" className="text-[10px]">{country === "all" ? "Tüm Ülkeler" : country}</Badge>
+        <Badge variant="outline" className="text-[10px]">{city === "all" ? "Tüm Şehirler" : city}</Badge>
+        <Link to="/bloggers" className="ml-auto text-primary text-[11px] inline-flex items-center gap-0.5">
+          Tümünü Gör <ArrowRight className="h-3 w-3" />
+        </Link>
+      </Card>
+
+      {list.length === 0 ? (
+        <div className="text-center py-8 border border-dashed rounded-lg">
+          <Megaphone className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+          <p className="text-sm text-muted-foreground">Bu lokasyonda içerik üretici bulunamadı.</p>
+          <Link to="/bloggers"><Button size="sm" variant="outline" className="mt-3 gap-1.5"><Megaphone className="h-3.5 w-3.5" /> Tüm Medya Kütüphanesi</Button></Link>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {list.map((b) => (
+            <Link key={b.id} to={`/bloggers/${b.id}`} className="flex gap-3 p-3 rounded-lg border border-border hover:border-primary/30 transition-colors">
+              <img src={b.photo} alt={b.name} className="w-12 h-12 rounded-full object-cover shrink-0" />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <h4 className="font-semibold text-sm truncate">{b.name}</h4>
+                  <Badge variant="secondary" className="text-[9px] capitalize">{b.type}</Badge>
+                </div>
+                <div className="text-[11px] text-muted-foreground inline-flex items-center gap-1">
+                  <MapPin className="h-2.5 w-2.5" />{b.city}, {b.country}
+                </div>
+                <div className="flex items-center gap-2 mt-1 text-[11px]">
+                  <span className="inline-flex items-center gap-0.5 text-amber-600"><Star className="h-2.5 w-2.5 fill-amber-500" /> {b.rating}</span>
+                  <span className="text-muted-foreground">{b.followers.toLocaleString()} takipçi</span>
+                </div>
+              </div>
+              <ExternalLink className="h-3.5 w-3.5 text-muted-foreground self-center" />
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
