@@ -272,7 +272,29 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCou
                 </p>
               </div>
             )}
+
+            {/* Premium-only extra filter: meslek */}
+            {isPro && (
+              <div className="pt-1 border-t border-border/60 mt-1">
+                <Label className="text-[11px] flex items-center gap-1">
+                  <Briefcase className="h-3 w-3" /> Meslek filtresi (opsiyonel)
+                  <Badge variant="secondary" className="ml-1 h-4 px-1 text-[9px] gap-0.5">
+                    <Crown className="h-2.5 w-2.5" /> Pro
+                  </Badge>
+                </Label>
+                <Input
+                  value={profession}
+                  onChange={(e) => setProfession(e.target.value)}
+                  placeholder="Örn: Yazılım, Hekim, Avukat…"
+                  maxLength={60}
+                />
+                <p className="text-[10px] text-muted-foreground mt-1">
+                  Pro üyeler ülke, şehir, meslek ve davet kodu kriterlerini birlikte kullanabilir.
+                </p>
+              </div>
+            )}
           </div>
+
 
           <div>
             <Label className="text-xs flex items-center gap-1"><Linkedin className="h-3 w-3" /> LinkedIn URL (opsiyonel)</Label>
