@@ -325,30 +325,43 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCou
               </div>
             )}
           </div>
-          {ambassadorMode && (
+          {(ambassadorMode || isPro) && (
             <div>
-              <Label className="text-xs">Cafe Süresi (Şehir Elçisi)</Label>
+              <Label className="text-xs">Cafe Süresi</Label>
               <Select value={String(duration)} onValueChange={(v) => setDuration(Number(v))}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {[1, 2, 3, 4, 5, 6].map((h) => (
+                  {Array.from({ length: maxDuration }, (_, i) => i + 1).map((h) => (
                     <SelectItem key={h} value={String(h)}>{h} saat</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <p className="text-[10px] text-muted-foreground mt-1">
-                Şehir elçileri 1–6 saat arası diledikleri süreyi seçebilir.
+                {ambassadorMode ? "Şehir elçileri" : "Pro üyeler"} 1–{maxDuration} saat arası süre seçebilir.
               </p>
             </div>
           )}
-          <div className="rounded-lg bg-muted/50 p-2.5 text-xs text-muted-foreground">
-            Süre: <strong className="text-foreground">{duration} saat</strong> · Kapasite:{" "}
-            <strong className="text-foreground">{capacity} kişi</strong>{" "}
-            {ambassadorMode ? "(Şehir Elçisi avantajı)" : (!isPremium && "(Premium: 4 saat / 300 kişi)")}
+          <div className="rounded-lg bg-muted/50 p-2.5 text-xs text-muted-foreground space-y-1">
+            <div>
+              Süre: <strong className="text-foreground">{duration} saat</strong> · Kapasite:{" "}
+              <strong className="text-foreground">{capacity} kişi</strong>{" "}
+              {isPro ? (
+                <Badge variant="secondary" className="ml-1 h-4 px-1 text-[9px] gap-0.5">
+                  <Crown className="h-2.5 w-2.5" /> Pro
+                </Badge>
+              ) : (
+                <span className="text-[10px]">(Pro: 6 saat / 1000 kişi)</span>
+              )}
+            </div>
+            <div className="flex items-start gap-1.5 text-[10px] pt-1 border-t border-border/60">
+              <ShieldCheck className="h-3 w-3 text-amber-600 shrink-0 mt-0.5" />
+              <span>Cafe açma talebin admin onayına gönderilir. Onaylanınca yayına alınır.</span>
+            </div>
           </div>
           <Button className="w-full" disabled={submitting} onClick={submit}>
             {submitting && <Loader2 className="h-4 w-4 animate-spin mr-2" />} Cafe'yi Aç
           </Button>
+
         </div>
       </DialogContent>
     </Dialog>
