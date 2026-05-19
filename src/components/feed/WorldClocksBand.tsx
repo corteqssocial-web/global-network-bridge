@@ -21,14 +21,13 @@ const formatTime = (tz: string, now: Date) =>
     timeZone: tz,
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit",
     hour12: false,
   }).format(now);
 
 const WorldClocksBand = () => {
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
-    const id = window.setInterval(() => setNow(new Date()), 1000);
+    const id = window.setInterval(() => setNow(new Date()), 30_000);
     return () => window.clearInterval(id);
   }, []);
 
@@ -49,17 +48,17 @@ const WorldClocksBand = () => {
           <div
             key={z.tz}
             title={z.tz}
-            className="shrink-0 snap-start flex flex-col items-center justify-center rounded-lg border border-emerald-500/20 bg-slate-950 px-3 py-1.5 shadow-[inset_0_0_12px_rgba(16,185,129,0.08)]"
+            className="shrink-0 snap-start flex flex-col items-center justify-center rounded-md border border-emerald-500/20 bg-slate-950 px-1.5 py-0.5 shadow-[inset_0_0_8px_rgba(16,185,129,0.08)]"
           >
-            <span className="text-[9px] font-semibold uppercase tracking-[0.15em] text-emerald-400/70">
+            <span className="text-[7px] font-semibold uppercase tracking-[0.12em] text-emerald-400/70">
               {z.label}
             </span>
             <span
-              className="text-base font-bold tabular-nums text-emerald-400 tracking-wider"
+              className="text-[10px] font-bold tabular-nums text-emerald-400 tracking-wider"
               style={{
                 fontFamily:
                   "'JetBrains Mono', 'Courier New', ui-monospace, monospace",
-                textShadow: "0 0 8px rgba(16,185,129,0.55)",
+                textShadow: "0 0 6px rgba(16,185,129,0.55)",
               }}
             >
               {formatTime(z.tz, now)}
