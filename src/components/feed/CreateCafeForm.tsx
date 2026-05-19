@@ -47,10 +47,19 @@ interface Props {
 }
 
 const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCountry, defaultCity }: Props) => {
-  const { user } = useAuth();
+  const { user, accountType } = useAuth();
   const isPremium = useIsPremium();
   const navigate = useNavigate();
-  const defaultDuration = ambassadorMode ? 6 : (isPremium ? 4 : 2);
+
+  // Cadde Kural Seti:
+  //  • Pro hesap (Premium + işletme/danışman/kuruluş/blogger-vlogger): 6 saat · 1000 kişi
+  //  • Ücretsiz subscriber: 3 saat · 100 kişi
+  //  • Şehir Elçisi: 6 saat · 1000 kişi
+  const PRO_ROLES = ["business", "consultant", "association", "blogger", "vlogger"];
+  const isPro = isPremium || PRO_ROLES.includes((accountType || "").toLowerCase());
+  const maxDuration = ambassadorMode || isPro ? 6 : 3;
+  const maxCapacity = ambassadorMode || isPro ? 1000 : 100;
+  const defaultDuration = maxDuration;
   const [duration, setDuration] = useState<number>(defaultDuration);
 
   const [open, setOpen] = useState(false);
@@ -65,6 +74,7 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCou
       : ""
   );
   const [referralCode, setReferralCode] = useState("");
+  const [profession, setProfession] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [extra, setExtra] = useState("");
   const [openEntry, setOpenEntry] = useState(true);
@@ -73,7 +83,7 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCou
 
   const cities = country ? countryCities[country] || [] : [];
   const continentList = Object.keys(continents);
-  const capacity = ambassadorMode ? 500 : (duration >= 4 ? 300 : 100);
+  const capacity = maxCapacity;
 
   const submit = async () => {
     if (!user) {
