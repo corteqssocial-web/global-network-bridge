@@ -89,7 +89,7 @@ const WorldClocksBand = () => {
   return (
     <div className="mb-3">
 
-      <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 snap-x justify-center">
+      <div className="flex items-stretch gap-1 w-full">
         {ZONES.map((z) => {
           const h = getHour(z.tz, now);
           const phase = phaseOf(h);
@@ -99,13 +99,13 @@ const WorldClocksBand = () => {
             <div
               key={z.tz}
               title={`${z.tz} · ${phase}`}
-              className={`shrink-0 snap-start flex flex-col items-center justify-center rounded-md border px-2.5 py-0.5 transition-colors ${s.bg} ${s.border}`}
+              className={`flex-1 min-w-0 flex flex-col items-center justify-center rounded-md border px-1 py-0.5 transition-colors ${s.bg} ${s.border}`}
             >
               <span
-                className={`flex items-center gap-1 text-[7px] font-semibold uppercase tracking-[0.12em] ${s.label}`}
+                className={`flex items-center gap-0.5 text-[7px] font-semibold uppercase tracking-[0.08em] truncate max-w-full ${s.label}`}
               >
-                <Icon className="h-2 w-2" />
-                {z.label}
+                <Icon className="h-2 w-2 shrink-0" />
+                <span className="truncate">{z.label}</span>
               </span>
               <span
                 className={`text-[10px] font-bold tabular-nums tracking-wider ${s.time}`}
