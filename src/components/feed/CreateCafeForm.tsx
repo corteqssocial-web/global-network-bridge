@@ -273,26 +273,32 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCou
               </div>
             )}
 
-            {/* Premium-only extra filter: meslek */}
-            {isPro && (
-              <div className="pt-1 border-t border-border/60 mt-1">
-                <Label className="text-[11px] flex items-center gap-1">
-                  <Briefcase className="h-3 w-3" /> Meslek filtresi (opsiyonel)
-                  <Badge variant="secondary" className="ml-1 h-4 px-1 text-[9px] gap-0.5">
-                    <Crown className="h-2.5 w-2.5" /> Pro
-                  </Badge>
-                </Label>
-                <Input
-                  value={profession}
-                  onChange={(e) => setProfession(e.target.value)}
-                  placeholder="Örn: Yazılım, Hekim, Avukat…"
-                  maxLength={60}
-                />
-                <p className="text-[10px] text-muted-foreground mt-1">
-                  Pro üyeler ülke, şehir, meslek ve davet kodu kriterlerini birlikte kullanabilir.
-                </p>
-              </div>
-            )}
+            {/* Premium-only extra filter: meslek (CKS: standart kullanıcıda kilitli + "premium özellik" overlay) */}
+            <div className="pt-1 border-t border-border/60 mt-1 relative">
+              <Label className="text-[11px] flex items-center gap-1">
+                <Briefcase className="h-3 w-3" /> Meslek filtresi (opsiyonel)
+                <Badge variant="secondary" className="ml-1 h-4 px-1 text-[9px] gap-0.5">
+                  <Crown className="h-2.5 w-2.5" /> Pro
+                </Badge>
+              </Label>
+              <Input
+                value={profession}
+                onChange={(e) => setProfession(e.target.value)}
+                placeholder="Örn: Yazılım, Hekim, Avukat…"
+                maxLength={60}
+                disabled={!isPro}
+              />
+              <p className="text-[10px] text-muted-foreground mt-1">
+                Pro üyeler ülke, şehir, meslek ve davet kodu kriterlerini birlikte kullanabilir.
+              </p>
+              {!isPro && (
+                <div className="absolute inset-0 -m-1 rounded-md bg-background/70 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
+                  <div className="flex items-center gap-1 rounded-full bg-amber-500/95 px-2.5 py-1 text-[10px] font-semibold text-white shadow">
+                    <Lock className="h-3 w-3" /> premium özellik
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
 
