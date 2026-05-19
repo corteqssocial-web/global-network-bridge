@@ -499,8 +499,8 @@ const SegmentDetailBody = ({ segmentKey, segmentLabel, country, city, contact, s
       {user && (
         <Card className="p-3.5 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
           <div className="flex items-start gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-turquoise text-white flex items-center justify-center font-bold text-sm shrink-0">
-              {user.initials}
+            <div className={`w-12 h-12 ${user.kind === "org" ? "rounded-md" : "rounded-full"} overflow-hidden bg-gradient-to-br from-primary/20 to-turquoise/20 flex items-center justify-center font-bold text-sm shrink-0 border border-border`}>
+              <img src={user.image} alt={user.name} className={user.kind === "org" ? "w-full h-full object-contain p-1 bg-white" : "w-full h-full object-cover"} loading="lazy" />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2">
