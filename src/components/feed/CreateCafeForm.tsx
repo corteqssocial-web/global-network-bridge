@@ -157,7 +157,7 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCou
     setEntryQuestion("");
     setOpenEntry(true);
     setReferralCode("");
-    toast({ title: "Cafe açıldı ☕", description: `${duration} saat · kapasite ${capacity}.` });
+    toast({ title: "Cafe açma talebin gönderildi ☕", description: `${duration} saat · kapasite ${capacity}. Admin onayı bekleniyor.` });
     onCreated?.();
     navigate(`/cadde/${cafeId}`);
   };
