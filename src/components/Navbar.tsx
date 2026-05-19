@@ -123,6 +123,11 @@ const Navbar = () => {
                     <Briefcase className="h-3.5 w-3.5 text-primary" />İş İlanları
                   </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/associations" className="flex items-center gap-2 cursor-pointer">
+                    <Flag className="h-3.5 w-3.5 text-primary" />{t.nav.organizations}
+                  </Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -135,11 +140,6 @@ const Navbar = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-52">
-                <DropdownMenuItem asChild>
-                  <Link to="/associations" className="flex items-center gap-2 cursor-pointer">
-                    <Flag className="h-3.5 w-3.5 text-primary" />{t.nav.organizations}
-                  </Link>
-                </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/bloggers" className="flex items-center gap-2 cursor-pointer">
                     <PenLine className="h-3.5 w-3.5 text-primary" />{t.nav.vblogger}
