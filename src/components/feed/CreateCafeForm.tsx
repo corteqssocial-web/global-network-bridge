@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Coffee, Loader2, Linkedin, Globe2, MapPin, Ticket, Users, Crown, Briefcase, ShieldCheck } from "lucide-react";
+import { Coffee, Loader2, Linkedin, Globe2, MapPin, Ticket, Users, Crown, Briefcase, ShieldCheck, Lock } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -273,26 +273,32 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCou
               </div>
             )}
 
-            {/* Premium-only extra filter: meslek */}
-            {isPro && (
-              <div className="pt-1 border-t border-border/60 mt-1">
-                <Label className="text-[11px] flex items-center gap-1">
-                  <Briefcase className="h-3 w-3" /> Meslek filtresi (opsiyonel)
-                  <Badge variant="secondary" className="ml-1 h-4 px-1 text-[9px] gap-0.5">
-                    <Crown className="h-2.5 w-2.5" /> Pro
-                  </Badge>
-                </Label>
-                <Input
-                  value={profession}
-                  onChange={(e) => setProfession(e.target.value)}
-                  placeholder="Örn: Yazılım, Hekim, Avukat…"
-                  maxLength={60}
-                />
-                <p className="text-[10px] text-muted-foreground mt-1">
-                  Pro üyeler ülke, şehir, meslek ve davet kodu kriterlerini birlikte kullanabilir.
-                </p>
-              </div>
-            )}
+            {/* Premium-only extra filter: meslek (CKS: standart kullanıcıda kilitli + "premium özellik" overlay) */}
+            <div className="pt-1 border-t border-border/60 mt-1 relative">
+              <Label className="text-[11px] flex items-center gap-1">
+                <Briefcase className="h-3 w-3" /> Meslek filtresi (opsiyonel)
+                <Badge variant="secondary" className="ml-1 h-4 px-1 text-[9px] gap-0.5">
+                  <Crown className="h-2.5 w-2.5" /> Pro
+                </Badge>
+              </Label>
+              <Input
+                value={profession}
+                onChange={(e) => setProfession(e.target.value)}
+                placeholder="Örn: Yazılım, Hekim, Avukat…"
+                maxLength={60}
+                disabled={!isPro}
+              />
+              <p className="text-[10px] text-muted-foreground mt-1">
+                Pro üyeler ülke, şehir, meslek ve davet kodu kriterlerini birlikte kullanabilir.
+              </p>
+              {!isPro && (
+                <div className="absolute inset-0 -m-1 rounded-md bg-background/70 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
+                  <div className="flex items-center gap-1 rounded-full bg-amber-500/95 px-2.5 py-1 text-[10px] font-semibold text-white shadow">
+                    <Lock className="h-3 w-3" /> premium özellik
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
 
@@ -325,22 +331,32 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCou
               </div>
             )}
           </div>
-          {(ambassadorMode || isPro) && (
-            <div>
-              <Label className="text-xs">Cafe Süresi</Label>
-              <Select value={String(duration)} onValueChange={(v) => setDuration(Number(v))}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  {Array.from({ length: maxDuration }, (_, i) => i + 1).map((h) => (
-                    <SelectItem key={h} value={String(h)}>{h} saat</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-[10px] text-muted-foreground mt-1">
-                {ambassadorMode ? "Şehir elçileri" : "Pro üyeler"} 1–{maxDuration} saat arası süre seçebilir.
-              </p>
-            </div>
-          )}
+          <div className="relative">
+            <Label className="text-xs flex items-center gap-1">
+              Cafe Süresi
+              <Badge variant="secondary" className="ml-1 h-4 px-1 text-[9px] gap-0.5">
+                <Crown className="h-2.5 w-2.5" /> Pro
+              </Badge>
+            </Label>
+            <Select value={String(duration)} onValueChange={(v) => setDuration(Number(v))} disabled={!(ambassadorMode || isPro)}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {Array.from({ length: maxDuration }, (_, i) => i + 1).map((h) => (
+                  <SelectItem key={h} value={String(h)}>{h} saat</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="text-[10px] text-muted-foreground mt-1">
+              {ambassadorMode ? "Şehir elçileri" : "Pro üyeler"} 1–{ambassadorMode || isPro ? maxDuration : 6} saat arası süre seçebilir.
+            </p>
+            {!(ambassadorMode || isPro) && (
+              <div className="absolute inset-0 -m-1 rounded-md bg-background/70 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
+                <div className="flex items-center gap-1 rounded-full bg-amber-500/95 px-2.5 py-1 text-[10px] font-semibold text-white shadow">
+                  <Lock className="h-3 w-3" /> premium özellik
+                </div>
+              </div>
+            )}
+          </div>
           <div className="rounded-lg bg-muted/50 p-2.5 text-xs text-muted-foreground space-y-1">
             <div>
               Süre: <strong className="text-foreground">{duration} saat</strong> · Kapasite:{" "}
