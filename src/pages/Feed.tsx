@@ -1096,6 +1096,7 @@ const Feed = () => {
 
             {/* CENTER FEED */}
             <div className="min-w-0">
+              {!inCafe && <WorldClocksBand />}
               {!inCafe && (
                 <div className="mb-4">
                   <div className="flex items-center gap-2 px-1 mb-2">
