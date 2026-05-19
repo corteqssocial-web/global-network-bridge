@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Coffee, Loader2, Linkedin, Globe2, MapPin, Ticket, Users } from "lucide-react";
+import { Coffee, Loader2, Linkedin, Globe2, MapPin, Ticket, Users, Crown, Briefcase, ShieldCheck } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -46,10 +47,19 @@ interface Props {
 }
 
 const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCountry, defaultCity }: Props) => {
-  const { user } = useAuth();
+  const { user, accountType } = useAuth();
   const isPremium = useIsPremium();
   const navigate = useNavigate();
-  const defaultDuration = ambassadorMode ? 6 : (isPremium ? 4 : 2);
+
+  // Cadde Kural Seti:
+  //  • Pro hesap (Premium + işletme/danışman/kuruluş/blogger-vlogger): 6 saat · 1000 kişi
+  //  • Ücretsiz subscriber: 3 saat · 100 kişi
+  //  • Şehir Elçisi: 6 saat · 1000 kişi
+  const PRO_ROLES = ["business", "consultant", "association", "blogger", "vlogger"];
+  const isPro = isPremium || PRO_ROLES.includes((accountType || "").toLowerCase());
+  const maxDuration = ambassadorMode || isPro ? 6 : 3;
+  const maxCapacity = ambassadorMode || isPro ? 1000 : 100;
+  const defaultDuration = maxDuration;
   const [duration, setDuration] = useState<number>(defaultDuration);
 
   const [open, setOpen] = useState(false);
@@ -64,6 +74,7 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCou
       : ""
   );
   const [referralCode, setReferralCode] = useState("");
+  const [profession, setProfession] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [extra, setExtra] = useState("");
   const [openEntry, setOpenEntry] = useState(true);
@@ -72,7 +83,7 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCou
 
   const cities = country ? countryCities[country] || [] : [];
   const continentList = Object.keys(continents);
-  const capacity = ambassadorMode ? 500 : (duration >= 4 ? 300 : 100);
+  const capacity = maxCapacity;
 
   const submit = async () => {
     if (!user) {
@@ -146,7 +157,7 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCou
     setEntryQuestion("");
     setOpenEntry(true);
     setReferralCode("");
-    toast({ title: "Cafe açıldı ☕", description: `${duration} saat · kapasite ${capacity}.` });
+    toast({ title: "Cafe açma talebin gönderildi ☕", description: `${duration} saat · kapasite ${capacity}. Admin onayı bekleniyor.` });
     onCreated?.();
     navigate(`/cadde/${cafeId}`);
   };
@@ -261,7 +272,29 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCou
                 </p>
               </div>
             )}
+
+            {/* Premium-only extra filter: meslek */}
+            {isPro && (
+              <div className="pt-1 border-t border-border/60 mt-1">
+                <Label className="text-[11px] flex items-center gap-1">
+                  <Briefcase className="h-3 w-3" /> Meslek filtresi (opsiyonel)
+                  <Badge variant="secondary" className="ml-1 h-4 px-1 text-[9px] gap-0.5">
+                    <Crown className="h-2.5 w-2.5" /> Pro
+                  </Badge>
+                </Label>
+                <Input
+                  value={profession}
+                  onChange={(e) => setProfession(e.target.value)}
+                  placeholder="Örn: Yazılım, Hekim, Avukat…"
+                  maxLength={60}
+                />
+                <p className="text-[10px] text-muted-foreground mt-1">
+                  Pro üyeler ülke, şehir, meslek ve davet kodu kriterlerini birlikte kullanabilir.
+                </p>
+              </div>
+            )}
           </div>
+
 
           <div>
             <Label className="text-xs flex items-center gap-1"><Linkedin className="h-3 w-3" /> LinkedIn URL (opsiyonel)</Label>
@@ -292,30 +325,43 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCou
               </div>
             )}
           </div>
-          {ambassadorMode && (
+          {(ambassadorMode || isPro) && (
             <div>
-              <Label className="text-xs">Cafe Süresi (Şehir Elçisi)</Label>
+              <Label className="text-xs">Cafe Süresi</Label>
               <Select value={String(duration)} onValueChange={(v) => setDuration(Number(v))}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {[1, 2, 3, 4, 5, 6].map((h) => (
+                  {Array.from({ length: maxDuration }, (_, i) => i + 1).map((h) => (
                     <SelectItem key={h} value={String(h)}>{h} saat</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <p className="text-[10px] text-muted-foreground mt-1">
-                Şehir elçileri 1–6 saat arası diledikleri süreyi seçebilir.
+                {ambassadorMode ? "Şehir elçileri" : "Pro üyeler"} 1–{maxDuration} saat arası süre seçebilir.
               </p>
             </div>
           )}
-          <div className="rounded-lg bg-muted/50 p-2.5 text-xs text-muted-foreground">
-            Süre: <strong className="text-foreground">{duration} saat</strong> · Kapasite:{" "}
-            <strong className="text-foreground">{capacity} kişi</strong>{" "}
-            {ambassadorMode ? "(Şehir Elçisi avantajı)" : (!isPremium && "(Premium: 4 saat / 300 kişi)")}
+          <div className="rounded-lg bg-muted/50 p-2.5 text-xs text-muted-foreground space-y-1">
+            <div>
+              Süre: <strong className="text-foreground">{duration} saat</strong> · Kapasite:{" "}
+              <strong className="text-foreground">{capacity} kişi</strong>{" "}
+              {isPro ? (
+                <Badge variant="secondary" className="ml-1 h-4 px-1 text-[9px] gap-0.5">
+                  <Crown className="h-2.5 w-2.5" /> Pro
+                </Badge>
+              ) : (
+                <span className="text-[10px]">(Pro: 6 saat / 1000 kişi)</span>
+              )}
+            </div>
+            <div className="flex items-start gap-1.5 text-[10px] pt-1 border-t border-border/60">
+              <ShieldCheck className="h-3 w-3 text-amber-600 shrink-0 mt-0.5" />
+              <span>Cafe açma talebin admin onayına gönderilir. Onaylanınca yayına alınır.</span>
+            </div>
           </div>
           <Button className="w-full" disabled={submitting} onClick={submit}>
             {submitting && <Loader2 className="h-4 w-4 animate-spin mr-2" />} Cafe'yi Aç
           </Button>
+
         </div>
       </DialogContent>
     </Dialog>
