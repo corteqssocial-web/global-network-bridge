@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Clock, Sun, Moon, Sunrise, Sunset } from "lucide-react";
+import { Sun, Moon, Sunrise, Sunset } from "lucide-react";
 
 type Zone = { label: string; tz: string };
 
@@ -88,16 +88,7 @@ const WorldClocksBand = () => {
 
   return (
     <div className="mb-3">
-      <div className="flex items-center gap-2 px-1 mb-2">
-        <Clock className="h-4 w-4 text-primary" />
-        <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-          Dünya Saatleri
-        </h2>
-        <span className="ml-auto inline-flex items-center gap-1 text-[10px] text-emerald-500 tabular-nums">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          CANLI
-        </span>
-      </div>
+
       <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 snap-x justify-center">
         {ZONES.map((z) => {
           const h = getHour(z.tz, now);
