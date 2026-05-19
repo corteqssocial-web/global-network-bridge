@@ -43,12 +43,12 @@ const WorldClocksBand = () => {
           CANLI
         </span>
       </div>
-      <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 snap-x">
+      <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 snap-x justify-center">
         {ZONES.map((z) => (
           <div
             key={z.tz}
             title={z.tz}
-            className="shrink-0 snap-start flex flex-col items-center justify-center rounded-md border border-emerald-500/20 bg-slate-950 px-1.5 py-0.5 shadow-[inset_0_0_8px_rgba(16,185,129,0.08)]"
+            className="shrink-0 snap-start flex flex-col items-center justify-center rounded-md border border-emerald-500/20 bg-slate-950 px-2.5 py-0.5 shadow-[inset_0_0_8px_rgba(16,185,129,0.08)]"
           >
             <span className="text-[7px] font-semibold uppercase tracking-[0.12em] text-emerald-400/70">
               {z.label}
