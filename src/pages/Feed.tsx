@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import CreateCafeForm from "@/components/feed/CreateCafeForm";
 import DiasporaPeopleSearch from "@/components/feed/DiasporaPeopleSearch";
+import WorldClocksBand from "@/components/feed/WorldClocksBand";
 import { useActiveCafes, useCafe } from "@/hooks/useCafes";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -1095,6 +1096,7 @@ const Feed = () => {
 
             {/* CENTER FEED */}
             <div className="min-w-0">
+              {!inCafe && <WorldClocksBand />}
               {!inCafe && (
                 <div className="mb-4">
                   <div className="flex items-center gap-2 px-1 mb-2">
@@ -1220,13 +1222,6 @@ const Feed = () => {
                   <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                     <Newspaper className="h-6 w-6 text-primary" />
                     <h1 className="text-2xl font-extrabold text-gradient-primary">Diaspora Cadde</h1>
-                    <Link to="/19-mayis" className="ml-auto group">
-                      <Button size="sm" className="gap-1.5 bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white shadow-lg shadow-rose-500/40 h-9 px-3 animate-pulse hover:animate-none">
-                        <span className="text-base leading-none" role="img" aria-label="Türk Bayrağı">🇹🇷</span>
-                        <span className="font-bold">19 Mayıs Etkinlikleri</span>
-                        <span className="ml-1 px-1.5 py-0.5 rounded-full bg-white/20 text-[10px] font-bold tracking-wide">TIKLA →</span>
-                      </Button>
-                    </Link>
                   </div>
                   <p className="text-xs text-muted-foreground">
                     Sol panelden kıta, ülke veya şehir seç. Akışın anında daralır. Paylaşırken @Şehir veya @Ülke etiketleyebilirsin.
