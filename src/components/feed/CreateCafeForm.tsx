@@ -331,22 +331,32 @@ const CreateCafeForm = ({ trigger, onCreated, ambassadorMode = false, defaultCou
               </div>
             )}
           </div>
-          {(ambassadorMode || isPro) && (
-            <div>
-              <Label className="text-xs">Cafe Süresi</Label>
-              <Select value={String(duration)} onValueChange={(v) => setDuration(Number(v))}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  {Array.from({ length: maxDuration }, (_, i) => i + 1).map((h) => (
-                    <SelectItem key={h} value={String(h)}>{h} saat</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-[10px] text-muted-foreground mt-1">
-                {ambassadorMode ? "Şehir elçileri" : "Pro üyeler"} 1–{maxDuration} saat arası süre seçebilir.
-              </p>
-            </div>
-          )}
+          <div className="relative">
+            <Label className="text-xs flex items-center gap-1">
+              Cafe Süresi
+              <Badge variant="secondary" className="ml-1 h-4 px-1 text-[9px] gap-0.5">
+                <Crown className="h-2.5 w-2.5" /> Pro
+              </Badge>
+            </Label>
+            <Select value={String(duration)} onValueChange={(v) => setDuration(Number(v))} disabled={!(ambassadorMode || isPro)}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {Array.from({ length: maxDuration }, (_, i) => i + 1).map((h) => (
+                  <SelectItem key={h} value={String(h)}>{h} saat</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="text-[10px] text-muted-foreground mt-1">
+              {ambassadorMode ? "Şehir elçileri" : "Pro üyeler"} 1–{ambassadorMode || isPro ? maxDuration : 6} saat arası süre seçebilir.
+            </p>
+            {!(ambassadorMode || isPro) && (
+              <div className="absolute inset-0 -m-1 rounded-md bg-background/70 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
+                <div className="flex items-center gap-1 rounded-full bg-amber-500/95 px-2.5 py-1 text-[10px] font-semibold text-white shadow">
+                  <Lock className="h-3 w-3" /> premium özellik
+                </div>
+              </div>
+            )}
+          </div>
           <div className="rounded-lg bg-muted/50 p-2.5 text-xs text-muted-foreground space-y-1">
             <div>
               Süre: <strong className="text-foreground">{duration} saat</strong> · Kapasite:{" "}
