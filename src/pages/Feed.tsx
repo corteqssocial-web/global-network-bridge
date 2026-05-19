@@ -729,7 +729,9 @@ const Feed = () => {
                 <div className="flex items-center gap-2 mb-3">
                   <MapPin className="h-4 w-4 text-primary" />
                   <h3 className="text-sm font-bold">Konum</h3>
-                  <Badge variant="secondary" className="ml-auto text-[10px]">{scopeLabel}</Badge>
+                  {scopeLabel !== "Global" && (
+                    <Badge variant="secondary" className="ml-auto text-[10px]">{scopeLabel}</Badge>
+                  )}
                 </div>
                 <MultiCountryCityFilter
                   selectedCountries={selectedCountries}
