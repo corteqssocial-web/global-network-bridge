@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Clock, Sun, Moon, Sunrise, Sunset } from "lucide-react";
+import { Sun, Moon, Sunrise, Sunset } from "lucide-react";
 
 type Zone = { label: string; tz: string };
 
