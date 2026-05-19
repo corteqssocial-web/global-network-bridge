@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import CreateCafeForm from "@/components/feed/CreateCafeForm";
 import DiasporaPeopleSearch from "@/components/feed/DiasporaPeopleSearch";
+import WorldClocksBand from "@/components/feed/WorldClocksBand";
 import { useActiveCafes, useCafe } from "@/hooks/useCafes";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
