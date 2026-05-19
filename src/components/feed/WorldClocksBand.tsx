@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Clock } from "lucide-react";
+import { Clock, Sun, Moon, Sunrise, Sunset } from "lucide-react";
 
 type Zone = { label: string; tz: string };
 
@@ -24,6 +24,61 @@ const formatTime = (tz: string, now: Date) =>
     hour12: false,
   }).format(now);
 
+const getHour = (tz: string, now: Date) =>
+  Number(
+    new Intl.DateTimeFormat("en-GB", {
+      timeZone: tz,
+      hour: "2-digit",
+      hour12: false,
+    }).format(now)
+  );
+
+type Phase = "night" | "dawn" | "day" | "dusk";
+const phaseOf = (h: number): Phase => {
+  if (h >= 5 && h < 8) return "dawn";
+  if (h >= 8 && h < 18) return "day";
+  if (h >= 18 && h < 21) return "dusk";
+  return "night";
+};
+
+const PHASE_STYLES: Record<
+  Phase,
+  { bg: string; border: string; label: string; time: string; glow: string; Icon: typeof Sun }
+> = {
+  night: {
+    bg: "bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900",
+    border: "border-indigo-400/25",
+    label: "text-indigo-200/70",
+    time: "text-indigo-100",
+    glow: "0 0 6px rgba(165,180,252,0.55)",
+    Icon: Moon,
+  },
+  dawn: {
+    bg: "bg-gradient-to-br from-indigo-900 via-rose-500/70 to-amber-300",
+    border: "border-amber-200/40",
+    label: "text-rose-50/90",
+    time: "text-white",
+    glow: "0 0 6px rgba(255,237,213,0.7)",
+    Icon: Sunrise,
+  },
+  day: {
+    bg: "bg-gradient-to-br from-sky-400 via-sky-300 to-amber-200",
+    border: "border-amber-300/50",
+    label: "text-sky-900/80",
+    time: "text-slate-900",
+    glow: "0 0 6px rgba(255,255,255,0.7)",
+    Icon: Sun,
+  },
+  dusk: {
+    bg: "bg-gradient-to-br from-amber-400 via-rose-500 to-indigo-700",
+    border: "border-rose-300/40",
+    label: "text-amber-50/90",
+    time: "text-white",
+    glow: "0 0 6px rgba(254,215,170,0.8)",
+    Icon: Sunset,
+  },
+};
+
 const WorldClocksBand = () => {
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
@@ -44,27 +99,36 @@ const WorldClocksBand = () => {
         </span>
       </div>
       <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 snap-x justify-center">
-        {ZONES.map((z) => (
-          <div
-            key={z.tz}
-            title={z.tz}
-            className="shrink-0 snap-start flex flex-col items-center justify-center rounded-md border border-emerald-500/20 bg-slate-950 px-2.5 py-0.5 shadow-[inset_0_0_8px_rgba(16,185,129,0.08)]"
-          >
-            <span className="text-[7px] font-semibold uppercase tracking-[0.12em] text-emerald-400/70">
-              {z.label}
-            </span>
-            <span
-              className="text-[10px] font-bold tabular-nums text-emerald-400 tracking-wider"
-              style={{
-                fontFamily:
-                  "'JetBrains Mono', 'Courier New', ui-monospace, monospace",
-                textShadow: "0 0 6px rgba(16,185,129,0.55)",
-              }}
+        {ZONES.map((z) => {
+          const h = getHour(z.tz, now);
+          const phase = phaseOf(h);
+          const s = PHASE_STYLES[phase];
+          const Icon = s.Icon;
+          return (
+            <div
+              key={z.tz}
+              title={`${z.tz} · ${phase}`}
+              className={`shrink-0 snap-start flex flex-col items-center justify-center rounded-md border px-2.5 py-0.5 transition-colors ${s.bg} ${s.border}`}
             >
-              {formatTime(z.tz, now)}
-            </span>
-          </div>
-        ))}
+              <span
+                className={`flex items-center gap-1 text-[7px] font-semibold uppercase tracking-[0.12em] ${s.label}`}
+              >
+                <Icon className="h-2 w-2" />
+                {z.label}
+              </span>
+              <span
+                className={`text-[10px] font-bold tabular-nums tracking-wider ${s.time}`}
+                style={{
+                  fontFamily:
+                    "'JetBrains Mono', 'Courier New', ui-monospace, monospace",
+                  textShadow: s.glow,
+                }}
+              >
+                {formatTime(z.tz, now)}
+              </span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
